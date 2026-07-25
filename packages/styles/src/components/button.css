@@ -1,0 +1,141 @@
+@layer components {
+  .button {
+    position: relative;
+    display: inline-flex;
+    min-height: calc(2.25rem * var(--spacing-scale));
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-inline: calc(1rem * var(--spacing-scale));
+    border: var(--field-border) solid transparent;
+    border-radius: var(--form-radius);
+    font-family: var(--font-heading);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: calc(0.05em + var(--letter-spacing));
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      transform 100ms ease,
+      box-shadow 100ms ease,
+      background-color 100ms ease,
+      color 100ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .button--primary,
+  .button--secondary,
+  .button--outline,
+  .button--danger {
+    box-shadow: 0 var(--bc-hard-shadow-depth) 0 var(--bc-hard-shadow);
+  }
+
+  .button--primary {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  .button--secondary {
+    background: var(--default);
+    color: var(--default-foreground);
+  }
+
+  .button--tertiary {
+    background: color-mix(in oklab, var(--default) 48%, transparent);
+    color: var(--foreground);
+  }
+
+  .button--outline {
+    border-color: var(--border);
+    background: var(--card);
+    color: var(--foreground);
+  }
+
+  .button--ghost {
+    background: transparent;
+    color: var(--foreground);
+  }
+
+  .button--danger {
+    background: var(--danger);
+    color: var(--danger-foreground);
+  }
+
+  .button--danger-soft {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+
+  .button--sm {
+    min-height: calc(1.875rem * var(--spacing-scale));
+    padding-inline: calc(0.75rem * var(--spacing-scale));
+    font-size: calc(0.75rem * var(--font-size-scale));
+  }
+
+  .button--lg {
+    min-height: calc(2.75rem * var(--spacing-scale));
+    padding-inline: calc(1.25rem * var(--spacing-scale));
+    font-size: calc(1rem * var(--font-size-scale));
+  }
+
+  .button--icon-only {
+    width: calc(2.25rem * var(--spacing-scale));
+    padding-inline: 0;
+  }
+
+  .button--sm.button--icon-only {
+    width: calc(1.875rem * var(--spacing-scale));
+  }
+
+  .button--lg.button--icon-only {
+    width: calc(2.75rem * var(--spacing-scale));
+  }
+
+  .button:hover:not([data-disabled], :disabled) {
+    filter: brightness(0.96);
+  }
+
+  .button:active:not([data-disabled], :disabled),
+  .button[data-pressed] {
+    box-shadow: none;
+    transform: translateY(var(--bc-hard-shadow-depth));
+  }
+
+  .button[data-disabled],
+  .button:disabled {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .button[data-loading] {
+    color: transparent;
+    user-select: none;
+  }
+
+  .button__spinner {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 999px;
+    color: var(--accent-foreground);
+    animation: bc-spin 600ms linear infinite;
+  }
+
+  @keyframes bc-spin {
+    to {
+      rotate: 1turn;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button__spinner {
+    transition: none;
+    animation-duration: 1ms;
+  }
+}

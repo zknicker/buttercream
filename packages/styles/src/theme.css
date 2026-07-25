@@ -1,0 +1,108 @@
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-default: var(--default);
+  --color-default-foreground: var(--default-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-danger-soft: var(--danger-soft);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+}
+
+@layer theme {
+  :root,
+  [data-theme="light"],
+  [data-theme="default"] {
+    color-scheme: light;
+    --background: #f8f8f8;
+    --foreground: #292524;
+    --accent: #1b1b1b;
+    --accent-foreground: #ffffff;
+    --accent-soft: color-mix(in oklab, #1b1b1b 10%, transparent);
+    --default: #eaebea;
+    --default-foreground: #1b1b1b;
+    --card: #ffffff;
+    --card-foreground: #1b1b1b;
+    --success: #46a758;
+    --success-foreground: #ffffff;
+    --success-soft: color-mix(in oklab, #46a758 15%, transparent);
+    --warning: #f59e0b;
+    --warning-foreground: #1b1b1b;
+    --warning-soft: color-mix(in oklab, #f59e0b 18%, transparent);
+    --danger: #ef476f;
+    --danger-foreground: #ffffff;
+    --danger-soft: color-mix(in oklab, #ef476f 15%, transparent);
+    --border: color-mix(in oklab, #1b1b1b 14%, transparent);
+    --ring: #1b1b1b;
+    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+    --font-heading: ui-rounded, system-ui, sans-serif;
+    --line-height: 1.4;
+    --letter-spacing: 0em;
+    --spacing-scale: 1;
+    --font-size-scale: 1;
+    --radius: 0.625rem;
+    --form-radius: 0.75rem;
+    --field-border: 1px;
+    --disabled-opacity: 0.5;
+    --bc-hard-shadow: color-mix(in oklab, #1b1b1b 30%, transparent);
+    --bc-hard-shadow-depth: 4px;
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --background: #161514;
+    --foreground: #f5f5f4;
+    --accent: #f5f5f4;
+    --accent-foreground: #1c1917;
+    --accent-soft: color-mix(in oklab, #f5f5f4 12%, transparent);
+    --default: #302f2d;
+    --default-foreground: #f5f5f4;
+    --card: #201f1e;
+    --card-foreground: #f5f5f4;
+    --success: #5bc86b;
+    --success-foreground: #102414;
+    --success-soft: color-mix(in oklab, #5bc86b 18%, transparent);
+    --warning: #ffb340;
+    --warning-foreground: #2a1b00;
+    --warning-soft: color-mix(in oklab, #ffb340 20%, transparent);
+    --danger: #ff5d7d;
+    --danger-foreground: #1c1917;
+    --danger-soft: color-mix(in oklab, #ff5d7d 18%, transparent);
+    --border: color-mix(in oklab, #ffffff 14%, transparent);
+    --ring: #f5f5f4;
+    --bc-hard-shadow: rgba(0, 0, 0, 0.55);
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}

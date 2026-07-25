@@ -1,0 +1,49 @@
+{
+  "name": "@buttercream/react",
+  "version": "0.1.0",
+  "description": "Composable Buttercream React components",
+  "license": "Apache-2.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./avatar": {
+      "types": "./dist/avatar.d.mts",
+      "import": "./dist/avatar.mjs"
+    },
+    "./button": {
+      "types": "./dist/button.d.mts",
+      "import": "./dist/button.mjs"
+    },
+    "./card": {
+      "types": "./dist/card.d.mts",
+      "import": "./dist/card.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsdown",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tsdown": "0.22.14"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  }
+}

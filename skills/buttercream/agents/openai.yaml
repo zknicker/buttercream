@@ -1,0 +1,4 @@
+interface:
+  display_name: "Buttercream"
+  short_description: "Build and theme Buttercream component systems"
+  default_prompt: "Use $buttercream to integrate this project with its Buttercream design system."

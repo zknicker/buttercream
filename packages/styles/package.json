@@ -1,0 +1,29 @@
+{
+  "name": "@buttercream/styles",
+  "version": "0.1.0",
+  "description": "Buttercream semantic tokens and component styles",
+  "license": "Apache-2.0",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "exports": {
+    ".": "./src/index.css",
+    "./components/avatar": "./src/components/avatar.css",
+    "./components/button": "./src/components/button.css",
+    "./components/card": "./src/components/card.css",
+    "./theme": "./src/theme.css",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "build": "bun -e \"console.log('CSS source ready')\"",
+    "test": "bun -e \"console.log('No style tests yet')\"",
+    "typecheck": "bun -e \"console.log('No style types')\""
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=4.0.0"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@buttercream/cli",
+  "version": "0.1.0",
+  "description": "Read-only exports from Buttercream Studio",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "buttercream": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "commander": "15.0.0"
+  },
+  "devDependencies": {
+    "tsdown": "0.22.14"
+  }
+}

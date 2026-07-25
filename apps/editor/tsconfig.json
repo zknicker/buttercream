@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["bun", "vite/client"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "drizzle.config.ts", "vite.config.ts"]
+}
