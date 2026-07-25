@@ -7,11 +7,18 @@
   "observability": {
     "enabled": true
   },
+  "routes": [
+    {
+      "pattern": "buttercream.studio",
+      "custom_domain": true
+    }
+  ],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "buttercream-production",
-      "database_id": "REPLACE_WITH_PRODUCTION_D1_ID",
+      "database_id": "ebd145ed-ce4d-46f9-99e8-9e7b3baeb035",
+      "remote": true,
       "migrations_dir": "drizzle"
     }
   ]
