@@ -24,6 +24,17 @@ export const componentSettingsSchema = z.object({
   card: z.object({
     defaultVariant: z.enum(["default", "secondary"]),
   }),
+  checkbox: z
+    .object({
+      defaultRounded: z.boolean(),
+      defaultSize: componentSizeSchema,
+      defaultVariant: z.enum(["primary", "secondary"]),
+    })
+    .default({
+      defaultRounded: false,
+      defaultSize: "md",
+      defaultVariant: "primary",
+    }),
   input: z
     .object({
       defaultFullWidth: z.boolean(),
@@ -32,6 +43,31 @@ export const componentSettingsSchema = z.object({
     .default({
       defaultFullWidth: false,
       defaultVariant: "primary",
+    }),
+  radioGroup: z
+    .object({
+      defaultOrientation: z.enum(["horizontal", "vertical"]),
+      defaultSize: componentSizeSchema,
+      defaultVariant: z.enum(["primary", "secondary"]),
+    })
+    .default({
+      defaultOrientation: "vertical",
+      defaultSize: "md",
+      defaultVariant: "primary",
+    }),
+  slider: z
+    .object({
+      defaultSize: componentSizeSchema,
+    })
+    .default({
+      defaultSize: "md",
+    }),
+  switch: z
+    .object({
+      defaultSize: componentSizeSchema,
+    })
+    .default({
+      defaultSize: "md",
     }),
 });
 

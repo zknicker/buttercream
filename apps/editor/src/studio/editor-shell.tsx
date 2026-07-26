@@ -10,20 +10,37 @@ import { useEffect, useMemo, useState } from "react";
 import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw";
 import buttonCss from "../../../../packages/styles/src/components/button.css?raw";
 import cardCss from "../../../../packages/styles/src/components/card.css?raw";
+import checkboxCss from "../../../../packages/styles/src/components/checkbox.css?raw";
 import inputCss from "../../../../packages/styles/src/components/input.css?raw";
+import radioGroupCss from "../../../../packages/styles/src/components/radio-group.css?raw";
+import sliderCss from "../../../../packages/styles/src/components/slider.css?raw";
 import surfaceCss from "../../../../packages/styles/src/components/surface.css?raw";
+import switchCss from "../../../../packages/styles/src/components/switch.css?raw";
 import themeCss from "../../../../packages/styles/src/theme.css?raw";
 import { createPreviewDocument } from "./preview-document.ts";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { ThemeEditorPanel } from "./theme-editor-panel.tsx";
 import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
 
-const sections = ["Guides", "Button", "Input", "Card", "Avatar"] as const;
+const sections = [
+  "Guides",
+  "Button",
+  "Input",
+  "Checkbox",
+  "Radio Group",
+  "Slider",
+  "Switch",
+  "Card",
+  "Avatar",
+] as const;
 type Section = (typeof sections)[number];
 
 const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
   { label: "Preview", items: ["Guides"] },
-  { label: "Components", items: ["Button", "Input", "Card", "Avatar"] },
+  {
+    label: "Components",
+    items: ["Button", "Input", "Checkbox", "Radio Group", "Slider", "Switch", "Card", "Avatar"],
+  },
 ];
 
 export function EditorShell({
@@ -68,7 +85,18 @@ export function EditorShell({
   const preview = useMemo(
     () =>
       createPreviewDocument({
-        componentCss: [themeCss, avatarCss, buttonCss, cardCss, inputCss, surfaceCss].join("\n"),
+        componentCss: [
+          themeCss,
+          avatarCss,
+          buttonCss,
+          cardCss,
+          checkboxCss,
+          inputCss,
+          radioGroupCss,
+          sliderCss,
+          surfaceCss,
+          switchCss,
+        ].join("\n"),
         designSystem,
         section,
         theme: previewTheme,

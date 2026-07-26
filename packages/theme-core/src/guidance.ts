@@ -15,7 +15,11 @@ export function exportDesignGuidance(designSystem: DesignSystem): string {
       "",
       `- Button: \`${components.button.defaultVariant}\`, \`${components.button.defaultSize}\``,
       `- Card: \`${components.card.defaultVariant}\``,
+      `- Checkbox: \`${components.checkbox.defaultVariant}\`, \`${components.checkbox.defaultSize}\`${components.checkbox.defaultRounded ? ", rounded" : ""}`,
       `- Input: \`${components.input.defaultVariant}\`${components.input.defaultFullWidth ? ", full width" : ""}`,
+      `- Radio group: \`${components.radioGroup.defaultVariant}\`, \`${components.radioGroup.defaultSize}\`, \`${components.radioGroup.defaultOrientation}\``,
+      `- Slider: \`${components.slider.defaultSize}\``,
+      `- Switch: \`${components.switch.defaultSize}\``,
       `- Avatar: \`${components.avatar.defaultShape}\`, \`${components.avatar.defaultSize}\``,
     ].join("\n"),
     [

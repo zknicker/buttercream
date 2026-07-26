@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
+import { Slider } from "@buttercream/react";
+import type { ReactNode } from "react";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
   return (
@@ -49,25 +50,32 @@ export function RangeControl({
   step: number;
   value: number;
 }) {
-  const progress = ((value - min) / (max - min)) * 100;
   return (
-    <label
+    <Slider
       className="studio-range"
-      style={{ "--studio-progress": `${progress}%` } as CSSProperties}
+      max={max}
+      min={min}
+      name={controlName(label)}
+      onValueChange={onChange}
+      step={step}
+      value={value}
     >
-      <span>{label}</span>
-      <output>{value.toFixed(step < 1 ? 2 : 0)}</output>
-      <input
-        aria-label={label}
-        max={max}
-        min={min}
-        onChange={(event) => onChange(event.currentTarget.valueAsNumber)}
-        step={step}
-        type="range"
-        value={value}
-      />
-    </label>
+      <div className="studio-range__header">
+        <Slider.Label>{label}</Slider.Label>
+        <output>{value.toFixed(step < 1 ? 2 : 0)}</output>
+      </div>
+      <Slider.Control className="studio-range__control">
+        <Slider.Track className="studio-range__track">
+          <Slider.Indicator className="studio-range__indicator" />
+        </Slider.Track>
+        <Slider.Thumb className="studio-range__thumb" getAriaLabel={() => label} index={0} />
+      </Slider.Control>
+    </Slider>
   );
+}
+
+function controlName(label: string): string {
+  return label.toLowerCase().replaceAll(" ", "-");
 }
 
 function normalizeHex(value: string): string {

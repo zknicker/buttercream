@@ -12,7 +12,15 @@ bun add @buttercream/react @buttercream/styles
 ```
 
 ```tsx
-import { Button, Card, Input } from "@buttercream/react";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Input,
+  RadioGroup,
+  Slider,
+  Switch,
+} from "@buttercream/react";
 
 export function Example() {
   return (
@@ -23,6 +31,13 @@ export function Example() {
       </Card.Header>
       <Card.Content>
         <Input aria-label="Email" fullWidth name="email" placeholder="Email" />
+        <Checkbox defaultChecked>Remember this device</Checkbox>
+        <RadioGroup defaultValue="daily" label="Digest frequency" name="digest">
+          <RadioGroup.Item value="daily">Daily</RadioGroup.Item>
+          <RadioGroup.Item value="weekly">Weekly</RadioGroup.Item>
+        </RadioGroup>
+        <Slider defaultValue={50} label="Volume" name="volume" />
+        <Switch>Product updates</Switch>
       </Card.Content>
       <Card.Footer>
         <Button>Continue</Button>

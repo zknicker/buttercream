@@ -102,9 +102,25 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
       card: {
         defaultVariant: "default",
       },
+      checkbox: {
+        defaultRounded: false,
+        defaultSize: "md",
+        defaultVariant: "primary",
+      },
       input: {
         defaultFullWidth: false,
         defaultVariant: "primary",
+      },
+      radioGroup: {
+        defaultOrientation: "vertical",
+        defaultSize: "md",
+        defaultVariant: "primary",
+      },
+      slider: {
+        defaultSize: "md",
+      },
+      switch: {
+        defaultSize: "md",
       },
     },
     identity: {

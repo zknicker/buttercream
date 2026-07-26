@@ -57,14 +57,37 @@ describe("design-system exports", () => {
 
   test("fills additive component defaults in version 2 documents", () => {
     const current = createDefaultDesignSystem("Legacy");
-    const { input: _input, ...components } = current.components;
+    const {
+      checkbox: _checkbox,
+      input: _input,
+      radioGroup: _radioGroup,
+      slider: _slider,
+      switch: _switch,
+      ...components
+    } = current.components;
     const source = JSON.stringify({ ...current, components });
 
     const imported = importDesignSystemJson(source);
 
+    expect(imported.components.checkbox).toEqual({
+      defaultRounded: false,
+      defaultSize: "md",
+      defaultVariant: "primary",
+    });
     expect(imported.components.input).toEqual({
       defaultFullWidth: false,
       defaultVariant: "primary",
+    });
+    expect(imported.components.radioGroup).toEqual({
+      defaultOrientation: "vertical",
+      defaultSize: "md",
+      defaultVariant: "primary",
+    });
+    expect(imported.components.slider).toEqual({
+      defaultSize: "md",
+    });
+    expect(imported.components.switch).toEqual({
+      defaultSize: "md",
     });
   });
 });

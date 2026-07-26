@@ -24,13 +24,29 @@
       "types": "./dist/card.d.mts",
       "import": "./dist/card.mjs"
     },
+    "./checkbox": {
+      "types": "./dist/checkbox.d.mts",
+      "import": "./dist/checkbox.mjs"
+    },
     "./input": {
       "types": "./dist/input.d.mts",
       "import": "./dist/input.mjs"
     },
+    "./radio-group": {
+      "types": "./dist/radio-group.d.mts",
+      "import": "./dist/radio-group.mjs"
+    },
+    "./slider": {
+      "types": "./dist/slider.d.mts",
+      "import": "./dist/slider.mjs"
+    },
     "./surface": {
       "types": "./dist/surface.d.mts",
       "import": "./dist/surface.mjs"
+    },
+    "./switch": {
+      "types": "./dist/switch.d.mts",
+      "import": "./dist/switch.mjs"
     },
     "./package.json": "./package.json"
   },
