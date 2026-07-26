@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@source "../";
+
+/*
+ * Buttercream studio shell.
+ *
+ * These tokens dress the editor chrome only. They are deliberately unrelated to the
+ * semantic tokens in @buttercream/styles, which belong to the design system being
+ * edited — the shell must never inherit them (CONTEXT.md invariant 4).
+ */
+
+/* Recoleta and Söhne are licensed faces. Drop the trial/licensed woff2 files into
+ * apps/editor/public/fonts/ using the names below and they take over automatically;
+ * until then the stacks fall back to the system serif and grotesk. See fonts/README.md. */
+
+@font-face {
+  font-family: Recoleta;
+  src: url("/fonts/Recoleta-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Recoleta;
+  src: url("/fonts/Recoleta-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Recoleta;
+  src: url("/fonts/Recoleta-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Söhne;
+  src: url("/fonts/Soehne-Buch.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Söhne;
+  src: url("/fonts/Soehne-Kraftig.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Söhne;
+  src: url("/fonts/Soehne-Halbfett.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/DepartureMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Dominant palette — carries the whole shell. */
+  --color-parchment: #faf7f0;
+  --color-ink: #1c1815;
+  --color-butter: #f0b429;
+  --color-crumb: #f2ede3;
+
+  /* Supporting palette — semantic signals and rare accents only. */
+  --color-frosting: #f3afc0;
+  --color-pistachio: #9cc5a1;
+  --color-crust: #8a5a2b;
+  --color-berry: #c0355f;
+  --color-honey: #e8d9a8;
+  --color-graphite: #6b635b;
+
+  --font-display: Recoleta, ui-serif, Georgia, Cambria, serif;
+  --font-sans: Söhne, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Departure Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Squarer than the design-system default so the chrome reads as a tool, not a card. */
+  --radius-shell: 0.5rem;
+}
+
+@layer base {
+  html {
+    color: var(--color-ink);
+    background: var(--color-parchment);
+    font-family: var(--font-sans);
+    font-synthesis: none;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    margin: 0;
+  }
+
+  /* Pixel art and dither patterns must never be smoothed. */
+  [data-pixel] {
+    image-rendering: pixelated;
+    shape-rendering: crispEdges;
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
