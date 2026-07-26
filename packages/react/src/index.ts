@@ -28,6 +28,8 @@ export {
   type RadioGroupSize,
   type RadioGroupVariant,
 } from "./radio-group.tsx";
+export { Select, type SelectItemProps, type SelectProps } from "./select.tsx";
 export { Slider, type SliderProps, type SliderSize } from "./slider.tsx";
 export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";
 export { Switch, type SwitchProps, type SwitchSize } from "./switch.tsx";
+export { Tabs, type TabsListProps, type TabsProps, type TabsVariant } from "./tabs.tsx";

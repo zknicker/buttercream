@@ -18,8 +18,10 @@ export function exportDesignGuidance(designSystem: DesignSystem): string {
       `- Checkbox: \`${components.checkbox.defaultVariant}\`, \`${components.checkbox.defaultSize}\`${components.checkbox.defaultRounded ? ", rounded" : ""}`,
       `- Input: \`${components.input.defaultVariant}\`${components.input.defaultFullWidth ? ", full width" : ""}`,
       `- Radio group: \`${components.radioGroup.defaultVariant}\`, \`${components.radioGroup.defaultSize}\`, \`${components.radioGroup.defaultOrientation}\``,
+      `- Select: ${components.select.defaultMultiple ? "multiple" : "single"}`,
       `- Slider: \`${components.slider.defaultSize}\``,
       `- Switch: \`${components.switch.defaultSize}\``,
+      `- Tabs: \`${components.tabs.defaultVariant}\`, \`${components.tabs.defaultOrientation}\``,
       `- Avatar: \`${components.avatar.defaultShape}\`, \`${components.avatar.defaultSize}\``,
     ].join("\n"),
     [

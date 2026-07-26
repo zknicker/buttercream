@@ -15,9 +15,11 @@
     "./components/checkbox": "./src/components/checkbox.css",
     "./components/input": "./src/components/input.css",
     "./components/radio-group": "./src/components/radio-group.css",
+    "./components/select": "./src/components/select.css",
     "./components/slider": "./src/components/slider.css",
     "./components/surface": "./src/components/surface.css",
     "./components/switch": "./src/components/switch.css",
+    "./components/tabs": "./src/components/tabs.css",
     "./theme": "./src/theme.css",
     "./package.json": "./package.json"
   },

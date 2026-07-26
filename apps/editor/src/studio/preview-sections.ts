@@ -1,7 +1,9 @@
 import { renderCheckboxPreview, renderSwitchPreview } from "./preview-choice-controls.ts";
 import { renderInputPreview } from "./preview-form-controls.ts";
 import { renderRadioGroupPreview } from "./preview-radio-group.ts";
+import { renderSelectPreview } from "./preview-select.ts";
 import { renderSliderPreview } from "./preview-slider.ts";
+import { renderTabsPreview } from "./preview-tabs.ts";
 
 export type PreviewSection =
   | "Guides"
@@ -9,8 +11,10 @@ export type PreviewSection =
   | "Input"
   | "Checkbox"
   | "Radio Group"
+  | "Select"
   | "Slider"
   | "Switch"
+  | "Tabs"
   | "Card"
   | "Avatar";
 
@@ -30,11 +34,17 @@ export function renderPreviewSection(section: PreviewSection): string {
   if (section === "Radio Group") {
     return renderRadioGroupPreview();
   }
+  if (section === "Select") {
+    return renderSelectPreview();
+  }
   if (section === "Slider") {
     return renderSliderPreview();
   }
   if (section === "Switch") {
     return renderSwitchPreview();
+  }
+  if (section === "Tabs") {
+    return renderTabsPreview();
   }
   if (section === "Avatar") {
     return renderAvatarPreview();

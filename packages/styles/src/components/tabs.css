@@ -1,0 +1,176 @@
+@layer components {
+  .tabs {
+    display: flex;
+    width: min(100%, 24rem);
+    min-width: 0;
+    flex-direction: column;
+    gap: calc(1rem * var(--spacing-scale));
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    line-height: calc(1.25rem * var(--line-height));
+  }
+
+  .tabs__list {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    padding: calc(0.25rem * var(--spacing-scale));
+    overflow-x: auto;
+    border-radius: var(--form-radius);
+    background: var(--default);
+    scrollbar-width: none;
+  }
+
+  .tabs__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabs__tab {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    min-width: 0;
+    min-height: calc(2rem * var(--spacing-scale));
+    flex: 1 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    padding: 0 calc(0.875rem * var(--spacing-scale));
+    border: 0;
+    border-radius: min(var(--form-radius), 0.625rem);
+    outline: none;
+    background: transparent;
+    color: color-mix(in oklab, var(--foreground) 62%, transparent);
+    cursor: pointer;
+    font: inherit;
+    white-space: nowrap;
+  }
+
+  .tabs__tab:hover:not([data-disabled]),
+  .tabs__tab[data-active] {
+    color: var(--foreground);
+  }
+
+  .tabs__tab:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: -1px;
+  }
+
+  .tabs__tab[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .tabs__indicator {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: var(--active-tab-width);
+    height: var(--active-tab-height);
+    border-radius: min(var(--form-radius), 0.625rem);
+    background: var(--card);
+    box-shadow: var(--field-shadow);
+    transform: translate(var(--active-tab-left), var(--active-tab-top));
+    transition:
+      width 150ms ease,
+      height 150ms ease,
+      transform 150ms ease;
+  }
+
+  .tabs__panel {
+    min-width: 0;
+    outline: none;
+    color: color-mix(in oklab, var(--foreground) 72%, transparent);
+  }
+
+  .tabs__panel:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .tabs--secondary .tabs__list {
+    padding: 0;
+    overflow: visible;
+    border-block-end: 1px solid var(--border);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .tabs--secondary .tabs__tab {
+    min-height: calc(2.25rem * var(--spacing-scale));
+    border-radius: 0;
+  }
+
+  .tabs--secondary .tabs__indicator {
+    top: auto;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: none;
+    transform: translateX(var(--active-tab-left));
+  }
+
+  .tabs__list--separated .tabs__tab + .tabs__tab::before {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    left: 0;
+    width: 1px;
+    background: var(--border);
+    content: "";
+  }
+
+  .tabs[data-orientation="vertical"] {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .tabs[data-orientation="vertical"] .tabs__list {
+    width: max-content;
+    flex: none;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .tabs[data-orientation="vertical"] .tabs__tab {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .tabs[data-orientation="vertical"].tabs--secondary .tabs__list {
+    border-block-end: 0;
+    border-inline-end: 1px solid var(--border);
+  }
+
+  .tabs[data-orientation="vertical"].tabs--secondary .tabs__indicator {
+    top: 0;
+    right: -1px;
+    bottom: auto;
+    left: auto;
+    width: 2px;
+    height: var(--active-tab-height);
+    transform: translateY(var(--active-tab-top));
+  }
+
+  .tabs[data-orientation="vertical"] .tabs__list--separated .tabs__tab + .tabs__tab::before {
+    top: 0;
+    right: 25%;
+    bottom: auto;
+    left: 25%;
+    width: auto;
+    height: 1px;
+  }
+}
+
+[data-theme="dark"] .tabs__indicator {
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs__indicator {
+    transition: none;
+  }
+}

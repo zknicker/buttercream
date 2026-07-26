@@ -3,6 +3,7 @@ import { z } from "zod";
 const cssValue = z.string().trim().min(1);
 const positiveScale = z.number().positive();
 const componentSizeSchema = z.enum(["sm", "md", "lg"]);
+const defaultOverlayShadow = "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)";
 
 export const componentSettingsSchema = z.object({
   avatar: z.object({
@@ -55,6 +56,13 @@ export const componentSettingsSchema = z.object({
       defaultSize: "md",
       defaultVariant: "primary",
     }),
+  select: z
+    .object({
+      defaultMultiple: z.boolean(),
+    })
+    .default({
+      defaultMultiple: false,
+    }),
   slider: z
     .object({
       defaultSize: componentSizeSchema,
@@ -69,53 +77,67 @@ export const componentSettingsSchema = z.object({
     .default({
       defaultSize: "md",
     }),
+  tabs: z
+    .object({
+      defaultOrientation: z.enum(["horizontal", "vertical"]),
+      defaultVariant: z.enum(["primary", "secondary"]),
+    })
+    .default({
+      defaultOrientation: "horizontal",
+      defaultVariant: "primary",
+    }),
 });
 
-export const themeTokensSchema = z.object({
-  colors: z.object({
-    accent: cssValue,
-    accentForeground: cssValue,
-    accentSoft: cssValue,
-    background: cssValue,
-    border: cssValue,
-    card: cssValue,
-    cardForeground: cssValue,
-    danger: cssValue,
-    dangerForeground: cssValue,
-    dangerSoft: cssValue,
-    default: cssValue,
-    defaultForeground: cssValue,
-    foreground: cssValue,
-    ring: cssValue,
-    success: cssValue,
-    successForeground: cssValue,
-    successSoft: cssValue,
-    warning: cssValue,
-    warningForeground: cssValue,
-    warningSoft: cssValue,
-  }),
-  corners: z.object({
-    formRadius: cssValue,
-    radius: cssValue,
-  }),
-  density: z.object({
-    fontSize: positiveScale,
-    spacing: positiveScale,
-  }),
-  effects: z.object({
-    disabledOpacity: z.number().min(0).max(1),
-    fieldBorder: cssValue,
-    fieldShadow: cssValue.default("0 2px 4px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.1)"),
-    hardShadowColor: cssValue,
-    hardShadowDepth: cssValue,
-  }),
-  typography: z.object({
-    fontHeading: cssValue,
-    fontSans: cssValue,
-    letterSpacing: cssValue,
-    lineHeight: z.number().positive(),
-  }),
-});
+function createThemeTokensSchema(overlayShadow: string) {
+  return z.object({
+    colors: z.object({
+      accent: cssValue,
+      accentForeground: cssValue,
+      accentSoft: cssValue,
+      background: cssValue,
+      border: cssValue,
+      card: cssValue,
+      cardForeground: cssValue,
+      danger: cssValue,
+      dangerForeground: cssValue,
+      dangerSoft: cssValue,
+      default: cssValue,
+      defaultForeground: cssValue,
+      foreground: cssValue,
+      ring: cssValue,
+      success: cssValue,
+      successForeground: cssValue,
+      successSoft: cssValue,
+      warning: cssValue,
+      warningForeground: cssValue,
+      warningSoft: cssValue,
+    }),
+    corners: z.object({
+      formRadius: cssValue,
+      radius: cssValue,
+    }),
+    density: z.object({
+      fontSize: positiveScale,
+      spacing: positiveScale,
+    }),
+    effects: z.object({
+      disabledOpacity: z.number().min(0).max(1),
+      fieldBorder: cssValue,
+      fieldShadow: cssValue.default("0 2px 4px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.1)"),
+      hardShadowColor: cssValue,
+      hardShadowDepth: cssValue,
+      overlayShadow: cssValue.default(overlayShadow),
+    }),
+    typography: z.object({
+      fontHeading: cssValue,
+      fontSans: cssValue,
+      letterSpacing: cssValue,
+      lineHeight: z.number().positive(),
+    }),
+  });
+}
+
+export const themeTokensSchema = createThemeTokensSchema(defaultOverlayShadow);
 
 export const designSystemSchema = z.object({
   components: componentSettingsSchema,
@@ -133,7 +155,7 @@ export const designSystemSchema = z.object({
   }),
   schemaVersion: z.literal(2),
   theme: z.object({
-    dark: themeTokensSchema,
+    dark: createThemeTokensSchema("none"),
     light: themeTokensSchema,
   }),
 });

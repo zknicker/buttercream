@@ -18,31 +18,55 @@ import {
   Checkbox,
   Input,
   RadioGroup,
+  Select,
   Slider,
   Switch,
+  Tabs,
 } from "@buttercream/react";
 
 export function Example() {
   return (
-    <Card>
-      <Card.Header>
-        <Card.Title>Ready to go</Card.Title>
-        <Card.Description>Composed, themeable, and accessible.</Card.Description>
-      </Card.Header>
-      <Card.Content>
-        <Input aria-label="Email" fullWidth name="email" placeholder="Email" />
-        <Checkbox defaultChecked>Remember this device</Checkbox>
-        <RadioGroup defaultValue="daily" label="Digest frequency" name="digest">
-          <RadioGroup.Item value="daily">Daily</RadioGroup.Item>
-          <RadioGroup.Item value="weekly">Weekly</RadioGroup.Item>
-        </RadioGroup>
-        <Slider defaultValue={50} label="Volume" name="volume" />
-        <Switch>Product updates</Switch>
-      </Card.Content>
-      <Card.Footer>
-        <Button>Continue</Button>
-      </Card.Footer>
-    </Card>
+    <>
+      <Card>
+        <Card.Header>
+          <Card.Title>Ready to go</Card.Title>
+          <Card.Description>Composed, themeable, and accessible.</Card.Description>
+        </Card.Header>
+        <Card.Content>
+          <Input aria-label="Email" fullWidth name="email" placeholder="Email" />
+          <Checkbox defaultChecked>Remember this device</Checkbox>
+          <RadioGroup defaultValue="daily" label="Digest frequency" name="digest">
+            <RadioGroup.Item value="daily">Daily</RadioGroup.Item>
+            <RadioGroup.Item value="weekly">Weekly</RadioGroup.Item>
+          </RadioGroup>
+          <Slider defaultValue={50} label="Volume" name="volume" />
+          <Select
+            items={[
+              { label: "Daily", value: "daily" },
+              { label: "Weekly", value: "weekly" },
+            ]}
+            label="Summary"
+            name="summary"
+            placeholder="Select frequency"
+          >
+            <Select.Item value="daily">Daily</Select.Item>
+            <Select.Item value="weekly">Weekly</Select.Item>
+          </Select>
+          <Switch>Product updates</Switch>
+        </Card.Content>
+        <Card.Footer>
+          <Button>Continue</Button>
+        </Card.Footer>
+      </Card>
+      <Tabs defaultValue="overview">
+        <Tabs.List>
+          <Tabs.Tab value="overview">Overview</Tabs.Tab>
+          <Tabs.Tab value="details">Details</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="overview">Overview content</Tabs.Panel>
+        <Tabs.Panel value="details">Details content</Tabs.Panel>
+      </Tabs>
+    </>
   );
 }
 ```

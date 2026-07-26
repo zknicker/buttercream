@@ -31,6 +31,7 @@ const variablePaths = {
   "disabled-opacity": ["effects", "disabledOpacity"],
   "field-border": ["effects", "fieldBorder"],
   "field-shadow": ["effects", "fieldShadow"],
+  "overlay-shadow": ["effects", "overlayShadow"],
   "bc-hard-shadow": ["effects", "hardShadowColor"],
   "bc-hard-shadow-depth": ["effects", "hardShadowDepth"],
   "font-heading": ["typography", "fontHeading"],

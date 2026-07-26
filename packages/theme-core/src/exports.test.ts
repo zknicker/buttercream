@@ -61,11 +61,22 @@ describe("design-system exports", () => {
       checkbox: _checkbox,
       input: _input,
       radioGroup: _radioGroup,
+      select: _select,
       slider: _slider,
       switch: _switch,
+      tabs: _tabs,
       ...components
     } = current.components;
-    const source = JSON.stringify({ ...current, components });
+    const { overlayShadow: _lightOverlayShadow, ...lightEffects } = current.theme.light.effects;
+    const { overlayShadow: _darkOverlayShadow, ...darkEffects } = current.theme.dark.effects;
+    const source = JSON.stringify({
+      ...current,
+      components,
+      theme: {
+        dark: { ...current.theme.dark, effects: darkEffects },
+        light: { ...current.theme.light, effects: lightEffects },
+      },
+    });
 
     const imported = importDesignSystemJson(source);
 
@@ -83,11 +94,22 @@ describe("design-system exports", () => {
       defaultSize: "md",
       defaultVariant: "primary",
     });
+    expect(imported.components.select).toEqual({
+      defaultMultiple: false,
+    });
     expect(imported.components.slider).toEqual({
       defaultSize: "md",
     });
     expect(imported.components.switch).toEqual({
       defaultSize: "md",
     });
+    expect(imported.components.tabs).toEqual({
+      defaultOrientation: "horizontal",
+      defaultVariant: "primary",
+    });
+    expect(imported.theme.light.effects.overlayShadow).toBe(
+      "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)",
+    );
+    expect(imported.theme.dark.effects.overlayShadow).toBe("none");
   });
 });

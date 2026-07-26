@@ -49,6 +49,7 @@ export const defaultLightTheme: ThemeTokens = {
       "0 2px 4px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.06), 0 0 1px rgb(0 0 0 / 0.06)",
     hardShadowColor: "color-mix(in oklab, #1b1b1b 30%, transparent)",
     hardShadowDepth: "4px",
+    overlayShadow: "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)",
   },
   typography: sharedTypography,
 };
@@ -84,6 +85,7 @@ export const defaultDarkTheme: ThemeTokens = {
     fieldShadow: "0 2px 4px rgb(0 0 0 / 0.24), 0 1px 2px rgb(0 0 0 / 0.3)",
     hardShadowColor: "rgba(0, 0, 0, 0.55)",
     hardShadowDepth: "4px",
+    overlayShadow: "none",
   },
   typography: sharedTypography,
 };
@@ -116,11 +118,18 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
         defaultSize: "md",
         defaultVariant: "primary",
       },
+      select: {
+        defaultMultiple: false,
+      },
       slider: {
         defaultSize: "md",
       },
       switch: {
         defaultSize: "md",
+      },
+      tabs: {
+        defaultOrientation: "horizontal",
+        defaultVariant: "primary",
       },
     },
     identity: {

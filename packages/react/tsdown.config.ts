@@ -14,9 +14,11 @@ export default defineConfig({
     "src/checkbox.tsx",
     "src/input.tsx",
     "src/radio-group.tsx",
+    "src/select.tsx",
     "src/slider.tsx",
     "src/surface.tsx",
     "src/switch.tsx",
+    "src/tabs.tsx",
   ],
   format: ["esm"],
 });
