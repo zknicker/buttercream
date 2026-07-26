@@ -59,6 +59,7 @@ The current JSON Schema is served from `https://buttercream.studio/schema.json`.
 
 ## Editor development
 
+Copy `.env.example` to `.env` and add the Hugeicons Pro license key before installing dependencies.
 Copy `apps/editor/.env.example` to `apps/editor/.env.local`, add the Clerk development keys, and
 optionally configure the local-only automatic sign-in values. Development uses the hosted D1
 database configured in `apps/editor/wrangler.jsonc`.
