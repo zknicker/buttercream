@@ -12,7 +12,7 @@ bun add @buttercream/react @buttercream/styles
 ```
 
 ```tsx
-import { Button, Card } from "@buttercream/react";
+import { Button, Card, Input } from "@buttercream/react";
 
 export function Example() {
   return (
@@ -21,6 +21,9 @@ export function Example() {
         <Card.Title>Ready to go</Card.Title>
         <Card.Description>Composed, themeable, and accessible.</Card.Description>
       </Card.Header>
+      <Card.Content>
+        <Input aria-label="Email" fullWidth name="email" placeholder="Email" />
+      </Card.Content>
       <Card.Footer>
         <Button>Continue</Button>
       </Card.Footer>
