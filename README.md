@@ -40,6 +40,20 @@ export function Example() {
 
 Read [CONTEXT.md](./CONTEXT.md) for the product model and `docs/adr/` for durable decisions.
 
+## Portable design systems
+
+The hosted editor stores one canonical schema-versioned document. Its **Code** view projects that
+document into:
+
+- `global.css`
+- `DESIGN.md`
+- `buttercream.json`
+- `design-system.json`
+
+Import accepts either the complete JSON document or generated CSS. JSON replaces the complete
+editor state. CSS replaces recognized theme variables and resets omitted variables to defaults.
+The current JSON Schema is served from `https://buttercream.studio/schema.json`.
+
 ## Editor development
 
 Copy `apps/editor/.env.example` to `apps/editor/.env.local`, add the Clerk development keys, and

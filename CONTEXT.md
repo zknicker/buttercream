@@ -6,7 +6,7 @@ guides, previews, and project-specific agent guidance.
 
 ## Product nouns
 
-- A **design system** is one hosted, account-owned `DesignSystem` document.
+- A **design system** is one hosted, account-owned, schema-versioned `DesignSystem` document.
 - A **user** is a Buttercream-owned `usr_*` identity linked to one Clerk authentication identity.
 - A **theme** is the light and dark token state inside a design system.
 - A **preset** is a reusable starting value for a new design system.
@@ -14,6 +14,7 @@ guides, previews, and project-specific agent guidance.
 - A **preview** renders Buttercream components with the current design system in an isolated frame.
 - **Custom CSS** is authored BEM and utility CSS stored separately from structured theme tokens.
 - **Agent rules** are project-specific design instructions exported as `DESIGN.md`.
+- **Component settings** are typed default props for Buttercream components.
 - `buttercream.json` associates a consuming repository with a hosted design system and export paths.
 
 ## Invariants
@@ -29,6 +30,7 @@ guides, previews, and project-specific agent guidance.
 9. The CLI reads and exports. It does not mutate consuming repositories.
 10. Public packages share one release version.
 11. Product records reference Buttercream user IDs, never Clerk user IDs.
+12. `design-system.json` is the lossless portable backup; CSS import only replaces theme variables.
 
 ## Layers
 
