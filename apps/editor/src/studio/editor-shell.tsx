@@ -301,13 +301,21 @@ export function EditorShell({
         </div>
       </aside>
 
-      <main className="min-h-0 min-w-0 bg-canvas pt-12">
-        <iframe
-          className="block h-full w-full border-0 bg-canvas"
-          sandbox=""
-          srcDoc={preview}
-          title={`${section} preview`}
-        />
+      {/*
+       * The preview is a surface floating on the chrome, not a region bleeding into
+       * it. The gutter and radius are what make the chrome read as a frame and the
+       * preview as the artifact inside it; without them the two fight for the same
+       * plane. The top gutter clears the floating topbar.
+       */}
+      <main className="min-h-0 min-w-0 bg-canvas px-3 pt-12 pb-3">
+        <div className="h-full w-full overflow-hidden rounded-xl bg-raised">
+          <iframe
+            className="block h-full w-full border-0 bg-transparent"
+            sandbox=""
+            srcDoc={preview}
+            title={`${section} preview`}
+          />
+        </div>
       </main>
 
       <ThemeEditorPanel

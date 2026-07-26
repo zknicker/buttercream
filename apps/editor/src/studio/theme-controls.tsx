@@ -5,10 +5,18 @@ import { classes, Slider } from "../ui/index.ts";
 const ROW =
   "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-raised px-3 text-sm";
 
+/** Row labels carry the medium weight; at 400 they read unfinished against the values. */
+const ROW_LABEL = "truncate font-medium text-fg";
+
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
   return (
     <section className="mt-7 flex flex-col gap-1">
-      <h2 className="mb-1 font-mono text-xs tracking-wide text-muted uppercase">{title}</h2>
+      {/*
+       * Sentence-case sans, not the brand's uppercase mono. Section headers in a dense
+       * control rail should recede behind the values they label; the mono eyebrow is an
+       * expressive device that belongs on marketing, where it has room to be loud.
+       */}
+      <h2 className="mb-1 text-xs font-medium text-muted">{title}</h2>
       {children}
     </section>
   );
@@ -31,7 +39,7 @@ export function TextControl({
 }) {
   return (
     <label className={ROW}>
-      <span className="truncate text-fg">{label}</span>
+      <span className={ROW_LABEL}>{label}</span>
       <input
         aria-label={label}
         className="w-36 rounded-[calc(var(--radius-shell)-0.125rem)] bg-transparent py-1 pl-2 text-right text-fg outline-0 focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-fg"
@@ -55,7 +63,7 @@ export function ColorControl({
 }) {
   return (
     <label className={ROW}>
-      <span className="truncate text-fg">{label}</span>
+      <span className={ROW_LABEL}>{label}</span>
       <span className="flex shrink-0 items-center gap-2 font-mono text-xs text-muted">
         {value.toUpperCase()}
         <input
@@ -108,8 +116,12 @@ export function RangeControl({
     >
       <Slider.Control className="absolute inset-0">
         <Slider.Track className="h-full w-full">
-          {/* Butter muddies to olive when blended over the dark canvas, so ease it back. */}
-          <Slider.Indicator className="h-full bg-butter/25 dark:bg-butter/16" />
+          {/*
+           * Neutral, not butter. Four accent-filled sliders stop reading as "active"
+           * and become decoration; the accent stays on the thumb, where it marks the
+           * value. This is also why the fill no longer muddies on the dark canvas.
+           */}
+          <Slider.Indicator className="h-full bg-fg/8 dark:bg-fg/12" />
         </Slider.Track>
         <Slider.Thumb
           className="h-full w-0.5 bg-butter outline-none"
@@ -117,7 +129,7 @@ export function RangeControl({
           index={0}
         />
       </Slider.Control>
-      <Slider.Label className="pointer-events-none z-1 truncate text-fg">{label}</Slider.Label>
+      <Slider.Label className={classes(ROW_LABEL, "pointer-events-none z-1")}>{label}</Slider.Label>
       <output className="pointer-events-none z-1 shrink-0 font-mono text-xs tabular-nums text-muted">
         {value.toFixed(step < 1 ? 2 : 0)}
       </output>

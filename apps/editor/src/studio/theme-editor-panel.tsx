@@ -71,7 +71,7 @@ export function ThemeEditorPanel({
 
         <div className="mt-3">
           <ControlRow>
-            <span className="truncate text-fg">Theme</span>
+            <span className="truncate font-medium text-fg">Theme</span>
             <span className="shrink-0 font-mono text-xs text-muted">Custom</span>
           </ControlRow>
         </div>
