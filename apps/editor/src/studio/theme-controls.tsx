@@ -1,6 +1,5 @@
-import { Slider } from "@base-ui/react/slider";
 import type { ReactNode } from "react";
-import { classes } from "../ui/index.ts";
+import { classes, Slider } from "../ui/index.ts";
 
 /** Shared shape for every row in the controls rail: label left, value right. */
 const ROW =
@@ -93,7 +92,7 @@ export function RangeControl({
      * control is stretched behind the row so the whole row reads as one continuous
      * slider, with the fill sitting under the label rather than beside it.
      */
-    <Slider.Root
+    <Slider
       className={classes(
         ROW,
         "cursor-ew-resize overflow-hidden",
@@ -120,7 +119,7 @@ export function RangeControl({
       <output className="pointer-events-none z-1 shrink-0 font-mono text-xs tabular-nums text-graphite">
         {value.toFixed(step < 1 ? 2 : 0)}
       </output>
-    </Slider.Root>
+    </Slider>
   );
 }
 

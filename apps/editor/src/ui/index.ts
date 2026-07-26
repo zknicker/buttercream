@@ -16,6 +16,7 @@ export { Eyebrow } from "./eyebrow.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
 export { CupcakeMark, type CupcakeMarkProps, Logo, type LogoProps } from "./logo.tsx";
 export { Segmented, type SegmentedProps } from "./segmented.tsx";
+export { Slider, type SliderProps } from "./slider.tsx";
 export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";
 export { Swirled } from "./swirled.tsx";
 export { Textarea, type TextareaProps } from "./textarea.tsx";

@@ -35,6 +35,13 @@ studio's needs, making the product build from the design system it edits. Keepin
 means that swap is an import change rather than a rewrite. New shell components should follow the
 same rule: if `@buttercream/react` has or will have an equivalent, match its API.
 
+**Until that switch is made deliberately, the editor must not depend on `@buttercream/react`.** It
+is not in `apps/editor/package.json`, and shell components wrap Base UI primitives directly. Reaching
+for a published component one at a time couples the studio's build to the package's release state
+before the system is ready to carry it — a stale `dist` becomes a failing typecheck in the app, and
+the boundary that keeps the chrome independent erodes without anyone deciding to move it. Adopting
+the package is a single, intentional migration, not a drip.
+
 ## Tailwind wiring
 
 The editor uses `@tailwindcss/vite`. This remains CSS-first — no Tailwind plugin, no
