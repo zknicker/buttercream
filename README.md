@@ -40,3 +40,12 @@ export function Example() {
 
 Read [CONTEXT.md](./CONTEXT.md) for the product model and `docs/adr/` for durable decisions.
 
+## Editor development
+
+Copy `apps/editor/.env.example` to `apps/editor/.env.local`, add the Clerk development keys, and
+optionally configure the local-only automatic sign-in values. Development uses the hosted D1
+database configured in `apps/editor/wrangler.jsonc`.
+
+```bash
+bun run dev
+```

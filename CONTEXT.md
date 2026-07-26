@@ -7,6 +7,7 @@ guides, previews, and project-specific agent guidance.
 ## Product nouns
 
 - A **design system** is one hosted, account-owned `DesignSystem` document.
+- A **user** is a Buttercream-owned `usr_*` identity linked to one Clerk authentication identity.
 - A **theme** is the light and dark token state inside a design system.
 - A **preset** is a reusable starting value for a new design system.
 - A **guide** is a generated view of the current design system.
@@ -27,6 +28,7 @@ guides, previews, and project-specific agent guidance.
 8. Server writes use an integer version; the first edit against stale state opens a conflict dialog.
 9. The CLI reads and exports. It does not mutate consuming repositories.
 10. Public packages share one release version.
+11. Product records reference Buttercream user IDs, never Clerk user IDs.
 
 ## Layers
 
@@ -38,4 +40,3 @@ guides, previews, and project-specific agent guidance.
 | `@buttercream/theme-core` | Private schema, defaults, CSS parsing/generation, and guidance generation |
 | Editor | Auth, persistence, visual controls, generated guides, isolated previews, import/export |
 | Skill | Stable agent workflow for installation, component use, theming, and repository integration |
-
