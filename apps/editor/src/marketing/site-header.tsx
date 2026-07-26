@@ -1,10 +1,12 @@
 import { Dialog } from "@base-ui/react/dialog";
+import { Show, SignInButton } from "@clerk/tanstack-react-start";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Cancel01Icon from "@hugeicons-pro/core-stroke-rounded/Cancel01Icon";
 import Menu01Icon from "@hugeicons-pro/core-stroke-rounded/Menu01Icon";
 import { Link } from "@tanstack/react-router";
 import type { ReactElement, ReactNode } from "react";
 import { Button, classes, dialogBackdropClass, Logo } from "../ui/index.ts";
+import { AccountMenu } from "./account-menu.tsx";
 
 const NAV_LINKS = [
   { label: "components", to: "/ds/$id" as const, params: { id: "preview" } },
@@ -19,6 +21,8 @@ export function SiteHeader({
   actions?: ReactNode;
   current?: string | undefined;
 }): ReactElement {
+  const clerkEnabled = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
+
   return (
     <header className="mx-auto flex w-full max-w-6xl items-center gap-4 px-6 py-5 lg:px-10">
       <div className="flex flex-1 items-center">
@@ -47,8 +51,26 @@ export function SiteHeader({
           }
           variant="ghost"
         />
+        {/* Auth lives here rather than being passed per page, so every marketing
+            surface gets the same account controls instead of only the homepage. */}
+        {clerkEnabled ? (
+          <>
+            <Show when="signed-out">
+              <SignInButton>
+                <Button className="max-sm:hidden" variant="ghost">
+                  Sign in
+                </Button>
+              </SignInButton>
+            </Show>
+            <Show when="signed-in">
+              <AccountMenu />
+            </Show>
+          </>
+        ) : null}
         {actions}
-        <Button render={<Link params={{ id: "preview" }} to="/ds/$id" />}>Get Buttercream</Button>
+        <Button nativeButton={false} render={<Link params={{ id: "preview" }} to="/ds/$id" />}>
+          Get Buttercream
+        </Button>
         <MobileMenu current={current} />
       </div>
     </header>
@@ -114,6 +136,7 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
             {NAV_LINKS.map((link) => (
               <Dialog.Close
                 key={link.label}
+                nativeButton={false}
                 render={
                   <Link
                     className={classes(

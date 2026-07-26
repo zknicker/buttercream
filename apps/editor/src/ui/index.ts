@@ -15,6 +15,12 @@ export { DitherBand, type DitherBandProps } from "./dither-band.tsx";
 export { Eyebrow } from "./eyebrow.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
 export { CupcakeMark, type CupcakeMarkProps, Logo, type LogoProps } from "./logo.tsx";
+export {
+  Menu,
+  type MenuItemProps,
+  type MenuItemVariant,
+  type MenuPopupProps,
+} from "./menu.tsx";
 export { Segmented, type SegmentedProps } from "./segmented.tsx";
 export { Slider, type SliderProps } from "./slider.tsx";
 export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";

@@ -51,7 +51,11 @@ function NotFound() {
         <h1 className="max-w-[24ch] font-display text-5xl tracking-tight text-balance text-fg sm:text-6xl">
           This one came out of the oven empty.
         </h1>
-        <Button render={<Link params={{ id: "preview" }} to="/ds/$id" />} size="lg">
+        <Button
+          nativeButton={false}
+          render={<Link params={{ id: "preview" }} to="/ds/$id" />}
+          size="lg"
+        >
           Open the preview
         </Button>
       </div>

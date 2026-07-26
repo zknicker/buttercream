@@ -27,7 +27,7 @@ function DesignSystemRoute() {
   if (result.status === "not-found") {
     return (
       <Gate eyebrow="Design system not found" heading="It may belong to another account.">
-        <Button render={<Link to="/" />} size="lg" variant="outline">
+        <Button nativeButton={false} render={<Link to="/" />} size="lg" variant="outline">
           Back to Buttercream
         </Button>
       </Gate>

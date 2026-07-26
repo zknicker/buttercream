@@ -1,4 +1,4 @@
-import { Show, SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/tanstack-react-start";
+import { Show, SignUpButton, useAuth } from "@clerk/tanstack-react-start";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Copy01Icon from "@hugeicons-pro/core-stroke-rounded/Copy01Icon";
 import Tick02Icon from "@hugeicons-pro/core-stroke-rounded/Tick02Icon";
@@ -42,7 +42,7 @@ function Home() {
 
   return (
     <div className="min-h-dvh">
-      <SiteHeader actions={clerkEnabled ? <AuthActions /> : null} />
+      <SiteHeader />
 
       <main>
         <section className="mx-auto w-full max-w-6xl px-6 pt-16 pb-20 lg:px-10 lg:pt-24">
@@ -55,7 +55,11 @@ function Home() {
             that feel unique, consistent, and unmistakably yours.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Button render={<Link params={{ id: "preview" }} to="/ds/$id" />} size="lg">
+            <Button
+              nativeButton={false}
+              render={<Link params={{ id: "preview" }} to="/ds/$id" />}
+              size="lg"
+            >
               Start baking
             </Button>
             <InstallChip />
@@ -93,6 +97,7 @@ function Home() {
 
         {clerkEnabled ? (
           <Show when="signed-in">
+            <RefreshOnSignIn />
             <DesignSystemList designSystems={designSystems} />
           </Show>
         ) : null}
@@ -100,24 +105,6 @@ function Home() {
 
       <SiteFooter />
     </div>
-  );
-}
-
-function AuthActions() {
-  return (
-    <>
-      <Show when="signed-out">
-        <SignInButton>
-          <Button className="max-sm:hidden" variant="ghost">
-            Sign in
-          </Button>
-        </SignInButton>
-      </Show>
-      <Show when="signed-in">
-        <RefreshOnSignIn />
-        <UserButton />
-      </Show>
-    </>
   );
 }
 

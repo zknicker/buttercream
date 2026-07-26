@@ -102,6 +102,7 @@ function TierCard({ period, tier }: { period: BillingPeriod; tier: Tier }): Reac
       <div className="p-6">
         <Button
           className="w-full"
+          nativeButton={false}
           render={<Link params={{ id: "preview" }} to="/ds/$id" />}
           size="lg"
           variant={tier.featured ? "primary" : "outline"}
