@@ -80,7 +80,7 @@ export function CodeDialog({
 
             <div
               aria-label="Exported files"
-              className="flex gap-0.5 overflow-x-auto rounded-(--radius-shell) bg-crumb p-0.5 scrollbar-none"
+              className="flex gap-0.5 overflow-x-auto rounded-(--radius-shell) bg-sunken p-0.5 scrollbar-none"
               role="tablist"
             >
               {exports.map((item) => (
@@ -88,10 +88,10 @@ export function CodeDialog({
                   aria-selected={item.filename === activeExport.filename}
                   className={classes(
                     "h-8 shrink-0 rounded-[calc(var(--radius-shell)-0.125rem)] px-3 font-mono text-xs whitespace-nowrap",
-                    "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-ink",
+                    "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-fg",
                     item.filename === activeExport.filename
-                      ? "bg-parchment text-ink shadow-sm ring-1 ring-ink/8"
-                      : "text-graphite hover:text-ink",
+                      ? "bg-raised text-fg shadow-sm dark:shadow-none ring-1 ring-fg/8"
+                      : "text-muted hover:text-fg",
                   )}
                   key={item.filename}
                   onClick={() => {
@@ -106,12 +106,12 @@ export function CodeDialog({
               ))}
             </div>
 
-            <pre className="min-h-90 flex-1 overflow-auto rounded-(--radius-shell) bg-parchment p-5 font-mono text-xs leading-6 text-ink ring-1 ring-ink/10">
+            <pre className="min-h-90 flex-1 overflow-auto rounded-(--radius-shell) bg-raised p-5 font-mono text-xs leading-6 text-fg ring-1 ring-fg/10">
               <code>{activeExport.content}</code>
             </pre>
 
             <DialogFooter>
-              <span aria-live="polite" className="mr-auto font-mono text-xs text-graphite">
+              <span aria-live="polite" className="mr-auto font-mono text-xs text-muted">
                 {copyState === "copied" ? "Copied" : null}
                 {copyState === "error" ? "Copy failed" : null}
               </span>

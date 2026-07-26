@@ -70,22 +70,48 @@
   font-display: swap;
 }
 
-@theme {
-  /* Dominant palette — carries the whole shell. */
+/*
+ * The shell's dark variant keys off data-shell-theme, never data-theme. The design
+ * system owns data-theme inside the preview iframe; keeping the attributes distinct
+ * is what makes it impossible for an edited theme to restyle the chrome.
+ *
+ * An inline script in __root.tsx resolves the stored preference (or the OS setting)
+ * onto <html> before first paint, so the CSS only needs the explicit attribute.
+ */
+@custom-variant dark (&:where([data-shell-theme="dark"], [data-shell-theme="dark"] *));
+
+@theme inline {
+  /* Roles, not colours. These flip per theme; call sites should use these. */
+  --color-canvas: var(--shell-canvas);
+  --color-raised: var(--shell-raised);
+  --color-sunken: var(--shell-sunken);
+  --color-fg: var(--shell-fg);
+  --color-muted: var(--shell-muted);
+  --color-line: var(--shell-line);
+
+  /* Accents. Tuned per theme so they keep their contrast on either canvas. */
+  --color-butter: var(--shell-butter);
+  --color-frosting: var(--shell-frosting);
+  --color-pistachio: var(--shell-pistachio);
+  --color-crust: var(--shell-crust);
+  --color-berry: var(--shell-berry);
+  --color-honey: var(--shell-honey);
+
+  /*
+   * Fixed brand palette. These never flip — they are the literal brand colours, used
+   * where the surface underneath is known (logo art, swatch specimens, chips on a
+   * fixed-colour background).
+   */
   --color-parchment: #faf7f0;
   --color-ink: #1c1815;
-  --color-butter: #f0b429;
-  --color-crumb: #f2ede3;
 
-  /* Supporting palette — semantic signals and rare accents only. */
-  --color-frosting: #f3afc0;
-  --color-pistachio: #9cc5a1;
-  --color-crust: #8a5a2b;
-  --color-berry: #c0355f;
-  --color-honey: #e8d9a8;
-  --color-graphite: #6b635b;
-
+  /*
+   * Ligatures off: the Recoleta demo declares an `fl` ligature but ships no glyph for
+   * it, so "flavor" renders with a tofu box. Harmless on the retail cut — revisit once
+   * the licensed files land.
+   */
   --font-display: Recoleta, ui-serif, Georgia, Cambria, serif;
+  --font-display--font-feature-settings: "liga" 0, "clig" 0;
   --font-sans: Söhne, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "Departure Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -93,10 +119,56 @@
   --radius-shell: 0.5rem;
 }
 
+@layer theme {
+  :root {
+    color-scheme: light;
+
+    /*
+     * Canvas is parchment rather than crumb. The chrome sits directly against the
+     * preview, which renders the user's own near-white background, so a heavier tan
+     * frame reads as a mismatched border rather than as warmth. Crumb survives as
+     * `sunken`, used sparingly for wells and hover.
+     */
+    --shell-canvas: #faf7f0;
+    --shell-raised: #ffffff;
+    --shell-sunken: #f2ede3;
+    --shell-fg: #1c1815;
+    --shell-muted: #6b635b;
+    --shell-line: color-mix(in oklab, #1c1815 10%, transparent);
+
+    --shell-butter: #f0b429;
+    --shell-frosting: #f3afc0;
+    --shell-pistachio: #9cc5a1;
+    --shell-crust: #8a5a2b;
+    --shell-berry: #c0355f;
+    --shell-honey: #e8d9a8;
+  }
+
+  [data-shell-theme="dark"] {
+    color-scheme: dark;
+
+    /* Warm near-blacks; a neutral grey would read as ash next to the butter accent. */
+    --shell-canvas: #17130f;
+    --shell-raised: #211c17;
+    --shell-sunken: #100d0a;
+    --shell-fg: #f7f2e9;
+    --shell-muted: #a69c8f;
+    --shell-line: color-mix(in oklab, #f7f2e9 14%, transparent);
+
+    /* Crust and berry are too dark to read on the dark canvas; lift both. */
+    --shell-butter: #f0b429;
+    --shell-frosting: #f3afc0;
+    --shell-pistachio: #9cc5a1;
+    --shell-crust: #d09a5c;
+    --shell-berry: #ff7093;
+    --shell-honey: #e8d9a8;
+  }
+}
+
 @layer base {
   html {
-    color: var(--color-ink);
-    background: var(--color-parchment);
+    color: var(--color-fg);
+    background: var(--color-canvas);
     font-family: var(--font-sans);
     font-synthesis: none;
   }

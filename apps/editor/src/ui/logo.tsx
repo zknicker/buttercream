@@ -83,7 +83,7 @@ export function Logo({ className, size = 22 }: LogoProps): ReactElement {
   return (
     <span className={classes("flex items-center gap-2", className)}>
       <CupcakeMark size={size} />
-      <span className="font-mono text-ink lowercase tracking-tight">buttercream</span>
+      <span className="font-mono text-fg lowercase tracking-tight">buttercream</span>
     </span>
   );
 }

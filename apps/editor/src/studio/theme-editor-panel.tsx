@@ -44,8 +44,8 @@ export function ThemeEditorPanel({
     <aside
       aria-label="Theme controls"
       className={classes(
-        "z-5 flex min-h-0 w-69 flex-col overflow-hidden bg-crumb transition-transform duration-150 ease-out",
-        "max-[720px]:fixed max-[720px]:inset-y-0 max-[720px]:right-0 max-[720px]:w-[min(17.25rem,calc(100vw-1.5rem))] max-[720px]:shadow-2xl max-[720px]:shadow-ink/15",
+        "z-5 flex min-h-0 w-69 flex-col overflow-hidden bg-canvas transition-transform duration-150 ease-out",
+        "max-[720px]:fixed max-[720px]:inset-y-0 max-[720px]:right-0 max-[720px]:w-[min(17.25rem,calc(100vw-1.5rem))] max-[720px]:shadow-2xl max-[720px]:shadow-ink/15 dark:max-[720px]:shadow-none",
         open ? "translate-x-0" : "translate-x-full",
       )}
     >
@@ -71,8 +71,8 @@ export function ThemeEditorPanel({
 
         <div className="mt-3">
           <ControlRow>
-            <span className="truncate text-ink">Theme</span>
-            <span className="shrink-0 font-mono text-xs text-graphite">Custom</span>
+            <span className="truncate text-fg">Theme</span>
+            <span className="shrink-0 font-mono text-xs text-muted">Custom</span>
           </ControlRow>
         </div>
 
@@ -191,7 +191,7 @@ function SaveStatus({ state }: { state: SaveState }) {
     <span
       className={classes(
         "min-w-0 truncate px-1 font-mono text-xs",
-        state === "conflict" || state === "error" ? "text-berry" : "text-graphite",
+        state === "conflict" || state === "error" ? "text-berry" : "text-muted",
       )}
       role="status"
     >

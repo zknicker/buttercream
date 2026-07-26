@@ -4,6 +4,7 @@ import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon"
 import Moon02Icon from "@hugeicons-pro/core-stroke-rounded/Moon02Icon";
 import Redo02Icon from "@hugeicons-pro/core-stroke-rounded/Redo02Icon";
 import SidebarLeft01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarLeft01Icon";
+import Sun01Icon from "@hugeicons-pro/core-stroke-rounded/Sun01Icon";
 import Undo02Icon from "@hugeicons-pro/core-stroke-rounded/Undo02Icon";
 import { useEffect, useMemo, useState } from "react";
 import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw";
@@ -20,6 +21,7 @@ import switchCss from "../../../../packages/styles/src/components/switch.css?raw
 import tabsCss from "../../../../packages/styles/src/components/tabs.css?raw";
 import tooltipCss from "../../../../packages/styles/src/components/tooltip.css?raw";
 import themeCss from "../../../../packages/styles/src/theme.css?raw";
+import { useShellTheme } from "../shell-theme.ts";
 import { Button, CupcakeMark, classes } from "../ui/index.ts";
 import { createPreviewDocument } from "./preview-document.ts";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
@@ -78,7 +80,11 @@ export function EditorShell({
   const [controlsOpen, setControlsOpen] = useState(true);
   const [navOpen, setNavOpen] = useState(false);
   const [section, setSection] = useState<Section>("Button");
-  const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("light");
+  /*
+   * One switch moves the chrome and the preview together, but through two separate
+   * token sets: the shell's own dark palette, and the design system's dark theme.
+   */
+  const { theme, toggleTheme } = useShellTheme();
   const {
     conflictVersion,
     designSystem,
@@ -124,15 +130,15 @@ export function EditorShell({
         ].join("\n"),
         designSystem,
         section,
-        theme: previewTheme,
+        theme,
       }),
-    [designSystem, previewTheme, section],
+    [designSystem, section, theme],
   );
 
   return (
     <div
       className={classes(
-        "isolate grid h-dvh min-w-0 overflow-hidden bg-crumb transition-[grid-template-columns] duration-150 ease-out",
+        "isolate grid h-dvh min-w-0 overflow-hidden bg-canvas transition-[grid-template-columns] duration-150 ease-out",
         "max-[720px]:grid-cols-[minmax(0,1fr)] max-[720px]:grid-rows-[minmax(0,1fr)_52px]",
         "min-[721px]:grid-rows-[minmax(0,1fr)]",
         controlsOpen
@@ -149,21 +155,21 @@ export function EditorShell({
       >
         <a
           aria-label="Homepage"
-          className="flex min-w-0 max-w-40 items-center gap-1.5 rounded-(--radius-shell) px-2 text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink min-[721px]:max-w-60"
+          className="flex min-w-0 max-w-40 items-center gap-1.5 rounded-(--radius-shell) px-2 text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg min-[721px]:max-w-60"
           href="/"
         >
           <CupcakeMark size={18} />
           <span className="truncate text-sm">{designSystem.identity.name}</span>
           <HugeiconsIcon
             aria-hidden="true"
-            className="shrink-0 text-graphite"
+            className="shrink-0 text-muted"
             icon={ArrowDown01Icon}
             size={14}
             strokeWidth={2}
           />
         </a>
 
-        <strong className="font-mono text-xs font-normal tracking-wide text-graphite uppercase">
+        <strong className="font-mono text-xs font-normal tracking-wide text-muted uppercase">
           {section}
         </strong>
 
@@ -174,15 +180,20 @@ export function EditorShell({
           <Button aria-label="Redo" disabled iconOnly size="sm" variant="ghost">
             <HugeiconsIcon aria-hidden="true" icon={Redo02Icon} size={18} strokeWidth={2} />
           </Button>
-          <span aria-hidden className="mx-1.5 h-6 w-px bg-ink/12" />
+          <span aria-hidden className="mx-1.5 h-6 w-px bg-fg/12" />
           <Button
-            aria-label="Toggle preview theme"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             iconOnly
-            onClick={() => setPreviewTheme((value) => (value === "light" ? "dark" : "light"))}
+            onClick={toggleTheme}
             size="sm"
             variant="ghost"
           >
-            <HugeiconsIcon aria-hidden="true" icon={Moon02Icon} size={18} strokeWidth={2} />
+            <HugeiconsIcon
+              aria-hidden="true"
+              icon={theme === "dark" ? Sun01Icon : Moon02Icon}
+              size={18}
+              strokeWidth={2}
+            />
           </Button>
           {controlsOpen ? null : (
             <Button
@@ -207,7 +218,7 @@ export function EditorShell({
         aria-label="Preview navigation"
         className={classes(
           "relative z-2 flex items-center justify-center px-2 py-4",
-          "max-[720px]:order-last max-[720px]:border-t max-[720px]:border-ink/10 max-[720px]:bg-crumb",
+          "max-[720px]:order-last max-[720px]:border-t max-[720px]:border-fg/10 max-[720px]:bg-canvas",
         )}
         data-open={navOpen}
         onBlurCapture={(event) => {
@@ -221,7 +232,7 @@ export function EditorShell({
         <button
           aria-expanded={navOpen}
           aria-label="Preview sections"
-          className="flex max-h-[60vh] w-8 flex-col items-center gap-3 overflow-y-auto px-1 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink scrollbar-none max-[720px]:flex-row"
+          className="flex max-h-[60vh] w-8 flex-col items-center gap-3 overflow-y-auto px-1 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg scrollbar-none max-[720px]:flex-row"
           onClick={() => setNavOpen(true)}
           onPointerEnter={() => setNavOpen(true)}
           type="button"
@@ -245,7 +256,7 @@ export function EditorShell({
                     "block shrink-0 rounded-full max-[720px]:w-0.5 min-[721px]:h-0.5",
                     section === item
                       ? "bg-butter max-[720px]:h-6 min-[721px]:w-6"
-                      : "bg-ink/20 max-[720px]:h-4 min-[721px]:w-4",
+                      : "bg-fg/20 max-[720px]:h-4 min-[721px]:w-4",
                   )}
                   key={item}
                 />
@@ -256,15 +267,15 @@ export function EditorShell({
 
         <div
           className={classes(
-            "absolute top-1/2 left-12 z-10 w-44 max-h-[80vh] -translate-y-1/2 overflow-hidden rounded-xl bg-parchment p-1.5 shadow-xl shadow-ink/10 ring-1 ring-ink/10 transition-opacity",
+            "absolute top-1/2 left-12 z-10 w-44 max-h-[80vh] -translate-y-1/2 overflow-hidden rounded-xl bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
             "max-[720px]:top-auto max-[720px]:bottom-14 max-[720px]:left-2 max-[720px]:translate-y-0",
             navOpen ? "visible opacity-100" : "invisible opacity-0",
           )}
         >
           {sectionGroups.map((group, groupIndex) => (
             <div key={group.label}>
-              {groupIndex > 0 ? <hr className="my-2 h-px border-0 bg-ink/10" /> : null}
-              <p className="px-3 py-1 font-mono text-xs tracking-wide text-graphite uppercase">
+              {groupIndex > 0 ? <hr className="my-2 h-px border-0 bg-fg/10" /> : null}
+              <p className="px-3 py-1 font-mono text-xs tracking-wide text-muted uppercase">
                 {group.label}
               </p>
               {group.items.map((item) => (
@@ -272,8 +283,8 @@ export function EditorShell({
                   aria-current={section === item ? "page" : undefined}
                   className={classes(
                     "block h-8 w-full rounded-(--radius-shell) px-3 text-left text-sm",
-                    "focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ink",
-                    section === item ? "bg-crumb text-ink" : "text-graphite hover:bg-ink/5",
+                    "focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-fg",
+                    section === item ? "bg-sunken text-fg" : "text-muted hover:bg-fg/5",
                   )}
                   key={item}
                   onClick={() => {
@@ -290,9 +301,9 @@ export function EditorShell({
         </div>
       </aside>
 
-      <main className="min-h-0 min-w-0 bg-crumb pt-12">
+      <main className="min-h-0 min-w-0 bg-canvas pt-12">
         <iframe
-          className="block h-full w-full border-0 bg-crumb"
+          className="block h-full w-full border-0 bg-canvas"
           sandbox=""
           srcDoc={preview}
           title={`${section} preview`}

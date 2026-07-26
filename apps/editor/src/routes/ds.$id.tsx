@@ -64,7 +64,7 @@ function Gate({
         <Logo />
       </a>
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h1 className="max-w-[24ch] font-display text-4xl tracking-tight text-balance text-ink sm:text-5xl">
+      <h1 className="max-w-[24ch] font-display text-4xl tracking-tight text-balance text-fg sm:text-5xl">
         {heading}
       </h1>
       {children}

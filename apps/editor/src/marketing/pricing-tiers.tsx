@@ -63,28 +63,28 @@ function TierCard({ period, tier }: { period: BillingPeriod; tier: Tier }): Reac
     <Card
       className={classes(
         "flex h-full flex-col justify-between overflow-hidden",
-        tier.featured && "ring-ink/20",
+        tier.featured && "ring-fg/20",
       )}
     >
       <div>
         {tier.featured ? <DitherBand className="text-butter" height={14} /> : null}
         <div className={classes("px-6", tier.featured ? "pt-5" : "pt-8")}>
           <div className="flex items-center justify-between gap-3">
-            <h3 className="font-display text-2xl text-ink">{tier.name}</h3>
+            <h3 className="font-display text-2xl text-fg">{tier.name}</h3>
             {tier.featured ? <Badge variant="accent">Most ordered</Badge> : null}
           </div>
-          <p className="mt-2 max-w-[48ch] text-base text-pretty text-graphite sm:text-sm">
+          <p className="mt-2 max-w-[48ch] text-base text-pretty text-muted sm:text-sm">
             {tier.description}
           </p>
 
           <p className="mt-6 flex items-baseline gap-1.5">
-            <span className="font-mono text-5xl tabular-nums text-ink">${tier.price[period]}</span>
-            <span className="font-mono text-sm text-graphite">/mo</span>
+            <span className="font-mono text-5xl tabular-nums text-fg">${tier.price[period]}</span>
+            <span className="font-mono text-sm text-muted">/mo</span>
           </p>
 
           <ul className="mt-6 flex flex-col gap-2.5 text-base sm:text-sm" role="list">
             {tier.features.map((feature) => (
-              <li className="flex items-start gap-2.5 text-ink" key={feature}>
+              <li className="flex items-start gap-2.5 text-fg" key={feature}>
                 <HugeiconsIcon
                   aria-hidden="true"
                   className="h-lh size-4 shrink-0 text-crust"

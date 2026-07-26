@@ -12,10 +12,12 @@ export interface BadgeProps extends SpanProps {
 }
 
 const VARIANTS: Record<BadgeVariant, string> = {
+  // Butter stays light in both themes, so its text is always the fixed dark ink.
   accent: "bg-butter text-ink",
-  danger: "bg-berry/12 text-berry",
-  ink: "bg-ink text-parchment",
-  muted: "bg-crumb text-graphite ring-1 ring-ink/8 ring-inset",
+  danger: "bg-berry/15 text-berry",
+  // Inverted chip: reads against the canvas it sits on, so both ends must flip.
+  ink: "bg-fg text-canvas",
+  muted: "bg-sunken text-muted ring-1 ring-fg/8 ring-inset",
   success: "bg-pistachio/25 text-crust",
 };
 

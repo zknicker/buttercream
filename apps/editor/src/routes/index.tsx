@@ -47,10 +47,10 @@ function Home() {
       <main>
         <section className="mx-auto w-full max-w-6xl px-6 pt-16 pb-20 lg:px-10 lg:pt-24">
           <Eyebrow>AI-native component library</Eyebrow>
-          <h1 className="mt-5 max-w-[24ch] font-display text-5xl tracking-tight text-balance text-ink sm:text-6xl lg:text-7xl">
+          <h1 className="mt-5 max-w-[24ch] font-display text-5xl tracking-tight text-balance text-fg sm:text-6xl lg:text-7xl">
             Components that <Swirled>taste</Swirled> like your brand.
           </h1>
-          <p className="mt-7 max-w-[56ch] text-lg text-pretty text-graphite sm:text-base">
+          <p className="mt-7 max-w-[56ch] text-lg text-pretty text-muted sm:text-base">
             Buttercream is a premium React component library and theme studio for design systems
             that feel unique, consistent, and unmistakably yours.
           </p>
@@ -77,14 +77,14 @@ function Home() {
           className="mx-auto w-full max-w-6xl px-6 pb-8 lg:px-10"
         >
           <h2
-            className="font-mono text-sm tracking-wide text-graphite uppercase sm:text-xs"
+            className="font-mono text-sm tracking-wide text-muted uppercase sm:text-xs"
             id="proof-heading"
           >
             Trusted by teams shipping fast
           </h2>
           <ul className="mt-6 flex flex-wrap items-center gap-x-12 gap-y-6" role="list">
             {PROOF.map((name) => (
-              <li className="font-display text-xl text-ink/35" key={name}>
+              <li className="font-display text-xl text-fg/35" key={name}>
                 {name}
               </li>
             ))}
@@ -146,7 +146,7 @@ function InstallChip() {
       {command}
       <HugeiconsIcon
         aria-hidden="true"
-        className="shrink-0 text-graphite"
+        className="shrink-0 text-muted"
         icon={copied ? Tick02Icon : Copy01Icon}
         size={16}
         strokeWidth={2}
@@ -199,7 +199,7 @@ function DesignSystemList({
         <div>
           <Eyebrow>Workspace</Eyebrow>
           <h2
-            className="mt-2 font-display text-3xl tracking-tight text-ink"
+            className="mt-2 font-display text-3xl tracking-tight text-fg"
             id="your-design-systems"
           >
             Your design systems
@@ -220,11 +220,11 @@ function DesignSystemList({
           {designSystems.map((designSystem) => (
             <li key={designSystem.id}>
               <Card
-                className="flex h-full min-h-32 flex-col justify-between gap-6 p-5 hover:ring-ink/25"
+                className="flex h-full min-h-32 flex-col justify-between gap-6 p-5 hover:ring-fg/25"
                 render={<Link params={{ id: designSystem.id }} to="/ds/$id" />}
               >
-                <p className="font-display text-lg text-ink">{designSystem.name}</p>
-                <p className="font-mono text-xs text-graphite">
+                <p className="font-display text-lg text-fg">{designSystem.name}</p>
+                <p className="font-mono text-xs text-muted">
                   Updated {formatDate(designSystem.updatedAt)}
                 </p>
               </Card>
@@ -232,7 +232,7 @@ function DesignSystemList({
           ))}
         </ul>
       ) : (
-        <p className="mt-8 rounded-(--radius-shell) border border-dashed border-ink/15 p-8 text-center text-base text-graphite sm:text-sm">
+        <p className="mt-8 rounded-(--radius-shell) border border-dashed border-fg/15 p-8 text-center text-base text-muted sm:text-sm">
           Create your first saved design system.
         </p>
       )}

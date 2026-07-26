@@ -9,9 +9,9 @@ export type SurfaceProps = useRender.ComponentProps<"div"> & {
 };
 
 const VARIANTS: Record<SurfaceVariant, string> = {
-  default: "bg-parchment",
-  secondary: "bg-crumb",
-  tertiary: "bg-ink/5",
+  default: "bg-raised",
+  secondary: "bg-sunken",
+  tertiary: "bg-fg/5",
   transparent: "bg-transparent",
 };
 

@@ -9,7 +9,7 @@ export function SiteFooter(): ReactElement {
         <a aria-label="Homepage" href="/">
           <Logo />
         </a>
-        <p className="font-mono text-sm text-graphite sm:text-xs">Baked in the open. Apache-2.0.</p>
+        <p className="font-mono text-sm text-muted sm:text-xs">Baked in the open. Apache-2.0.</p>
       </div>
     </footer>
   );

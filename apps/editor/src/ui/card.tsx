@@ -12,8 +12,8 @@ export interface CardRootProps extends DivProps {
 }
 
 const VARIANTS: Record<CardVariant, string> = {
-  default: "bg-parchment ring-1 ring-ink/10 ring-inset",
-  secondary: "bg-crumb ring-1 ring-ink/8 ring-inset",
+  default: "bg-raised ring-1 ring-fg/10 ring-inset",
+  secondary: "bg-sunken ring-1 ring-fg/8 ring-inset",
   transparent: "bg-transparent",
 };
 
@@ -52,8 +52,8 @@ function part(baseClass: string, dataSlot: string) {
 export const Card = Object.assign(CardRoot, {
   Action: part("shrink-0", "card-action"),
   Content: part("px-5 pb-5", "card-content"),
-  Description: part("mt-1 text-base text-pretty text-graphite sm:text-sm", "card-description"),
-  Footer: part("flex items-center gap-3 border-t border-ink/8 px-5 py-4", "card-footer"),
+  Description: part("mt-1 text-base text-pretty text-muted sm:text-sm", "card-description"),
+  Footer: part("flex items-center gap-3 border-t border-fg/8 px-5 py-4", "card-footer"),
   Header: part("flex items-start justify-between gap-4 p-5", "card-header"),
-  Title: part("font-display text-lg text-ink", "card-title"),
+  Title: part("font-display text-lg text-fg", "card-title"),
 });

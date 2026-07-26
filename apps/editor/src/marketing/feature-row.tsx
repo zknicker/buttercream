@@ -70,7 +70,7 @@ function PixelGlyph({ name }: { name: keyof typeof GLYPHS }): ReactElement {
   return (
     <svg
       aria-hidden="true"
-      className="size-8 shrink-0 text-ink"
+      className="size-8 shrink-0 text-fg"
       data-pixel=""
       shapeRendering="crispEdges"
       viewBox="0 0 12 12"
@@ -95,8 +95,8 @@ export function FeatureRow({
       {features.map((feature) => (
         <li key={feature.title}>
           <PixelGlyph name={feature.glyph} />
-          <h3 className="mt-4 font-display text-xl text-ink">{feature.title}</h3>
-          <p className="mt-2 max-w-[48ch] text-base text-pretty text-graphite sm:text-sm">
+          <h3 className="mt-4 font-display text-xl text-fg">{feature.title}</h3>
+          <p className="mt-2 max-w-[48ch] text-base text-pretty text-muted sm:text-sm">
             {feature.body}
           </p>
         </li>

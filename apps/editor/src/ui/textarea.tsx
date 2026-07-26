@@ -9,9 +9,9 @@ export function Textarea({ className, fullWidth = true, ...props }: TextareaProp
   return (
     <textarea
       className={classes(
-        "resize-y rounded-(--radius-shell) bg-parchment p-4 font-mono text-base text-ink sm:text-sm",
-        "ring-1 ring-ink/12 ring-inset placeholder:text-graphite/60",
-        "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-ink",
+        "resize-y rounded-(--radius-shell) bg-raised p-4 font-mono text-base text-fg sm:text-sm",
+        "ring-1 ring-fg/12 ring-inset placeholder:text-muted/60",
+        "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-fg",
         fullWidth && "w-full",
         className,
       )}

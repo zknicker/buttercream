@@ -20,7 +20,7 @@ export function Segmented<Value extends string>({
     <div
       aria-label={label}
       className={classes(
-        "flex gap-0.5 overflow-x-auto rounded-(--radius-shell) bg-crumb p-0.5 scrollbar-none",
+        "flex gap-0.5 overflow-x-auto rounded-(--radius-shell) bg-sunken p-0.5 scrollbar-none",
         className,
       )}
       role="tablist"
@@ -30,10 +30,10 @@ export function Segmented<Value extends string>({
           aria-selected={option === value}
           className={classes(
             "h-7 flex-1 rounded-[calc(var(--radius-shell)-0.125rem)] px-2.5 text-sm whitespace-nowrap",
-            "focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-ink",
+            "focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-fg",
             option === value
-              ? "bg-parchment text-ink shadow-sm ring-1 ring-ink/8"
-              : "text-graphite hover:text-ink",
+              ? "bg-raised text-fg shadow-sm dark:shadow-none ring-1 ring-fg/8"
+              : "text-muted hover:text-fg",
           )}
           key={option}
           onClick={() => onChange(option)}

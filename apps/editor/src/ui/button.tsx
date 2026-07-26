@@ -27,14 +27,18 @@ export interface ButtonProps extends Omit<BaseButton.Props, "className"> {
   variant?: ButtonVariant;
 }
 
+/*
+ * Butter and berry are saturated in both themes, so their labels stay the fixed brand
+ * ink/parchment rather than flipping with the canvas.
+ */
 const VARIANTS: Record<ButtonVariant, string> = {
-  danger: "bg-berry text-parchment hover:bg-berry/90",
-  "danger-soft": "bg-berry/12 text-berry hover:bg-berry/20",
-  ghost: "text-graphite hover:bg-ink/6 hover:text-ink",
-  outline: "bg-parchment text-ink ring-1 ring-ink/12 ring-inset hover:bg-crumb",
+  danger: "bg-berry text-parchment hover:bg-berry/90 dark:text-ink",
+  "danger-soft": "bg-berry/15 text-berry hover:bg-berry/25",
+  ghost: "text-muted hover:bg-fg/8 hover:text-fg",
+  outline: "bg-raised text-fg ring-1 ring-fg/12 ring-inset hover:bg-sunken",
   primary: "bg-butter text-ink hover:bg-butter/88",
-  secondary: "bg-crumb text-ink ring-1 ring-ink/8 ring-inset hover:bg-ink/8",
-  tertiary: "bg-ink/5 text-ink hover:bg-ink/10",
+  secondary: "bg-sunken text-fg ring-1 ring-fg/8 ring-inset hover:bg-fg/8",
+  tertiary: "bg-fg/5 text-fg hover:bg-fg/10",
 };
 
 const SIZES: Record<ButtonSize, string> = {
@@ -76,7 +80,7 @@ export function Button({
         "relative inline-flex shrink-0 items-center justify-center rounded-(--radius-shell) font-medium whitespace-nowrap",
         // Icons must never be squeezed by the flex row.
         "[&>svg]:shrink-0",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg",
         "disabled:pointer-events-none disabled:opacity-45 data-disabled:pointer-events-none data-disabled:opacity-45",
         VARIANTS[variant],
         SIZES[size],
@@ -99,7 +103,7 @@ export function Button({
       {loading ? (
         <span
           aria-hidden="true"
-          className="absolute size-4 animate-spin rounded-full border-2 border-current border-r-transparent text-ink"
+          className="absolute size-4 animate-spin rounded-full border-2 border-current border-r-transparent text-fg"
         />
       ) : null}
     </BaseButton>

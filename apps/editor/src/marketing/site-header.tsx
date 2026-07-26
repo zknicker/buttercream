@@ -24,7 +24,7 @@ export function SiteHeader({
       <div className="flex flex-1 items-center">
         <a
           aria-label="Homepage"
-          className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+          className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg"
           href="/"
         >
           <Logo />
@@ -71,8 +71,8 @@ function NavLink({
     <Link
       className={classes(
         "relative font-mono text-sm lowercase",
-        "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink",
-        active ? "text-ink" : "text-graphite hover:text-ink",
+        "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg",
+        active ? "text-fg" : "text-muted hover:text-fg",
       )}
       params={params as never}
       to={to}
@@ -93,19 +93,19 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
     <Dialog.Root>
       <Dialog.Trigger
         aria-label="Open menu"
-        className="relative inline-flex size-8.5 shrink-0 items-center justify-center rounded-(--radius-shell) text-ink hover:bg-ink/6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink lg:hidden"
+        className="relative inline-flex size-8.5 shrink-0 items-center justify-center rounded-(--radius-shell) text-fg hover:bg-fg/6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg lg:hidden"
         render={<button type="button" />}
       >
         <HugeiconsIcon aria-hidden="true" icon={Menu01Icon} size={16} strokeWidth={2} />
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Backdrop className={dialogBackdropClass} />
-        <Dialog.Popup className="fixed inset-x-3 top-3 z-21 flex flex-col gap-6 rounded-xl bg-parchment p-5 shadow-2xl shadow-ink/25 ring-1 ring-ink/10 outline-none data-ending-style:opacity-0 data-starting-style:opacity-0">
+        <Dialog.Popup className="fixed inset-x-3 top-3 z-21 flex flex-col gap-6 rounded-xl bg-raised p-5 shadow-2xl shadow-ink/25 dark:shadow-none ring-1 ring-fg/10 outline-none data-ending-style:opacity-0 data-starting-style:opacity-0">
           <div className="flex items-center justify-between">
             <Logo />
             <Dialog.Close
               aria-label="Close menu"
-              className="inline-flex size-8.5 items-center justify-center rounded-(--radius-shell) text-graphite hover:bg-ink/6"
+              className="inline-flex size-8.5 items-center justify-center rounded-(--radius-shell) text-muted hover:bg-fg/6"
             >
               <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
             </Dialog.Close>
@@ -118,7 +118,7 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
                   <Link
                     className={classes(
                       "rounded-(--radius-shell) px-3 py-2.5 font-mono text-base lowercase",
-                      current === link.label ? "bg-crumb text-ink" : "text-graphite",
+                      current === link.label ? "bg-sunken text-fg" : "text-muted",
                     )}
                     params={link.params as never}
                     to={link.to}
