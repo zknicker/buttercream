@@ -38,15 +38,26 @@ const VARIANTS: Record<ButtonVariant, string> = {
 };
 
 const SIZES: Record<ButtonSize, string> = {
-  lg: "h-11 gap-2 px-4 text-base",
-  md: "h-8.5 gap-2 px-3 text-sm",
-  sm: "h-7 gap-1.5 px-2.5 text-sm",
+  lg: "h-11 gap-2 text-base",
+  md: "h-8.5 gap-2 text-sm",
+  sm: "h-7 gap-1.5 text-sm",
 };
 
-const ICON_SIZES: Record<ButtonSize, string> = {
-  lg: "w-11 px-0",
-  md: "w-8.5 px-0",
-  sm: "w-7 px-0",
+/*
+ * Padding and the icon-only width are kept apart from SIZES on purpose. Emitting
+ * `px-2.5` and `px-0` together lets Tailwind's property ordering decide the winner,
+ * which silently crushed icon-only buttons to a few pixels of content width.
+ */
+const PADDING: Record<ButtonSize, string> = {
+  lg: "px-4",
+  md: "px-3",
+  sm: "px-2.5",
+};
+
+const ICON_ONLY_WIDTHS: Record<ButtonSize, string> = {
+  lg: "w-11",
+  md: "w-8.5",
+  sm: "w-7",
 };
 
 export function Button({
@@ -63,11 +74,13 @@ export function Button({
     <BaseButton
       className={classes(
         "relative inline-flex shrink-0 items-center justify-center rounded-(--radius-shell) font-medium whitespace-nowrap",
+        // Icons must never be squeezed by the flex row.
+        "[&>svg]:shrink-0",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
         "disabled:pointer-events-none disabled:opacity-45 data-disabled:pointer-events-none data-disabled:opacity-45",
         VARIANTS[variant],
         SIZES[size],
-        iconOnly && ICON_SIZES[size],
+        iconOnly ? ICON_ONLY_WIDTHS[size] : PADDING[size],
         loading && "text-transparent",
         className,
       )}
