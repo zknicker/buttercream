@@ -1,0 +1,22 @@
+@layer components {
+  .surface {
+    position: relative;
+    background: var(--card);
+    color: var(--card-foreground);
+  }
+
+  .surface--secondary {
+    background: var(--default);
+    color: var(--default-foreground);
+  }
+
+  .surface--tertiary {
+    background: color-mix(in oklab, var(--default) 55%, transparent);
+    color: var(--foreground);
+  }
+
+  .surface--transparent {
+    background: transparent;
+    color: var(--foreground);
+  }
+}

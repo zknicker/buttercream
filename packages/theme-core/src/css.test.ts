@@ -12,6 +12,7 @@ describe("theme CSS", () => {
     expect(css).toContain('@import "tailwindcss";');
     expect(css).toContain('@import "@buttercream/styles";');
     expect(css).toContain("--accent: #1b1b1b;");
+    expect(css).toContain("--field-shadow:");
     expect(css).toContain(".button { text-transform: uppercase; }");
   });
 

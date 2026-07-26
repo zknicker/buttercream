@@ -24,6 +24,15 @@ export const componentSettingsSchema = z.object({
   card: z.object({
     defaultVariant: z.enum(["default", "secondary"]),
   }),
+  input: z
+    .object({
+      defaultFullWidth: z.boolean(),
+      defaultVariant: z.enum(["primary", "secondary"]),
+    })
+    .default({
+      defaultFullWidth: false,
+      defaultVariant: "primary",
+    }),
 });
 
 export const themeTokensSchema = z.object({
@@ -60,6 +69,7 @@ export const themeTokensSchema = z.object({
   effects: z.object({
     disabledOpacity: z.number().min(0).max(1),
     fieldBorder: cssValue,
+    fieldShadow: cssValue.default("0 2px 4px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.1)"),
     hardShadowColor: cssValue,
     hardShadowDepth: cssValue,
   }),

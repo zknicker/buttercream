@@ -24,6 +24,14 @@
       "types": "./dist/card.d.mts",
       "import": "./dist/card.mjs"
     },
+    "./input": {
+      "types": "./dist/input.d.mts",
+      "import": "./dist/input.mjs"
+    },
+    "./surface": {
+      "types": "./dist/surface.d.mts",
+      "import": "./dist/surface.mjs"
+    },
     "./package.json": "./package.json"
   },
   "sideEffects": false,

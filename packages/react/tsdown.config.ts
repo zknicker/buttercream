@@ -6,6 +6,13 @@ export default defineConfig({
     neverBundle: ["react", "react-dom"],
   },
   dts: true,
-  entry: ["src/index.ts", "src/avatar.tsx", "src/button.tsx", "src/card.tsx"],
+  entry: [
+    "src/index.ts",
+    "src/avatar.tsx",
+    "src/button.tsx",
+    "src/card.tsx",
+    "src/input.tsx",
+    "src/surface.tsx",
+  ],
   format: ["esm"],
 });

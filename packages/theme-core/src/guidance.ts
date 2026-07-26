@@ -15,6 +15,7 @@ export function exportDesignGuidance(designSystem: DesignSystem): string {
       "",
       `- Button: \`${components.button.defaultVariant}\`, \`${components.button.defaultSize}\``,
       `- Card: \`${components.card.defaultVariant}\``,
+      `- Input: \`${components.input.defaultVariant}\`${components.input.defaultFullWidth ? ", full width" : ""}`,
       `- Avatar: \`${components.avatar.defaultShape}\`, \`${components.avatar.defaultSize}\``,
     ].join("\n"),
     [

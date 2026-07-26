@@ -45,6 +45,8 @@ export const defaultLightTheme: ThemeTokens = {
   effects: {
     disabledOpacity: 0.5,
     fieldBorder: "1px",
+    fieldShadow:
+      "0 2px 4px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.06), 0 0 1px rgb(0 0 0 / 0.06)",
     hardShadowColor: "color-mix(in oklab, #1b1b1b 30%, transparent)",
     hardShadowDepth: "4px",
   },
@@ -79,6 +81,7 @@ export const defaultDarkTheme: ThemeTokens = {
   effects: {
     disabledOpacity: 0.5,
     fieldBorder: "1px",
+    fieldShadow: "0 2px 4px rgb(0 0 0 / 0.24), 0 1px 2px rgb(0 0 0 / 0.3)",
     hardShadowColor: "rgba(0, 0, 0, 0.55)",
     hardShadowDepth: "4px",
   },
@@ -98,6 +101,10 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
       },
       card: {
         defaultVariant: "default",
+      },
+      input: {
+        defaultFullWidth: false,
+        defaultVariant: "primary",
       },
     },
     identity: {

@@ -13,3 +13,5 @@ export {
   type ButtonVariant,
 } from "./button.tsx";
 export { Card, type CardRootProps } from "./card.tsx";
+export { Input, type InputProps, type InputVariant } from "./input.tsx";
+export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";

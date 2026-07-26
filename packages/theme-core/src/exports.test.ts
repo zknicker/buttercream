@@ -54,4 +54,17 @@ describe("design-system exports", () => {
     expect(designSystemJsonSchema.properties).toHaveProperty("components");
     expect(designSystemJsonSchema.properties).toHaveProperty("theme");
   });
+
+  test("fills additive component defaults in version 2 documents", () => {
+    const current = createDefaultDesignSystem("Legacy");
+    const { input: _input, ...components } = current.components;
+    const source = JSON.stringify({ ...current, components });
+
+    const imported = importDesignSystemJson(source);
+
+    expect(imported.components.input).toEqual({
+      defaultFullWidth: false,
+      defaultVariant: "primary",
+    });
+  });
 });

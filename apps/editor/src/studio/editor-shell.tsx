@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw";
 import buttonCss from "../../../../packages/styles/src/components/button.css?raw";
 import cardCss from "../../../../packages/styles/src/components/card.css?raw";
+import inputCss from "../../../../packages/styles/src/components/input.css?raw";
+import surfaceCss from "../../../../packages/styles/src/components/surface.css?raw";
 import themeCss from "../../../../packages/styles/src/theme.css?raw";
 import { CodeDialog } from "./code-dialog.tsx";
 import { ImportDialog } from "./import-dialog.tsx";
@@ -15,7 +17,7 @@ import {
   useDesignSystemDraft,
 } from "./use-design-system-draft.ts";
 
-const sections = ["Guides", "Button", "Card", "Avatar"] as const;
+const sections = ["Guides", "Button", "Input", "Card", "Avatar"] as const;
 type Section = (typeof sections)[number];
 
 export function EditorShell({
@@ -47,7 +49,7 @@ export function EditorShell({
   const preview = useMemo(
     () =>
       createPreviewDocument({
-        componentCss: [themeCss, avatarCss, buttonCss, cardCss].join("\n"),
+        componentCss: [themeCss, avatarCss, buttonCss, cardCss, inputCss, surfaceCss].join("\n"),
         designSystem,
         section,
         theme: previewTheme,

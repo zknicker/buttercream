@@ -12,6 +12,8 @@
     "./components/avatar": "./src/components/avatar.css",
     "./components/button": "./src/components/button.css",
     "./components/card": "./src/components/card.css",
+    "./components/input": "./src/components/input.css",
+    "./components/surface": "./src/components/surface.css",
     "./theme": "./src/theme.css",
     "./package.json": "./package.json"
   },
