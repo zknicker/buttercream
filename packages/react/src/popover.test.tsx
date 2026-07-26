@@ -19,4 +19,15 @@ describe("Popover", () => {
     expect(markup).toContain('aria-haspopup="dialog"');
     expect(markup).toContain(">Open</button>");
   });
+
+  test("renders an accessible, geometrically styled default close icon", () => {
+    const markup = renderToStaticMarkup(
+      <Popover>
+        <Popover.Close />
+      </Popover>,
+    );
+
+    expect(markup).toContain('aria-label="Close"');
+    expect(markup).toContain('<span aria-hidden="true" class="popover__close-icon"></span>');
+  });
 });

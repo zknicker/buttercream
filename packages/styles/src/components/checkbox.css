@@ -7,7 +7,7 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
-    line-height: calc(1.25rem * var(--line-height));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
@@ -53,14 +53,14 @@
   .checkbox__indicator {
     position: relative;
     display: block;
-    width: 0.625rem;
-    height: 0.625rem;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 
   .checkbox__indicator::after {
     position: absolute;
-    top: 0;
-    left: 0.1875rem;
+    top: 0.0625rem;
+    left: 0.25rem;
     width: 0.25rem;
     height: 0.5rem;
     border: solid currentColor;
@@ -71,8 +71,8 @@
 
   .checkbox__control[data-indeterminate] .checkbox__indicator::after,
   .checkbox__native:indeterminate + .checkbox__control .checkbox__indicator::after {
-    top: 0.25rem;
-    left: 0.0625rem;
+    top: 0.3125rem;
+    left: 0.125rem;
     width: 0.5rem;
     height: 0;
     border-width: 0 0 0.125rem;
@@ -95,7 +95,7 @@
   .checkbox__description {
     color: color-mix(in oklab, var(--foreground) 55%, transparent);
     font-size: calc(0.75rem * var(--font-size-scale));
-    line-height: calc(1.125rem * var(--line-height));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .checkbox:focus-within .checkbox__control {

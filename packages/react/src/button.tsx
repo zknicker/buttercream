@@ -17,6 +17,7 @@ export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps extends Omit<BaseButton.Props, "className"> {
   className?: string;
+  fullWidth?: boolean;
   iconOnly?: boolean;
   loading?: boolean;
   size?: ButtonSize;
@@ -27,6 +28,7 @@ export function Button({
   children,
   className,
   disabled,
+  fullWidth = false,
   iconOnly = false,
   loading = false,
   size = "md",
@@ -35,10 +37,12 @@ export function Button({
 }: ButtonProps): ReactElement {
   return (
     <BaseButton
+      aria-busy={loading || undefined}
       className={classes(
         "button",
         `button--${variant}`,
         size !== "md" && `button--${size}`,
+        fullWidth && "button--full-width",
         iconOnly && "button--icon-only",
         className,
       )}

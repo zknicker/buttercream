@@ -5,26 +5,34 @@ import type { ReactElement } from "react";
 import { classes } from "./classes.ts";
 
 export type AvatarSize = "sm" | "md" | "lg";
-export type AvatarShape = "circle" | "rounded";
+export type AvatarColor = "default" | "accent" | "success" | "warning" | "danger";
+export type AvatarShape = "square" | "rounded" | "circle";
+export type AvatarVariant = "solid" | "soft";
 
-export interface AvatarRootProps extends Omit<BaseAvatar.Root.Props, "className"> {
+export interface AvatarRootProps extends Omit<BaseAvatar.Root.Props, "className" | "color"> {
   className?: string;
+  color?: AvatarColor;
   shape?: AvatarShape;
   size?: AvatarSize;
+  variant?: AvatarVariant;
 }
 
 function AvatarRoot({
   className,
-  shape = "circle",
+  color = "default",
+  shape = "rounded",
   size = "md",
+  variant = "solid",
   ...props
 }: AvatarRootProps): ReactElement {
   return (
     <BaseAvatar.Root
       className={classes(
         "avatar",
+        color !== "default" && `avatar--${color}`,
         size !== "md" && `avatar--${size}`,
-        shape === "rounded" && "avatar--rounded",
+        shape !== "rounded" && `avatar--${shape}`,
+        variant !== "solid" && `avatar--${variant}`,
         className,
       )}
       {...props}

@@ -28,9 +28,17 @@
       "types": "./dist/checkbox.d.mts",
       "import": "./dist/checkbox.mjs"
     },
+    "./drawer": {
+      "types": "./dist/drawer.d.mts",
+      "import": "./dist/drawer.mjs"
+    },
     "./input": {
       "types": "./dist/input.d.mts",
       "import": "./dist/input.mjs"
+    },
+    "./modal": {
+      "types": "./dist/modal.d.mts",
+      "import": "./dist/modal.mjs"
     },
     "./popover": {
       "types": "./dist/popover.d.mts",

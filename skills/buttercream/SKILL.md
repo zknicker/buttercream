@@ -73,6 +73,9 @@ export function Confirmation() {
 - Expect Base UI state attributes such as `data-disabled`.
 - Skip an interactive component when Buttercream does not export it. Do not substitute another
   primitive library without explicit project approval.
+- Follow the icon family, treatment, package, and import pattern in the generated `DESIGN.md`.
+  Do not mix icon families in one interface unless the guidance explicitly allows it.
+- Keep icon-only controls labeled and mark decorative icons as hidden from assistive technology.
 - Use `className` for local layout. Put reusable visual changes in theme tokens or public BEM rules.
 
 ## Theme
@@ -140,4 +143,3 @@ When applying an export:
 5. Show the diff and run focused checks.
 
 Buttercream CLI itself must remain read-only and must never mutate the consuming repository.
-

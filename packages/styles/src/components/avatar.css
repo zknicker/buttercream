@@ -1,40 +1,56 @@
 @layer components {
   .avatar {
+    --bc-avatar-background: var(--default);
+    --bc-avatar-foreground: var(--default-foreground);
+    --bc-avatar-soft-background: var(--default);
+    --bc-avatar-soft-foreground: var(--default-foreground);
+
     position: relative;
     display: inline-flex;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: calc(2.5rem * var(--spacing-scale));
+    height: calc(2.5rem * var(--spacing-scale));
     flex: none;
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    border-radius: 999px;
-    background: var(--default);
-    color: var(--default-foreground);
+    border-radius: var(--form-radius);
+    background: var(--bc-avatar-background);
+    color: var(--bc-avatar-foreground);
     font-family: var(--font-heading);
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
+    vertical-align: middle;
   }
 
   .avatar--sm {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 0.625rem;
+    width: calc(2rem * var(--spacing-scale));
+    height: calc(2rem * var(--spacing-scale));
+    border-radius: min(var(--form-radius), 0.5rem);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .avatar--lg {
-    width: 3.5rem;
-    height: 3.5rem;
-    font-size: 1rem;
+    width: calc(3rem * var(--spacing-scale));
+    height: calc(3rem * var(--spacing-scale));
+    font-size: calc(1rem * var(--font-size-scale));
+    line-height: calc(1.5rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
-  .avatar--rounded {
-    border-radius: var(--form-radius);
+  .avatar--square {
+    border-radius: 0;
+  }
+
+  .avatar--circle {
+    border-radius: 999px;
   }
 
   .avatar__image {
+    display: block;
     width: 100%;
     height: 100%;
+    flex: none;
     object-fit: cover;
   }
 
@@ -42,13 +58,77 @@
     display: flex;
     width: 100%;
     height: 100%;
+    flex: none;
     align-items: center;
     justify-content: center;
+  }
+
+  .avatar--accent,
+  .avatar__fallback--accent {
+    --bc-avatar-background: var(--accent);
+    --bc-avatar-foreground: var(--accent-foreground);
+    --bc-avatar-soft-background: var(--accent-soft);
+    --bc-avatar-soft-foreground: var(--accent);
+
+    background: var(--bc-avatar-background);
+    color: var(--bc-avatar-foreground);
+  }
+
+  .avatar--success,
+  .avatar__fallback--success {
+    --bc-avatar-background: var(--success);
+    --bc-avatar-foreground: var(--success-foreground);
+    --bc-avatar-soft-background: var(--success-soft);
+    --bc-avatar-soft-foreground: var(--success);
+
+    background: var(--bc-avatar-background);
+    color: var(--bc-avatar-foreground);
+  }
+
+  .avatar--warning,
+  .avatar__fallback--warning {
+    --bc-avatar-background: var(--warning);
+    --bc-avatar-foreground: var(--warning-foreground);
+    --bc-avatar-soft-background: var(--warning-soft);
+    --bc-avatar-soft-foreground: var(--warning);
+
+    background: var(--bc-avatar-background);
+    color: var(--bc-avatar-foreground);
+  }
+
+  .avatar--danger,
+  .avatar__fallback--danger {
+    --bc-avatar-background: var(--danger);
+    --bc-avatar-foreground: var(--danger-foreground);
+    --bc-avatar-soft-background: var(--danger-soft);
+    --bc-avatar-soft-foreground: var(--danger);
+
+    background: var(--bc-avatar-background);
+    color: var(--bc-avatar-foreground);
+  }
+
+  .avatar--soft {
+    background: var(--bc-avatar-soft-background);
+    color: var(--bc-avatar-soft-foreground);
+  }
+
+  .avatar-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .avatar-group > .avatar + .avatar {
+    margin-inline-start: calc(-0.5rem * var(--spacing-scale));
+  }
+
+  .avatar-group > .avatar {
+    box-shadow: 0 0 0 2px var(--background);
   }
 
   .agent-avatar {
     position: relative;
     display: inline-flex;
+    vertical-align: middle;
   }
 
   .agent-avatar__status {

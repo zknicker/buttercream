@@ -4,11 +4,47 @@ const cssValue = z.string().trim().min(1);
 const positiveScale = z.number().positive();
 const componentSizeSchema = z.enum(["sm", "md", "lg"]);
 const componentSideSchema = z.enum(["top", "right", "bottom", "left"]);
+const backdropVariantSchema = z.enum(["opaque", "blur", "transparent"]);
 const defaultOverlayShadow = "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)";
+
+export const hugeiconsTreatmentSchema = z.enum([
+  "stroke-rounded",
+  "stroke-sharp",
+  "stroke-standard",
+  "solid-rounded",
+  "solid-sharp",
+  "solid-standard",
+  "bulk-rounded",
+  "duotone-rounded",
+  "duotone-standard",
+  "twotone-rounded",
+]);
+
+export const defaultIconSettings = {
+  family: "hugeicons",
+  size: 16,
+  strokeWidth: 2,
+  treatment: "stroke-rounded",
+} as const;
+
+export const iconSettingsSchema = z.discriminatedUnion("family", [
+  z.object({
+    family: z.literal("lucide"),
+    size: z.number().positive(),
+    strokeWidth: z.number().positive(),
+    treatment: z.literal("stroke"),
+  }),
+  z.object({
+    family: z.literal("hugeicons"),
+    size: z.number().positive(),
+    strokeWidth: z.number().positive(),
+    treatment: hugeiconsTreatmentSchema,
+  }),
+]);
 
 export const componentSettingsSchema = z.object({
   avatar: z.object({
-    defaultShape: z.enum(["square", "rounded"]),
+    defaultShape: z.enum(["square", "rounded", "circle"]),
     defaultSize: componentSizeSchema,
   }),
   button: z.object({
@@ -24,7 +60,7 @@ export const componentSettingsSchema = z.object({
     ]),
   }),
   card: z.object({
-    defaultVariant: z.enum(["default", "secondary"]),
+    defaultVariant: z.enum(["default", "secondary", "tertiary", "transparent"]),
   }),
   checkbox: z
     .object({
@@ -37,6 +73,15 @@ export const componentSettingsSchema = z.object({
       defaultSize: "md",
       defaultVariant: "primary",
     }),
+  drawer: z
+    .object({
+      defaultBackdrop: backdropVariantSchema,
+      defaultPlacement: componentSideSchema,
+    })
+    .default({
+      defaultBackdrop: "opaque",
+      defaultPlacement: "bottom",
+    }),
   input: z
     .object({
       defaultFullWidth: z.boolean(),
@@ -45,6 +90,15 @@ export const componentSettingsSchema = z.object({
     .default({
       defaultFullWidth: false,
       defaultVariant: "primary",
+    }),
+  modal: z
+    .object({
+      defaultBackdrop: backdropVariantSchema,
+      defaultPlacement: z.enum(["auto", "top", "center", "bottom"]),
+    })
+    .default({
+      defaultBackdrop: "opaque",
+      defaultPlacement: "auto",
     }),
   popover: z
     .object({
@@ -105,13 +159,14 @@ export const componentSettingsSchema = z.object({
     }),
 });
 
-function createThemeTokensSchema(overlayShadow: string) {
+function createThemeTokensSchema(overlayShadow: string, backdrop: string) {
   return z.object({
     colors: z.object({
       accent: cssValue,
       accentForeground: cssValue,
       accentSoft: cssValue,
       background: cssValue,
+      backdrop: cssValue.default(backdrop),
       border: cssValue,
       card: cssValue,
       cardForeground: cssValue,
@@ -154,7 +209,7 @@ function createThemeTokensSchema(overlayShadow: string) {
   });
 }
 
-export const themeTokensSchema = createThemeTokensSchema(defaultOverlayShadow);
+export const themeTokensSchema = createThemeTokensSchema(defaultOverlayShadow, "rgb(0 0 0 / 0.38)");
 
 export const designSystemSchema = z.object({
   components: componentSettingsSchema,
@@ -166,13 +221,14 @@ export const designSystemSchema = z.object({
     voiceAndTone: z.string().optional(),
     website: z.string().optional(),
   }),
+  icons: iconSettingsSchema.default(defaultIconSettings),
   rules: z.object({
     agent: z.string(),
     customCss: z.string(),
   }),
   schemaVersion: z.literal(2),
   theme: z.object({
-    dark: createThemeTokensSchema("none"),
+    dark: createThemeTokensSchema("none", "rgb(0 0 0 / 0.56)"),
     light: themeTokensSchema,
   }),
 });
@@ -181,4 +237,6 @@ export const designSystemJsonSchema = z.toJSONSchema(designSystemSchema);
 
 export type ComponentSettings = z.infer<typeof componentSettingsSchema>;
 export type DesignSystem = z.infer<typeof designSystemSchema>;
+export type HugeiconsTreatment = z.infer<typeof hugeiconsTreatmentSchema>;
+export type IconSettings = z.infer<typeof iconSettingsSchema>;
 export type ThemeTokens = z.infer<typeof themeTokensSchema>;

@@ -159,15 +159,19 @@ function PopoverDescription({
 }
 
 function PopoverClose({
+  children,
   className,
   ...props
 }: Omit<BasePopover.Close.Props, "className"> & { className?: string }): ReactElement {
   return (
     <BasePopover.Close
+      aria-label={children == null ? "Close" : undefined}
       className={classes("popover__close", className)}
       data-slot="popover-close"
       {...props}
-    />
+    >
+      {children ?? <span aria-hidden="true" className="popover__close-icon" />}
+    </BasePopover.Close>
   );
 }
 

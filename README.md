@@ -16,7 +16,9 @@ import {
   Button,
   Card,
   Checkbox,
+  Drawer,
   Input,
+  Modal,
   Popover,
   RadioGroup,
   Select,
@@ -81,6 +83,34 @@ export function Example() {
           <Popover.Description>Use the command palette to jump anywhere.</Popover.Description>
         </Popover.Content>
       </Popover>
+      <Modal>
+        <Modal.Trigger render={<Button variant="tertiary" />}>Open modal</Modal.Trigger>
+        <Modal.Portal>
+          <Modal.Backdrop variant="blur" />
+          <Modal.Container>
+            <Modal.Dialog>
+              <Modal.Header>
+                <Modal.Heading>Welcome</Modal.Heading>
+              </Modal.Header>
+              <Modal.Body>Focused content.</Modal.Body>
+            </Modal.Dialog>
+          </Modal.Container>
+        </Modal.Portal>
+      </Modal>
+      <Drawer>
+        <Drawer.Trigger render={<Button variant="tertiary" />}>Open drawer</Drawer.Trigger>
+        <Drawer.Portal>
+          <Drawer.Backdrop />
+          <Drawer.Content placement="right">
+            <Drawer.Dialog>
+              <Drawer.Header>
+                <Drawer.Heading>Settings</Drawer.Heading>
+              </Drawer.Header>
+              <Drawer.Body>Supplementary content.</Drawer.Body>
+            </Drawer.Dialog>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer>
     </>
   );
 }
@@ -100,7 +130,7 @@ Read [CONTEXT.md](./CONTEXT.md) for the product model and `docs/adr/` for durabl
 ## Portable design systems
 
 The hosted editor stores one canonical schema-versioned document. Its **Code** view projects that
-document into:
+document—including theme tokens, component defaults, and icon authoring settings—into:
 
 - `global.css`
 - `DESIGN.md`

@@ -1,5 +1,12 @@
+import type { DesignSystem } from "@buttercream/theme-core";
+import { renderAvatarPreview } from "./preview-avatar.ts";
+import { renderButtonPreview } from "./preview-button.ts";
+import { renderCardPreview } from "./preview-card.ts";
 import { renderCheckboxPreview, renderSwitchPreview } from "./preview-choice-controls.ts";
+import { renderDrawerPreview } from "./preview-drawer.ts";
 import { renderInputPreview } from "./preview-form-controls.ts";
+import { createPreviewIcons } from "./preview-icons.ts";
+import { renderModalPreview } from "./preview-modal.ts";
 import { renderPopoverPreview } from "./preview-popover.ts";
 import { renderRadioGroupPreview } from "./preview-radio-group.ts";
 import { renderSelectPreview } from "./preview-select.ts";
@@ -11,6 +18,8 @@ export type PreviewSection =
   | "Guides"
   | "Button"
   | "Input"
+  | "Modal"
+  | "Drawer"
   | "Popover"
   | "Checkbox"
   | "Radio Group"
@@ -22,15 +31,24 @@ export type PreviewSection =
   | "Card"
   | "Avatar";
 
-export function renderPreviewSection(section: PreviewSection): string {
+export function renderPreviewSection(
+  section: PreviewSection,
+  iconSettings: DesignSystem["icons"],
+): string {
   if (section === "Guides") {
     return renderGuides();
   }
   if (section === "Card") {
-    return renderCardPreview();
+    return renderCardPreview(createPreviewIcons(iconSettings));
   }
   if (section === "Input") {
     return renderInputPreview();
+  }
+  if (section === "Modal") {
+    return renderModalPreview();
+  }
+  if (section === "Drawer") {
+    return renderDrawerPreview();
   }
   if (section === "Popover") {
     return renderPopoverPreview();
@@ -59,7 +77,7 @@ export function renderPreviewSection(section: PreviewSection): string {
   if (section === "Avatar") {
     return renderAvatarPreview();
   }
-  return renderButtonPreview();
+  return renderButtonPreview(createPreviewIcons(iconSettings));
 }
 
 function renderGuides(): string {
@@ -70,67 +88,5 @@ function renderGuides(): string {
     <div class="swatch" style="background:var(--success);color:var(--success-foreground)">Success</div>
     <div class="swatch" style="background:var(--warning);color:var(--warning-foreground)">Warning</div>
     <div class="swatch" style="background:var(--danger);color:var(--danger-foreground)">Danger</div>
-  </div>`;
-}
-
-function renderCardPreview(): string {
-  return `<div class="specimens">
-    <section class="specimen">
-      <article class="card" style="width:min(100%,360px)">
-        <header class="card__header">
-          <div class="card__title">Default card</div>
-          <div class="card__description">Composed from the stock Card slots.</div>
-        </header>
-        <div class="card__content">Theme changes update this surface directly.</div>
-        <footer class="card__footer"><button class="button button--primary">Continue</button></footer>
-      </article>
-      <div class="specimen__label">Default</div>
-    </section>
-    <section class="specimen">
-      <article class="card card--secondary" style="width:min(100%,360px)">
-        <header class="card__header"><div class="card__title">Secondary card</div></header>
-        <div class="card__content">Same component, alternate stock surface.</div>
-      </article>
-      <div class="specimen__label">Secondary</div>
-    </section>
-  </div>`;
-}
-
-function renderAvatarPreview(): string {
-  return `<div class="specimens">
-    <section class="specimen">
-      <span class="avatar avatar--sm"><span class="avatar__fallback">BC</span></span>
-      <span class="avatar"><span class="avatar__fallback">BC</span></span>
-      <span class="avatar avatar--lg"><span class="avatar__fallback">BC</span></span>
-      <div class="specimen__label">Sizes</div>
-    </section>
-    <section class="specimen">
-      <span class="agent-avatar">
-        <span class="avatar avatar--lg avatar--rounded"><span class="avatar__fallback">AI</span></span>
-        <span class="agent-avatar__status agent-avatar__status--online"></span>
-      </span>
-      <div class="specimen__label">Agent avatar</div>
-    </section>
-  </div>`;
-}
-
-function renderButtonPreview(): string {
-  return `<div class="specimens">
-    <section class="specimen">
-      <button class="button button--primary">Primary</button>
-      <button class="button button--secondary">Secondary</button>
-      <button class="button button--tertiary">Tertiary</button>
-      <button class="button button--outline">Outline</button>
-      <button class="button button--ghost">Ghost</button>
-      <button class="button button--danger">Danger</button>
-      <button class="button button--danger-soft">Danger soft</button>
-      <div class="specimen__label">Variants</div>
-    </section>
-    <section class="specimen">
-      <button class="button button--primary button--sm">Small</button>
-      <button class="button button--primary">Medium</button>
-      <button class="button button--primary button--lg">Large</button>
-      <div class="specimen__label">Sizes</div>
-    </section>
   </div>`;
 }

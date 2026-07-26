@@ -1,43 +1,43 @@
 @layer components {
   .button {
+    --bc-button-spinner-color: var(--foreground);
+
     position: relative;
     display: inline-flex;
-    min-height: calc(2.25rem * var(--spacing-scale));
+    width: fit-content;
+    height: calc(2.25rem * var(--spacing-scale));
+    flex: none;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: calc(0.5rem * var(--spacing-scale));
     padding-inline: calc(1rem * var(--spacing-scale));
     border: var(--field-border) solid transparent;
     border-radius: var(--form-radius);
     font-family: var(--font-heading);
     font-size: calc(0.875rem * var(--font-size-scale));
     font-weight: 700;
-    line-height: 1;
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
     letter-spacing: calc(0.05em + var(--letter-spacing));
     text-transform: uppercase;
     white-space: nowrap;
     cursor: pointer;
     transition:
       transform 100ms ease,
-      box-shadow 100ms ease,
-      background-color 100ms ease,
-      color 100ms ease;
+      box-shadow 100ms ease;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .button--primary,
-  .button--secondary,
-  .button--outline,
-  .button--danger {
+  .button--primary {
+    --bc-button-spinner-color: var(--accent-foreground);
+
+    background: var(--accent);
+    color: var(--accent-foreground);
     box-shadow: 0 var(--bc-hard-shadow-depth) 0 var(--bc-hard-shadow);
   }
 
-  .button--primary {
-    background: var(--accent);
-    color: var(--accent-foreground);
-  }
-
   .button--secondary {
+    --bc-button-spinner-color: var(--default-foreground);
+
     background: var(--default);
     color: var(--default-foreground);
   }
@@ -59,25 +59,31 @@
   }
 
   .button--danger {
+    --bc-button-spinner-color: var(--danger-foreground);
+
     background: var(--danger);
     color: var(--danger-foreground);
   }
 
   .button--danger-soft {
+    --bc-button-spinner-color: var(--danger);
+
     background: var(--danger-soft);
     color: var(--danger);
   }
 
   .button--sm {
-    min-height: calc(1.875rem * var(--spacing-scale));
+    height: calc(1.875rem * var(--spacing-scale));
     padding-inline: calc(0.75rem * var(--spacing-scale));
     font-size: calc(0.75rem * var(--font-size-scale));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .button--lg {
-    min-height: calc(2.75rem * var(--spacing-scale));
+    height: calc(2.75rem * var(--spacing-scale));
     padding-inline: calc(1.25rem * var(--spacing-scale));
     font-size: calc(1rem * var(--font-size-scale));
+    line-height: calc(1.5rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .button--icon-only {
@@ -93,12 +99,21 @@
     width: calc(2.75rem * var(--spacing-scale));
   }
 
+  .button--full-width {
+    width: 100%;
+  }
+
   .button:hover:not([data-disabled], :disabled) {
     filter: brightness(0.96);
   }
 
-  .button:active:not([data-disabled], :disabled),
-  .button[data-pressed] {
+  .button:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .button--primary:active:not([data-disabled], :disabled),
+  .button--primary[data-pressed] {
     box-shadow: none;
     transform: translateY(var(--bc-hard-shadow-depth));
   }
@@ -121,7 +136,7 @@
     border: 2px solid currentColor;
     border-right-color: transparent;
     border-radius: 999px;
-    color: var(--accent-foreground);
+    color: var(--bc-button-spinner-color);
     animation: bc-spin 600ms linear infinite;
   }
 

@@ -8,6 +8,7 @@ const variablePaths = {
   "accent-foreground": ["colors", "accentForeground"],
   "accent-soft": ["colors", "accentSoft"],
   background: ["colors", "background"],
+  backdrop: ["colors", "backdrop"],
   border: ["colors", "border"],
   card: ["colors", "card"],
   "card-foreground": ["colors", "cardForeground"],

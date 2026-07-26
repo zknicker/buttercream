@@ -11,7 +11,9 @@ import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw
 import buttonCss from "../../../../packages/styles/src/components/button.css?raw";
 import cardCss from "../../../../packages/styles/src/components/card.css?raw";
 import checkboxCss from "../../../../packages/styles/src/components/checkbox.css?raw";
+import drawerCss from "../../../../packages/styles/src/components/drawer.css?raw";
 import inputCss from "../../../../packages/styles/src/components/input.css?raw";
+import modalCss from "../../../../packages/styles/src/components/modal.css?raw";
 import popoverCss from "../../../../packages/styles/src/components/popover.css?raw";
 import radioGroupCss from "../../../../packages/styles/src/components/radio-group.css?raw";
 import selectCss from "../../../../packages/styles/src/components/select.css?raw";
@@ -32,6 +34,8 @@ const sections = [
   "Guides",
   "Button",
   "Input",
+  "Modal",
+  "Drawer",
   "Popover",
   "Checkbox",
   "Radio Group",
@@ -52,6 +56,8 @@ const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
     items: [
       "Button",
       "Input",
+      "Modal",
+      "Drawer",
       "Popover",
       "Checkbox",
       "Radio Group",
@@ -118,7 +124,9 @@ export function EditorShell({
           buttonCss,
           cardCss,
           checkboxCss,
+          drawerCss,
           inputCss,
+          modalCss,
           popoverCss,
           radioGroupCss,
           selectCss,

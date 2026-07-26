@@ -16,33 +16,34 @@
   .popover__popup {
     position: relative;
     display: flex;
-    width: var(--popup-width, auto);
-    min-width: min(14rem, var(--available-width));
-    max-width: min(20rem, var(--available-width));
+    width: var(--popup-width, min(16rem, var(--available-width, 16rem)));
+    max-width: min(20rem, var(--available-width, 20rem));
     height: var(--popup-height, auto);
     flex-direction: column;
-    gap: calc(0.25rem * var(--spacing-scale));
+    gap: calc(0.5rem * var(--spacing-scale));
     padding: calc(1rem * var(--spacing-scale));
     border-radius: var(--form-radius);
     outline: none;
     background: var(--card);
     color: var(--card-foreground);
-    box-shadow:
-      var(--overlay-shadow),
-      inset 0 0 0 1px var(--border);
+    box-shadow: var(--overlay-shadow);
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
-    line-height: calc(1.25rem * var(--line-height));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
     transform-origin: var(--transform-origin);
     transition:
-      transform 100ms ease-out,
-      opacity 100ms ease-out;
+      transform 150ms ease-out,
+      opacity 150ms ease-out;
   }
 
   .popover__popup[data-starting-style],
   .popover__popup[data-ending-style] {
     opacity: 0;
     transform: scale(0.98);
+  }
+
+  .popover__popup[data-ending-style] {
+    transition-duration: 100ms;
   }
 
   .popover__popup[data-instant] {
@@ -54,7 +55,7 @@
     margin: 0;
     color: var(--card-foreground);
     font: inherit;
-    font-weight: 600;
+    font-weight: 500;
     text-wrap: balance;
   }
 
@@ -82,6 +83,37 @@
     color: color-mix(in oklab, var(--card-foreground) 62%, transparent);
     cursor: pointer;
     font: inherit;
+  }
+
+  .popover__close-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0.75rem;
+    height: 0.75rem;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .popover__close-icon::before,
+  .popover__close-icon::after {
+    position: absolute;
+    top: calc(50% - 1px);
+    left: 0.0625rem;
+    width: 0.625rem;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    content: "";
+  }
+
+  .popover__close-icon::before {
+    transform: rotate(45deg);
+  }
+
+  .popover__close-icon::after {
+    transform: rotate(-45deg);
   }
 
   .popover__close:hover {
@@ -131,10 +163,6 @@
     left: -0.5625rem;
     rotate: -90deg;
   }
-}
-
-[data-theme="dark"] .popover__popup {
-  box-shadow: inset 0 0 0 1px var(--border);
 }
 
 @media (prefers-reduced-motion: reduce) {

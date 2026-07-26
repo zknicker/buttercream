@@ -1,4 +1,6 @@
-import type { DesignSystem, ThemeTokens } from "./design-system.ts";
+import { type DesignSystem, defaultIconSettings, type ThemeTokens } from "./design-system.ts";
+
+export { defaultIconSettings };
 
 const sharedTypography: ThemeTokens["typography"] = {
   fontHeading: "ui-rounded, system-ui, sans-serif",
@@ -23,6 +25,7 @@ export const defaultLightTheme: ThemeTokens = {
     accentForeground: "#ffffff",
     accentSoft: "color-mix(in oklab, #1b1b1b 10%, transparent)",
     background: "#f8f8f8",
+    backdrop: "rgb(0 0 0 / 0.38)",
     border: "color-mix(in oklab, #1b1b1b 14%, transparent)",
     card: "#ffffff",
     cardForeground: "#1b1b1b",
@@ -60,6 +63,7 @@ export const defaultDarkTheme: ThemeTokens = {
     accentForeground: "#1c1917",
     accentSoft: "color-mix(in oklab, #f5f5f4 12%, transparent)",
     background: "#161514",
+    backdrop: "rgb(0 0 0 / 0.56)",
     border: "color-mix(in oklab, #ffffff 14%, transparent)",
     card: "#201f1e",
     cardForeground: "#f5f5f4",
@@ -109,9 +113,17 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
         defaultSize: "md",
         defaultVariant: "primary",
       },
+      drawer: {
+        defaultBackdrop: "opaque",
+        defaultPlacement: "bottom",
+      },
       input: {
         defaultFullWidth: false,
         defaultVariant: "primary",
+      },
+      modal: {
+        defaultBackdrop: "opaque",
+        defaultPlacement: "auto",
       },
       popover: {
         defaultSide: "bottom",
@@ -142,6 +154,7 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
     identity: {
       name,
     },
+    icons: { ...defaultIconSettings },
     rules: {
       agent: "",
       customCss: "",

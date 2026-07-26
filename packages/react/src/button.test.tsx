@@ -14,4 +14,19 @@ describe("Button", () => {
     expect(markup).toContain("button--lg");
     expect(markup).toContain(">Delete<");
   });
+
+  test("renders full width and loading states", () => {
+    const markup = renderToStaticMarkup(
+      <Button fullWidth loading variant="secondary">
+        Save
+      </Button>,
+    );
+
+    expect(markup).toContain("button--full-width");
+    expect(markup).toContain("button--secondary");
+    expect(markup).toContain('data-loading="true"');
+    expect(markup).toContain("button__spinner");
+    expect(markup).toContain('aria-busy="true"');
+    expect(markup).toContain('aria-disabled="true"');
+  });
 });

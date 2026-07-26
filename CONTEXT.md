@@ -15,6 +15,8 @@ guides, previews, and project-specific agent guidance.
 - **Custom CSS** is authored BEM and utility CSS stored separately from structured theme tokens.
 - **Agent rules** are project-specific design instructions exported as `DESIGN.md`.
 - **Component settings** are typed default props for Buttercream components.
+- **Icon settings** select the project icon family, treatment, size, and stroke width for previews
+  and generated authoring guidance.
 - `buttercream.json` associates a consuming repository with a hosted design system and export paths.
 
 ## Invariants

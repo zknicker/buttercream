@@ -5,7 +5,7 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
-    line-height: calc(1.25rem * var(--line-height));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .radio-group__header {
@@ -20,7 +20,7 @@
   .radio__description {
     color: color-mix(in oklab, var(--foreground) 55%, transparent);
     font-size: calc(0.75rem * var(--font-size-scale));
-    line-height: calc(1.125rem * var(--line-height));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .radio-group__items {
@@ -64,7 +64,7 @@
     justify-content: center;
     margin-block-start: 0.125rem;
     border: var(--field-border) solid var(--border);
-    border-radius: min(var(--form-radius), 0.1875rem);
+    border-radius: min(var(--form-radius), 0.25rem);
     outline: none;
     background: var(--card);
     color: var(--accent-foreground);

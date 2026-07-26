@@ -7,8 +7,10 @@ import { classes } from "./classes.ts";
 
 type DivProps = useRender.ComponentProps<"div">;
 
+export type CardVariant = "default" | "secondary" | "tertiary" | "transparent";
+
 export interface CardRootProps extends DivProps {
-  variant?: "default" | "secondary" | "transparent";
+  variant?: CardVariant;
 }
 
 function CardRoot({

@@ -12,7 +12,7 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
-    line-height: calc(1.25rem * var(--line-height));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
@@ -79,7 +79,7 @@
   .switch__description {
     color: color-mix(in oklab, var(--foreground) 55%, transparent);
     font-size: calc(0.75rem * var(--font-size-scale));
-    line-height: calc(1.125rem * var(--line-height));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .switch:focus-within .switch__control {
@@ -100,6 +100,7 @@
     --bc-switch-thumb-height: 0.75rem;
 
     font-size: calc(0.75rem * var(--font-size-scale));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .switch--lg {
@@ -109,7 +110,7 @@
     --bc-switch-thumb-height: 1.25rem;
 
     font-size: calc(1rem * var(--font-size-scale));
-    line-height: calc(1.5rem * var(--line-height));
+    line-height: calc(1.5rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 }
 

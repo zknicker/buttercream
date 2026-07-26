@@ -12,8 +12,12 @@ function TooltipRoot<Payload = unknown>(props: TooltipProps<Payload>): ReactElem
 
 export type TooltipProviderProps = BaseTooltip.Provider.Props;
 
-function TooltipProvider(props: TooltipProviderProps): ReactElement {
-  return <BaseTooltip.Provider {...props} />;
+function TooltipProvider({
+  closeDelay = 500,
+  delay = 1500,
+  ...props
+}: TooltipProviderProps): ReactElement {
+  return <BaseTooltip.Provider closeDelay={closeDelay} delay={delay} {...props} />;
 }
 
 export interface TooltipTriggerProps<Payload = unknown>
@@ -48,14 +52,14 @@ function TooltipContent({
   className,
   positionerClassName,
   side = "top",
-  sideOffset = 8,
+  sideOffset,
   ...props
 }: TooltipContentProps): ReactElement {
   return (
     <BaseTooltip.Portal>
       <TooltipPositioner
         side={side}
-        sideOffset={sideOffset}
+        sideOffset={sideOffset ?? (arrow ? 7 : 3)}
         {...(positionerClassName === undefined ? {} : { className: positionerClassName })}
         {...props}
       >

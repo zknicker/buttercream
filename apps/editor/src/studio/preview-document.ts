@@ -28,7 +28,20 @@ export function createPreviewDocument({
       body { padding: 32px; font-family: var(--font-sans); }
       .specimens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
       .specimen { min-height: 260px; display: flex; flex-wrap: wrap; align-content: center; align-items: center; justify-content: center; gap: 16px; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+      .specimen--stack { flex-direction: column; flex-wrap: nowrap; }
       .specimen__label { width: 100%; align-self: flex-end; color: color-mix(in oklab, var(--foreground) 55%, transparent); font-size: 13px; }
+      .preview-icon { flex: none; }
+      .preview-card { width: min(100%, 23.375rem); }
+      .preview-card-grid { display: grid; width: min(100%, 23.375rem); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .preview-card--horizontal { display: grid; grid-template-columns: 5rem minmax(0, 1fr) auto; align-items: start; }
+      .preview-card__media { width: 5rem; height: 5rem; grid-row: span 2; border-radius: var(--form-radius); background: var(--accent-soft); }
+      .preview-card__meta { display: grid; grid-column: 2; align-self: end; font-size: 12px; }
+      .preview-card__meta span, .preview-byline { color: color-mix(in oklab, var(--foreground) 55%, transparent); }
+      .preview-card-stack { display: grid; width: min(100%, 23.375rem); gap: 16px; }
+      .preview-card--community { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; }
+      .preview-byline { display: inline-flex; grid-column: 2; align-items: center; gap: 8px; font-size: 12px; }
+      .preview-card__actions { justify-content: space-between; }
+      .preview-login { display: grid; gap: 12px; }
       .input-demo { display: grid; width: min(100%, 15rem); gap: 16px; }
       .input-demo--types { gap: 12px; }
       .input-field { display: grid; gap: 6px; }
@@ -51,6 +64,8 @@ export function createPreviewDocument({
       .preview-tooltip:hover .preview-tooltip__overlay,
       .preview-tooltip:focus-within .preview-tooltip__overlay,
       .preview-popover:focus-within .preview-popover__overlay { visibility: visible; opacity: 1; pointer-events: auto; }
+      .preview-modal, .preview-drawer { display: inline-flex; }
+      .preview-modal__overlay, .preview-drawer__overlay { width: auto; height: auto; margin: 0; padding: 0; border: 0; color: inherit; }
       .placement-cross { display: grid; grid-template: "blank top blank2" auto "left center right" auto "blank3 bottom blank4" auto / auto auto auto; align-items: center; justify-items: center; gap: 8px; }
       .placement-cross__top { grid-area: top; }
       .placement-cross__left { grid-area: left; }
@@ -70,7 +85,7 @@ export function createPreviewDocument({
     </style>
   </head>
   <body>
-    ${renderPreviewSection(section)}
+    ${renderPreviewSection(section, designSystem.icons)}
   </body>
 </html>`;
 }

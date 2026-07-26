@@ -19,18 +19,22 @@
     font-family: var(--font-sans);
     font-size: calc(0.75rem * var(--font-size-scale));
     font-weight: 500;
-    line-height: calc(1.125rem * var(--line-height));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
     overflow-wrap: anywhere;
     transform-origin: var(--transform-origin);
     transition:
-      transform 100ms ease-out,
-      opacity 100ms ease-out;
+      transform 150ms ease-out,
+      opacity 150ms ease-out;
   }
 
   .tooltip__popup[data-starting-style],
   .tooltip__popup[data-ending-style] {
     opacity: 0;
     transform: scale(0.98);
+  }
+
+  .tooltip__popup[data-ending-style] {
+    transition-duration: 100ms;
   }
 
   .tooltip__popup[data-instant] {

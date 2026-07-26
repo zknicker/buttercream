@@ -12,6 +12,7 @@ import {
   RangeControl,
   TextControl,
 } from "./theme-controls.tsx";
+import { ThemeIconControls } from "./theme-icon-controls.tsx";
 import type { SaveState } from "./use-design-system-draft.ts";
 
 const TABS = ["Style", "Variables", "Agent"] as const;
@@ -135,6 +136,14 @@ export function ThemeEditorPanel({
             value={designSystem.theme.light.density.fontSize}
           />
         </ControlSection>
+        <ThemeIconControls
+          icons={designSystem.icons}
+          onChange={(icons) =>
+            onUpdate((next) => {
+              next.icons = icons;
+            })
+          }
+        />
 
         <ControlSection title="Corners">
           <RangeControl
