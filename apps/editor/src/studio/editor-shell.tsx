@@ -138,7 +138,7 @@ export function EditorShell({
   return (
     <div
       className={classes(
-        "isolate grid h-dvh min-w-0 overflow-hidden bg-canvas transition-[grid-template-columns] duration-150 ease-out",
+        "isolate grid h-dvh min-w-0 overflow-hidden bg-sunken transition-[grid-template-columns] duration-150 ease-out",
         "max-[720px]:grid-cols-[minmax(0,1fr)] max-[720px]:grid-rows-[minmax(0,1fr)_52px]",
         "min-[721px]:grid-rows-[minmax(0,1fr)]",
         controlsOpen
@@ -158,8 +158,13 @@ export function EditorShell({
           className="flex min-w-0 max-w-40 items-center gap-1.5 rounded-(--radius-shell) px-2 text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg min-[721px]:max-w-60"
           href="/"
         >
-          <CupcakeMark size={18} />
-          <span className="truncate text-sm">{designSystem.identity.name}</span>
+          {/*
+           * Optically aligned, not geometrically. The cupcake's mass sits in the lower
+           * two thirds of its grid — stem and cherry occupy the top rows — so centring
+           * the box leaves the ink sitting visibly low against the wordmark.
+           */}
+          <CupcakeMark className="-mt-0.5" size={16} />
+          <span className="truncate text-sm font-medium">{designSystem.identity.name}</span>
           <HugeiconsIcon
             aria-hidden="true"
             className="shrink-0 text-muted"
@@ -169,29 +174,32 @@ export function EditorShell({
           />
         </a>
 
-        <strong className="font-mono text-xs font-normal tracking-wide text-muted uppercase">
-          {section}
-        </strong>
+        {/*
+         * Matches the wordmark's size and weight so the bar reads as three deliberate
+         * parts. As tracked uppercase mono it looked like a stray token rather than a
+         * "you are here".
+         */}
+        <strong className="truncate text-sm font-medium text-fg">{section}</strong>
 
         <div className="flex items-center justify-end gap-1">
-          <Button aria-label="Undo" disabled iconOnly size="sm" variant="ghost">
-            <HugeiconsIcon aria-hidden="true" icon={Undo02Icon} size={18} strokeWidth={2} />
+          <Button aria-label="Undo" disabled iconOnly size="md" variant="ghost">
+            <HugeiconsIcon aria-hidden="true" icon={Undo02Icon} size={16} strokeWidth={2} />
           </Button>
-          <Button aria-label="Redo" disabled iconOnly size="sm" variant="ghost">
-            <HugeiconsIcon aria-hidden="true" icon={Redo02Icon} size={18} strokeWidth={2} />
+          <Button aria-label="Redo" disabled iconOnly size="md" variant="ghost">
+            <HugeiconsIcon aria-hidden="true" icon={Redo02Icon} size={16} strokeWidth={2} />
           </Button>
           <span aria-hidden className="mx-1.5 h-6 w-px bg-fg/12" />
           <Button
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             iconOnly
             onClick={toggleTheme}
-            size="sm"
+            size="md"
             variant="ghost"
           >
             <HugeiconsIcon
               aria-hidden="true"
               icon={theme === "dark" ? Sun01Icon : Moon02Icon}
-              size={18}
+              size={16}
               strokeWidth={2}
             />
           </Button>
@@ -200,13 +208,13 @@ export function EditorShell({
               aria-label="Open theme controls"
               iconOnly
               onClick={() => setControlsOpen(true)}
-              size="sm"
+              size="md"
               variant="secondary"
             >
               <HugeiconsIcon
                 aria-hidden="true"
                 icon={SidebarLeft01Icon}
-                size={18}
+                size={16}
                 strokeWidth={2}
               />
             </Button>
@@ -218,7 +226,7 @@ export function EditorShell({
         aria-label="Preview navigation"
         className={classes(
           "relative z-2 flex items-center justify-center px-2 py-4",
-          "max-[720px]:order-last max-[720px]:border-t max-[720px]:border-fg/10 max-[720px]:bg-canvas",
+          "max-[720px]:order-last max-[720px]:border-t max-[720px]:border-fg/10 max-[720px]:bg-sunken",
         )}
         data-open={navOpen}
         onBlurCapture={(event) => {
@@ -307,8 +315,8 @@ export function EditorShell({
        * preview as the artifact inside it; without them the two fight for the same
        * plane. The top gutter clears the floating topbar.
        */}
-      <main className="min-h-0 min-w-0 bg-canvas px-3 pt-12 pb-3">
-        <div className="h-full w-full overflow-hidden rounded-xl bg-raised">
+      <main className="min-h-0 min-w-0 bg-sunken px-3 pt-12 pb-3">
+        <div className="h-full w-full overflow-hidden rounded-xl bg-raised ring-1 ring-line">
           <iframe
             className="block h-full w-full border-0 bg-transparent"
             sandbox=""

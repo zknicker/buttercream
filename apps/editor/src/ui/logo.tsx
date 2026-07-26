@@ -78,11 +78,17 @@ export interface LogoProps {
   size?: number;
 }
 
-/** The locked-up mark and wordmark. Identical everywhere it appears. */
-export function Logo({ className, size = 22 }: LogoProps): ReactElement {
+/**
+ * The locked-up mark and wordmark. Identical everywhere it appears.
+ *
+ * The mark carries a small upward nudge: its ink sits in the lower two thirds of the
+ * grid, since the stem and cherry occupy the top rows, so a geometrically centred box
+ * leaves the cupcake reading low against the wordmark.
+ */
+export function Logo({ className, size = 20 }: LogoProps): ReactElement {
   return (
     <span className={classes("flex items-center gap-2", className)}>
-      <CupcakeMark size={size} />
+      <CupcakeMark className="-mt-0.5" size={size} />
       <span className="font-mono text-fg lowercase tracking-tight">buttercream</span>
     </span>
   );

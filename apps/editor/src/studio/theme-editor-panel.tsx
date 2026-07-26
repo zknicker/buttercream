@@ -44,7 +44,7 @@ export function ThemeEditorPanel({
     <aside
       aria-label="Theme controls"
       className={classes(
-        "z-5 flex min-h-0 w-69 flex-col overflow-hidden bg-canvas transition-transform duration-150 ease-out",
+        "z-5 flex min-h-0 w-69 flex-col overflow-hidden bg-sunken transition-transform duration-150 ease-out",
         "max-[720px]:fixed max-[720px]:inset-y-0 max-[720px]:right-0 max-[720px]:w-[min(17.25rem,calc(100vw-1.5rem))] max-[720px]:shadow-2xl max-[720px]:shadow-ink/15 dark:max-[720px]:shadow-none",
         open ? "translate-x-0" : "translate-x-full",
       )}
@@ -54,10 +54,10 @@ export function ThemeEditorPanel({
           aria-label="Close theme controls"
           iconOnly
           onClick={onClose}
-          size="sm"
+          size="md"
           variant="ghost"
         >
-          <HugeiconsIcon aria-hidden="true" icon={SidebarRight01Icon} size={18} strokeWidth={2} />
+          <HugeiconsIcon aria-hidden="true" icon={SidebarRight01Icon} size={16} strokeWidth={2} />
         </Button>
         <div className="flex min-w-0 items-center justify-end gap-1.5">
           <ImportDialog current={designSystem} onImport={onImport} />
