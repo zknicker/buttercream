@@ -4,6 +4,9 @@ import {
   type DesignSystem,
   type ProjectExport,
 } from "@buttercream/theme-core";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Cancel01Icon from "@hugeicons-pro/core-stroke-rounded/Cancel01Icon";
+import SourceCodeIcon from "@hugeicons-pro/core-stroke-rounded/SourceCodeIcon";
 import { useMemo, useState } from "react";
 
 export function CodeDialog({
@@ -40,7 +43,10 @@ export function CodeDialog({
 
   return (
     <Dialog.Root onOpenChange={() => setCopyState("idle")}>
-      <Dialog.Trigger className="studio-button">Code</Dialog.Trigger>
+      <Dialog.Trigger className="studio-button studio-button--with-icon">
+        <HugeiconsIcon aria-hidden="true" icon={SourceCodeIcon} size={16} strokeWidth={2} />
+        Code
+      </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Backdrop className="studio-dialog__backdrop" />
         <Dialog.Viewport className="studio-dialog__viewport">
@@ -53,7 +59,7 @@ export function CodeDialog({
                 </Dialog.Description>
               </div>
               <Dialog.Close aria-label="Close code" className="studio-dialog__close">
-                ×
+                <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
               </Dialog.Close>
             </header>
             <div aria-label="Exported files" className="studio-code-tabs" role="tablist">

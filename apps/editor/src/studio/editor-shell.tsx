@@ -1,24 +1,30 @@
 import type { DesignSystem } from "@buttercream/theme-core";
-import { useMemo, useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
+import CakeSliceIcon from "@hugeicons-pro/core-stroke-rounded/CakeSliceIcon";
+import Moon02Icon from "@hugeicons-pro/core-stroke-rounded/Moon02Icon";
+import Redo02Icon from "@hugeicons-pro/core-stroke-rounded/Redo02Icon";
+import SidebarLeft01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarLeft01Icon";
+import Undo02Icon from "@hugeicons-pro/core-stroke-rounded/Undo02Icon";
+import { useEffect, useMemo, useState } from "react";
 import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw";
 import buttonCss from "../../../../packages/styles/src/components/button.css?raw";
 import cardCss from "../../../../packages/styles/src/components/card.css?raw";
 import inputCss from "../../../../packages/styles/src/components/input.css?raw";
 import surfaceCss from "../../../../packages/styles/src/components/surface.css?raw";
 import themeCss from "../../../../packages/styles/src/theme.css?raw";
-import { CodeDialog } from "./code-dialog.tsx";
-import { ImportDialog } from "./import-dialog.tsx";
 import { createPreviewDocument } from "./preview-document.ts";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
-import { ColorControl, ControlSection, RangeControl } from "./theme-controls.tsx";
-import {
-  type SaveDesignSystem,
-  type SaveState,
-  useDesignSystemDraft,
-} from "./use-design-system-draft.ts";
+import { ThemeEditorPanel } from "./theme-editor-panel.tsx";
+import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
 
 const sections = ["Guides", "Button", "Input", "Card", "Avatar"] as const;
 type Section = (typeof sections)[number];
+
+const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
+  { label: "Preview", items: ["Guides"] },
+  { label: "Components", items: ["Button", "Input", "Card", "Avatar"] },
+];
 
 export function EditorShell({
   initialDesignSystem,
@@ -31,6 +37,8 @@ export function EditorShell({
   initialVersion?: number;
   onSave?: SaveDesignSystem;
 }) {
+  const [controlsOpen, setControlsOpen] = useState(true);
+  const [navOpen, setNavOpen] = useState(false);
   const [section, setSection] = useState<Section>("Button");
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("light");
   const {
@@ -46,6 +54,17 @@ export function EditorShell({
     ...(onSave ? { onSave } : {}),
   });
 
+  useEffect(() => {
+    const compactViewport = window.matchMedia("(max-width: 720px)");
+    const syncControls = ({ matches }: MediaQueryListEvent | MediaQueryList) => {
+      setControlsOpen(!matches);
+    };
+
+    syncControls(compactViewport);
+    compactViewport.addEventListener("change", syncControls);
+    return () => compactViewport.removeEventListener("change", syncControls);
+  }, []);
+
   const preview = useMemo(
     () =>
       createPreviewDocument({
@@ -58,46 +77,109 @@ export function EditorShell({
   );
 
   return (
-    <div className="studio-editor">
+    <div className="studio-editor" data-controls-open={controlsOpen}>
       <header className="studio-topbar">
-        <a className="studio-wordmark" href="/">
-          Buttercream
+        <a aria-label="Homepage" className="studio-editor__brand" href="/">
+          <HugeiconsIcon
+            aria-hidden="true"
+            className="studio-editor__brand-icon"
+            icon={CakeSliceIcon}
+            size={20}
+            strokeWidth={2}
+          />
+          <span>{designSystem.identity.name}</span>
+          <HugeiconsIcon
+            aria-hidden="true"
+            className="studio-editor__brand-chevron"
+            icon={ArrowDown01Icon}
+            size={12}
+            strokeWidth={2}
+          />
         </a>
         <strong>{section}</strong>
         <div className="studio-topbar__actions">
-          <button className="studio-icon-button" type="button">
-            ↶<span className="studio-sr-only">Undo</span>
+          <button aria-label="Undo" className="studio-icon-button" disabled type="button">
+            <HugeiconsIcon aria-hidden="true" icon={Undo02Icon} size={16} strokeWidth={2} />
           </button>
-          <button className="studio-icon-button" type="button">
-            ↷<span className="studio-sr-only">Redo</span>
+          <button aria-label="Redo" className="studio-icon-button" disabled type="button">
+            <HugeiconsIcon aria-hidden="true" icon={Redo02Icon} size={16} strokeWidth={2} />
           </button>
+          <span aria-hidden className="studio-topbar__divider" />
           <button
+            aria-label="Toggle preview theme"
             className="studio-icon-button"
             onClick={() => setPreviewTheme((value) => (value === "light" ? "dark" : "light"))}
             type="button"
           >
-            {previewTheme === "light" ? "◐" : "◑"}
-            <span className="studio-sr-only">Toggle preview theme</span>
+            <HugeiconsIcon aria-hidden="true" icon={Moon02Icon} size={16} strokeWidth={2} />
           </button>
-          <ImportDialog current={designSystem} onImport={replaceDesignSystem} />
-          {onSave ? <SaveStatus state={saveState} /> : null}
-          <CodeDialog designSystem={designSystem} designSystemId={designSystemId} />
+          <button
+            aria-label="Open theme controls"
+            className="studio-icon-button studio-controls-open"
+            onClick={() => setControlsOpen(true)}
+            type="button"
+          >
+            <HugeiconsIcon aria-hidden="true" icon={SidebarLeft01Icon} size={16} strokeWidth={2} />
+          </button>
         </div>
       </header>
 
-      <aside className="studio-nav" aria-label="Components">
-        {sections.map((item) => (
-          <button
-            aria-current={section === item ? "page" : undefined}
-            className="studio-nav__item"
-            key={item}
-            onClick={() => setSection(item)}
-            type="button"
-          >
-            <span aria-hidden />
-            {item}
-          </button>
-        ))}
+      <aside
+        aria-label="Preview navigation"
+        className="studio-nav"
+        data-open={navOpen}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setNavOpen(false);
+          }
+        }}
+        onFocusCapture={() => setNavOpen(true)}
+        onPointerLeave={() => setNavOpen(false)}
+      >
+        <button
+          aria-expanded={navOpen}
+          aria-label="Preview sections"
+          className="studio-nav__trigger"
+          onClick={() => setNavOpen(true)}
+          onPointerEnter={() => setNavOpen(true)}
+          type="button"
+        >
+          {sectionGroups.map((group, groupIndex) => (
+            <span className="studio-nav__tick-group" key={group.label}>
+              {groupIndex > 0 ? <span aria-hidden className="studio-nav__spacer" /> : null}
+              {group.items.map((item) => (
+                <span
+                  aria-hidden
+                  className="studio-nav__bar"
+                  data-active={section === item || undefined}
+                  key={item}
+                />
+              ))}
+            </span>
+          ))}
+        </button>
+        <div className="studio-nav__content">
+          {sectionGroups.map((group, groupIndex) => (
+            <div className="studio-nav__group" key={group.label}>
+              {groupIndex > 0 ? <hr /> : null}
+              <p>{group.label}</p>
+              {group.items.map((item) => (
+                <button
+                  aria-current={section === item ? "page" : undefined}
+                  className="studio-nav__item"
+                  key={item}
+                  onClick={() => {
+                    setSection(item);
+                    setNavOpen(false);
+                  }}
+                  type="button"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
       </aside>
 
       <main className="studio-preview">
@@ -109,117 +191,15 @@ export function EditorShell({
         />
       </main>
 
-      <aside className="studio-controls" aria-label="Theme controls">
-        <div className="studio-segmented" role="tablist">
-          <button aria-selected="true" role="tab" type="button">
-            Style
-          </button>
-          <button aria-selected="false" role="tab" type="button">
-            Variables
-          </button>
-          <button aria-selected="false" role="tab" type="button">
-            Agent
-          </button>
-        </div>
-        <div className="studio-control-row">
-          <strong>Theme</strong>
-          <span>Custom</span>
-        </div>
-        {onSave ? (
-          <ControlSection title="General">
-            <label className="studio-control-row">
-              <span>Name</span>
-              <input
-                aria-label="Design system name"
-                className="studio-control-input"
-                maxLength={80}
-                onChange={(event) => {
-                  const name = event.currentTarget.value;
-                  updateDesignSystem((next) => {
-                    next.identity.name = name;
-                  });
-                }}
-                value={designSystem.identity.name}
-              />
-            </label>
-          </ControlSection>
-        ) : null}
-        <ControlSection title="Color">
-          <ColorControl
-            label="Accent"
-            onChange={(value) =>
-              updateDesignSystem((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.colors.accent = value;
-                });
-              })
-            }
-            value={designSystem.theme.light.colors.accent}
-          />
-        </ControlSection>
-        <ControlSection title="Density">
-          <RangeControl
-            label="Spacing"
-            max={1.3}
-            min={0.7}
-            onChange={(value) =>
-              updateDesignSystem((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.density.spacing = value;
-                });
-              })
-            }
-            step={0.05}
-            value={designSystem.theme.light.density.spacing}
-          />
-          <RangeControl
-            label="Font size"
-            max={1.25}
-            min={0.8}
-            onChange={(value) =>
-              updateDesignSystem((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.density.fontSize = value;
-                });
-              })
-            }
-            step={0.05}
-            value={designSystem.theme.light.density.fontSize}
-          />
-        </ControlSection>
-        <ControlSection title="Corners">
-          <RangeControl
-            label="General radius"
-            max={24}
-            min={0}
-            onChange={(value) =>
-              updateDesignSystem((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.corners.radius = `${value}px`;
-                });
-              })
-            }
-            step={1}
-            value={Number.parseFloat(designSystem.theme.light.corners.radius)}
-          />
-        </ControlSection>
-        <ControlSection title="Effects">
-          <RangeControl
-            label="Hard shadow"
-            max={8}
-            min={0}
-            onChange={(value) =>
-              updateDesignSystem((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.effects.hardShadowDepth = `${value}px`;
-                });
-              })
-            }
-            step={1}
-            value={Number.parseFloat(designSystem.theme.light.effects.hardShadowDepth)}
-          />
-        </ControlSection>
-      </aside>
+      <ThemeEditorPanel
+        designSystem={designSystem}
+        designSystemId={designSystemId}
+        onClose={() => setControlsOpen(false)}
+        onImport={replaceDesignSystem}
+        onUpdate={updateDesignSystem}
+        saveState={saveState}
+        showSaveState={Boolean(onSave)}
+      />
       <SaveConflictDialog
         onOverwrite={overwriteConflict}
         open={conflictVersion !== undefined}
@@ -228,28 +208,4 @@ export function EditorShell({
       />
     </div>
   );
-}
-
-function SaveStatus({ state }: { state: SaveState }) {
-  const labels: Record<SaveState, string> = {
-    clean: "Saved",
-    conflict: "Save conflict",
-    dirty: "Unsaved",
-    error: "Not saved",
-    saving: "Saving…",
-  };
-
-  return (
-    <span className={`studio-autosave-state studio-autosave-state--${state}`} role="status">
-      {labels[state]}
-    </span>
-  );
-}
-
-function updateBothThemes(
-  designSystem: DesignSystem,
-  mutate: (theme: DesignSystem["theme"]["light"]) => void,
-) {
-  mutate(designSystem.theme.light);
-  mutate(designSystem.theme.dark);
 }

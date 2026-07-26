@@ -1,5 +1,7 @@
 import { Dialog } from "@base-ui/react/dialog";
 import { type DesignSystem, importDesignSystemSource } from "@buttercream/theme-core";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Cancel01Icon from "@hugeicons-pro/core-stroke-rounded/Cancel01Icon";
 import { useState } from "react";
 
 export function ImportDialog({
@@ -47,7 +49,7 @@ export function ImportDialog({
                 </Dialog.Description>
               </div>
               <Dialog.Close aria-label="Close import" className="studio-dialog__close">
-                ×
+                <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
               </Dialog.Close>
             </header>
             <label className="studio-dialog__field">
