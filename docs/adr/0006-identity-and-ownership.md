@@ -12,5 +12,5 @@ ticket. The ticket endpoint is disabled in production, accepts only localhost re
 both the development Clerk secret and an explicit development user ID.
 
 Design-system writes include the last observed integer version. A matching write increments the
-version. A stale write returns a conflict and requires the editor to reload the current document
-before continuing.
+version. A stale write returns the current version. The editor then requires an explicit reload or
+an overwrite retry against that observed version before autosave can continue.

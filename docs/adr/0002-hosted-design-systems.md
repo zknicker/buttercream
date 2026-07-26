@@ -12,4 +12,6 @@ read-only view.
 
 The server stores only the latest document. Undo and redo are in-memory browser history. IndexedDB
 may retain unsaved recovery state, but saved server state wins. Writes carry an integer version. A
-first edit against stale state opens a reload-or-overwrite dialog.
+local draft autosaves after a short idle delay, with only one write in flight. A first edit against
+stale state opens a reload-or-overwrite dialog. Overwrite retries against the latest observed
+version; it never bypasses version checks.
