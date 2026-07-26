@@ -3,6 +3,18 @@ import { type DesignSystem, importDesignSystemSource } from "@buttercream/theme-
 import { HugeiconsIcon } from "@hugeicons/react";
 import Cancel01Icon from "@hugeicons-pro/core-stroke-rounded/Cancel01Icon";
 import { useState } from "react";
+import {
+  Button,
+  classes,
+  DialogFooter,
+  DialogHeader,
+  dialogBackdropClass,
+  dialogDescriptionClass,
+  dialogPanelClass,
+  dialogTitleClass,
+  dialogViewportClass,
+  Textarea,
+} from "../ui/index.ts";
 
 export function ImportDialog({
   current,
@@ -36,52 +48,59 @@ export function ImportDialog({
       }}
       open={open}
     >
-      <Dialog.Trigger className="studio-button studio-button--quiet">Import</Dialog.Trigger>
+      <Dialog.Trigger render={<Button size="sm" variant="ghost" />}>Import</Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Backdrop className="studio-dialog__backdrop" />
-        <Dialog.Viewport className="studio-dialog__viewport">
-          <Dialog.Popup className="studio-dialog">
-            <header className="studio-dialog__header">
-              <div>
-                <Dialog.Title>Import design system</Dialog.Title>
-                <Dialog.Description>
-                  Paste Buttercream JSON or global CSS to replace the current editor state.
-                </Dialog.Description>
-              </div>
-              <Dialog.Close aria-label="Close import" className="studio-dialog__close">
-                <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
-              </Dialog.Close>
-            </header>
-            <label className="studio-dialog__field">
-              <span>Design-system JSON or global CSS</span>
-              <textarea
-                aria-label="Design-system JSON or global CSS"
+        <Dialog.Backdrop className={dialogBackdropClass} />
+        <Dialog.Viewport className={dialogViewportClass}>
+          <Dialog.Popup className={classes(dialogPanelClass, "w-[min(39rem,calc(100vw-3rem))]")}>
+            <DialogHeader
+              close={
+                <Dialog.Close
+                  aria-label="Close import"
+                  render={<Button iconOnly size="sm" variant="ghost" />}
+                >
+                  <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
+                </Dialog.Close>
+              }
+            >
+              <Dialog.Title className={dialogTitleClass}>Import design system</Dialog.Title>
+              <Dialog.Description className={dialogDescriptionClass}>
+                Paste Buttercream JSON or global CSS to replace the current editor state.
+              </Dialog.Description>
+            </DialogHeader>
+
+            <label className="flex flex-col gap-2" htmlFor="import-source">
+              <span className="font-mono text-xs tracking-wide text-graphite uppercase">
+                Design-system JSON or global CSS
+              </span>
+              <Textarea
+                className="min-h-75"
+                id="import-source"
+                name="source"
                 onChange={(event) => setSource(event.currentTarget.value)}
                 placeholder={'{\n  "schemaVersion": 2,\n  …\n}'}
                 spellCheck="false"
                 value={source}
               />
             </label>
-            <p className="studio-dialog__hint">
+
+            <p className="text-base text-pretty text-graphite sm:text-sm">
               JSON replaces the complete document. CSS replaces recognized theme variables and
               resets omitted variables to defaults.
             </p>
+
             {error ? (
-              <p className="studio-dialog__error" role="alert">
+              <p className="text-base text-berry sm:text-sm" role="alert">
                 {error}
               </p>
             ) : null}
-            <footer className="studio-dialog__actions">
-              <Dialog.Close className="studio-button studio-button--quiet">Cancel</Dialog.Close>
-              <button
-                className="studio-button"
-                disabled={!source.trim()}
-                onClick={importSource}
-                type="button"
-              >
+
+            <DialogFooter>
+              <Dialog.Close render={<Button variant="ghost" />}>Cancel</Dialog.Close>
+              <Button disabled={!source.trim()} onClick={importSource}>
                 Import
-              </button>
-            </footer>
+              </Button>
+            </DialogFooter>
           </Dialog.Popup>
         </Dialog.Viewport>
       </Dialog.Portal>

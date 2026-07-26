@@ -8,6 +8,17 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import Cancel01Icon from "@hugeicons-pro/core-stroke-rounded/Cancel01Icon";
 import SourceCodeIcon from "@hugeicons-pro/core-stroke-rounded/SourceCodeIcon";
 import { useMemo, useState } from "react";
+import {
+  Button,
+  classes,
+  DialogFooter,
+  DialogHeader,
+  dialogBackdropClass,
+  dialogDescriptionClass,
+  dialogPanelClass,
+  dialogTitleClass,
+  dialogViewportClass,
+} from "../ui/index.ts";
 
 export function CodeDialog({
   designSystem,
@@ -43,29 +54,45 @@ export function CodeDialog({
 
   return (
     <Dialog.Root onOpenChange={() => setCopyState("idle")}>
-      <Dialog.Trigger className="studio-button studio-button--with-icon">
+      <Dialog.Trigger render={<Button size="sm" />}>
         <HugeiconsIcon aria-hidden="true" icon={SourceCodeIcon} size={16} strokeWidth={2} />
         Code
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Backdrop className="studio-dialog__backdrop" />
-        <Dialog.Viewport className="studio-dialog__viewport">
-          <Dialog.Popup className="studio-dialog studio-dialog--code">
-            <header className="studio-dialog__header">
-              <div>
-                <Dialog.Title>Project code</Dialog.Title>
-                <Dialog.Description>
-                  Copy generated files or the complete design-system document.
-                </Dialog.Description>
-              </div>
-              <Dialog.Close aria-label="Close code" className="studio-dialog__close">
-                <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
-              </Dialog.Close>
-            </header>
-            <div aria-label="Exported files" className="studio-code-tabs" role="tablist">
+        <Dialog.Backdrop className={dialogBackdropClass} />
+        <Dialog.Viewport className={dialogViewportClass}>
+          <Dialog.Popup className={classes(dialogPanelClass, "w-[min(58rem,calc(100vw-3rem))]")}>
+            <DialogHeader
+              close={
+                <Dialog.Close
+                  aria-label="Close code"
+                  render={<Button iconOnly size="sm" variant="ghost" />}
+                >
+                  <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
+                </Dialog.Close>
+              }
+            >
+              <Dialog.Title className={dialogTitleClass}>Project code</Dialog.Title>
+              <Dialog.Description className={dialogDescriptionClass}>
+                Copy generated files or the complete design-system document.
+              </Dialog.Description>
+            </DialogHeader>
+
+            <div
+              aria-label="Exported files"
+              className="flex gap-0.5 overflow-x-auto rounded-(--radius-shell) bg-crumb p-0.5 scrollbar-none"
+              role="tablist"
+            >
               {exports.map((item) => (
                 <button
                   aria-selected={item.filename === activeExport.filename}
+                  className={classes(
+                    "h-8 shrink-0 rounded-[calc(var(--radius-shell)-0.125rem)] px-3 font-mono text-xs whitespace-nowrap",
+                    "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-ink",
+                    item.filename === activeExport.filename
+                      ? "bg-parchment text-ink shadow-sm ring-1 ring-ink/8"
+                      : "text-graphite hover:text-ink",
+                  )}
                   key={item.filename}
                   onClick={() => {
                     setActiveFilename(item.filename);
@@ -78,19 +105,19 @@ export function CodeDialog({
                 </button>
               ))}
             </div>
-            <pre className="studio-code">
+
+            <pre className="min-h-90 flex-1 overflow-auto rounded-(--radius-shell) bg-parchment p-5 font-mono text-xs leading-6 text-ink ring-1 ring-ink/10">
               <code>{activeExport.content}</code>
             </pre>
-            <footer className="studio-dialog__actions">
-              <span aria-live="polite" className="studio-dialog__copy-state">
+
+            <DialogFooter>
+              <span aria-live="polite" className="mr-auto font-mono text-xs text-graphite">
                 {copyState === "copied" ? "Copied" : null}
                 {copyState === "error" ? "Copy failed" : null}
               </span>
-              <Dialog.Close className="studio-button studio-button--quiet">Close</Dialog.Close>
-              <button className="studio-button" onClick={() => void copy()} type="button">
-                Copy {activeExport.filename}
-              </button>
-            </footer>
+              <Dialog.Close render={<Button variant="ghost" />}>Close</Dialog.Close>
+              <Button onClick={() => void copy()}>Copy {activeExport.filename}</Button>
+            </DialogFooter>
           </Dialog.Popup>
         </Dialog.Viewport>
       </Dialog.Portal>

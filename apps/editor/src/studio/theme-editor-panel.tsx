@@ -1,10 +1,21 @@
 import type { DesignSystem } from "@buttercream/theme-core";
 import { HugeiconsIcon } from "@hugeicons/react";
 import SidebarRight01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarRight01Icon";
+import { useState } from "react";
+import { Button, classes, Segmented } from "../ui/index.ts";
 import { CodeDialog } from "./code-dialog.tsx";
 import { ImportDialog } from "./import-dialog.tsx";
-import { ColorControl, ControlSection, RangeControl } from "./theme-controls.tsx";
+import {
+  ColorControl,
+  ControlRow,
+  ControlSection,
+  RangeControl,
+  TextControl,
+} from "./theme-controls.tsx";
 import type { SaveState } from "./use-design-system-draft.ts";
+
+const TABS = ["Style", "Variables", "Agent"] as const;
+type Tab = (typeof TABS)[number];
 
 interface ThemeEditorPanelProps {
   designSystem: DesignSystem;
@@ -12,6 +23,7 @@ interface ThemeEditorPanelProps {
   onClose: () => void;
   onImport: (designSystem: DesignSystem) => void;
   onUpdate: (mutate: (designSystem: DesignSystem) => void) => void;
+  open: boolean;
   saveState: SaveState;
   showSaveState: boolean;
 }
@@ -22,61 +34,63 @@ export function ThemeEditorPanel({
   onClose,
   onImport,
   onUpdate,
+  open,
   saveState,
   showSaveState,
 }: ThemeEditorPanelProps) {
+  const [tab, setTab] = useState<Tab>("Style");
+
   return (
-    <aside className="studio-controls" aria-label="Theme controls">
-      <header className="studio-controls__header">
-        <button
+    <aside
+      aria-label="Theme controls"
+      className={classes(
+        "z-5 flex min-h-0 w-69 flex-col overflow-hidden bg-crumb transition-transform duration-150 ease-out",
+        "max-[720px]:fixed max-[720px]:inset-y-0 max-[720px]:right-0 max-[720px]:w-[min(17.25rem,calc(100vw-1.5rem))] max-[720px]:shadow-2xl max-[720px]:shadow-ink/15",
+        open ? "translate-x-0" : "translate-x-full",
+      )}
+    >
+      <header className="flex h-13 flex-none items-center justify-between gap-2 px-3">
+        <Button
           aria-label="Close theme controls"
-          className="studio-icon-button"
+          iconOnly
           onClick={onClose}
-          type="button"
+          size="sm"
+          variant="ghost"
         >
-          <HugeiconsIcon aria-hidden="true" icon={SidebarRight01Icon} size={16} strokeWidth={2} />
-        </button>
-        <div className="studio-controls__actions">
+          <HugeiconsIcon aria-hidden="true" icon={SidebarRight01Icon} size={18} strokeWidth={2} />
+        </Button>
+        <div className="flex min-w-0 items-center justify-end gap-1.5">
           <ImportDialog current={designSystem} onImport={onImport} />
           {showSaveState ? <SaveStatus state={saveState} /> : null}
           <CodeDialog designSystem={designSystem} designSystemId={designSystemId} />
         </div>
       </header>
-      <div className="studio-controls__body">
-        <div className="studio-segmented" role="tablist">
-          <button aria-selected="true" role="tab" type="button">
-            Style
-          </button>
-          <button aria-selected="false" role="tab" type="button">
-            Variables
-          </button>
-          <button aria-selected="false" role="tab" type="button">
-            Agent
-          </button>
+
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-6 scrollbar-none">
+        <Segmented label="Editor mode" onChange={setTab} options={TABS} value={tab} />
+
+        <div className="mt-3">
+          <ControlRow>
+            <span className="truncate text-ink">Theme</span>
+            <span className="shrink-0 font-mono text-xs text-graphite">Custom</span>
+          </ControlRow>
         </div>
-        <div className="studio-control-row">
-          <strong>Theme</strong>
-          <span>Custom</span>
-        </div>
+
         {showSaveState ? (
           <ControlSection title="General">
-            <label className="studio-control-row">
-              <span>Name</span>
-              <input
-                aria-label="Design system name"
-                className="studio-control-input"
-                maxLength={80}
-                onChange={(event) => {
-                  const name = event.currentTarget.value;
-                  onUpdate((next) => {
-                    next.identity.name = name;
-                  });
-                }}
-                value={designSystem.identity.name}
-              />
-            </label>
+            <TextControl
+              label="Name"
+              maxLength={80}
+              onChange={(name) =>
+                onUpdate((next) => {
+                  next.identity.name = name;
+                })
+              }
+              value={designSystem.identity.name}
+            />
           </ControlSection>
         ) : null}
+
         <ControlSection title="Color">
           <ColorControl
             label="Accent"
@@ -90,6 +104,7 @@ export function ThemeEditorPanel({
             value={designSystem.theme.light.colors.accent}
           />
         </ControlSection>
+
         <ControlSection title="Density">
           <RangeControl
             label="Spacing"
@@ -120,6 +135,7 @@ export function ThemeEditorPanel({
             value={designSystem.theme.light.density.fontSize}
           />
         </ControlSection>
+
         <ControlSection title="Corners">
           <RangeControl
             label="General radius"
@@ -136,6 +152,7 @@ export function ThemeEditorPanel({
             value={Number.parseFloat(designSystem.theme.light.corners.radius)}
           />
         </ControlSection>
+
         <ControlSection title="Effects">
           <RangeControl
             label="Hard shadow"
@@ -171,7 +188,13 @@ function SaveStatus({ state }: { state: SaveState }) {
   };
 
   return (
-    <span className={`studio-autosave-state studio-autosave-state--${state}`} role="status">
+    <span
+      className={classes(
+        "min-w-0 truncate px-1 font-mono text-xs",
+        state === "conflict" || state === "error" ? "text-berry" : "text-graphite",
+      )}
+      role="status"
+    >
       {labels[state]}
     </span>
   );

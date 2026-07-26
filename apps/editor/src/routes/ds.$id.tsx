@@ -1,7 +1,9 @@
 import { SignInButton } from "@clerk/tanstack-react-start";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { getDesignSystemFn, saveDesignSystemFn } from "../server/design-system-functions.ts";
 import { EditorShell } from "../studio/editor-shell.tsx";
+import { Button, Eyebrow, Logo } from "../ui/index.ts";
 
 export const Route = createFileRoute("/ds/$id")({
   component: DesignSystemRoute,
@@ -14,27 +16,21 @@ function DesignSystemRoute() {
 
   if (result.status === "signed-out") {
     return (
-      <main className="studio-gate">
-        <p className="studio-eyebrow">Private design system</p>
-        <h1>Sign in to open it.</h1>
+      <Gate eyebrow="Private design system" heading="Sign in to open it.">
         <SignInButton>
-          <button className="studio-button" type="button">
-            Sign in
-          </button>
+          <Button size="lg">Sign in</Button>
         </SignInButton>
-      </main>
+      </Gate>
     );
   }
 
   if (result.status === "not-found") {
     return (
-      <main className="studio-gate">
-        <p className="studio-eyebrow">Design system not found</p>
-        <h1>It may belong to another account.</h1>
-        <Link className="studio-button" to="/">
+      <Gate eyebrow="Design system not found" heading="It may belong to another account.">
+        <Button render={<Link to="/" />} size="lg" variant="outline">
           Back to Buttercream
-        </Link>
-      </main>
+        </Button>
+      </Gate>
     );
   }
 
@@ -50,5 +46,28 @@ function DesignSystemRoute() {
           }
         : {})}
     />
+  );
+}
+
+function Gate({
+  children,
+  eyebrow,
+  heading,
+}: {
+  children: ReactNode;
+  eyebrow: string;
+  heading: string;
+}) {
+  return (
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-5 px-6 text-center">
+      <a aria-label="Homepage" className="mb-3" href="/">
+        <Logo />
+      </a>
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <h1 className="max-w-[24ch] font-display text-4xl tracking-tight text-balance text-ink sm:text-5xl">
+        {heading}
+      </h1>
+      {children}
+    </main>
   );
 }

@@ -1,4 +1,15 @@
 import { AlertDialog } from "@base-ui/react/alert-dialog";
+import {
+  Button,
+  classes,
+  DialogFooter,
+  DialogHeader,
+  dialogBackdropClass,
+  dialogDescriptionClass,
+  dialogPanelClass,
+  dialogTitleClass,
+  dialogViewportClass,
+} from "../ui/index.ts";
 
 export function SaveConflictDialog({
   open,
@@ -14,41 +25,43 @@ export function SaveConflictDialog({
   return (
     <AlertDialog.Root open={open}>
       <AlertDialog.Portal>
-        <AlertDialog.Backdrop className="studio-dialog__backdrop" />
-        <AlertDialog.Viewport className="studio-dialog__viewport">
-          <AlertDialog.Popup className="studio-dialog studio-dialog--conflict">
-            <header className="studio-dialog__header">
-              <div>
-                <AlertDialog.Title>This design system changed elsewhere</AlertDialog.Title>
-                <AlertDialog.Description>
-                  Reload the saved version, or overwrite it with the changes in this window.
-                </AlertDialog.Description>
-              </div>
-            </header>
+        <AlertDialog.Backdrop className={dialogBackdropClass} />
+        <AlertDialog.Viewport className={dialogViewportClass}>
+          <AlertDialog.Popup
+            className={classes(dialogPanelClass, "w-[min(30rem,calc(100vw-3rem))]")}
+          >
+            <DialogHeader>
+              <AlertDialog.Title className={dialogTitleClass}>
+                This design system changed elsewhere
+              </AlertDialog.Title>
+              <AlertDialog.Description className={dialogDescriptionClass}>
+                Reload the saved version, or overwrite it with the changes in this window.
+              </AlertDialog.Description>
+            </DialogHeader>
+
             {overwriteFailed ? (
-              <p className="studio-dialog__error" role="alert">
+              <p className="text-base text-berry sm:text-sm" role="alert">
                 The saved version changed again or could not be reached. Try overwriting again, or
                 reload the latest version.
               </p>
             ) : null}
-            <footer className="studio-dialog__actions">
-              <button
-                className="studio-button studio-button--quiet"
+
+            <DialogFooter>
+              <Button
                 disabled={overwriting}
                 onClick={() => window.location.reload()}
-                type="button"
+                variant="ghost"
               >
                 Reload latest
-              </button>
-              <button
-                className="studio-button"
+              </Button>
+              <Button
                 disabled={overwriting}
+                loading={overwriting}
                 onClick={() => void onOverwrite()}
-                type="button"
               >
-                {overwriting ? "Overwriting…" : "Overwrite saved version"}
-              </button>
-            </footer>
+                Overwrite saved version
+              </Button>
+            </DialogFooter>
           </AlertDialog.Popup>
         </AlertDialog.Viewport>
       </AlertDialog.Portal>
