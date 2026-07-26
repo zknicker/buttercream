@@ -1,18 +1,36 @@
-import { createDefaultDesignSystem, type DesignSystem } from "@buttercream/theme-core";
+import type { DesignSystem } from "@buttercream/theme-core";
 import { useMemo, useState } from "react";
 import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw";
 import buttonCss from "../../../../packages/styles/src/components/button.css?raw";
 import cardCss from "../../../../packages/styles/src/components/card.css?raw";
 import themeCss from "../../../../packages/styles/src/theme.css?raw";
 import { createPreviewDocument } from "./preview-document.ts";
+import { ColorControl, ControlSection, RangeControl } from "./theme-controls.tsx";
 
 const sections = ["Guides", "Button", "Card", "Avatar"] as const;
 type Section = (typeof sections)[number];
 
-export function EditorShell({ id }: { id: string }) {
-  const [designSystem, setDesignSystem] = useState(() =>
-    createDefaultDesignSystem(id === "preview" ? "Buttercream" : "Untitled design system"),
-  );
+type SaveState = "clean" | "conflict" | "dirty" | "error" | "saving";
+
+export function EditorShell({
+  initialDesignSystem,
+  initialVersion,
+  onSave,
+}: {
+  initialDesignSystem: DesignSystem;
+  initialVersion?: number;
+  onSave?: (
+    designSystem: DesignSystem,
+    version: number,
+  ) => Promise<
+    | { status: "conflict"; version: number }
+    | { status: "not-found" }
+    | { status: "saved"; version: number }
+  >;
+}) {
+  const [designSystem, setDesignSystem] = useState(initialDesignSystem);
+  const [version, setVersion] = useState(initialVersion);
+  const [saveState, setSaveState] = useState<SaveState>("clean");
   const [section, setSection] = useState<Section>("Button");
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("light");
 
@@ -26,6 +44,35 @@ export function EditorShell({ id }: { id: string }) {
       }),
     [designSystem, previewTheme, section],
   );
+
+  const updateDesignSystem = (mutate: (next: DesignSystem) => void) => {
+    setDesignSystem((current) => {
+      const next = structuredClone(current);
+      mutate(next);
+      return next;
+    });
+    if (onSave) {
+      setSaveState("dirty");
+    }
+  };
+
+  const save = async () => {
+    if (!(onSave && version)) {
+      return;
+    }
+    setSaveState("saving");
+    try {
+      const result = await onSave(designSystem, version);
+      if (result.status === "saved") {
+        setVersion(result.version);
+        setSaveState("clean");
+        return;
+      }
+      setSaveState(result.status === "conflict" ? "conflict" : "error");
+    } catch {
+      setSaveState("error");
+    }
+  };
 
   return (
     <div className="studio-editor">
@@ -52,6 +99,16 @@ export function EditorShell({ id }: { id: string }) {
           <button className="studio-button studio-button--quiet" type="button">
             Import
           </button>
+          {onSave ? (
+            <button
+              className="studio-button studio-button--save"
+              disabled={saveState === "clean" || saveState === "saving"}
+              onClick={() => void save()}
+              type="button"
+            >
+              {saveState === "saving" ? "Saving…" : "Save"}
+            </button>
+          ) : null}
           <button className="studio-button" type="button">
             Code
           </button>
@@ -83,6 +140,21 @@ export function EditorShell({ id }: { id: string }) {
       </main>
 
       <aside className="studio-controls" aria-label="Theme controls">
+        {onSave && saveState !== "clean" ? (
+          <div className={`studio-save-state studio-save-state--${saveState}`} role="status">
+            {saveState === "dirty" ? "Unsaved changes" : null}
+            {saveState === "saving" ? "Saving changes…" : null}
+            {saveState === "conflict" ? (
+              <>
+                This design system changed elsewhere.
+                <button onClick={() => window.location.reload()} type="button">
+                  Reload latest
+                </button>
+              </>
+            ) : null}
+            {saveState === "error" ? "Could not save. Try again." : null}
+          </div>
+        ) : null}
         <div className="studio-segmented" role="tablist">
           <button aria-selected="true" role="tab" type="button">
             Style
@@ -98,12 +170,33 @@ export function EditorShell({ id }: { id: string }) {
           <strong>Theme</strong>
           <span>Custom</span>
         </div>
+        {onSave ? (
+          <ControlSection title="General">
+            <label className="studio-control-row">
+              <span>Name</span>
+              <input
+                aria-label="Design system name"
+                className="studio-control-input"
+                maxLength={80}
+                onChange={(event) => {
+                  const name = event.currentTarget.value;
+                  updateDesignSystem((next) => {
+                    next.identity.name = name;
+                  });
+                }}
+                value={designSystem.identity.name}
+              />
+            </label>
+          </ControlSection>
+        ) : null}
         <ControlSection title="Color">
           <ColorControl
             label="Accent"
             onChange={(value) =>
-              updateBothThemes(setDesignSystem, (theme) => {
-                theme.colors.accent = value;
+              updateDesignSystem((next) => {
+                updateBothThemes(next, (theme) => {
+                  theme.colors.accent = value;
+                });
               })
             }
             value={designSystem.theme.light.colors.accent}
@@ -115,8 +208,10 @@ export function EditorShell({ id }: { id: string }) {
             max={1.3}
             min={0.7}
             onChange={(value) =>
-              updateBothThemes(setDesignSystem, (theme) => {
-                theme.density.spacing = value;
+              updateDesignSystem((next) => {
+                updateBothThemes(next, (theme) => {
+                  theme.density.spacing = value;
+                });
               })
             }
             step={0.05}
@@ -127,8 +222,10 @@ export function EditorShell({ id }: { id: string }) {
             max={1.25}
             min={0.8}
             onChange={(value) =>
-              updateBothThemes(setDesignSystem, (theme) => {
-                theme.density.fontSize = value;
+              updateDesignSystem((next) => {
+                updateBothThemes(next, (theme) => {
+                  theme.density.fontSize = value;
+                });
               })
             }
             step={0.05}
@@ -141,8 +238,10 @@ export function EditorShell({ id }: { id: string }) {
             max={24}
             min={0}
             onChange={(value) =>
-              updateBothThemes(setDesignSystem, (theme) => {
-                theme.corners.radius = `${value}px`;
+              updateDesignSystem((next) => {
+                updateBothThemes(next, (theme) => {
+                  theme.corners.radius = `${value}px`;
+                });
               })
             }
             step={1}
@@ -155,8 +254,10 @@ export function EditorShell({ id }: { id: string }) {
             max={8}
             min={0}
             onChange={(value) =>
-              updateBothThemes(setDesignSystem, (theme) => {
-                theme.effects.hardShadowDepth = `${value}px`;
+              updateDesignSystem((next) => {
+                updateBothThemes(next, (theme) => {
+                  theme.effects.hardShadowDepth = `${value}px`;
+                });
               })
             }
             step={1}
@@ -168,88 +269,10 @@ export function EditorShell({ id }: { id: string }) {
   );
 }
 
-function ControlSection({ children, title }: { children: React.ReactNode; title: string }) {
-  return (
-    <section className="studio-control-section">
-      <h2>{title}</h2>
-      {children}
-    </section>
-  );
-}
-
-function ColorControl({
-  label,
-  onChange,
-  value,
-}: {
-  label: string;
-  onChange: (value: string) => void;
-  value: string;
-}) {
-  return (
-    <label className="studio-control-row">
-      <span>{label}</span>
-      <span className="studio-color-value">
-        {value}
-        <input
-          aria-label={label}
-          onChange={(event) => onChange(event.currentTarget.value)}
-          type="color"
-          value={normalizeHex(value)}
-        />
-      </span>
-    </label>
-  );
-}
-
-function RangeControl({
-  label,
-  max,
-  min,
-  onChange,
-  step,
-  value,
-}: {
-  label: string;
-  max: number;
-  min: number;
-  onChange: (value: number) => void;
-  step: number;
-  value: number;
-}) {
-  const progress = ((value - min) / (max - min)) * 100;
-  return (
-    <label
-      className="studio-range"
-      style={{ "--studio-progress": `${progress}%` } as React.CSSProperties}
-    >
-      <span>{label}</span>
-      <output>{value.toFixed(step < 1 ? 2 : 0)}</output>
-      <input
-        aria-label={label}
-        max={max}
-        min={min}
-        onChange={(event) => onChange(event.currentTarget.valueAsNumber)}
-        step={step}
-        type="range"
-        value={value}
-      />
-    </label>
-  );
-}
-
 function updateBothThemes(
-  setDesignSystem: React.Dispatch<React.SetStateAction<DesignSystem>>,
+  designSystem: DesignSystem,
   mutate: (theme: DesignSystem["theme"]["light"]) => void,
 ) {
-  setDesignSystem((current) => {
-    const next = structuredClone(current);
-    mutate(next.theme.light);
-    mutate(next.theme.dark);
-    return next;
-  });
-}
-
-function normalizeHex(value: string): string {
-  return /^#[\da-f]{6}$/iu.test(value) ? value : "#1b1b1b";
+  mutate(designSystem.theme.light);
+  mutate(designSystem.theme.dark);
 }

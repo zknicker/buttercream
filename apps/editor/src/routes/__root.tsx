@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/tanstack-react-start";
 import { createRootRoute, HeadContent, Link, Outlet, Scripts } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { DevAutoSignIn } from "../auth/dev-auto-sign-in.tsx";
 import editorCss from "../styles/editor.css?url";
 
 export const Route = createRootRoute({
@@ -57,7 +58,10 @@ function RootDocument({ children }: { children: ReactNode }) {
       </head>
       <body>
         {publishableKey ? (
-          <ClerkProvider publishableKey={publishableKey}>{children}</ClerkProvider>
+          <ClerkProvider publishableKey={publishableKey}>
+            <DevAutoSignIn />
+            {children}
+          </ClerkProvider>
         ) : (
           children
         )}
