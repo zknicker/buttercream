@@ -7,7 +7,11 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@base-ui/react/alert-dialog", "@base-ui/react/dialog"],
   },
-  plugins: [cloudflare({ viteEnvironment: { name: "ssr" } }), tanstackStart(), react()],
+  plugins: [
+    cloudflare({ inspectorPort: false, viteEnvironment: { name: "ssr" } }),
+    tanstackStart(),
+    react(),
+  ],
   ssr: {
     optimizeDeps: {
       include: ["@base-ui/react/alert-dialog", "@base-ui/react/dialog"],
