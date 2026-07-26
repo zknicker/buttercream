@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SchemaDotjsonRouteImport } from './routes/schema[.]json'
 import { Route as DsIdRouteImport } from './routes/ds.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchemaDotjsonRoute = SchemaDotjsonRouteImport.update({
+  id: '/schema.json',
+  path: '/schema.json',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DsIdRoute = DsIdRouteImport.update({
@@ -25,27 +31,31 @@ const DsIdRoute = DsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/schema.json': typeof SchemaDotjsonRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/schema.json': typeof SchemaDotjsonRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/schema.json': typeof SchemaDotjsonRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ds/$id'
+  fullPaths: '/' | '/schema.json' | '/ds/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ds/$id'
-  id: '__root__' | '/' | '/ds/$id'
+  to: '/' | '/schema.json' | '/ds/$id'
+  id: '__root__' | '/' | '/schema.json' | '/ds/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SchemaDotjsonRoute: typeof SchemaDotjsonRoute
   DsIdRoute: typeof DsIdRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schema.json': {
+      id: '/schema.json'
+      path: '/schema.json'
+      fullPath: '/schema.json'
+      preLoaderRoute: typeof SchemaDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ds/$id': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SchemaDotjsonRoute: SchemaDotjsonRoute,
   DsIdRoute: DsIdRoute,
 }
 export const routeTree = rootRouteImport

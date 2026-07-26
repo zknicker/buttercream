@@ -1,7 +1,7 @@
 import type { DesignSystem } from "./design-system.ts";
 
 export function exportDesignGuidance(designSystem: DesignSystem): string {
-  const { identity, rules } = designSystem;
+  const { components, identity, rules } = designSystem;
   const sections = [
     `# ${identity.name} design guidance`,
     identity.description,
@@ -10,6 +10,13 @@ export function exportDesignGuidance(designSystem: DesignSystem): string {
     renderSection("Voice and tone", identity.voiceAndTone),
     renderSection("Anti-patterns", identity.antiPatterns),
     renderSection("Agent rules", rules.agent),
+    [
+      "## Component defaults",
+      "",
+      `- Button: \`${components.button.defaultVariant}\`, \`${components.button.defaultSize}\``,
+      `- Card: \`${components.card.defaultVariant}\``,
+      `- Avatar: \`${components.avatar.defaultShape}\`, \`${components.avatar.defaultSize}\``,
+    ].join("\n"),
     [
       "## Interface contract",
       "",

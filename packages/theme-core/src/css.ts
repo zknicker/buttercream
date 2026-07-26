@@ -68,9 +68,7 @@ export function exportGlobalCss(designSystem: DesignSystem): string {
 }
 
 export function importThemeCss(css: string, current?: DesignSystem): DesignSystem {
-  const imported = createDefaultDesignSystem(current?.identity.name);
-  imported.identity = structuredClone(current?.identity ?? imported.identity);
-  imported.rules = structuredClone(current?.rules ?? imported.rules);
+  const imported = structuredClone(current ?? createDefaultDesignSystem());
 
   const lightVariables = extractVariables(findThemeBlock(css, "light"));
   const darkVariables = extractVariables(findThemeBlock(css, "dark"));

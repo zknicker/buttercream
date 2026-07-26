@@ -40,6 +40,7 @@ function DesignSystemRoute() {
 
   return (
     <EditorShell
+      designSystemId={id}
       initialDesignSystem={result.designSystem}
       {...(result.version === null ? {} : { initialVersion: result.version })}
       {...(result.status === "found"

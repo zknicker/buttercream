@@ -2,6 +2,29 @@ import { z } from "zod";
 
 const cssValue = z.string().trim().min(1);
 const positiveScale = z.number().positive();
+const componentSizeSchema = z.enum(["sm", "md", "lg"]);
+
+export const componentSettingsSchema = z.object({
+  avatar: z.object({
+    defaultShape: z.enum(["square", "rounded"]),
+    defaultSize: componentSizeSchema,
+  }),
+  button: z.object({
+    defaultSize: componentSizeSchema,
+    defaultVariant: z.enum([
+      "primary",
+      "secondary",
+      "tertiary",
+      "outline",
+      "ghost",
+      "danger",
+      "danger-soft",
+    ]),
+  }),
+  card: z.object({
+    defaultVariant: z.enum(["default", "secondary"]),
+  }),
+});
 
 export const themeTokensSchema = z.object({
   colors: z.object({
@@ -49,6 +72,7 @@ export const themeTokensSchema = z.object({
 });
 
 export const designSystemSchema = z.object({
+  components: componentSettingsSchema,
   identity: z.object({
     antiPatterns: z.string().optional(),
     description: z.string().optional(),
@@ -61,12 +85,15 @@ export const designSystemSchema = z.object({
     agent: z.string(),
     customCss: z.string(),
   }),
-  schemaVersion: z.literal(1),
+  schemaVersion: z.literal(2),
   theme: z.object({
     dark: themeTokensSchema,
     light: themeTokensSchema,
   }),
 });
 
+export const designSystemJsonSchema = z.toJSONSchema(designSystemSchema);
+
+export type ComponentSettings = z.infer<typeof componentSettingsSchema>;
 export type DesignSystem = z.infer<typeof designSystemSchema>;
 export type ThemeTokens = z.infer<typeof themeTokensSchema>;

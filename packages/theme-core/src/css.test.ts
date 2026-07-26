@@ -19,6 +19,7 @@ describe("theme CSS", () => {
     const current = createDefaultDesignSystem("Test");
     current.theme.light.colors.warning = "hotpink";
     current.identity.description = "Keep me";
+    current.components.button.defaultVariant = "outline";
 
     const imported = importThemeCss(
       `
@@ -36,5 +37,6 @@ describe("theme CSS", () => {
     expect(imported.theme.dark.colors.accent).toBe("papayawhip");
     expect(imported.theme.light.colors.warning).not.toBe("hotpink");
     expect(imported.identity.description).toBe("Keep me");
+    expect(imported.components.button.defaultVariant).toBe("outline");
   });
 });

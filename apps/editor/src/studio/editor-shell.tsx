@@ -4,6 +4,8 @@ import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw
 import buttonCss from "../../../../packages/styles/src/components/button.css?raw";
 import cardCss from "../../../../packages/styles/src/components/card.css?raw";
 import themeCss from "../../../../packages/styles/src/theme.css?raw";
+import { CodeDialog } from "./code-dialog.tsx";
+import { ImportDialog } from "./import-dialog.tsx";
 import { createPreviewDocument } from "./preview-document.ts";
 import { ColorControl, ControlSection, RangeControl } from "./theme-controls.tsx";
 
@@ -15,8 +17,10 @@ type SaveState = "clean" | "conflict" | "dirty" | "error" | "saving";
 export function EditorShell({
   initialDesignSystem,
   initialVersion,
+  designSystemId,
   onSave,
 }: {
+  designSystemId: string;
   initialDesignSystem: DesignSystem;
   initialVersion?: number;
   onSave?: (
@@ -51,6 +55,13 @@ export function EditorShell({
       mutate(next);
       return next;
     });
+    if (onSave) {
+      setSaveState("dirty");
+    }
+  };
+
+  const replaceDesignSystem = (next: DesignSystem) => {
+    setDesignSystem(next);
     if (onSave) {
       setSaveState("dirty");
     }
@@ -96,9 +107,7 @@ export function EditorShell({
             {previewTheme === "light" ? "◐" : "◑"}
             <span className="studio-sr-only">Toggle preview theme</span>
           </button>
-          <button className="studio-button studio-button--quiet" type="button">
-            Import
-          </button>
+          <ImportDialog current={designSystem} onImport={replaceDesignSystem} />
           {onSave ? (
             <button
               className="studio-button studio-button--save"
@@ -109,9 +118,7 @@ export function EditorShell({
               {saveState === "saving" ? "Saving…" : "Save"}
             </button>
           ) : null}
-          <button className="studio-button" type="button">
-            Code
-          </button>
+          <CodeDialog designSystem={designSystem} designSystemId={designSystemId} />
         </div>
       </header>
 

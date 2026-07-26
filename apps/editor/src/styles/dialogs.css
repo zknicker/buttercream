@@ -1,0 +1,179 @@
+.studio-dialog__backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  background: rgba(24, 24, 28, 0.36);
+  backdrop-filter: blur(2px);
+  transition: opacity 120ms ease-out;
+}
+
+.studio-dialog__backdrop[data-starting-style],
+.studio-dialog__backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.studio-dialog__viewport {
+  position: fixed;
+  z-index: 21;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.studio-dialog {
+  display: flex;
+  width: min(620px, calc(100vw - 48px));
+  max-height: min(760px, calc(100vh - 48px));
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
+  overflow: hidden;
+  border: 1px solid #dedee1;
+  border-radius: 22px;
+  outline: 0;
+  background: #f7f7f8;
+  box-shadow: 0 24px 80px rgba(20, 20, 24, 0.24);
+  color: #242428;
+  transition:
+    opacity 120ms ease-out,
+    transform 120ms ease-out;
+}
+
+.studio-dialog[data-starting-style],
+.studio-dialog[data-ending-style] {
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+}
+
+.studio-dialog--code {
+  width: min(920px, calc(100vw - 48px));
+}
+
+.studio-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.studio-dialog__header h2,
+.studio-dialog__header p {
+  margin: 0;
+}
+
+.studio-dialog__header h2 {
+  margin-bottom: 6px;
+  font-size: 22px;
+  letter-spacing: -0.025em;
+}
+
+.studio-dialog__header p,
+.studio-dialog__hint {
+  color: #71717a;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.studio-dialog__close {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border: 0;
+  border-radius: 999px;
+  background: #e8e8eb;
+  color: #55555d;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.studio-dialog__field {
+  display: grid;
+  gap: 8px;
+  color: #55555d;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.studio-dialog__field textarea {
+  min-height: 300px;
+  resize: vertical;
+  padding: 16px;
+  border: 1px solid #d9d9dd;
+  border-radius: 14px;
+  outline: 0;
+  background: #fff;
+  color: #242428;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.studio-dialog__field textarea:focus {
+  border-color: #1688f8;
+  box-shadow: 0 0 0 3px rgba(22, 136, 248, 0.14);
+}
+
+.studio-dialog__hint,
+.studio-dialog__error {
+  margin: -8px 0 0;
+}
+
+.studio-dialog__error {
+  color: #a52d3d;
+  font-size: 13px;
+}
+
+.studio-dialog__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.studio-dialog__copy-state {
+  margin-right: auto;
+  color: #71717a;
+  font-size: 12px;
+}
+
+.studio-code-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: #e8e8eb;
+}
+
+.studio-code-tabs button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #6b6b74;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.studio-code-tabs button[aria-selected="true"] {
+  background: #fff;
+  color: #242428;
+  box-shadow: 0 1px 3px rgba(20, 20, 24, 0.12);
+}
+
+.studio-code {
+  min-height: 360px;
+  margin: 0;
+  padding: 18px;
+  overflow: auto;
+  border: 1px solid #dedee1;
+  border-radius: 14px;
+  background: #fff;
+  color: #29292e;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre;
+}

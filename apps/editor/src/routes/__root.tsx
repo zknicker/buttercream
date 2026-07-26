@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/tanstack-react-start";
 import { createRootRoute, HeadContent, Link, Outlet, Scripts } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { DevAutoSignIn } from "../auth/dev-auto-sign-in.tsx";
+import dialogCss from "../styles/dialogs.css?url";
 import editorCss from "../styles/editor.css?url";
 
 export const Route = createRootRoute({
@@ -10,6 +11,10 @@ export const Route = createRootRoute({
     links: [
       {
         href: editorCss,
+        rel: "stylesheet",
+      },
+      {
+        href: dialogCss,
         rel: "stylesheet",
       },
     ],

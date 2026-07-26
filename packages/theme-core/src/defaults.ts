@@ -87,6 +87,19 @@ export const defaultDarkTheme: ThemeTokens = {
 
 export function createDefaultDesignSystem(name = "Untitled design system"): DesignSystem {
   return {
+    components: {
+      avatar: {
+        defaultShape: "rounded",
+        defaultSize: "md",
+      },
+      button: {
+        defaultSize: "md",
+        defaultVariant: "primary",
+      },
+      card: {
+        defaultVariant: "default",
+      },
+    },
     identity: {
       name,
     },
@@ -94,7 +107,7 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
       agent: "",
       customCss: "",
     },
-    schemaVersion: 1,
+    schemaVersion: 2,
     theme: {
       dark: structuredClone(defaultDarkTheme),
       light: structuredClone(defaultLightTheme),
