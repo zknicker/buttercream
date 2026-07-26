@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SchemaDotjsonRouteImport } from './routes/schema[.]json'
 import { Route as DsIdRouteImport } from './routes/ds.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemaDotjsonRoute = SchemaDotjsonRouteImport.update({
@@ -31,30 +37,34 @@ const DsIdRoute = DsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/pricing': typeof PricingRoute
   '/schema.json': typeof SchemaDotjsonRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/pricing': typeof PricingRoute
   '/schema.json': typeof SchemaDotjsonRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/pricing': typeof PricingRoute
   '/schema.json': typeof SchemaDotjsonRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/schema.json' | '/ds/$id'
+  fullPaths: '/' | '/pricing' | '/schema.json' | '/ds/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/schema.json' | '/ds/$id'
-  id: '__root__' | '/' | '/schema.json' | '/ds/$id'
+  to: '/' | '/pricing' | '/schema.json' | '/ds/$id'
+  id: '__root__' | '/' | '/pricing' | '/schema.json' | '/ds/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PricingRoute: typeof PricingRoute
   SchemaDotjsonRoute: typeof SchemaDotjsonRoute
   DsIdRoute: typeof DsIdRoute
 }
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schema.json': {
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PricingRoute: PricingRoute,
   SchemaDotjsonRoute: SchemaDotjsonRoute,
   DsIdRoute: DsIdRoute,
 }
