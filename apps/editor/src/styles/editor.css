@@ -252,37 +252,16 @@ button {
   gap: 8px;
 }
 
-.studio-button--save {
-  background: #29292e;
-}
-
-.studio-save-state {
-  display: flex;
-  min-height: 42px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-  padding: 10px 14px;
-  border-radius: 13px;
-  background: #e8e8eb;
-  color: #66666f;
+.studio-autosave-state {
+  min-width: 58px;
+  color: #777781;
   font-size: 12px;
+  text-align: center;
 }
 
-.studio-save-state--conflict,
-.studio-save-state--error {
-  background: #fff0f0;
-  color: #9a3535;
-}
-
-.studio-save-state button {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font-weight: 700;
+.studio-autosave-state--conflict,
+.studio-autosave-state--error {
+  color: #a52d3d;
 }
 
 .studio-nav {

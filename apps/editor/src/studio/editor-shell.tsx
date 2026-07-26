@@ -7,12 +7,16 @@ import themeCss from "../../../../packages/styles/src/theme.css?raw";
 import { CodeDialog } from "./code-dialog.tsx";
 import { ImportDialog } from "./import-dialog.tsx";
 import { createPreviewDocument } from "./preview-document.ts";
+import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { ColorControl, ControlSection, RangeControl } from "./theme-controls.tsx";
+import {
+  type SaveDesignSystem,
+  type SaveState,
+  useDesignSystemDraft,
+} from "./use-design-system-draft.ts";
 
 const sections = ["Guides", "Button", "Card", "Avatar"] as const;
 type Section = (typeof sections)[number];
-
-type SaveState = "clean" | "conflict" | "dirty" | "error" | "saving";
 
 export function EditorShell({
   initialDesignSystem,
@@ -23,20 +27,22 @@ export function EditorShell({
   designSystemId: string;
   initialDesignSystem: DesignSystem;
   initialVersion?: number;
-  onSave?: (
-    designSystem: DesignSystem,
-    version: number,
-  ) => Promise<
-    | { status: "conflict"; version: number }
-    | { status: "not-found" }
-    | { status: "saved"; version: number }
-  >;
+  onSave?: SaveDesignSystem;
 }) {
-  const [designSystem, setDesignSystem] = useState(initialDesignSystem);
-  const [version, setVersion] = useState(initialVersion);
-  const [saveState, setSaveState] = useState<SaveState>("clean");
   const [section, setSection] = useState<Section>("Button");
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("light");
+  const {
+    conflictVersion,
+    designSystem,
+    overwriteConflict,
+    replaceDesignSystem,
+    saveState,
+    updateDesignSystem,
+  } = useDesignSystemDraft({
+    initialDesignSystem,
+    ...(initialVersion === undefined ? {} : { initialVersion }),
+    ...(onSave ? { onSave } : {}),
+  });
 
   const preview = useMemo(
     () =>
@@ -48,42 +54,6 @@ export function EditorShell({
       }),
     [designSystem, previewTheme, section],
   );
-
-  const updateDesignSystem = (mutate: (next: DesignSystem) => void) => {
-    setDesignSystem((current) => {
-      const next = structuredClone(current);
-      mutate(next);
-      return next;
-    });
-    if (onSave) {
-      setSaveState("dirty");
-    }
-  };
-
-  const replaceDesignSystem = (next: DesignSystem) => {
-    setDesignSystem(next);
-    if (onSave) {
-      setSaveState("dirty");
-    }
-  };
-
-  const save = async () => {
-    if (!(onSave && version)) {
-      return;
-    }
-    setSaveState("saving");
-    try {
-      const result = await onSave(designSystem, version);
-      if (result.status === "saved") {
-        setVersion(result.version);
-        setSaveState("clean");
-        return;
-      }
-      setSaveState(result.status === "conflict" ? "conflict" : "error");
-    } catch {
-      setSaveState("error");
-    }
-  };
 
   return (
     <div className="studio-editor">
@@ -108,16 +78,7 @@ export function EditorShell({
             <span className="studio-sr-only">Toggle preview theme</span>
           </button>
           <ImportDialog current={designSystem} onImport={replaceDesignSystem} />
-          {onSave ? (
-            <button
-              className="studio-button studio-button--save"
-              disabled={saveState === "clean" || saveState === "saving"}
-              onClick={() => void save()}
-              type="button"
-            >
-              {saveState === "saving" ? "Saving…" : "Save"}
-            </button>
-          ) : null}
+          {onSave ? <SaveStatus state={saveState} /> : null}
           <CodeDialog designSystem={designSystem} designSystemId={designSystemId} />
         </div>
       </header>
@@ -147,21 +108,6 @@ export function EditorShell({
       </main>
 
       <aside className="studio-controls" aria-label="Theme controls">
-        {onSave && saveState !== "clean" ? (
-          <div className={`studio-save-state studio-save-state--${saveState}`} role="status">
-            {saveState === "dirty" ? "Unsaved changes" : null}
-            {saveState === "saving" ? "Saving changes…" : null}
-            {saveState === "conflict" ? (
-              <>
-                This design system changed elsewhere.
-                <button onClick={() => window.location.reload()} type="button">
-                  Reload latest
-                </button>
-              </>
-            ) : null}
-            {saveState === "error" ? "Could not save. Try again." : null}
-          </div>
-        ) : null}
         <div className="studio-segmented" role="tablist">
           <button aria-selected="true" role="tab" type="button">
             Style
@@ -272,7 +218,29 @@ export function EditorShell({
           />
         </ControlSection>
       </aside>
+      <SaveConflictDialog
+        onOverwrite={overwriteConflict}
+        open={conflictVersion !== undefined}
+        overwriteFailed={saveState === "error"}
+        overwriting={saveState === "saving"}
+      />
     </div>
+  );
+}
+
+function SaveStatus({ state }: { state: SaveState }) {
+  const labels: Record<SaveState, string> = {
+    clean: "Saved",
+    conflict: "Save conflict",
+    dirty: "Unsaved",
+    error: "Not saved",
+    saving: "Saving…",
+  };
+
+  return (
+    <span className={`studio-autosave-state studio-autosave-state--${state}`} role="status">
+      {labels[state]}
+    </span>
   );
 }
 
