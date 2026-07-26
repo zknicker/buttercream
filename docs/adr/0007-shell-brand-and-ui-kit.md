@@ -4,11 +4,29 @@ The Buttercream brand is warm-neutral editorial typography with hard-edged pixel
 accents. The chrome stays quiet on purpose: visitors are evaluating their own components inside it,
 so the shell must never out-shout the preview.
 
-Dominant palette: parchment `#FAF7F0`, ink `#1C1815`, butter `#F0B429`, crumb `#F2EDE3`. Supporting
-colors — frosting, pistachio, crust, berry, honey, graphite — appear only as semantic signals and
-rare accents. Type is Recoleta for display, Söhne for body and UI, Departure Mono for labels, token
-names, prices, and code. Recoleta and Söhne are licensed; only Departure Mono is checked in. See
+Type is Recoleta for display, Söhne for body and UI, Departure Mono for labels, token names, prices,
+and code. Recoleta and Söhne are licensed; only Departure Mono is checked in. See
 `apps/editor/public/fonts/README.md`.
+
+## Surfaces are neutral; character comes from accents
+
+**Every shell surface is pure neutral grey — zero chroma.** Butter `#F0B429` is the accent, with
+frosting, pistachio, crust, berry, and honey as semantic signals and rare highlights.
+
+The studio frames a live preview of whatever theme the user is building. A tinted canvas has no way
+to sit correctly against an arbitrary user background: warm chrome around a cool preview reads as a
+mismatched border, not as warmth, and the effect gets worse the more opinionated the user's theme
+is. Neutral chrome is compatible with every theme by construction — the same reason tools like
+HeroUI settle on greys.
+
+An earlier revision used a parchment canvas with crumb surfaces, on the theory that marketing pages
+could stay warm even if the studio could not. That split was dropped: brand expressed through
+background tint is weak brand anyway, and maintaining two surface scales for one component kit costs
+more than it returns. The identity carries fine without it — the pixel cupcake, the dither bands,
+the display serif, the pixel-grid mono, and butter used with intent.
+
+Parchment and ink survive as fixed tokens for cases where the surface underneath is known: label
+text on a butter or berry fill, logo artwork, palette specimens. They are no longer surfaces.
 
 Three motifs carry the identity and are not used anywhere else: the pixel cupcake mark, the
 ordered-dither band that replaces hairline rules between major sections, and a single hand-piped

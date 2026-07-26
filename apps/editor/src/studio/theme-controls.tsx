@@ -108,7 +108,8 @@ export function RangeControl({
     >
       <Slider.Control className="absolute inset-0">
         <Slider.Track className="h-full w-full">
-          <Slider.Indicator className="h-full bg-butter/25" />
+          {/* Butter muddies to olive when blended over the dark canvas, so ease it back. */}
+          <Slider.Indicator className="h-full bg-butter/25 dark:bg-butter/16" />
         </Slider.Track>
         <Slider.Thumb
           className="h-full w-0.5 bg-butter outline-none"

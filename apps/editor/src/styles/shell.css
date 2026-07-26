@@ -124,17 +124,17 @@
     color-scheme: light;
 
     /*
-     * Canvas is parchment rather than crumb. The chrome sits directly against the
-     * preview, which renders the user's own near-white background, so a heavier tan
-     * frame reads as a mismatched border rather than as warmth. Crumb survives as
-     * `sunken`, used sparingly for wells and hover.
+     * Surfaces are pure neutral — zero chroma. The studio frames whatever theme the
+     * user is building, so any tint in the chrome reads as a clash against their
+     * background rather than as warmth. Character comes from the accents, the pixel
+     * and dither motifs, and the display serif; never from the canvas.
      */
-    --shell-canvas: #faf7f0;
+    --shell-canvas: #f4f4f4;
     --shell-raised: #ffffff;
-    --shell-sunken: #f2ede3;
-    --shell-fg: #1c1815;
-    --shell-muted: #6b635b;
-    --shell-line: color-mix(in oklab, #1c1815 10%, transparent);
+    --shell-sunken: #eaeaea;
+    --shell-fg: #1a1a1a;
+    --shell-muted: #6b6b6b;
+    --shell-line: color-mix(in oklab, #1a1a1a 10%, transparent);
 
     --shell-butter: #f0b429;
     --shell-frosting: #f3afc0;
@@ -147,13 +147,12 @@
   [data-shell-theme="dark"] {
     color-scheme: dark;
 
-    /* Warm near-blacks; a neutral grey would read as ash next to the butter accent. */
-    --shell-canvas: #17130f;
-    --shell-raised: #211c17;
-    --shell-sunken: #100d0a;
-    --shell-fg: #f7f2e9;
-    --shell-muted: #a69c8f;
-    --shell-line: color-mix(in oklab, #f7f2e9 14%, transparent);
+    --shell-canvas: #141414;
+    --shell-raised: #1e1e1e;
+    --shell-sunken: #0d0d0d;
+    --shell-fg: #f0f0f0;
+    --shell-muted: #999999;
+    --shell-line: color-mix(in oklab, #f0f0f0 14%, transparent);
 
     /* Crust and berry are too dark to read on the dark canvas; lift both. */
     --shell-butter: #f0b429;
