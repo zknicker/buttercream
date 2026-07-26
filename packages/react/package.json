@@ -32,6 +32,10 @@
       "types": "./dist/input.d.mts",
       "import": "./dist/input.mjs"
     },
+    "./popover": {
+      "types": "./dist/popover.d.mts",
+      "import": "./dist/popover.mjs"
+    },
     "./radio-group": {
       "types": "./dist/radio-group.d.mts",
       "import": "./dist/radio-group.mjs"
@@ -55,6 +59,10 @@
     "./tabs": {
       "types": "./dist/tabs.d.mts",
       "import": "./dist/tabs.mjs"
+    },
+    "./tooltip": {
+      "types": "./dist/tooltip.d.mts",
+      "import": "./dist/tooltip.mjs"
     },
     "./package.json": "./package.json"
   },

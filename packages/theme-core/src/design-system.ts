@@ -3,6 +3,7 @@ import { z } from "zod";
 const cssValue = z.string().trim().min(1);
 const positiveScale = z.number().positive();
 const componentSizeSchema = z.enum(["sm", "md", "lg"]);
+const componentSideSchema = z.enum(["top", "right", "bottom", "left"]);
 const defaultOverlayShadow = "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)";
 
 export const componentSettingsSchema = z.object({
@@ -45,6 +46,13 @@ export const componentSettingsSchema = z.object({
       defaultFullWidth: false,
       defaultVariant: "primary",
     }),
+  popover: z
+    .object({
+      defaultSide: componentSideSchema,
+    })
+    .default({
+      defaultSide: "bottom",
+    }),
   radioGroup: z
     .object({
       defaultOrientation: z.enum(["horizontal", "vertical"]),
@@ -85,6 +93,15 @@ export const componentSettingsSchema = z.object({
     .default({
       defaultOrientation: "horizontal",
       defaultVariant: "primary",
+    }),
+  tooltip: z
+    .object({
+      defaultDelay: z.number().int().nonnegative(),
+      defaultSide: componentSideSchema,
+    })
+    .default({
+      defaultDelay: 600,
+      defaultSide: "top",
     }),
 });
 

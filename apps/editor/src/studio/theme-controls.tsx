@@ -1,4 +1,4 @@
-import { Slider } from "@buttercream/react";
+import { Slider } from "@base-ui/react/slider";
 import type { ReactNode } from "react";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
@@ -51,7 +51,7 @@ export function RangeControl({
   value: number;
 }) {
   return (
-    <Slider
+    <Slider.Root
       className="studio-range"
       max={max}
       min={min}
@@ -61,7 +61,7 @@ export function RangeControl({
       value={value}
     >
       <div className="studio-range__header">
-        <Slider.Label>{label}</Slider.Label>
+        <Slider.Label className="studio-range__label">{label}</Slider.Label>
         <output>{value.toFixed(step < 1 ? 2 : 0)}</output>
       </div>
       <Slider.Control className="studio-range__control">
@@ -70,7 +70,7 @@ export function RangeControl({
         </Slider.Track>
         <Slider.Thumb className="studio-range__thumb" getAriaLabel={() => label} index={0} />
       </Slider.Control>
-    </Slider>
+    </Slider.Root>
   );
 }
 

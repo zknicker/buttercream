@@ -113,6 +113,9 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
         defaultFullWidth: false,
         defaultVariant: "primary",
       },
+      popover: {
+        defaultSide: "bottom",
+      },
       radioGroup: {
         defaultOrientation: "vertical",
         defaultSize: "md",
@@ -130,6 +133,10 @@ export function createDefaultDesignSystem(name = "Untitled design system"): Desi
       tabs: {
         defaultOrientation: "horizontal",
         defaultVariant: "primary",
+      },
+      tooltip: {
+        defaultDelay: 600,
+        defaultSide: "top",
       },
     },
     identity: {

@@ -12,12 +12,14 @@ import buttonCss from "../../../../packages/styles/src/components/button.css?raw
 import cardCss from "../../../../packages/styles/src/components/card.css?raw";
 import checkboxCss from "../../../../packages/styles/src/components/checkbox.css?raw";
 import inputCss from "../../../../packages/styles/src/components/input.css?raw";
+import popoverCss from "../../../../packages/styles/src/components/popover.css?raw";
 import radioGroupCss from "../../../../packages/styles/src/components/radio-group.css?raw";
 import selectCss from "../../../../packages/styles/src/components/select.css?raw";
 import sliderCss from "../../../../packages/styles/src/components/slider.css?raw";
 import surfaceCss from "../../../../packages/styles/src/components/surface.css?raw";
 import switchCss from "../../../../packages/styles/src/components/switch.css?raw";
 import tabsCss from "../../../../packages/styles/src/components/tabs.css?raw";
+import tooltipCss from "../../../../packages/styles/src/components/tooltip.css?raw";
 import themeCss from "../../../../packages/styles/src/theme.css?raw";
 import { createPreviewDocument } from "./preview-document.ts";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
@@ -28,12 +30,14 @@ const sections = [
   "Guides",
   "Button",
   "Input",
+  "Popover",
   "Checkbox",
   "Radio Group",
   "Select",
   "Slider",
   "Switch",
   "Tabs",
+  "Tooltip",
   "Card",
   "Avatar",
 ] as const;
@@ -46,12 +50,14 @@ const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
     items: [
       "Button",
       "Input",
+      "Popover",
       "Checkbox",
       "Radio Group",
       "Select",
       "Slider",
       "Switch",
       "Tabs",
+      "Tooltip",
       "Card",
       "Avatar",
     ],
@@ -107,12 +113,14 @@ export function EditorShell({
           cardCss,
           checkboxCss,
           inputCss,
+          popoverCss,
           radioGroupCss,
           selectCss,
           sliderCss,
           surfaceCss,
           switchCss,
           tabsCss,
+          tooltipCss,
         ].join("\n"),
         designSystem,
         section,

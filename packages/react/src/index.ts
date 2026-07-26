@@ -21,6 +21,12 @@ export {
 } from "./checkbox.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
 export {
+  Popover,
+  type PopoverContentProps,
+  type PopoverProps,
+  type PopoverTriggerProps,
+} from "./popover.tsx";
+export {
   RadioGroup,
   type RadioGroupItemProps,
   type RadioGroupOrientation,
@@ -33,3 +39,10 @@ export { Slider, type SliderProps, type SliderSize } from "./slider.tsx";
 export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";
 export { Switch, type SwitchProps, type SwitchSize } from "./switch.tsx";
 export { Tabs, type TabsListProps, type TabsProps, type TabsVariant } from "./tabs.tsx";
+export {
+  Tooltip,
+  type TooltipContentProps,
+  type TooltipProps,
+  type TooltipProviderProps,
+  type TooltipTriggerProps,
+} from "./tooltip.tsx";

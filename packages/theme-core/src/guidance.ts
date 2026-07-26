@@ -17,11 +17,13 @@ export function exportDesignGuidance(designSystem: DesignSystem): string {
       `- Card: \`${components.card.defaultVariant}\``,
       `- Checkbox: \`${components.checkbox.defaultVariant}\`, \`${components.checkbox.defaultSize}\`${components.checkbox.defaultRounded ? ", rounded" : ""}`,
       `- Input: \`${components.input.defaultVariant}\`${components.input.defaultFullWidth ? ", full width" : ""}`,
+      `- Popover: \`${components.popover.defaultSide}\``,
       `- Radio group: \`${components.radioGroup.defaultVariant}\`, \`${components.radioGroup.defaultSize}\`, \`${components.radioGroup.defaultOrientation}\``,
       `- Select: ${components.select.defaultMultiple ? "multiple" : "single"}`,
       `- Slider: \`${components.slider.defaultSize}\``,
       `- Switch: \`${components.switch.defaultSize}\``,
       `- Tabs: \`${components.tabs.defaultVariant}\`, \`${components.tabs.defaultOrientation}\``,
+      `- Tooltip: \`${components.tooltip.defaultSide}\`, ${components.tooltip.defaultDelay}ms delay`,
       `- Avatar: \`${components.avatar.defaultShape}\`, \`${components.avatar.defaultSize}\``,
     ].join("\n"),
     [

@@ -89,6 +89,9 @@ describe("design-system exports", () => {
       defaultFullWidth: false,
       defaultVariant: "primary",
     });
+    expect(imported.components.popover).toEqual({
+      defaultSide: "bottom",
+    });
     expect(imported.components.radioGroup).toEqual({
       defaultOrientation: "vertical",
       defaultSize: "md",
@@ -106,6 +109,10 @@ describe("design-system exports", () => {
     expect(imported.components.tabs).toEqual({
       defaultOrientation: "horizontal",
       defaultVariant: "primary",
+    });
+    expect(imported.components.tooltip).toEqual({
+      defaultDelay: 600,
+      defaultSide: "top",
     });
     expect(imported.theme.light.effects.overlayShadow).toBe(
       "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)",

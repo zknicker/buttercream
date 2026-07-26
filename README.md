@@ -17,11 +17,13 @@ import {
   Card,
   Checkbox,
   Input,
+  Popover,
   RadioGroup,
   Select,
   Slider,
   Switch,
   Tabs,
+  Tooltip,
 } from "@buttercream/react";
 
 export function Example() {
@@ -66,6 +68,19 @@ export function Example() {
         <Tabs.Panel value="overview">Overview content</Tabs.Panel>
         <Tabs.Panel value="details">Details content</Tabs.Panel>
       </Tabs>
+      <Tooltip.Provider>
+        <Tooltip>
+          <Tooltip.Trigger render={<Button variant="tertiary" />}>Help</Tooltip.Trigger>
+          <Tooltip.Content arrow>More information</Tooltip.Content>
+        </Tooltip>
+      </Tooltip.Provider>
+      <Popover>
+        <Popover.Trigger render={<Button variant="tertiary" />}>Open</Popover.Trigger>
+        <Popover.Content>
+          <Popover.Title>Shortcuts</Popover.Title>
+          <Popover.Description>Use the command palette to jump anywhere.</Popover.Description>
+        </Popover.Content>
+      </Popover>
     </>
   );
 }
