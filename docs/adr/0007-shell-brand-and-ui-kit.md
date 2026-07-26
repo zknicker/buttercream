@@ -4,9 +4,16 @@ The Buttercream brand is warm-neutral editorial typography with hard-edged pixel
 accents. The chrome stays quiet on purpose: visitors are evaluating their own components inside it,
 so the shell must never out-shout the preview.
 
-Type is Recoleta for display, Söhne for body and UI, Departure Mono for labels, token names, prices,
-and code. Recoleta and Söhne are licensed; only Departure Mono is checked in. See
-`apps/editor/public/fonts/README.md`.
+Type is Young Serif for display, Geist for body and UI, and Departure Mono for labels, token names,
+prices, and code.
+
+**Every face is SIL Open Font License 1.1 and checked into the repo**, so a fresh clone renders
+correctly with no setup step. That constraint drove the choice. An earlier revision used Recoleta
+and Söhne, which are commercially licensed: their trial files may not be distributed outside your
+organisation at all, and retail webfont licences generally also prohibit redistributing the files in
+a public repository. Since this repo is public under Apache-2.0, no licensed face can live in it —
+buying licences would not have changed that. Open faces were the only option that lets the design
+ship as source.
 
 ## Surfaces are neutral; character comes from accents
 

@@ -10,8 +10,8 @@ import { Badge, Button, classes } from "../ui/index.ts";
 const TOKEN_ROWS = [
   { group: "Color", label: "Accent", swatch: "#f0b429", value: "#F0B429" },
   { group: null, label: "Surface", swatch: "#f2ede3", value: "#F2EDE3" },
-  { group: "Type", label: "Display", value: "Recoleta" },
-  { group: null, label: "Body", value: "Söhne" },
+  { group: "Type", label: "Display", value: "Young Serif" },
+  { group: null, label: "Body", value: "Geist" },
   { group: "Shape", label: "Radius", value: "0.50" },
   { group: null, label: "Density", value: "1.00" },
 ];

@@ -10,54 +10,25 @@
  * edited — the shell must never inherit them (CONTEXT.md invariant 4).
  */
 
-/* Recoleta and Söhne are licensed faces. Drop the trial/licensed woff2 files into
- * apps/editor/public/fonts/ using the names below and they take over automatically;
- * until then the stacks fall back to the system serif and grotesk. See fonts/README.md. */
+/*
+ * Every face is SIL Open Font License 1.1, so the files live in the repo and a fresh
+ * clone renders correctly with no setup. This is deliberate: commercially licensed
+ * webfonts — trial or retail — generally may not be redistributed in a public
+ * repository, which rules them out for a repo published under Apache-2.0.
+ */
 
 @font-face {
-  font-family: Recoleta;
-  src: url("/fonts/Recoleta-Regular.woff2") format("woff2");
+  font-family: "Young Serif";
+  src: url("/fonts/YoungSerif-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: Recoleta;
-  src: url("/fonts/Recoleta-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Recoleta;
-  src: url("/fonts/Recoleta-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Söhne;
-  src: url("/fonts/Soehne-Buch.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Söhne;
-  src: url("/fonts/Soehne-Kraftig.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Söhne;
-  src: url("/fonts/Soehne-Halbfett.woff2") format("woff2");
-  font-weight: 600;
+  font-family: Geist;
+  src: url("/fonts/Geist-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -105,14 +76,8 @@
   --color-parchment: #faf7f0;
   --color-ink: #1c1815;
 
-  /*
-   * Ligatures off: the Recoleta demo declares an `fl` ligature but ships no glyph for
-   * it, so "flavor" renders with a tofu box. Harmless on the retail cut — revisit once
-   * the licensed files land.
-   */
-  --font-display: Recoleta, ui-serif, Georgia, Cambria, serif;
-  --font-display--font-feature-settings: "liga" 0, "clig" 0;
-  --font-sans: Söhne, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Young Serif", ui-serif, Georgia, Cambria, serif;
+  --font-sans: Geist, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "Departure Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Squarer than the design-system default so the chrome reads as a tool, not a card. */
