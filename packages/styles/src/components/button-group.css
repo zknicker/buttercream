@@ -16,8 +16,18 @@
     flex-direction: row;
   }
 
+  /*
+   * Stretched, not centred. A column of buttons that each size to their own label reads as a
+   * lumpy stack rather than one control — the reference only ever demonstrates this variant
+   * with icon-only buttons, which are uniform by construction and hide the problem.
+   */
   .button-group--vertical {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button-group--vertical .button {
+    width: 100%;
   }
 
   .button-group--full-width {
