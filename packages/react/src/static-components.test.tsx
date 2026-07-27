@@ -75,6 +75,34 @@ describe("ColorSwatch", () => {
 });
 
 describe("ButtonGroup", () => {
+  test("injects a hairline into every button after the first", () => {
+    const markup = renderToStaticMarkup(
+      <ButtonGroup>
+        <Button>First</Button>
+        <Button>Second</Button>
+        <Button>Third</Button>
+      </ButtonGroup>,
+    );
+
+    /*
+     * Three buttons, two seams. The separator lives inside the button so it can sit over the
+     * seam — flush buttons leave no space between them for it to occupy.
+     */
+    expect([...markup.matchAll(/button-group__separator/gu)]).toHaveLength(2);
+    expect(markup).toContain("First");
+    expect(markup).toContain("Third");
+  });
+
+  test("leaves a lone button without a hairline", () => {
+    const markup = renderToStaticMarkup(
+      <ButtonGroup>
+        <Button>Only</Button>
+      </ButtonGroup>,
+    );
+
+    expect(markup).not.toContain("button-group__separator");
+  });
+
   test("joins buttons without inventing a role", () => {
     const markup = renderToStaticMarkup(
       <ButtonGroup>
