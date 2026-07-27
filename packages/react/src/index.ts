@@ -129,6 +129,7 @@ export {
 } from "./spinner.tsx";
 export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";
 export { Switch, type SwitchProps, type SwitchSize } from "./switch.tsx";
+export { Table, type TableProps, type TableVariant } from "./table.tsx";
 export { Tabs, type TabsListProps, type TabsProps, type TabsVariant } from "./tabs.tsx";
 export { Textarea, type TextareaProps, type TextareaVariant } from "./textarea.tsx";
 export {
@@ -146,3 +147,4 @@ export {
   type TooltipProviderProps,
   type TooltipTriggerProps,
 } from "./tooltip.tsx";
+export { Typography, type TypographyProps, type TypographyVariant } from "./typography.tsx";

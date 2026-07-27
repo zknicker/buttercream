@@ -1,0 +1,142 @@
+/*
+ * Two readings of the same table. Primary sits the rows on a raised surface inside a tinted
+ * frame; secondary drops the frame and leaves rows on the page, separated only by hairlines.
+ */
+@layer components {
+  .table {
+    width: 100%;
+  }
+
+  .table__scroll-container {
+    overflow-x: auto;
+  }
+
+  .table__content {
+    width: 100%;
+    /* Separate, not collapse — collapsed borders cannot round the body's outer corners. */
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+  }
+
+  .table__header {
+    background: var(--surface-secondary);
+  }
+
+  .table__column {
+    position: relative;
+    padding-inline: calc(1rem * var(--spacing-scale));
+    padding-block: calc(0.625rem * var(--spacing-scale));
+    color: var(--muted);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+    text-align: start;
+  }
+
+  /*
+   * A short rule between headings rather than a full-height border, so the divider reads as
+   * belonging to the header row instead of continuing down the table.
+   */
+  .table__column::after {
+    position: absolute;
+    top: 50%;
+    inset-inline-end: 0;
+    width: 1px;
+    height: calc(1rem * var(--spacing-scale));
+    border-radius: var(--radius-sm);
+    background: var(--separator);
+    content: "";
+    pointer-events: none;
+    translate: 0 -50%;
+  }
+
+  .table__column:last-child::after {
+    content: none;
+  }
+
+  .table__cell {
+    height: 100%;
+    padding-inline: calc(1rem * var(--spacing-scale));
+    padding-block: calc(0.75rem * var(--spacing-scale));
+    border-bottom: var(--border-width) solid
+      color-mix(in oklab, var(--separator-tertiary) 50%, transparent);
+    background: var(--surface);
+    color: var(--foreground);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    vertical-align: middle;
+  }
+
+  .table__row:hover .table__cell {
+    background: color-mix(in oklab, var(--surface) 40%, transparent);
+  }
+
+  .table__row:last-child .table__cell {
+    border-bottom-width: 0;
+  }
+
+  /* The body's corners are rounded on its outermost cells, since a tbody cannot clip. */
+  .table__body tr:first-child td:first-child {
+    border-start-start-radius: min(2rem, var(--radius-2xl));
+  }
+
+  .table__body tr:first-child td:last-child {
+    border-start-end-radius: min(2rem, var(--radius-2xl));
+  }
+
+  .table__body tr:last-child td:first-child {
+    border-end-start-radius: min(2rem, var(--radius-2xl));
+  }
+
+  .table__body tr:last-child td:last-child {
+    border-end-end-radius: min(2rem, var(--radius-2xl));
+  }
+
+  .table--primary {
+    padding-inline: calc(0.25rem * var(--spacing-scale));
+    padding-block-end: calc(0.25rem * var(--spacing-scale));
+    border-radius: min(2rem, calc(var(--radius) * 2.5));
+    background: var(--surface-secondary);
+  }
+
+  /* Secondary has no frame to sit in, so the rows lose their surface and their rounding. */
+  .table--secondary {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .table--secondary .table__header {
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  .table--secondary .table__column {
+    background: var(--surface-secondary);
+  }
+
+  .table--secondary .table__column:first-child {
+    border-start-start-radius: min(2rem, var(--radius-2xl));
+    border-end-start-radius: min(2rem, var(--radius-2xl));
+  }
+
+  .table--secondary .table__column:last-child {
+    border-start-end-radius: min(2rem, var(--radius-2xl));
+    border-end-end-radius: min(2rem, var(--radius-2xl));
+  }
+
+  .table--secondary .table__cell {
+    border-bottom: var(--border-width) solid
+      color-mix(in oklab, var(--separator-tertiary) 50%, transparent);
+    background: transparent;
+  }
+
+  .table--secondary .table__row:hover .table__cell {
+    background: color-mix(in oklab, var(--default) 50%, transparent);
+  }
+
+  .table--secondary .table__body tr:first-child td,
+  .table--secondary .table__body tr:last-child td {
+    border-radius: 0;
+  }
+}
