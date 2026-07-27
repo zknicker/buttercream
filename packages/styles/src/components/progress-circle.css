@@ -1,0 +1,75 @@
+@layer components {
+  .progress-circle {
+    --bc-progress-circle-stroke: var(--default-foreground);
+    --bc-progress-circle-track: var(--default);
+
+    display: inline-flex;
+  }
+
+  .progress-circle__track {
+    width: calc(1.75rem * var(--spacing-scale));
+    height: calc(1.75rem * var(--spacing-scale));
+  }
+
+  .progress-circle--sm .progress-circle__track {
+    width: calc(1.25rem * var(--spacing-scale));
+    height: calc(1.25rem * var(--spacing-scale));
+  }
+
+  .progress-circle--lg .progress-circle__track {
+    width: calc(2.25rem * var(--spacing-scale));
+    height: calc(2.25rem * var(--spacing-scale));
+  }
+
+  .progress-circle__track-circle {
+    stroke: var(--bc-progress-circle-track);
+  }
+
+  /*
+   * Turned a quarter anticlockwise so zero starts at the top rather than at three o'clock,
+   * which is where an SVG circle's path would otherwise begin.
+   */
+  .progress-circle__fill-circle {
+    stroke: var(--bc-progress-circle-stroke);
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 300ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  /* With no value to report, the whole ring spins and the arc stays a fixed length. */
+  .progress-circle:not([aria-valuenow]) .progress-circle__track {
+    animation: bc-progress-circle-spin 1s linear infinite;
+  }
+
+  .progress-circle--accent {
+    --bc-progress-circle-stroke: var(--accent);
+  }
+
+  .progress-circle--success {
+    --bc-progress-circle-stroke: var(--success);
+  }
+
+  .progress-circle--warning {
+    --bc-progress-circle-stroke: var(--warning);
+  }
+
+  .progress-circle--danger {
+    --bc-progress-circle-stroke: var(--danger);
+  }
+
+  .progress-circle[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-circle__fill-circle {
+    transition: none;
+  }
+
+  /* Like the bar's shuttle, the spin is the only sign of activity, so it slows rather than stops. */
+  .progress-circle:not([aria-valuenow]) .progress-circle__track {
+    animation-duration: 3s;
+  }
+}

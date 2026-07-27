@@ -74,6 +74,12 @@ export {
   type ProgressBarSize,
 } from "./progress-bar.tsx";
 export {
+  ProgressCircle,
+  type ProgressCircleColor,
+  type ProgressCircleProps,
+  type ProgressCircleSize,
+} from "./progress-circle.tsx";
+export {
   RadioGroup,
   type RadioGroupItemProps,
   type RadioGroupOrientation,
