@@ -122,7 +122,7 @@ export function renderPreviewSection(
     return <SwitchPreview />;
   }
   if (section === "Tabs") {
-    return <TabsPreview />;
+    return <TabsPreview icons={iconSettings} />;
   }
   if (section === "Toggle Button") {
     return <ToggleButtonPreview />;

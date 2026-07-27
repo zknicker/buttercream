@@ -1,7 +1,20 @@
 import { Tabs, type TabsProps } from "@buttercream/react";
-import type { ReactElement } from "react";
+import type { DesignSystem } from "@buttercream/theme-core";
+import type { ReactElement, ReactNode } from "react";
+import { createPreviewIconElements } from "./preview-icons.ts";
 
-export function TabsPreview(): ReactElement {
+export function TabsPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
+  const iconElements = createPreviewIconElements(icons);
+  const iconTabs: readonly SpecimenTab[] = [
+    { icon: iconElements.mail, label: "Inbox" },
+    { icon: iconElements.search, label: "Search" },
+    { icon: iconElements.settings, label: "Settings" },
+  ];
+
+  return <TabsSpecimens iconTabs={iconTabs} />;
+}
+
+function TabsSpecimens({ iconTabs }: { iconTabs: readonly SpecimenTab[] }): ReactElement {
   return (
     <div className="specimens">
       <section className="specimen">
@@ -21,7 +34,7 @@ export function TabsPreview(): ReactElement {
         <div className="specimen__label">Vertical</div>
       </section>
       <section className="specimen">
-        <TabsSpecimen items={ICON_TABS} />
+        <TabsSpecimen items={iconTabs} />
         <div className="specimen__label">With icons</div>
       </section>
       <section className="specimen">
@@ -33,7 +46,8 @@ export function TabsPreview(): ReactElement {
 }
 
 interface SpecimenTab {
-  icon?: string;
+  /* A real icon element from the configured family, not a text glyph standing in for one. */
+  icon?: ReactNode;
   label: string;
 }
 
@@ -41,12 +55,6 @@ const MEDIA_TABS: readonly SpecimenTab[] = [
   { label: "Photos" },
   { label: "Music" },
   { label: "Videos" },
-];
-
-const ICON_TABS: readonly SpecimenTab[] = [
-  { icon: "⌂", label: "Home" },
-  { icon: "♫", label: "Music" },
-  { icon: "▶", label: "Videos" },
 ];
 
 interface TabsSpecimenProps extends TabsProps {
@@ -72,7 +80,7 @@ function TabsSpecimen({
       <Tabs.List separated={separated}>
         {items.map((item) => (
           <Tabs.Tab disabled={item.label === disabledTab} key={item.label} value={item.label}>
-            {item.icon ? <span aria-hidden>{item.icon} </span> : null}
+            {item.icon}
             {item.label}
           </Tabs.Tab>
         ))}
