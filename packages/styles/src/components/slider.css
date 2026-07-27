@@ -52,10 +52,17 @@
     background: var(--default);
   }
 
+  /*
+   * The fill and the handle both sit on --bc-shadow-raised, the same stack the buttons use:
+   * an inset white line along the top edge with a soft falloff under it reads as light from
+   * above, and four stacked drop layers read as the object lifting off the track. It is not
+   * a gradient — the surface stays one flat colour.
+   */
   .slider__fill {
     position: absolute;
     border-radius: var(--radius-xl);
     background: var(--accent);
+    box-shadow: var(--bc-shadow-raised);
   }
 
   /*
@@ -81,8 +88,11 @@
   .slider__thumb::after {
     width: calc(var(--bc-slider-handle-width) * var(--spacing-scale));
     height: calc(var(--bc-slider-handle-height) * var(--spacing-scale));
+    /* The accent ring is what separates the handle from the fill it overlaps. */
+    border: var(--border-width) solid var(--accent);
     border-radius: var(--radius);
     background: var(--accent-foreground);
+    box-shadow: var(--bc-shadow-raised);
     content: "";
     transform-origin: 50%;
     transition: scale 250ms cubic-bezier(0, 0, 0.2, 1);
