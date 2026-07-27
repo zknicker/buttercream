@@ -24,6 +24,11 @@ export {
   type ButtonSize,
   type ButtonVariant,
 } from "./button.tsx";
+export {
+  ButtonGroup,
+  type ButtonGroupOrientation,
+  type ButtonGroupProps,
+} from "./button-group.tsx";
 export { Card, type CardRootProps, type CardVariant } from "./card.tsx";
 export {
   Checkbox,
@@ -38,6 +43,12 @@ export {
   type CloseButtonVariant,
 } from "./close-button.tsx";
 export {
+  ColorSwatch,
+  type ColorSwatchProps,
+  type ColorSwatchShape,
+  type ColorSwatchSize,
+} from "./color-swatch.tsx";
+export {
   Drawer,
   type DrawerBackdropProps,
   type DrawerBackdropVariant,
@@ -50,6 +61,8 @@ export { Field, type FieldLabelProps, type FieldProps } from "./field.tsx";
 export { Fieldset, type FieldsetProps } from "./fieldset.tsx";
 export { Form, type FormProps } from "./form.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
+export { Kbd, type KbdProps } from "./kbd.tsx";
+export { Link, type LinkProps } from "./link.tsx";
 export { Meter, type MeterColor, type MeterProps, type MeterSize } from "./meter.tsx";
 export {
   Modal,

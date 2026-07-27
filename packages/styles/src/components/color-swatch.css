@@ -1,0 +1,62 @@
+@layer components {
+  /*
+   * The colour is painted as a gradient of itself over a checkerboard, so a translucent or
+   * partly-transparent value shows what is behind it rather than reading as a lighter solid.
+   * The inset ring keeps a white swatch visible against a white surface.
+   */
+  .color-swatch {
+    position: relative;
+    width: calc(2rem * var(--spacing-scale));
+    height: calc(2rem * var(--spacing-scale));
+    box-sizing: border-box;
+    flex-shrink: 0;
+    background:
+      linear-gradient(var(--bc-color-swatch), var(--bc-color-swatch)),
+      repeating-conic-gradient(#efefef 0% 25%, #f7f7f7 0% 50%) 50% / 16px 16px;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1);
+  }
+
+  .color-swatch--square {
+    border-radius: var(--radius-md);
+  }
+
+  .color-swatch--circle {
+    border-radius: var(--radius-2xl);
+  }
+
+  .color-swatch--xs {
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+  }
+
+  .color-swatch--xs.color-swatch--circle {
+    border-radius: var(--radius-lg);
+  }
+
+  .color-swatch--sm {
+    width: calc(1.5rem * var(--spacing-scale));
+    height: calc(1.5rem * var(--spacing-scale));
+  }
+
+  .color-swatch--sm.color-swatch--circle {
+    border-radius: var(--radius-xl);
+  }
+
+  .color-swatch--lg {
+    width: calc(2.25rem * var(--spacing-scale));
+    height: calc(2.25rem * var(--spacing-scale));
+  }
+
+  .color-swatch--lg.color-swatch--circle {
+    border-radius: var(--radius-3xl);
+  }
+
+  .color-swatch--xl {
+    width: calc(2.5rem * var(--spacing-scale));
+    height: calc(2.5rem * var(--spacing-scale));
+  }
+
+  .color-swatch--xl.color-swatch--circle {
+    border-radius: var(--radius-3xl);
+  }
+}

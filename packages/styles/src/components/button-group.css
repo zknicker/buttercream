@@ -1,0 +1,111 @@
+/*
+ * The same construction as toggle-button-group: only the outer corners round, the press
+ * transform is dropped so the row does not ripple, and adjacent outline buttons drop the
+ * border they would otherwise double up on.
+ */
+@layer components {
+  .button-group {
+    display: inline-flex;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .button-group--horizontal {
+    flex-direction: row;
+  }
+
+  .button-group--vertical {
+    flex-direction: column;
+  }
+
+  .button-group--full-width {
+    width: 100%;
+  }
+
+  .button-group .button {
+    border-radius: 0;
+  }
+
+  /* One button scaling inside a joined row would break the seam against its neighbour. */
+  .button-group .button:active {
+    transform: none;
+  }
+
+  .button-group--horizontal .button:first-child {
+    border-start-start-radius: var(--radius-3xl);
+    border-end-start-radius: var(--radius-3xl);
+  }
+
+  .button-group--horizontal .button:last-child {
+    border-start-end-radius: var(--radius-3xl);
+    border-end-end-radius: var(--radius-3xl);
+  }
+
+  .button-group--vertical .button:first-child {
+    border-start-start-radius: var(--radius-3xl);
+    border-start-end-radius: var(--radius-3xl);
+  }
+
+  .button-group--vertical .button:last-child {
+    border-end-start-radius: var(--radius-3xl);
+    border-end-end-radius: var(--radius-3xl);
+  }
+
+  .button-group .button:first-child:last-child {
+    border-radius: var(--radius-3xl);
+  }
+
+  /*
+   * A hairline in the buttons' own text colour rather than a border, so it reads on every
+   * variant without needing a colour per variant.
+   */
+  .button-group__separator {
+    position: absolute;
+    border-radius: var(--radius-sm);
+    background: currentcolor;
+    opacity: 0.15;
+    pointer-events: none;
+    transition: opacity 150ms ease;
+  }
+
+  .button-group--horizontal .button-group__separator {
+    top: 25%;
+    left: -1px;
+    width: 1px;
+    height: 50%;
+  }
+
+  .button-group--vertical .button-group__separator {
+    top: -1px;
+    left: 25%;
+    width: 50%;
+    height: 1px;
+  }
+
+  /* Outline buttons already draw an edge; two adjacent ones would stack to 2px. */
+  .button-group--horizontal .button--outline:first-child {
+    border-inline-end-width: 0;
+  }
+
+  .button-group--horizontal .button--outline:last-child {
+    border-inline-start-width: 0;
+  }
+
+  .button-group--horizontal .button--outline:not(:first-child):not(:last-child) {
+    border-inline-width: 0;
+  }
+
+  .button-group--vertical .button--outline:first-child {
+    border-block-end-width: 0;
+  }
+
+  .button-group--vertical .button--outline:last-child {
+    border-block-start-width: 0;
+  }
+
+  .button-group--vertical .button--outline:not(:first-child):not(:last-child) {
+    border-block-width: 0;
+  }
+}

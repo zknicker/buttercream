@@ -1,0 +1,18 @@
+@layer components {
+  .kbd {
+    display: inline-flex;
+    height: calc(1.5rem * var(--spacing-scale));
+    align-items: center;
+    padding-inline: calc(0.5rem * var(--spacing-scale));
+    border-radius: var(--radius-lg);
+    background: var(--default);
+    color: var(--muted);
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    /* Pulls the glyphs of a chord together so ⌘ K reads as one key, not two words. */
+    word-spacing: -0.25rem;
+  }
+}
