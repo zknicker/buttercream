@@ -1,0 +1,73 @@
+@layer components {
+  .skeleton {
+    position: relative;
+    border-radius: var(--radius-sm);
+    background: color-mix(in oklab, var(--surface-tertiary) 70%, transparent);
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /*
+   * A sheen swept across the block rather than the block itself pulsing, so a group of
+   * skeletons reads as one surface being loaded instead of several blinking independently.
+   */
+  .skeleton--shimmer::after {
+    position: absolute;
+    inset: 0;
+    animation: bc-skeleton-sweep 2s linear infinite;
+    background-image: linear-gradient(
+      to right in oklab,
+      transparent,
+      var(--surface-tertiary),
+      transparent
+    );
+    content: "";
+    translate: -100%;
+  }
+
+  /*
+   * When skeletons nest, the outer one sweeps for all of them: the children drop their own
+   * sheen and the parent's rides over the top, so the highlight crosses the group as a
+   * single pass rather than each child running its own clock.
+   */
+  .skeleton--shimmer:has(.skeleton)::after {
+    content: none;
+  }
+
+  .skeleton--shimmer:has(.skeleton)::before {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    animation: bc-skeleton-sweep 2s linear infinite;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(255 255 255 / 0.5) 50%,
+      transparent 100%
+    );
+    content: "";
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    translate: -100%;
+  }
+
+  .skeleton--shimmer:has(.skeleton) .skeleton::after {
+    content: none;
+  }
+
+  .skeleton--pulse {
+    animation: bc-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /*
+   * Held still rather than slowed. Unlike a spinner, a skeleton already communicates
+   * "loading" through its shape, so the motion carries no information of its own.
+   */
+  .skeleton--shimmer::after,
+  .skeleton--shimmer:has(.skeleton)::before,
+  .skeleton--pulse {
+    animation: none;
+  }
+}

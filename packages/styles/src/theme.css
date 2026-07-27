@@ -430,7 +430,30 @@
   }
 
   to {
-    translate: 250%;
+    translate: 350%;
+  }
+}
+
+@keyframes bc-progress-circle-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+/* The skeleton sheen travels from fully off one edge to fully off the other. */
+@keyframes bc-skeleton-sweep {
+  from {
+    translate: -100%;
+  }
+
+  to {
+    translate: 200%;
+  }
+}
+
+@keyframes bc-skeleton-pulse {
+  50% {
+    opacity: 0.5;
   }
 }
 

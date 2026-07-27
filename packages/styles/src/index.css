@@ -1,8 +1,11 @@
 @import "./theme.css";
+@import "./components/alert.css";
 @import "./components/avatar.css";
+@import "./components/badge.css";
 @import "./components/button.css";
 @import "./components/card.css";
 @import "./components/checkbox.css";
+@import "./components/chip.css";
 @import "./components/close-button.css";
 @import "./components/drawer.css";
 @import "./components/field.css";
@@ -18,6 +21,7 @@
 @import "./components/segment.css";
 @import "./components/select.css";
 @import "./components/separator.css";
+@import "./components/skeleton.css";
 @import "./components/slider.css";
 @import "./components/spinner.css";
 @import "./components/surface.css";

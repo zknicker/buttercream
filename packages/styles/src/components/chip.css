@@ -1,0 +1,106 @@
+@layer components {
+  .chip {
+    --bc-chip-bg: var(--default);
+    --bc-chip-fg: currentColor;
+
+    display: inline-flex;
+    width: fit-content;
+    flex-shrink: 0;
+    align-items: center;
+    gap: calc(0.125rem * var(--spacing-scale));
+    padding-inline: calc(0.5rem * var(--spacing-scale));
+    padding-block: calc(0.125rem * var(--spacing-scale));
+    border-radius: var(--radius-2xl);
+    background: var(--bc-chip-bg);
+    color: var(--bc-chip-fg);
+    font-family: var(--font-sans);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: calc(1.25rem * var(--spacing-scale));
+  }
+
+  .chip__label {
+    padding-inline: calc(0.125rem * var(--spacing-scale));
+  }
+
+  .chip--sm {
+    padding-inline: calc(0.25rem * var(--spacing-scale));
+    padding-block: 0;
+  }
+
+  .chip--lg {
+    padding-inline: calc(0.75rem * var(--spacing-scale));
+    padding-block: calc(0.25rem * var(--spacing-scale));
+    font-size: calc(0.875rem * var(--font-size-scale));
+  }
+
+  .chip--accent {
+    --bc-chip-fg: var(--accent-soft-foreground);
+  }
+
+  .chip--success {
+    --bc-chip-fg: var(--success-soft-foreground);
+  }
+
+  .chip--warning {
+    --bc-chip-fg: var(--warning-soft-foreground);
+  }
+
+  .chip--danger {
+    --bc-chip-fg: var(--danger-soft-foreground);
+  }
+
+  .chip--default {
+    --bc-chip-fg: var(--default-foreground);
+  }
+
+  /* Tertiary drops the fill entirely and reads as text with a colour. */
+  .chip--tertiary {
+    --bc-chip-bg: transparent;
+  }
+
+  .chip--primary.chip--accent {
+    --bc-chip-bg: var(--accent);
+    --bc-chip-fg: var(--accent-foreground);
+  }
+
+  .chip--primary.chip--success {
+    --bc-chip-bg: var(--success);
+    --bc-chip-fg: var(--success-foreground);
+  }
+
+  .chip--primary.chip--warning {
+    --bc-chip-bg: var(--warning);
+    --bc-chip-fg: var(--warning-foreground);
+  }
+
+  .chip--primary.chip--danger {
+    --bc-chip-bg: var(--danger);
+    --bc-chip-fg: var(--danger-foreground);
+  }
+
+  .chip--soft.chip--accent {
+    --bc-chip-bg: var(--accent-soft);
+    --bc-chip-fg: var(--accent-soft-foreground);
+  }
+
+  .chip--soft.chip--success {
+    --bc-chip-bg: var(--success-soft);
+    --bc-chip-fg: var(--success-soft-foreground);
+  }
+
+  .chip--soft.chip--warning {
+    --bc-chip-bg: var(--warning-soft);
+    --bc-chip-fg: var(--warning-soft-foreground);
+  }
+
+  .chip--soft.chip--danger {
+    --bc-chip-bg: var(--danger-soft);
+    --bc-chip-fg: var(--danger-soft-foreground);
+  }
+
+  .chip--soft.chip--default {
+    --bc-chip-bg: var(--default-soft);
+    --bc-chip-fg: var(--default-soft-foreground);
+  }
+}

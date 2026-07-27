@@ -1,0 +1,150 @@
+@layer components {
+  .badge {
+    --bc-badge-bg: var(--default);
+    --bc-badge-fg: var(--default-foreground);
+    /*
+     * The ring is the page behind it, not a colour of its own. A badge usually overlaps the
+     * thing it counts, and punching a gap in that thing is what keeps it legible.
+     */
+    --bc-badge-border: var(--background);
+
+    display: inline-flex;
+    min-width: calc(1.75rem * var(--spacing-scale));
+    min-height: calc(1.75rem * var(--spacing-scale));
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: calc(0.125rem * var(--spacing-scale));
+    border: var(--border-width) solid var(--bc-badge-border);
+    border-radius: var(--radius-3xl);
+    background: var(--bc-badge-bg);
+    color: var(--bc-badge-fg);
+    font-family: var(--font-sans);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: 1.34;
+  }
+
+  .badge__label {
+    padding-inline: calc(0.125rem * var(--spacing-scale));
+  }
+
+  .badge--sm {
+    min-width: calc(1rem * var(--spacing-scale));
+    min-height: calc(1rem * var(--spacing-scale));
+    border-radius: var(--radius-xl);
+    font-size: calc(0.625rem * var(--font-size-scale));
+  }
+
+  .badge--lg {
+    min-width: calc(2rem * var(--spacing-scale));
+    min-height: calc(2rem * var(--spacing-scale));
+    border-radius: var(--radius-2xl);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    line-height: 1.43;
+  }
+
+  /* Soft is the default read; the colour modifier alone only recolours the text. */
+  .badge--accent {
+    --bc-badge-fg: var(--accent-soft-foreground);
+  }
+
+  .badge--success {
+    --bc-badge-fg: var(--success-soft-foreground);
+  }
+
+  .badge--warning {
+    --bc-badge-fg: var(--warning-soft-foreground);
+  }
+
+  .badge--danger {
+    --bc-badge-fg: var(--danger-soft-foreground);
+  }
+
+  .badge--primary.badge--accent {
+    --bc-badge-bg: var(--accent);
+    --bc-badge-fg: var(--accent-foreground);
+  }
+
+  .badge--primary.badge--default {
+    --bc-badge-bg: var(--default);
+    --bc-badge-fg: var(--default-foreground);
+  }
+
+  .badge--primary.badge--success {
+    --bc-badge-bg: var(--success);
+    --bc-badge-fg: var(--success-foreground);
+  }
+
+  .badge--primary.badge--warning {
+    --bc-badge-bg: var(--warning);
+    --bc-badge-fg: var(--warning-foreground);
+  }
+
+  .badge--primary.badge--danger {
+    --bc-badge-bg: var(--danger);
+    --bc-badge-fg: var(--danger-foreground);
+  }
+
+  .badge--soft.badge--accent {
+    --bc-badge-bg: var(--accent-soft);
+    --bc-badge-fg: var(--accent-soft-foreground);
+  }
+
+  .badge--soft.badge--default {
+    --bc-badge-bg: var(--default-soft);
+    --bc-badge-fg: var(--default-soft-foreground);
+  }
+
+  .badge--soft.badge--success {
+    --bc-badge-bg: var(--success-soft);
+    --bc-badge-fg: var(--success-soft-foreground);
+  }
+
+  .badge--soft.badge--warning {
+    --bc-badge-bg: var(--warning-soft);
+    --bc-badge-fg: var(--warning-soft-foreground);
+  }
+
+  .badge--soft.badge--danger {
+    --bc-badge-bg: var(--danger-soft);
+    --bc-badge-fg: var(--danger-soft-foreground);
+  }
+
+  /*
+   * Anchored placements hang the badge off a corner of its container, overlapping by a
+   * quarter of its own size so it reads as attached rather than contained.
+   */
+  .badge-anchor {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .badge--top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(25%, -25%);
+  }
+
+  .badge--top-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-25%, -25%);
+  }
+
+  .badge--bottom-right {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transform: translate(25%, 25%);
+  }
+
+  .badge--bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translate(-25%, 25%);
+  }
+}

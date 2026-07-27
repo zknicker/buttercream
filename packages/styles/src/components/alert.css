@@ -1,0 +1,82 @@
+@layer components {
+  .alert {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: calc(1rem * var(--spacing-scale));
+    padding-inline: calc(1rem * var(--spacing-scale));
+    padding-block: calc(0.75rem * var(--spacing-scale));
+    /* Capped so a very round theme does not turn a wide alert into a lozenge. */
+    border-radius: min(2rem, var(--radius-3xl));
+    background: var(--surface);
+    box-shadow: var(--shadow-surface);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  .alert__indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(0.25rem * var(--spacing-scale));
+    user-select: none;
+  }
+
+  .alert__indicator svg {
+    /* content-box so the indicator's padding is not eaten by the icon's own box. */
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+    box-sizing: content-box;
+    flex-shrink: 0;
+  }
+
+  .alert__content {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: flex-start;
+  }
+
+  .alert__title {
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: calc(1.5rem * var(--spacing-scale));
+  }
+
+  .alert__description {
+    color: var(--muted);
+    font-size: calc(0.875rem * var(--font-size-scale));
+  }
+
+  /*
+   * Only the indicator and title take the role colour. The description stays muted so a
+   * danger alert does not become a wall of red.
+   */
+  .alert--default .alert__indicator,
+  .alert--default .alert__title {
+    color: var(--foreground);
+  }
+
+  .alert--accent .alert__indicator,
+  .alert--accent .alert__title {
+    color: var(--accent-soft-foreground);
+  }
+
+  .alert--success .alert__indicator,
+  .alert--success .alert__title {
+    color: var(--success-soft-foreground);
+  }
+
+  .alert--warning .alert__indicator,
+  .alert--warning .alert__title {
+    color: var(--warning-soft-foreground);
+  }
+
+  .alert--danger .alert__indicator,
+  .alert--danger .alert__title {
+    color: var(--danger-soft-foreground);
+  }
+}
