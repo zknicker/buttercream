@@ -1,6 +1,14 @@
 @layer components {
+  /*
+   * Hover and press are per-variant background tokens rather than a filter over whatever is
+   * there. A filter has nothing to act on when the background is transparent, which left the
+   * outline and ghost variants with no hover at all.
+   */
   .button {
     --bc-button-spinner-color: var(--foreground);
+    --bc-button-bg: transparent;
+    --bc-button-bg-hover: var(--bc-button-bg);
+    --bc-button-bg-pressed: var(--bc-button-bg-hover);
 
     position: relative;
     display: inline-flex;
@@ -13,6 +21,7 @@
     padding-inline: calc(1rem * var(--spacing-scale));
     border: var(--border-width) solid transparent;
     border-radius: var(--radius-3xl);
+    background: var(--bc-button-bg);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     font-weight: var(--font-weight-medium);
@@ -29,49 +38,61 @@
 
   .button--primary {
     --bc-button-spinner-color: var(--accent-foreground);
+    --bc-button-bg: var(--accent);
+    --bc-button-bg-hover: var(--accent-hover);
 
     border-color: var(--accent);
-    background: var(--accent);
     color: var(--accent-foreground);
     box-shadow: var(--bc-shadow-raised);
   }
 
   .button--secondary {
     --bc-button-spinner-color: var(--accent-soft-foreground);
+    --bc-button-bg: var(--default);
+    --bc-button-bg-hover: var(--default-hover);
 
-    background: var(--default);
     color: var(--accent-soft-foreground);
   }
 
   .button--tertiary {
-    background: var(--default);
+    --bc-button-bg: var(--default);
+    --bc-button-bg-hover: var(--default-hover);
+
     color: var(--foreground);
   }
 
+  /*
+   * Outline already carries a border, so its hover fill is held back to a partial tint —
+   * a full --default would read as heavier than the ghost variant beside it.
+   */
   .button--outline {
+    --bc-button-bg-hover: color-mix(in srgb, var(--default) 60%, transparent);
+
     border-color: var(--border);
-    background: transparent;
     color: var(--foreground);
   }
 
   .button--ghost {
-    background: transparent;
+    --bc-button-bg-hover: var(--default);
+
     color: var(--foreground);
   }
 
   .button--danger {
     --bc-button-spinner-color: var(--danger-foreground);
+    --bc-button-bg: var(--danger);
+    --bc-button-bg-hover: var(--danger-hover);
 
     border-color: var(--danger);
-    background: var(--danger);
     color: var(--danger-foreground);
     box-shadow: var(--bc-shadow-raised);
   }
 
   .button--danger-soft {
     --bc-button-spinner-color: var(--danger-soft-foreground);
+    --bc-button-bg: var(--danger-soft);
+    --bc-button-bg-hover: var(--danger-soft-hover);
 
-    background: var(--danger-soft);
     color: var(--danger-soft-foreground);
   }
 
@@ -107,7 +128,11 @@
   }
 
   .button:hover:not([data-disabled], :disabled) {
-    filter: brightness(0.96);
+    background: var(--bc-button-bg-hover);
+  }
+
+  .button:active:not([data-disabled], :disabled) {
+    background: var(--bc-button-bg-pressed);
   }
 
   .button:focus-visible {
