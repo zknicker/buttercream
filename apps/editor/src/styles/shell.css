@@ -96,7 +96,7 @@
      */
     --shell-canvas: #f4f4f4;
     --shell-raised: #ffffff;
-    --shell-sunken: #eaeaea;
+    --shell-sunken: #f6f6f6;
     --shell-fg: #1a1a1a;
     --shell-muted: #6b6b6b;
     --shell-line: color-mix(in oklab, #1a1a1a 10%, transparent);

@@ -88,7 +88,7 @@ export function CodeDialog({
                   aria-selected={item.filename === activeExport.filename}
                   className={classes(
                     "h-8 shrink-0 rounded-[calc(var(--radius-shell)-0.125rem)] px-3 font-mono text-xs whitespace-nowrap",
-                    "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-fg",
+                    "focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg",
                     item.filename === activeExport.filename
                       ? "bg-raised text-fg shadow-sm dark:shadow-none ring-1 ring-fg/8"
                       : "text-muted hover:text-fg",

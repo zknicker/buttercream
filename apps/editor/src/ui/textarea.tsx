@@ -11,7 +11,7 @@ export function Textarea({ className, fullWidth = true, ...props }: TextareaProp
       className={classes(
         "resize-y rounded-(--radius-shell) bg-raised p-4 font-mono text-base text-fg sm:text-sm",
         "ring-1 ring-fg/12 ring-inset placeholder:text-muted/60",
-        "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-fg",
+        "focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg",
         fullWidth && "w-full",
         className,
       )}

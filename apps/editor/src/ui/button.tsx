@@ -80,7 +80,7 @@ export function Button({
         "relative inline-flex shrink-0 items-center justify-center rounded-(--radius-shell) font-medium whitespace-nowrap",
         // Icons must never be squeezed by the flex row.
         "[&>svg]:shrink-0",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg",
+        "focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg",
         "disabled:pointer-events-none disabled:opacity-45 data-disabled:pointer-events-none data-disabled:opacity-45",
         VARIANTS[variant],
         SIZES[size],
