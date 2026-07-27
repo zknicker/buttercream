@@ -1,4 +1,12 @@
-import { Field, Fieldset, Input, NumberField, Textarea } from "@buttercream/react";
+import {
+  CloseButton,
+  Field,
+  Fieldset,
+  Input,
+  NumberField,
+  SearchField,
+  Textarea,
+} from "@buttercream/react";
 import type { ReactElement } from "react";
 
 export function TextFieldPreview(): ReactElement {
@@ -121,6 +129,50 @@ export function FieldsetPreview(): ReactElement {
           </Fieldset.Group>
         </Fieldset>
         <div className="specimen__label">Grouped fields</div>
+      </section>
+    </div>
+  );
+}
+
+export function SearchFieldPreview(): ReactElement {
+  return (
+    <div className="specimens">
+      <section className="specimen specimen--stack">
+        <Field name="search">
+          <Field.Label>Search</Field.Label>
+          <SearchField placeholder="Search..." />
+        </Field>
+        <div className="specimen__label">Basic</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Field name="search-products">
+          <Field.Label>Search products</Field.Label>
+          <SearchField defaultValue="running shoes" />
+          <Field.Description>Enter keywords to search for products</Field.Description>
+        </Field>
+        <div className="specimen__label">With a value</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Field name="search-disabled">
+          <Field.Label>Search archive</Field.Label>
+          <SearchField disabled placeholder="Unavailable" />
+        </Field>
+        <div className="specimen__label">Disabled</div>
+      </section>
+    </div>
+  );
+}
+
+export function CloseButtonPreview(): ReactElement {
+  return (
+    <div className="specimens">
+      <section className="specimen">
+        <CloseButton />
+        <div className="specimen__label">Default</div>
+      </section>
+      <section className="specimen">
+        <CloseButton disabled />
+        <div className="specimen__label">Disabled</div>
       </section>
     </div>
   );

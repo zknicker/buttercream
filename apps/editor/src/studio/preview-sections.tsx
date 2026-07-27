@@ -12,8 +12,10 @@ import {
 } from "./preview-display.tsx";
 import { DrawerPreview } from "./preview-drawer.tsx";
 import {
+  CloseButtonPreview,
   FieldsetPreview,
   NumberFieldPreview,
+  SearchFieldPreview,
   TextareaPreview,
   TextFieldPreview,
 } from "./preview-fields.tsx";
@@ -34,6 +36,7 @@ export type PreviewSection =
   | "Button"
   | "Card"
   | "Checkbox"
+  | "Close Button"
   | "Drawer"
   | "Fieldset"
   | "Input"
@@ -41,6 +44,7 @@ export type PreviewSection =
   | "Number Field"
   | "Popover"
   | "Radio Group"
+  | "Search Field"
   | "Segment"
   | "Select"
   | "Separator"
@@ -81,8 +85,14 @@ export function renderPreviewSection(
   if (section === "Radio Group") {
     return <RadioGroupPreview />;
   }
+  if (section === "Close Button") {
+    return <CloseButtonPreview />;
+  }
   if (section === "Fieldset") {
     return <FieldsetPreview />;
+  }
+  if (section === "Search Field") {
+    return <SearchFieldPreview />;
   }
   if (section === "Number Field") {
     return <NumberFieldPreview />;
