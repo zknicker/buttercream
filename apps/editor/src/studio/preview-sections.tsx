@@ -4,6 +4,7 @@ import { AvatarPreview } from "./preview-avatar.tsx";
 import { ButtonPreview } from "./preview-button.tsx";
 import { CardPreview } from "./preview-card.tsx";
 import { CheckboxPreview, SwitchPreview } from "./preview-choice-controls.tsx";
+import { TablePreview, TypographyPreview } from "./preview-data.tsx";
 import {
   SegmentPreview,
   SeparatorPreview,
@@ -77,11 +78,13 @@ export type PreviewSection =
   | "Slider"
   | "Spinner"
   | "Switch"
+  | "Table"
   | "Tabs"
   | "Text Field"
   | "Textarea"
   | "Toggle Button"
-  | "Tooltip";
+  | "Tooltip"
+  | "Typography";
 
 export function renderPreviewSection(
   section: PreviewSection,
@@ -180,8 +183,14 @@ export function renderPreviewSection(
   if (section === "Switch") {
     return <SwitchPreview />;
   }
+  if (section === "Table") {
+    return <TablePreview />;
+  }
   if (section === "Tabs") {
     return <TabsPreview icons={iconSettings} />;
+  }
+  if (section === "Typography") {
+    return <TypographyPreview />;
   }
   if (section === "Toggle Button") {
     return <ToggleButtonPreview />;

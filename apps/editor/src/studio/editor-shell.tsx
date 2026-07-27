@@ -50,11 +50,13 @@ const sections = [
   "Slider",
   "Spinner",
   "Switch",
+  "Table",
   "Tabs",
   "Text Field",
   "Textarea",
   "Toggle Button",
   "Tooltip",
+  "Typography",
 ] as const;
 type Section = (typeof sections)[number];
 
@@ -93,11 +95,13 @@ const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
       "Slider",
       "Spinner",
       "Switch",
+      "Table",
       "Tabs",
       "Text Field",
       "Textarea",
       "Toggle Button",
       "Tooltip",
+      "Typography",
     ],
   },
 ];

@@ -193,6 +193,29 @@
   gap: 12px;
 }
 
+/* The type specimen sheet: a fixed label gutter so the samples share a left edge. */
+.type-scale {
+  display: grid;
+  width: 100%;
+  gap: 20px;
+}
+
+.type-scale__row {
+  display: grid;
+  align-items: baseline;
+  gap: 24px;
+  grid-template-columns: 8rem minmax(0, 1fr);
+}
+
+.type-scale__meta {
+  display: grid;
+  gap: 2px;
+}
+
+.type-scale__note {
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+}
+
 .control-status {
   color: color-mix(in oklab, var(--foreground) 55%, transparent);
   font-size: 13px;
