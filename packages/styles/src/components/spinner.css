@@ -1,0 +1,107 @@
+/*
+ * The classic twelve-bar spinner. Nothing rotates: each bar holds a fixed angle and fades on a
+ * loop, and the staggered negative delays mean every bar starts partway through that fade, so
+ * the ring reads as travelling. Bars are drawn in currentColor, so a colour variant only has to
+ * set `color`, and they take the theme radius rather than a hard pill.
+ */
+@layer components {
+  .spinner {
+    --bc-spinner-duration: 1.2s;
+
+    position: relative;
+    display: inline-block;
+    width: calc(1.5rem * var(--spacing-scale));
+    height: calc(1.5rem * var(--spacing-scale));
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  .spinner--sm {
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+  }
+
+  .spinner--lg {
+    width: calc(2rem * var(--spacing-scale));
+    height: calc(2rem * var(--spacing-scale));
+  }
+
+  .spinner--xl {
+    width: calc(2.5rem * var(--spacing-scale));
+    height: calc(2.5rem * var(--spacing-scale));
+  }
+
+  .spinner--current {
+    color: inherit;
+  }
+
+  .spinner--accent {
+    color: var(--accent);
+  }
+
+  .spinner--danger {
+    color: var(--danger);
+  }
+
+  .spinner--success {
+    color: var(--success);
+  }
+
+  .spinner--warning {
+    color: var(--warning);
+  }
+
+  /* Offset to the centre so each bar's rotation pivots on the middle of the spinner. */
+  .spinner__bars {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /*
+   * Centred on the origin (hence the negative half-width and half-height) so `rotate` pivots on
+   * the middle of the spinner and `translate` pushes each bar straight out along its own angle.
+   * The bar takes the theme radius, which clamps to a pill at these proportions but does go
+   * square when a theme sets --radius to 0.
+   */
+  .spinner__bar {
+    position: absolute;
+    top: -6.5%;
+    left: -12%;
+    display: block;
+    width: 24%;
+    height: 13%;
+    border-radius: var(--radius);
+    background: currentColor;
+    animation: bc-spinner-fade var(--bc-spinner-duration) linear infinite;
+  }
+
+  /*
+   * Spelled out rather than borrowed from Tailwind's sr-only, because a consuming app is not
+   * required to have Tailwind for the design system's CSS to be correct.
+   */
+  .spinner__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    margin: -1px;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /*
+   * Chasing bars are exactly the repetitive motion the setting is asking to be spared, so the
+   * loop slows to a crawl rather than freezing — a static ring would read as a stalled control.
+   */
+  .spinner {
+    --bc-spinner-duration: 4s;
+  }
+}

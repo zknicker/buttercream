@@ -1,0 +1,194 @@
+/*
+ * The reference drives this component from react-aria's attributes, where `data-selected`
+ * means "on" and `data-pressed` means "held down". Base UI spells the same two states
+ * `data-pressed` (on) and the native `:active` (held down), so the selectors below are the
+ * Base UI translation of the reference, not a copy of its selector text.
+ */
+/*
+ * Ahead of the layer rather than after it: unlayered rules outrank layered ones whatever the
+ * source order, and leading with it keeps every :active reset above the group selectors that
+ * would otherwise read as descending specificity.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .toggle-button {
+    transition: none;
+  }
+
+  .toggle-button:active {
+    transform: none;
+  }
+}
+
+@layer components {
+  .toggle-button {
+    --bc-toggle-bg: var(--default);
+    --bc-toggle-bg-hover: var(--default-hover);
+    --bc-toggle-fg: currentColor;
+    --bc-toggle-bg-on: var(--accent-soft);
+    --bc-toggle-bg-on-hover: var(--accent-soft-hover);
+    --bc-toggle-fg-on: var(--accent-soft-foreground);
+
+    position: relative;
+    display: inline-flex;
+    width: fit-content;
+    height: calc(2.25rem * var(--spacing-scale));
+    align-items: center;
+    justify-content: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    padding-inline: calc(1rem * var(--spacing-scale));
+    border: none;
+    border-radius: var(--radius-3xl);
+    outline: none;
+    background: var(--bc-toggle-bg);
+    color: var(--bc-toggle-fg);
+    cursor: var(--cursor-interactive);
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
+    white-space: nowrap;
+    /* Isolate so the press transform cannot lift the button out of its group's stacking order. */
+    isolation: isolate;
+    transform-origin: 50%;
+    transition:
+      transform 250ms ease,
+      background-color 100ms cubic-bezier(0, 0, 0.2, 1),
+      box-shadow 100ms cubic-bezier(0, 0, 0.2, 1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .toggle-button svg {
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+    flex-shrink: 0;
+    align-self: center;
+    margin-inline: calc(-0.125rem * var(--spacing-scale));
+    margin-block: calc(0.25rem * var(--spacing-scale));
+    pointer-events: none;
+  }
+
+  .toggle-button:hover:not([data-disabled]) {
+    background: var(--bc-toggle-bg-hover);
+  }
+
+  .toggle-button:active:not([data-disabled]) {
+    background: var(--bc-toggle-bg-hover);
+    transform: scale(0.97);
+  }
+
+  .toggle-button:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
+  }
+
+  .toggle-button[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  /* Base UI marks the on state with data-pressed. */
+  .toggle-button[data-pressed] {
+    background: var(--bc-toggle-bg-on);
+    color: var(--bc-toggle-fg-on);
+  }
+
+  .toggle-button[data-pressed]:hover:not([data-disabled]),
+  .toggle-button[data-pressed]:active:not([data-disabled]) {
+    background: var(--bc-toggle-bg-on-hover);
+  }
+
+  .toggle-button--sm {
+    height: calc(2rem * var(--spacing-scale));
+    padding-inline: calc(0.75rem * var(--spacing-scale));
+  }
+
+  .toggle-button--sm:active:not([data-disabled]) {
+    transform: scale(0.98);
+  }
+
+  .toggle-button--lg {
+    height: calc(2.5rem * var(--spacing-scale));
+    font-size: calc(1rem * var(--font-size-scale));
+  }
+
+  .toggle-button--lg:active:not([data-disabled]) {
+    transform: scale(0.96);
+  }
+
+  .toggle-button--default {
+    --bc-toggle-bg: var(--default);
+    --bc-toggle-bg-hover: var(--default-hover);
+  }
+
+  .toggle-button--ghost {
+    --bc-toggle-bg: transparent;
+    --bc-toggle-bg-hover: var(--default);
+    --bc-toggle-fg: var(--default-foreground);
+  }
+
+  .toggle-button--icon-only {
+    width: calc(2.25rem * var(--spacing-scale));
+    padding: 0;
+  }
+
+  .toggle-button--icon-only.toggle-button--sm {
+    width: calc(2rem * var(--spacing-scale));
+  }
+
+  .toggle-button--icon-only.toggle-button--lg {
+    width: calc(2.5rem * var(--spacing-scale));
+  }
+
+  /*
+   * Grouped toggles round only the outer corners and drop the press transform, so the row
+   * reads as one control rather than a set of buttons that each shrink independently.
+   */
+  .toggle-button-group {
+    display: inline-flex;
+  }
+
+  .toggle-button-group--horizontal {
+    flex-direction: row;
+  }
+
+  .toggle-button-group--vertical {
+    flex-direction: column;
+  }
+
+  .toggle-button-group .toggle-button {
+    border-radius: 0;
+  }
+
+  .toggle-button-group .toggle-button:active {
+    transform: none;
+  }
+
+  .toggle-button-group .toggle-button:focus-visible {
+    outline-offset: calc(-1 * var(--ring-offset-width));
+  }
+
+  .toggle-button-group--horizontal .toggle-button:first-child {
+    border-start-start-radius: var(--radius-3xl);
+    border-end-start-radius: var(--radius-3xl);
+  }
+
+  .toggle-button-group--horizontal .toggle-button:last-child {
+    border-start-end-radius: var(--radius-3xl);
+    border-end-end-radius: var(--radius-3xl);
+  }
+
+  .toggle-button-group--vertical .toggle-button:first-child {
+    border-start-start-radius: var(--radius-3xl);
+    border-start-end-radius: var(--radius-3xl);
+  }
+
+  .toggle-button-group--vertical .toggle-button:last-child {
+    border-end-start-radius: var(--radius-3xl);
+    border-end-end-radius: var(--radius-3xl);
+  }
+
+  .toggle-button-group .toggle-button:first-child:last-child {
+    border-radius: var(--radius-3xl);
+  }
+}

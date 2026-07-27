@@ -1,0 +1,82 @@
+@layer components {
+  .separator {
+    width: 100%;
+    height: 1px;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    background: var(--separator);
+  }
+
+  .separator--horizontal {
+    width: 100%;
+    height: 1px;
+  }
+
+  .separator--vertical {
+    width: 1px;
+    height: auto;
+    min-height: calc(0.5rem * var(--spacing-scale));
+    align-self: stretch;
+  }
+
+  .separator--default {
+    background: var(--separator);
+  }
+
+  .separator--secondary {
+    background: var(--separator-secondary);
+  }
+
+  .separator--tertiary {
+    background: var(--separator-tertiary);
+  }
+
+  /*
+   * A labelled separator: the rule is split either side of the content, so the two
+   * `separator__line` halves grow to fill whatever the label leaves behind.
+   */
+  .separator__container {
+    display: flex;
+    align-items: center;
+    gap: calc(0.75rem * var(--spacing-scale));
+  }
+
+  .separator__container--horizontal {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .separator__container--vertical {
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /*
+   * A standalone separator fills its container, so inside a labelled one the two halves have to
+   * give that up — otherwise each claims the full width and the label is pushed out of the row.
+   */
+  .separator__line {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+  }
+
+  .separator__container--horizontal > .separator__line {
+    width: auto;
+  }
+
+  .separator__container--vertical > .separator__line {
+    height: auto;
+    min-height: 0;
+  }
+
+  .separator__content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+  }
+}
