@@ -11,6 +11,7 @@ import {
   ToggleButtonPreview,
 } from "./preview-display.tsx";
 import { DrawerPreview } from "./preview-drawer.tsx";
+import { AlertPreview, BadgePreview, ChipPreview, SkeletonPreview } from "./preview-feedback.tsx";
 import {
   CloseButtonPreview,
   FieldsetPreview,
@@ -34,10 +35,13 @@ import { TooltipPreview } from "./preview-tooltip.tsx";
 /* Alphabetical after Guides, matching the order the nav lists them in. */
 export type PreviewSection =
   | "Guides"
+  | "Alert"
   | "Avatar"
+  | "Badge"
   | "Button"
   | "Card"
   | "Checkbox"
+  | "Chip"
   | "Close Button"
   | "Drawer"
   | "Fieldset"
@@ -52,6 +56,7 @@ export type PreviewSection =
   | "Segment"
   | "Select"
   | "Separator"
+  | "Skeleton"
   | "Slider"
   | "Spinner"
   | "Switch"
@@ -88,6 +93,18 @@ export function renderPreviewSection(
   }
   if (section === "Radio Group") {
     return <RadioGroupPreview />;
+  }
+  if (section === "Alert") {
+    return <AlertPreview />;
+  }
+  if (section === "Badge") {
+    return <BadgePreview />;
+  }
+  if (section === "Chip") {
+    return <ChipPreview />;
+  }
+  if (section === "Skeleton") {
+    return <SkeletonPreview />;
   }
   if (section === "Close Button") {
     return <CloseButtonPreview />;
