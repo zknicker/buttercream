@@ -1,4 +1,4 @@
-import type { DesignSystem } from "@buttercream/theme-core";
+import { type DesignSystem, themeCssVariables } from "@buttercream/theme-core";
 import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import Moon02Icon from "@hugeicons-pro/core-stroke-rounded/Moon02Icon";
@@ -6,26 +6,13 @@ import Redo02Icon from "@hugeicons-pro/core-stroke-rounded/Redo02Icon";
 import SidebarLeft01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarLeft01Icon";
 import Sun01Icon from "@hugeicons-pro/core-stroke-rounded/Sun01Icon";
 import Undo02Icon from "@hugeicons-pro/core-stroke-rounded/Undo02Icon";
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
-import avatarCss from "../../../../packages/styles/src/components/avatar.css?raw";
-import buttonCss from "../../../../packages/styles/src/components/button.css?raw";
-import cardCss from "../../../../packages/styles/src/components/card.css?raw";
-import checkboxCss from "../../../../packages/styles/src/components/checkbox.css?raw";
-import drawerCss from "../../../../packages/styles/src/components/drawer.css?raw";
-import inputCss from "../../../../packages/styles/src/components/input.css?raw";
-import modalCss from "../../../../packages/styles/src/components/modal.css?raw";
-import popoverCss from "../../../../packages/styles/src/components/popover.css?raw";
-import radioGroupCss from "../../../../packages/styles/src/components/radio-group.css?raw";
-import selectCss from "../../../../packages/styles/src/components/select.css?raw";
-import sliderCss from "../../../../packages/styles/src/components/slider.css?raw";
-import surfaceCss from "../../../../packages/styles/src/components/surface.css?raw";
-import switchCss from "../../../../packages/styles/src/components/switch.css?raw";
-import tabsCss from "../../../../packages/styles/src/components/tabs.css?raw";
-import tooltipCss from "../../../../packages/styles/src/components/tooltip.css?raw";
-import themeCss from "../../../../packages/styles/src/theme.css?raw";
+import "../styles/preview.css";
 import { useShellTheme } from "../shell-theme.ts";
 import { Button, CupcakeMark, classes } from "../ui/index.ts";
-import { createPreviewDocument } from "./preview-document.ts";
+import { renderPreviewSection } from "./preview-sections.tsx";
+import { PreviewSurface } from "./preview-surface.tsx";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { ThemeEditorPanel } from "./theme-editor-panel.tsx";
 import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
@@ -115,32 +102,9 @@ export function EditorShell({
     return () => compactViewport.removeEventListener("change", syncControls);
   }, []);
 
-  const preview = useMemo(
-    () =>
-      createPreviewDocument({
-        componentCss: [
-          themeCss,
-          avatarCss,
-          buttonCss,
-          cardCss,
-          checkboxCss,
-          drawerCss,
-          inputCss,
-          modalCss,
-          popoverCss,
-          radioGroupCss,
-          selectCss,
-          sliderCss,
-          surfaceCss,
-          switchCss,
-          tabsCss,
-          tooltipCss,
-        ].join("\n"),
-        designSystem,
-        section,
-        theme,
-      }),
-    [designSystem, section, theme],
+  const themeVariables = useMemo(
+    () => themeCssVariables(designSystem.theme[theme]) as CSSProperties,
+    [designSystem, theme],
   );
 
   return (
@@ -163,7 +127,7 @@ export function EditorShell({
       >
         <a
           aria-label="Homepage"
-          className="flex min-w-0 max-w-40 items-center gap-1.5 rounded-(--radius-shell) px-2 text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg min-[721px]:max-w-60"
+          className="flex min-w-0 max-w-40 items-center gap-1.5 rounded-(--radius-shell) px-2 text-fg focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg min-[721px]:max-w-60"
           href="/"
         >
           {/*
@@ -248,7 +212,7 @@ export function EditorShell({
         <button
           aria-expanded={navOpen}
           aria-label="Preview sections"
-          className="flex max-h-[60vh] w-8 flex-col items-center gap-3 overflow-y-auto px-1 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg scrollbar-none max-[720px]:flex-row"
+          className="flex max-h-[60vh] w-8 flex-col items-center gap-3 overflow-y-auto px-1 py-3 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg scrollbar-none max-[720px]:flex-row"
           onClick={() => setNavOpen(true)}
           onPointerEnter={() => setNavOpen(true)}
           type="button"
@@ -299,7 +263,7 @@ export function EditorShell({
                   aria-current={section === item ? "page" : undefined}
                   className={classes(
                     "block h-8 w-full rounded-(--radius-shell) px-3 text-left text-sm",
-                    "focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-fg",
+                    "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
                     section === item ? "bg-sunken text-fg" : "text-muted hover:bg-fg/5",
                   )}
                   key={item}
@@ -325,12 +289,13 @@ export function EditorShell({
        */}
       <main className="min-h-0 min-w-0 bg-sunken px-3 pt-12 pb-3">
         <div className="h-full w-full overflow-hidden rounded-xl bg-raised ring-1 ring-line">
-          <iframe
-            className="block h-full w-full border-0 bg-transparent"
-            sandbox=""
-            srcDoc={preview}
-            title={`${section} preview`}
-          />
+          <PreviewSurface
+            customCss={designSystem.rules.customCss}
+            style={themeVariables}
+            theme={theme}
+          >
+            {renderPreviewSection(section, designSystem.icons)}
+          </PreviewSurface>
         </div>
       </main>
 
