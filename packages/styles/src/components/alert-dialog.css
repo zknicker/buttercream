@@ -1,7 +1,8 @@
 /*
- * An alert dialog is a modal that will not let you leave by accident: no dismiss on backdrop
- * click or Escape, because it is asking a question that needs an answer. The styling follows
- * Modal so the two read as the same object; only the behaviour differs.
+ * An alert dialog is a modal you cannot leave by accident: a backdrop click does not dismiss
+ * it, because it is asking a question that needs an answer. Escape still works — a keyboard
+ * exit is not something to take away. The styling follows Modal so the two read as the same
+ * object; only the dismissal rules differ.
  */
 @layer components {
   .alert-dialog__trigger {

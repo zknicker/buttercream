@@ -16,9 +16,12 @@ export interface AlertDialogContentProps
 }
 
 /**
- * A modal that demands an answer. Unlike Modal it cannot be dismissed by clicking the backdrop
- * or pressing Escape — Base UI's alert dialog enforces that, which is the whole reason it is a
- * separate primitive rather than a styling variant.
+ * A modal that demands an answer.
+ *
+ * Unlike Modal, clicking the backdrop does not dismiss it — the question has to be answered by
+ * one of the actions. Escape still closes it, and deliberately so: an unconditional keyboard
+ * exit is what keeps a modal from trapping someone, and it is the one dismissal an alert dialog
+ * is expected to keep. Treat Escape as equivalent to the cancelling action, not to confirming.
  */
 function AlertDialogRoot(props: AlertDialogProps): ReactElement {
   return <BaseAlertDialog.Root {...props} />;

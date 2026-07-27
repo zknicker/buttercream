@@ -11,7 +11,11 @@ export interface PaginationProps extends ComponentPropsWithoutRef<"nav"> {
   summary?: ReactNode;
 }
 
-export interface PaginationLinkProps extends Omit<ComponentPropsWithoutRef<"a">, "href"> {
+/*
+ * Typed on button props rather than anchor props: the control is a button by default and only
+ * becomes a link when given an href, so button is the shape callers hand attributes to.
+ */
+export interface PaginationLinkProps extends ComponentPropsWithoutRef<"button"> {
   current?: boolean;
   disabled?: boolean;
   href?: string;
@@ -46,9 +50,14 @@ function PaginationRoot({
 }
 
 /**
- * One page control. Renders an anchor when it goes somewhere and a span when it does not —
- * the current page and a disabled arrow are both destinations you are already at or cannot
- * reach, and an anchor without an href is not focusable or actionable anyway.
+ * One page control, in three shapes for three jobs:
+ *
+ * - an anchor when `href` is given, so the page is linkable and crawlable
+ * - a button when it is not, for client-side paging — this is what the reference renders
+ * - a span for the current page and for disabled arrows, which are not actionable at all
+ *
+ * A disabled anchor is the shape to avoid: without an href it is neither focusable nor
+ * clickable, so styling one as a control would misrepresent what it does.
  */
 function PaginationLink({
   children,
@@ -59,7 +68,7 @@ function PaginationLink({
   nav = false,
   ...props
 }: PaginationLinkProps): ReactElement {
-  const inert = disabled || current || href === undefined;
+  const inert = disabled || current;
   const classNames = classes("pagination__link", nav && "pagination__link--nav", className);
 
   return (
@@ -73,8 +82,17 @@ function PaginationLink({
         >
           {children}
         </span>
+      ) : href === undefined ? (
+        <button {...props} className={classNames} data-slot="pagination-link" type="button">
+          {children}
+        </button>
       ) : (
-        <a className={classNames} data-slot="pagination-link" href={href} {...props}>
+        <a
+          {...(props as ComponentPropsWithoutRef<"a">)}
+          className={classNames}
+          data-slot="pagination-link"
+          href={href}
+        >
           {children}
         </a>
       )}
