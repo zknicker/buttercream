@@ -30,6 +30,9 @@ export {
   type DrawerProps,
   type DrawerTriggerProps,
 } from "./drawer.tsx";
+export { Field, type FieldLabelProps, type FieldProps } from "./field.tsx";
+export { Fieldset, type FieldsetProps } from "./fieldset.tsx";
+export { Form, type FormProps } from "./form.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
 export {
   Modal,
@@ -40,6 +43,7 @@ export {
   type ModalProps,
   type ModalTriggerProps,
 } from "./modal.tsx";
+export { NumberField, type NumberFieldProps } from "./number-field.tsx";
 export {
   Popover,
   type PopoverContentProps,
@@ -54,11 +58,39 @@ export {
   type RadioGroupSize,
   type RadioGroupVariant,
 } from "./radio-group.tsx";
+export {
+  Segment,
+  type SegmentItemProps,
+  type SegmentProps,
+  type SegmentSize,
+  type SegmentVariant,
+} from "./segment.tsx";
 export { Select, type SelectItemProps, type SelectProps } from "./select.tsx";
+export {
+  Separator,
+  type SeparatorOrientation,
+  type SeparatorProps,
+  type SeparatorVariant,
+} from "./separator.tsx";
 export { Slider, type SliderProps, type SliderSize } from "./slider.tsx";
+export {
+  Spinner,
+  type SpinnerColor,
+  type SpinnerProps,
+  type SpinnerSize,
+} from "./spinner.tsx";
 export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";
 export { Switch, type SwitchProps, type SwitchSize } from "./switch.tsx";
 export { Tabs, type TabsListProps, type TabsProps, type TabsVariant } from "./tabs.tsx";
+export { Textarea, type TextareaProps, type TextareaVariant } from "./textarea.tsx";
+export {
+  ToggleButton,
+  type ToggleButtonGroupOrientation,
+  type ToggleButtonGroupProps,
+  type ToggleButtonProps,
+  type ToggleButtonSize,
+  type ToggleButtonVariant,
+} from "./toggle-button.tsx";
 export {
   Tooltip,
   type TooltipContentProps,
