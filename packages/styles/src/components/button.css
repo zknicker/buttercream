@@ -11,18 +11,18 @@
     justify-content: center;
     gap: calc(0.5rem * var(--spacing-scale));
     padding-inline: calc(1rem * var(--spacing-scale));
-    border: var(--field-border) solid transparent;
-    border-radius: var(--form-radius);
-    font-family: var(--font-heading);
-    font-size: calc(0.875rem * var(--font-size-scale));
-    font-weight: 700;
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-3xl);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
     line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
-    letter-spacing: calc(0.05em + var(--letter-spacing));
-    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing);
     white-space: nowrap;
-    cursor: pointer;
+    cursor: var(--cursor-interactive);
     transition:
-      transform 100ms ease,
+      transform 250ms ease,
+      background-color 100ms ease,
       box-shadow 100ms ease;
     -webkit-tap-highlight-color: transparent;
   }
@@ -30,26 +30,27 @@
   .button--primary {
     --bc-button-spinner-color: var(--accent-foreground);
 
+    border-color: var(--accent);
     background: var(--accent);
     color: var(--accent-foreground);
-    box-shadow: 0 var(--bc-hard-shadow-depth) 0 var(--bc-hard-shadow);
+    box-shadow: var(--bc-shadow-raised);
   }
 
   .button--secondary {
-    --bc-button-spinner-color: var(--default-foreground);
+    --bc-button-spinner-color: var(--accent-soft-foreground);
 
     background: var(--default);
-    color: var(--default-foreground);
+    color: var(--accent-soft-foreground);
   }
 
   .button--tertiary {
-    background: color-mix(in oklab, var(--default) 48%, transparent);
+    background: var(--default);
     color: var(--foreground);
   }
 
   .button--outline {
     border-color: var(--border);
-    background: var(--card);
+    background: transparent;
     color: var(--foreground);
   }
 
@@ -61,28 +62,30 @@
   .button--danger {
     --bc-button-spinner-color: var(--danger-foreground);
 
+    border-color: var(--danger);
     background: var(--danger);
     color: var(--danger-foreground);
+    box-shadow: var(--bc-shadow-raised);
   }
 
   .button--danger-soft {
-    --bc-button-spinner-color: var(--danger);
+    --bc-button-spinner-color: var(--danger-soft-foreground);
 
     background: var(--danger-soft);
-    color: var(--danger);
+    color: var(--danger-soft-foreground);
   }
 
   .button--sm {
-    height: calc(1.875rem * var(--spacing-scale));
+    height: calc(2rem * var(--spacing-scale));
     padding-inline: calc(0.75rem * var(--spacing-scale));
-    font-size: calc(0.75rem * var(--font-size-scale));
+    font-size: var(--text-xs);
     line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .button--lg {
     height: calc(2.75rem * var(--spacing-scale));
     padding-inline: calc(1.25rem * var(--spacing-scale));
-    font-size: calc(1rem * var(--font-size-scale));
+    font-size: var(--text-base);
     line-height: calc(1.5rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
@@ -92,7 +95,7 @@
   }
 
   .button--sm.button--icon-only {
-    width: calc(1.875rem * var(--spacing-scale));
+    width: calc(2rem * var(--spacing-scale));
   }
 
   .button--lg.button--icon-only {
@@ -108,14 +111,15 @@
   }
 
   .button:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
+    outline: 1.5px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
   }
 
   .button--primary:active:not([data-disabled], :disabled),
-  .button--primary[data-pressed] {
+  .button--primary[data-pressed],
+  .button--danger:active:not([data-disabled], :disabled),
+  .button--danger[data-pressed] {
     box-shadow: none;
-    transform: translateY(var(--bc-hard-shadow-depth));
   }
 
   .button[data-disabled],

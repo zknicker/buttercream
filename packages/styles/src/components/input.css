@@ -1,53 +1,76 @@
 @layer components {
   .input {
+    display: flex;
     width: 16rem;
-    height: calc(2.25rem * var(--spacing-scale));
-    padding: calc(0.5rem * var(--spacing-scale)) calc(0.75rem * var(--spacing-scale));
-    border: var(--field-border) solid transparent;
-    border-radius: var(--form-radius);
-    outline: none;
-    background: var(--card);
-    color: var(--card-foreground);
-    box-shadow: var(--field-shadow);
-    font: inherit;
-    font-size: max(1rem, calc(0.875rem * var(--font-size-scale)));
-    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
+    min-height: calc(2.25rem * var(--spacing-scale));
+    align-items: center;
+    border: var(--field-border-width) solid var(--field-border);
+    border-radius: var(--field-radius);
+    background: var(--field-background);
+    color: var(--field-foreground);
+    box-shadow: var(--shadow-field);
     transition:
-      background-color 120ms ease,
-      box-shadow 120ms ease,
-      outline-color 120ms ease;
+      background-color 150ms ease,
+      border-color 150ms ease,
+      box-shadow 150ms ease;
   }
 
-  .input::placeholder {
-    color: color-mix(in oklab, var(--foreground) 48%, transparent);
+  .input:hover {
+    border-color: var(--field-border-hover);
+    background: var(--field-background-hover);
   }
 
-  .input:hover:not(:disabled) {
-    background: color-mix(in oklab, var(--card) 96%, var(--foreground));
+  .input:has(.input__input:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
   }
 
-  .input:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
-
-  .input[aria-invalid="true"] {
+  .input:has(.input__input[aria-invalid="true"]) {
     outline: 2px solid var(--danger);
-    outline-offset: 2px;
+    outline-offset: var(--ring-offset-width);
   }
 
-  .input:disabled {
+  .input:has(.input__input:disabled) {
     pointer-events: none;
     opacity: var(--disabled-opacity);
   }
 
+  .input__prefix {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding-inline: calc(0.75rem * var(--spacing-scale));
+    border-radius: var(--field-radius) 0 0 var(--field-radius);
+    color: var(--field-placeholder);
+  }
+
+  .input__input {
+    width: 100%;
+    min-width: 0;
+    padding: calc(0.5rem * var(--spacing-scale)) calc(0.75rem * var(--spacing-scale));
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: max(1rem, calc(0.875rem * var(--font-size-scale)));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
+  }
+
+  .input__input::placeholder {
+    color: var(--field-placeholder);
+  }
+
   .input--secondary {
+    border-color: transparent;
     background: var(--default);
     color: var(--default-foreground);
     box-shadow: none;
   }
 
-  .input--secondary:hover:not(:disabled) {
+  .input--secondary:hover {
+    border-color: transparent;
     background: color-mix(in oklab, var(--default) 92%, var(--foreground));
   }
 
@@ -57,7 +80,7 @@
 }
 
 @media (min-width: 768px) {
-  .input {
+  .input__input {
     font-size: calc(0.875rem * var(--font-size-scale));
   }
 }

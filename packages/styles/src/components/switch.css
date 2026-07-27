@@ -13,7 +13,7 @@
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
     line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
-    cursor: pointer;
+    cursor: var(--cursor-interactive);
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -35,28 +35,35 @@
     flex: none;
     align-items: center;
     padding: calc(0.125rem * var(--spacing-scale));
+    overflow: hidden;
     border: 0;
-    border-radius: min(var(--form-radius), 0.375rem);
+    border-radius: var(--radius-xl);
     outline: none;
     background: var(--default);
-    transition: background-color 160ms ease;
+    transition:
+      background-color 250ms ease,
+      box-shadow 150ms ease;
   }
 
   .switch__thumb {
     display: block;
     width: calc(var(--bc-switch-thumb-width) * var(--spacing-scale));
     height: calc(var(--bc-switch-thumb-height) * var(--spacing-scale));
-    border-radius: min(var(--form-radius), 0.25rem);
-    background: var(--card);
-    box-shadow: var(--field-shadow);
+    border-radius: var(--radius-lg);
+    background: var(--foreground);
+    box-shadow:
+      0 0 5px rgba(0, 0, 0, 0.02),
+      0 2px 10px rgba(0, 0, 0, 0.06),
+      0 0 1px rgba(0, 0, 0, 0.3);
     transition:
-      background-color 160ms ease,
-      transform 160ms ease;
+      background-color 200ms ease,
+      transform 300ms ease;
   }
 
   .switch__control[data-checked],
   .switch__native:checked + .switch__control {
     background: var(--accent);
+    box-shadow: var(--bc-shadow-raised);
   }
 
   .switch__control[data-checked] .switch__thumb,
@@ -83,8 +90,8 @@
   }
 
   .switch:focus-within .switch__control {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
   }
 
   .switch[data-disabled],
