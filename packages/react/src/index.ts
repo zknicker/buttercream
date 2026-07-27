@@ -22,6 +22,11 @@ export {
   type CheckboxVariant,
 } from "./checkbox.tsx";
 export {
+  CloseButton,
+  type CloseButtonProps,
+  type CloseButtonVariant,
+} from "./close-button.tsx";
+export {
   Drawer,
   type DrawerBackdropProps,
   type DrawerBackdropVariant,
@@ -58,6 +63,7 @@ export {
   type RadioGroupSize,
   type RadioGroupVariant,
 } from "./radio-group.tsx";
+export { SearchField, type SearchFieldProps } from "./search-field.tsx";
 export {
   Segment,
   type SegmentItemProps,

@@ -1,0 +1,61 @@
+@layer components {
+  .close-button {
+    position: relative;
+    display: inline-flex;
+    width: calc(1.5rem * var(--spacing-scale));
+    height: calc(1.5rem * var(--spacing-scale));
+    align-items: center;
+    justify-content: center;
+    padding: calc(0.25rem * var(--spacing-scale));
+    border: none;
+    border-radius: 9999px;
+    outline: none;
+    cursor: var(--cursor-interactive);
+    transition:
+      transform 250ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      color 150ms cubic-bezier(0, 0, 0.2, 1),
+      background-color 100ms cubic-bezier(0, 0, 0.2, 1),
+      box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .close-button svg {
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  .close-button:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
+  }
+
+  .close-button[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .close-button--default {
+    background: var(--default);
+    color: var(--muted);
+  }
+
+  .close-button--default:hover:not([data-disabled]) {
+    background: var(--default-hover);
+  }
+
+  /* Shrinks rather than darkens on press — it is too small for a colour change to register. */
+  .close-button--default:active:not([data-disabled]) {
+    transform: scale(0.93);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .close-button {
+    transition: none;
+  }
+
+  .close-button:active {
+    transform: none;
+  }
+}

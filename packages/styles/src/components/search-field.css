@@ -1,0 +1,110 @@
+@layer components {
+  .search-field {
+    position: relative;
+    display: inline-flex;
+    height: calc(2.25rem * var(--spacing-scale));
+    align-items: center;
+    border: var(--field-border-width) solid var(--field-border);
+    border-radius: var(--field-radius);
+    outline: none;
+    background: var(--field-background);
+    color: var(--field-foreground);
+    box-shadow: var(--shadow-field);
+    overflow: hidden;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .search-field:hover:not(:focus-within) {
+    border-color: var(--field-border-hover);
+    background: var(--field-background-hover);
+  }
+
+  .search-field:focus-within {
+    border-color: var(--field-border-focus);
+    background: var(--field-focus);
+    outline: 2px solid var(--focus);
+    outline-offset: -1px;
+  }
+
+  .search-field[aria-invalid="true"] {
+    border-color: var(--danger);
+    background: var(--field-focus);
+  }
+
+  .search-field[aria-invalid="true"]:focus-within {
+    outline-color: var(--danger);
+  }
+
+  .search-field[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .search-field--full-width {
+    width: 100%;
+  }
+
+  .search-field__icon {
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+    flex-shrink: 0;
+    margin-inline-start: calc(0.75rem * var(--spacing-scale));
+    color: var(--field-placeholder);
+    pointer-events: none;
+  }
+
+  .search-field__input {
+    flex: 1;
+    min-width: 0;
+    padding: calc(0.5rem * var(--spacing-scale));
+    padding-inline-start: calc(0.5rem * var(--spacing-scale));
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    font-size: calc(0.875rem * var(--font-size-scale));
+  }
+
+  .search-field__input::placeholder {
+    color: var(--field-placeholder);
+  }
+
+  /* The type=search UA affordance duplicates the clear button and cannot be styled. */
+  .search-field__input::-webkit-search-cancel-button,
+  .search-field__input::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  .search-field__clear {
+    width: calc(1.25rem * var(--spacing-scale));
+    height: calc(1.25rem * var(--spacing-scale));
+    flex-shrink: 0;
+    margin-inline-end: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .search-field__clear svg {
+    width: calc(0.75rem * var(--spacing-scale));
+    height: calc(0.75rem * var(--spacing-scale));
+  }
+
+  /*
+   * Hidden rather than unmounted while the field is empty, so the input does not resize the
+   * moment the first character is typed.
+   */
+  .search-field[data-empty] .search-field__clear {
+    pointer-events: none;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-field {
+    transition: none;
+  }
+}
