@@ -47,25 +47,27 @@ export function Checkbox({
       data-disabled={disabled || undefined}
       data-slot="checkbox"
     >
-      <BaseCheckbox.Root
-        aria-describedby={descriptionId}
-        className="checkbox__control"
-        data-slot="checkbox-control"
-        disabled={disabled}
-        {...props}
-      >
-        <BaseCheckbox.Indicator className="checkbox__indicator" data-slot="checkbox-indicator" />
-      </BaseCheckbox.Root>
-      {children !== undefined || description !== undefined ? (
-        <span className="checkbox__copy">
-          {children !== undefined ? <span className="checkbox__label">{children}</span> : null}
-          {description !== undefined ? (
-            <span className="checkbox__description" id={descriptionId}>
-              {description}
-            </span>
-          ) : null}
-        </span>
-      ) : null}
+      <span className="checkbox__content" data-slot="checkbox-content">
+        <BaseCheckbox.Root
+          aria-describedby={descriptionId}
+          className="checkbox__control"
+          data-slot="checkbox-control"
+          disabled={disabled}
+          {...props}
+        >
+          <BaseCheckbox.Indicator className="checkbox__indicator" data-slot="checkbox-indicator" />
+        </BaseCheckbox.Root>
+        {children !== undefined || description !== undefined ? (
+          <span className="checkbox__copy">
+            {children !== undefined ? <span className="checkbox__label">{children}</span> : null}
+            {description !== undefined ? (
+              <span className="checkbox__description" id={descriptionId}>
+                {description}
+              </span>
+            ) : null}
+          </span>
+        ) : null}
+      </span>
     </label>
   );
 }

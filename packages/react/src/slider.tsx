@@ -50,7 +50,7 @@ function SliderRoot<Value extends SliderValue = SliderValue>({
                 <span />
               )}
               {showValue ? (
-                <BaseSlider.Value className="slider__value" data-slot="slider-value" />
+                <BaseSlider.Value className="slider__output" data-slot="slider-value" />
               ) : null}
             </div>
           ) : null}
@@ -84,7 +84,7 @@ function SliderValueText({
   className,
   ...props
 }: Omit<BaseSlider.Value.Props, "className"> & { className?: string }): ReactElement {
-  return <BaseSlider.Value className={classes("slider__value", className)} {...props} />;
+  return <BaseSlider.Value className={classes("slider__output", className)} {...props} />;
 }
 
 function SliderControl({
@@ -105,7 +105,7 @@ function SliderIndicator({
   className,
   ...props
 }: Omit<BaseSlider.Indicator.Props, "className"> & { className?: string }): ReactElement {
-  return <BaseSlider.Indicator className={classes("slider__indicator", className)} {...props} />;
+  return <BaseSlider.Indicator className={classes("slider__fill", className)} {...props} />;
 }
 
 function SliderThumb({
