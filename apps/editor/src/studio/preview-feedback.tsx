@@ -1,4 +1,4 @@
-import { Alert, Badge, Button, Chip, Skeleton } from "@buttercream/react";
+import { Alert, Badge, Button, Chip, ProgressCircle, Skeleton } from "@buttercream/react";
 import type { ReactElement } from "react";
 
 const ROLES = ["accent", "success", "warning", "danger"] as const;
@@ -127,6 +127,35 @@ export function SkeletonPreview(): ReactElement {
           <Skeleton style={{ flex: 1, height: "2.5rem" }} />
         </Skeleton>
         <div className="specimen__label">Nested</div>
+      </section>
+    </div>
+  );
+}
+
+export function ProgressCirclePreview(): ReactElement {
+  return (
+    <div className="specimens">
+      <section className="specimen">
+        <ProgressCircle size="sm" value={35} />
+        <ProgressCircle value={65} />
+        <ProgressCircle size="lg" value={80} />
+        <div className="specimen__label">Sizes</div>
+      </section>
+      <section className="specimen">
+        {ROLES.map((role) => (
+          <ProgressCircle color={role} key={role} value={70} />
+        ))}
+        <div className="specimen__label">Colours</div>
+      </section>
+      <section className="specimen">
+        <ProgressCircle value={0} />
+        <ProgressCircle value={50} />
+        <ProgressCircle value={100} />
+        <div className="specimen__label">Empty, half, full</div>
+      </section>
+      <section className="specimen">
+        <ProgressCircle color="accent" value={null} />
+        <div className="specimen__label">Indeterminate</div>
       </section>
     </div>
   );

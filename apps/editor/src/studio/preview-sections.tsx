@@ -11,7 +11,13 @@ import {
   ToggleButtonPreview,
 } from "./preview-display.tsx";
 import { DrawerPreview } from "./preview-drawer.tsx";
-import { AlertPreview, BadgePreview, ChipPreview, SkeletonPreview } from "./preview-feedback.tsx";
+import {
+  AlertPreview,
+  BadgePreview,
+  ChipPreview,
+  ProgressCirclePreview,
+  SkeletonPreview,
+} from "./preview-feedback.tsx";
 import {
   CloseButtonPreview,
   FieldsetPreview,
@@ -51,6 +57,7 @@ export type PreviewSection =
   | "Number Field"
   | "Popover"
   | "Progress Bar"
+  | "Progress Circle"
   | "Radio Group"
   | "Search Field"
   | "Segment"
@@ -123,6 +130,9 @@ export function renderPreviewSection(
   }
   if (section === "Progress Bar") {
     return <ProgressBarPreview />;
+  }
+  if (section === "Progress Circle") {
+    return <ProgressCirclePreview />;
   }
   if (section === "Text Field") {
     return <TextFieldPreview />;
