@@ -32,6 +32,16 @@ import {
 import { InputPreview } from "./preview-form-controls.tsx";
 import { createPreviewIconElements } from "./preview-icons.ts";
 import { ModalPreview } from "./preview-modal.tsx";
+import {
+  AccordionPreview,
+  AlertDialogPreview,
+  BreadcrumbsPreview,
+  ComboboxPreview,
+  DropdownPreview,
+  ErrorMessagePreview,
+  PaginationPreview,
+  ToolbarPreview,
+} from "./preview-navigation.tsx";
 import { PopoverPreview } from "./preview-popover.tsx";
 import { RadioGroupPreview } from "./preview-radio-group.tsx";
 import { SelectPreview } from "./preview-select.tsx";
@@ -48,9 +58,12 @@ import { TooltipPreview } from "./preview-tooltip.tsx";
 /* Alphabetical after Guides, matching the order the nav lists them in. */
 export type PreviewSection =
   | "Guides"
+  | "Accordion"
   | "Alert"
+  | "Alert Dialog"
   | "Avatar"
   | "Badge"
+  | "Breadcrumbs"
   | "Button"
   | "Button Group"
   | "Card"
@@ -58,7 +71,10 @@ export type PreviewSection =
   | "Chip"
   | "Close Button"
   | "Color Swatch"
+  | "Combobox"
   | "Drawer"
+  | "Dropdown"
+  | "Error Message"
   | "Fieldset"
   | "Input"
   | "Kbd"
@@ -66,6 +82,7 @@ export type PreviewSection =
   | "Meter"
   | "Modal"
   | "Number Field"
+  | "Pagination"
   | "Popover"
   | "Progress Bar"
   | "Progress Circle"
@@ -83,6 +100,7 @@ export type PreviewSection =
   | "Text Field"
   | "Textarea"
   | "Toggle Button"
+  | "Toolbar"
   | "Tooltip"
   | "Typography";
 
@@ -113,6 +131,30 @@ export function renderPreviewSection(
   }
   if (section === "Radio Group") {
     return <RadioGroupPreview />;
+  }
+  if (section === "Accordion") {
+    return <AccordionPreview icons={iconSettings} />;
+  }
+  if (section === "Alert Dialog") {
+    return <AlertDialogPreview />;
+  }
+  if (section === "Breadcrumbs") {
+    return <BreadcrumbsPreview />;
+  }
+  if (section === "Combobox") {
+    return <ComboboxPreview />;
+  }
+  if (section === "Dropdown") {
+    return <DropdownPreview icons={iconSettings} />;
+  }
+  if (section === "Error Message") {
+    return <ErrorMessagePreview />;
+  }
+  if (section === "Pagination") {
+    return <PaginationPreview />;
+  }
+  if (section === "Toolbar") {
+    return <ToolbarPreview icons={iconSettings} />;
   }
   if (section === "Alert") {
     return <AlertPreview />;
