@@ -17,7 +17,7 @@
     min-width: 0;
     padding: calc(0.25rem * var(--spacing-scale));
     overflow-x: auto;
-    border-radius: var(--form-radius);
+    border-radius: var(--field-radius);
     background: var(--default);
     scrollbar-width: none;
   }
@@ -38,11 +38,11 @@
     gap: calc(0.5rem * var(--spacing-scale));
     padding: 0 calc(1rem * var(--spacing-scale));
     border: 0;
-    border-radius: var(--form-radius);
+    border-radius: var(--field-radius);
     outline: none;
     background: transparent;
     color: color-mix(in oklab, var(--foreground) 62%, transparent);
-    cursor: pointer;
+    cursor: var(--cursor-interactive);
     font: inherit;
     white-space: nowrap;
   }
@@ -53,7 +53,7 @@
   }
 
   .tabs__tab:focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid var(--focus);
     outline-offset: -1px;
   }
 
@@ -69,9 +69,9 @@
     left: 0;
     width: var(--active-tab-width);
     height: var(--active-tab-height);
-    border-radius: var(--form-radius);
-    background: var(--card);
-    box-shadow: var(--field-shadow);
+    border-radius: var(--field-radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-field);
     transform: translate(var(--active-tab-left), var(--active-tab-top));
     transition:
       width 150ms ease,
@@ -88,7 +88,7 @@
   }
 
   .tabs__panel:focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid var(--focus);
     outline-offset: 2px;
   }
 

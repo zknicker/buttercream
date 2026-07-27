@@ -1,22 +1,29 @@
 @layer components {
   .surface {
     position: relative;
-    background: var(--card);
-    color: var(--card-foreground);
+    display: flex;
+    align-items: center;
+    gap: calc(0.75rem * var(--spacing-scale));
+    padding: calc(0.75rem * var(--spacing-scale)) calc(1rem * var(--spacing-scale));
+    border-radius: var(--radius-2xl);
+    background: var(--surface);
+    color: var(--surface-foreground);
+    box-shadow: var(--shadow-surface);
   }
 
   .surface--secondary {
-    background: var(--default);
-    color: var(--default-foreground);
+    background: var(--surface-secondary);
+    color: var(--surface-secondary-foreground);
   }
 
   .surface--tertiary {
-    background: color-mix(in oklab, var(--default) 55%, transparent);
-    color: var(--foreground);
+    background: var(--surface-tertiary);
+    color: var(--surface-tertiary-foreground);
   }
 
   .surface--transparent {
     background: transparent;
     color: var(--foreground);
+    box-shadow: none;
   }
 }

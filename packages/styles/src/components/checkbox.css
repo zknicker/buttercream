@@ -3,13 +3,19 @@
     display: inline-flex;
     min-width: 0;
     align-items: flex-start;
-    gap: calc(0.75rem * var(--spacing-scale));
     color: var(--foreground);
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
     line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
-    cursor: pointer;
+    cursor: var(--cursor-interactive);
     -webkit-tap-highlight-color: transparent;
+  }
+
+  .checkbox__content {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: calc(0.75rem * var(--spacing-scale));
   }
 
   .checkbox__native {
@@ -30,13 +36,17 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    margin-block-start: 0.125rem;
-    border: var(--field-border) solid var(--border);
-    border-radius: min(var(--form-radius), 0.1875rem);
+    overflow: hidden;
+    border: var(--field-border-width) solid var(--field-border);
+    border-radius: var(--radius-md);
     outline: none;
-    background: var(--card);
+    background: var(--field-background);
     color: var(--accent-foreground);
-    box-shadow: var(--field-shadow);
+    box-shadow: var(--shadow-field);
+    transition:
+      background-color 0.2s,
+      border-color 0.2s,
+      transform 0.1s;
   }
 
   .checkbox--secondary .checkbox__control {
@@ -52,9 +62,10 @@
 
   .checkbox__indicator {
     position: relative;
-    display: block;
-    width: 0.75rem;
-    height: 0.75rem;
+    display: flex;
+    width: calc(0.75rem * var(--spacing-scale));
+    height: calc(0.75rem * var(--spacing-scale));
+    align-items: center;
   }
 
   .checkbox__indicator::after {
@@ -89,23 +100,23 @@
   }
 
   .checkbox__label {
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
   }
 
   .checkbox__description {
-    color: color-mix(in oklab, var(--foreground) 55%, transparent);
+    color: var(--muted);
     font-size: calc(0.75rem * var(--font-size-scale));
     line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .checkbox:focus-within .checkbox__control {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
   }
 
   .checkbox:has([aria-invalid="true"]) .checkbox__control {
     outline: 2px solid var(--danger);
-    outline-offset: 2px;
+    outline-offset: var(--ring-offset-width);
   }
 
   .checkbox[data-disabled],

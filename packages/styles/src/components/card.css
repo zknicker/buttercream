@@ -5,23 +5,26 @@
     flex-direction: column;
     gap: calc(0.75rem * var(--spacing-scale));
     padding: calc(1rem * var(--spacing-scale));
-    border: 0;
-    border-radius: var(--radius);
-    background: var(--card);
-    color: var(--card-foreground);
-    box-shadow: 0 var(--bc-hard-shadow-depth) 0 var(--bc-hard-shadow);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-3xl);
+    background: var(--surface);
+    color: var(--surface-foreground);
+    box-shadow: var(--shadow-surface);
   }
 
   .card--secondary {
-    background: color-mix(in oklab, var(--card) 50%, var(--default));
+    background: var(--surface-secondary);
+    color: var(--surface-secondary-foreground);
   }
 
   .card--tertiary {
-    background: var(--default);
+    background: var(--surface-tertiary);
+    color: var(--surface-tertiary-foreground);
   }
 
   .card--transparent {
     background: transparent;
+    box-shadow: none;
   }
 
   .card__header {
@@ -42,7 +45,7 @@
   .card__description {
     min-width: 0;
     grid-column: 1;
-    color: color-mix(in oklab, var(--card-foreground) 62%, transparent);
+    color: color-mix(in oklab, var(--surface-foreground) 62%, transparent);
     font-size: calc(0.875rem * var(--font-size-scale));
     line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
@@ -53,14 +56,17 @@
   }
 
   .card__content {
+    display: flex;
     min-width: 0;
     flex: 1;
+    align-items: flex-start;
+    gap: calc(0.25rem * var(--spacing-scale));
   }
 
   .card__footer {
     display: flex;
     min-width: 0;
     align-items: center;
-    gap: calc(0.75rem * var(--spacing-scale));
+    gap: calc(0.5rem * var(--spacing-scale));
   }
 }
