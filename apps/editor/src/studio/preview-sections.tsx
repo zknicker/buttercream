@@ -35,6 +35,12 @@ import { PopoverPreview } from "./preview-popover.tsx";
 import { RadioGroupPreview } from "./preview-radio-group.tsx";
 import { SelectPreview } from "./preview-select.tsx";
 import { SliderPreview } from "./preview-slider.tsx";
+import {
+  ButtonGroupPreview,
+  ColorSwatchPreview,
+  KbdPreview,
+  LinkPreview,
+} from "./preview-static.tsx";
 import { TabsPreview } from "./preview-tabs.tsx";
 import { TooltipPreview } from "./preview-tooltip.tsx";
 
@@ -45,13 +51,17 @@ export type PreviewSection =
   | "Avatar"
   | "Badge"
   | "Button"
+  | "Button Group"
   | "Card"
   | "Checkbox"
   | "Chip"
   | "Close Button"
+  | "Color Swatch"
   | "Drawer"
   | "Fieldset"
   | "Input"
+  | "Kbd"
+  | "Link"
   | "Meter"
   | "Modal"
   | "Number Field"
@@ -112,6 +122,18 @@ export function renderPreviewSection(
   }
   if (section === "Skeleton") {
     return <SkeletonPreview />;
+  }
+  if (section === "Button Group") {
+    return <ButtonGroupPreview />;
+  }
+  if (section === "Color Swatch") {
+    return <ColorSwatchPreview />;
+  }
+  if (section === "Kbd") {
+    return <KbdPreview />;
+  }
+  if (section === "Link") {
+    return <LinkPreview />;
   }
   if (section === "Close Button") {
     return <CloseButtonPreview />;
