@@ -1,0 +1,124 @@
+@layer components {
+  .dropdown__trigger {
+    display: inline-block;
+    outline: none;
+    cursor: var(--cursor-interactive);
+    transition:
+      transform 250ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      background-color 150ms ease;
+  }
+
+  .dropdown__trigger:active {
+    transform: scale(0.97);
+  }
+
+  .dropdown__trigger[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .dropdown__positioner {
+    z-index: 50;
+    outline: none;
+  }
+
+  .dropdown__popup {
+    min-width: calc(13.75rem * var(--spacing-scale));
+    /* Capped against the viewport so a long label cannot push the menu off-screen. */
+    max-width: 48svw;
+    padding: calc(0.25rem * var(--spacing-scale));
+    border-radius: min(2rem, var(--radius-3xl));
+    outline: none;
+    background: var(--overlay);
+    box-shadow: var(--shadow-overlay);
+    color: var(--overlay-foreground);
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    /* Contained so scrolling to the end of a long menu does not start scrolling the page. */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: calc(0.25rem * var(--spacing-scale));
+    transform-origin: var(--transform-origin);
+    transition:
+      transform 150ms ease,
+      opacity 150ms ease;
+  }
+
+  .dropdown__popup[data-starting-style] {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  .dropdown__popup[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.95);
+    transition-duration: 100ms;
+  }
+
+  .dropdown__item {
+    display: flex;
+    min-height: calc(2rem * var(--spacing-scale));
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    padding-inline: calc(0.625rem * var(--spacing-scale));
+    padding-block: calc(0.375rem * var(--spacing-scale));
+    border-radius: min(var(--field-radius), 0.625rem);
+    outline: none;
+    color: inherit;
+    cursor: var(--cursor-interactive);
+    text-decoration: none;
+    user-select: none;
+  }
+
+  /*
+   * Keyed off data-highlighted rather than :hover — a menu's active item follows the keyboard
+   * too, and only one item should ever look active.
+   */
+  .dropdown__item[data-highlighted] {
+    background: var(--default);
+    color: var(--default-foreground);
+  }
+
+  .dropdown__item[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .dropdown__item--danger {
+    color: var(--danger);
+  }
+
+  .dropdown__item--danger[data-highlighted] {
+    background: var(--danger-soft);
+    color: var(--danger-soft-foreground);
+  }
+
+  .dropdown__group-label {
+    padding-inline: calc(0.625rem * var(--spacing-scale));
+    padding-block: calc(0.375rem * var(--spacing-scale));
+    color: var(--muted);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+  }
+
+  /* Inset from the popup's edges, matching the way the reference insets its dividers. */
+  .dropdown__separator {
+    width: 94%;
+    height: 1px;
+    margin-block: calc(0.25rem * var(--spacing-scale));
+    margin-left: 3%;
+    border-radius: var(--radius-xs);
+    background: var(--separator);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown__trigger,
+  .dropdown__popup {
+    transition: none;
+  }
+
+  .dropdown__trigger:active {
+    transform: none;
+  }
+}

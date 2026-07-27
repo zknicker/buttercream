@@ -6,6 +6,11 @@ export {
 } from "./accordion.tsx";
 export { Alert, type AlertColor, type AlertProps } from "./alert.tsx";
 export {
+  AlertDialog,
+  type AlertDialogContentProps,
+  type AlertDialogProps,
+} from "./alert-dialog.tsx";
+export {
   AgentAvatar,
   type AgentAvatarProps,
   Avatar,
@@ -59,6 +64,7 @@ export {
   type ColorSwatchShape,
   type ColorSwatchSize,
 } from "./color-swatch.tsx";
+export { Combobox, type ComboboxItemProps, type ComboboxProps } from "./combobox.tsx";
 export {
   Drawer,
   type DrawerBackdropProps,
@@ -68,6 +74,12 @@ export {
   type DrawerProps,
   type DrawerTriggerProps,
 } from "./drawer.tsx";
+export {
+  Dropdown,
+  type DropdownContentProps,
+  type DropdownItemProps,
+  type DropdownProps,
+} from "./dropdown.tsx";
 export { ErrorMessage, type ErrorMessageProps } from "./error-message.tsx";
 export { Field, type FieldLabelProps, type FieldProps } from "./field.tsx";
 export { Fieldset, type FieldsetProps } from "./fieldset.tsx";
