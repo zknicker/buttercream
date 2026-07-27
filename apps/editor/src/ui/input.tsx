@@ -26,7 +26,7 @@ export function Input({
       className={classes(
         "h-8.5 rounded-(--radius-shell) px-2.5 text-base text-fg sm:text-sm",
         "placeholder:text-muted/70",
-        "focus-visible:-outline-offset-1 focus-visible:outline-2 focus-visible:outline-fg",
+        "focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg",
         "disabled:opacity-45",
         VARIANTS[variant],
         fullWidth && "w-full",

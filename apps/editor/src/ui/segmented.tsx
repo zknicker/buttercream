@@ -30,7 +30,7 @@ export function Segmented<Value extends string>({
           aria-selected={option === value}
           className={classes(
             "h-7 flex-1 rounded-[calc(var(--radius-shell)-0.125rem)] px-2.5 text-sm whitespace-nowrap",
-            "focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-fg",
+            "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
             option === value
               ? "bg-raised text-fg shadow-sm dark:shadow-none ring-1 ring-fg/8"
               : "text-muted hover:text-fg",
