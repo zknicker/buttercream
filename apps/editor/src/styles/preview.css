@@ -1,0 +1,305 @@
+/*
+ * Studio preview surface.
+ *
+ * Loads the design-system component CSS once and lays out the specimen grid the studio
+ * renders live @buttercream/react components into. Everything here is scoped under
+ * .preview-surface or the specimen layout classes, so it dresses the artifact being
+ * previewed — never the editor chrome, which keeps its own tokens in shell.css.
+ */
+
+@import "@buttercream/styles";
+
+/*
+ * The themed subtree. Theme tokens arrive as inline custom properties on this element
+ * (see PreviewSurface), and data-theme selects the design system's light or dark block
+ * in @buttercream/styles for everything the inline map does not cover (derived
+ * values). It replaces the old iframe document's body, so it owns the canvas, padding,
+ * and scrolling the iframe used to.
+ */
+.preview-surface {
+  height: 100%;
+  overflow: auto;
+  padding: 32px;
+  background: var(--background);
+  color: var(--foreground);
+  /*
+   * Every inherited typographic property is restated, not left to flow in from the chrome.
+   * `font-size: medium` resets to the browser default the way the old iframe body did, so
+   * the rail's own type scale cannot reach in here. Note this does NOT insulate `rem`:
+   * that unit is root-relative by definition, so the design system's rem-based tokens still
+   * resolve against <html>. The shell must therefore never set a root font size — see the
+   * guard in preview-surface.test.ts.
+   */
+  font-family: var(--font-sans);
+  font-size: medium;
+  font-weight: 400;
+  font-style: normal;
+  line-height: var(--line-height);
+  letter-spacing: var(--letter-spacing);
+  text-align: start;
+  /* Specimens reflow on the surface's own width, as they did against the iframe viewport. */
+  container-type: inline-size;
+}
+
+.specimens {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.specimen {
+  min-height: 260px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+}
+
+.specimen--stack {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.specimen__label {
+  width: 100%;
+  align-self: flex-end;
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+  font-size: 13px;
+}
+
+.preview-icon {
+  flex: none;
+}
+
+.preview-card {
+  width: min(100%, 23.375rem);
+}
+
+.preview-card-grid {
+  display: grid;
+  width: min(100%, 23.375rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.preview-card--horizontal {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.preview-card__media {
+  width: 5rem;
+  height: 5rem;
+  grid-row: span 2;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.preview-card__meta {
+  display: grid;
+  grid-column: 2;
+  align-self: end;
+  font-size: 12px;
+}
+
+.preview-card__meta span,
+.preview-byline {
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+}
+
+.preview-card-stack {
+  display: grid;
+  width: min(100%, 23.375rem);
+  gap: 16px;
+}
+
+.preview-card--community {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.preview-byline {
+  display: inline-flex;
+  grid-column: 2;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.preview-card__actions {
+  justify-content: space-between;
+}
+
+.preview-login {
+  display: grid;
+  gap: 12px;
+}
+
+.input-demo {
+  display: grid;
+  width: min(100%, 15rem);
+  gap: 16px;
+}
+
+.input-demo--types {
+  gap: 12px;
+}
+
+.input-field {
+  display: grid;
+  gap: 6px;
+}
+
+.input-field__label {
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input-field__helper {
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+  font-size: 12px;
+}
+
+.surface-demo {
+  width: min(100%, 22rem);
+  padding: 40px;
+  border-radius: var(--radius-xl);
+}
+
+.control-stack {
+  display: grid;
+  gap: 20px;
+}
+
+.control-status {
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+  font-size: 13px;
+}
+
+.placement-cross {
+  display: grid;
+  grid-template:
+    "blank top blank2" auto
+    "left center right" auto
+    "blank3 bottom blank4" auto / auto auto auto;
+  align-items: center;
+  justify-items: center;
+  gap: 8px;
+}
+
+.placement-cross__top {
+  grid-area: top;
+}
+
+.placement-cross__left {
+  grid-area: left;
+}
+
+.placement-cross__center {
+  grid-area: center;
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+  font-size: 13px;
+}
+
+.placement-cross__right {
+  grid-area: right;
+}
+
+.placement-cross__bottom {
+  grid-area: bottom;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-trigger > span:last-child,
+.profile-popover__header > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+}
+
+.profile-trigger strong,
+.profile-popover__header strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.profile-trigger small,
+.profile-popover__header small {
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+  font-size: 12px;
+}
+
+.profile-popover {
+  width: 280px;
+}
+
+.profile-popover__header {
+  display: grid;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.profile-popover .popover__description {
+  margin-top: 8px;
+}
+
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* Swatches take their colour pair as a private custom-property map set inline by Guides. */
+.swatch {
+  min-height: 180px;
+  padding: 20px;
+  border-radius: var(--radius-xl);
+  font-weight: 700;
+  background: var(--bc-swatch-bg);
+  color: var(--bc-swatch-fg);
+}
+
+/* Slider specimens: the slider root is width: 100%, so demos pin the column. */
+.slider-demo {
+  display: grid;
+  width: min(100%, 18rem);
+  gap: 1rem;
+}
+
+/* Headroom for the value tooltip that pops above the thumb while dragging. */
+.slider-demo--tooltip {
+  padding-top: 2.5rem;
+}
+
+/* Vertical sliders fill their container's height, so the demo fixes one. */
+.slider-demo--vertical {
+  height: 12rem;
+}
+
+@container (max-width: 800px) {
+  .specimens,
+  .guide-grid {
+    grid-template-columns: 1fr;
+  }
+}

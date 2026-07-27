@@ -1,7 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { createDefaultDesignSystem, type HugeiconsTreatment } from "@buttercream/theme-core";
-import { createPreviewDocument } from "./preview-document.ts";
-import { createPreviewIcons } from "./preview-icons.ts";
+import { renderToStaticMarkup } from "react-dom/server";
+import { createPreviewIconElements } from "./preview-icons.ts";
+import { renderPreviewSection } from "./preview-sections.tsx";
 
 const hugeiconsTreatments: HugeiconsTreatment[] = [
   "stroke-rounded",
@@ -18,22 +19,23 @@ const hugeiconsTreatments: HugeiconsTreatment[] = [
 
 describe("preview icons", () => {
   test("renders Lucide with the configured size and stroke width", () => {
-    const icons = createPreviewIcons({
+    const icons = createPreviewIconElements({
       family: "lucide",
       size: 18,
       strokeWidth: 1.5,
       treatment: "stroke",
     });
+    const search = renderToStaticMarkup(icons.search);
 
     expect(Object.keys(icons)).toHaveLength(9);
-    expect(icons.search).toContain('class="lucide lucide-search preview-icon"');
-    expect(icons.search).toContain('width="18"');
-    expect(icons.search).toContain('stroke-width="1.5"');
+    expect(search).toContain('class="lucide lucide-search preview-icon"');
+    expect(search).toContain('width="18"');
+    expect(search).toContain('stroke-width="1.5"');
   });
 
   test("resolves every supported Hugeicons treatment", () => {
     const rendered = hugeiconsTreatments.map((treatment) =>
-      createPreviewIcons({
+      createPreviewIconElements({
         family: "hugeicons",
         size: 20,
         strokeWidth: 2,
@@ -43,12 +45,13 @@ describe("preview icons", () => {
 
     for (const icons of rendered) {
       expect(Object.keys(icons)).toHaveLength(9);
-      expect(icons.search).toContain('class="preview-icon"');
-      expect(icons.search).toContain('width="20"');
+      const search = renderToStaticMarkup(icons.search);
+      expect(search).toContain('class="preview-icon"');
+      expect(search).toContain('width="20"');
     }
   });
 
-  test("projects the selected family into the preview document", () => {
+  test("projects the selected family into the preview markup", () => {
     const designSystem = createDefaultDesignSystem();
     designSystem.icons = {
       family: "lucide",
@@ -57,15 +60,10 @@ describe("preview icons", () => {
       treatment: "stroke",
     };
 
-    const document = createPreviewDocument({
-      componentCss: "",
-      designSystem,
-      section: "Button",
-      theme: "light",
-    });
+    const markup = renderToStaticMarkup(renderPreviewSection("Button", designSystem.icons));
 
-    expect(document).toContain('class="lucide lucide-search preview-icon"');
-    expect(document).toContain('width="17"');
-    expect(document).toContain('stroke-width="1.75"');
+    expect(markup).toContain('class="lucide lucide-search preview-icon"');
+    expect(markup).toContain('width="17"');
+    expect(markup).toContain('stroke-width="1.75"');
   });
 });

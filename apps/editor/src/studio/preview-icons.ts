@@ -122,8 +122,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { type ComponentProps, createElement } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
+import { type ComponentProps, createElement, type ReactElement } from "react";
 
 type IconSettings = DesignSystem["icons"];
 type HugeiconsSettings = Extract<IconSettings, { family: "hugeicons" }>;
@@ -140,7 +139,7 @@ export type PreviewIconName =
   | "upload"
   | "users";
 
-export type PreviewIcons = Record<PreviewIconName, string>;
+export type PreviewIconElements = Record<PreviewIconName, ReactElement>;
 
 const previewIconNames: PreviewIconName[] = [
   "add",
@@ -280,33 +279,29 @@ const hugeiconsByTreatment = {
   ),
 } satisfies Record<HugeiconsSettings["treatment"], Record<PreviewIconName, IconData>>;
 
-export function createPreviewIcons(settings: IconSettings): PreviewIcons {
+export function createPreviewIconElements(settings: IconSettings): PreviewIconElements {
   return Object.fromEntries(
-    previewIconNames.map((name) => [name, renderPreviewIcon(name, settings)]),
-  ) as PreviewIcons;
+    previewIconNames.map((name) => [name, previewIconElement(name, settings)]),
+  ) as PreviewIconElements;
 }
 
-function renderPreviewIcon(name: PreviewIconName, settings: IconSettings): string {
+function previewIconElement(name: PreviewIconName, settings: IconSettings): ReactElement {
   if (settings.family === "lucide") {
-    return renderToStaticMarkup(
-      createElement(lucideIcons[name], {
-        "aria-hidden": true,
-        className: "preview-icon",
-        size: settings.size,
-        strokeWidth: settings.strokeWidth,
-      }),
-    );
-  }
-
-  return renderToStaticMarkup(
-    createElement(HugeiconsIcon, {
+    return createElement(lucideIcons[name], {
       "aria-hidden": true,
       className: "preview-icon",
-      icon: hugeiconsByTreatment[settings.treatment][name],
       size: settings.size,
       strokeWidth: settings.strokeWidth,
-    }),
-  );
+    });
+  }
+
+  return createElement(HugeiconsIcon, {
+    "aria-hidden": true,
+    className: "preview-icon",
+    icon: hugeiconsByTreatment[settings.treatment][name],
+    size: settings.size,
+    strokeWidth: settings.strokeWidth,
+  });
 }
 
 function hugeicons(
