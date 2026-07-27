@@ -55,6 +55,8 @@
   --color-separator: var(--separator);
   --color-separator-secondary: var(--separator-secondary);
   --color-separator-tertiary: var(--separator-tertiary);
+  --color-segment: var(--segment);
+  --color-segment-foreground: var(--segment-foreground);
   --color-field-background: var(--field-background);
   --color-field-background-hover: var(--field-background-hover);
   --color-field-foreground: var(--field-foreground);
@@ -132,6 +134,10 @@
       from var(--accent) calc(var(--neutral-base) + 0.52) var(--bc-neutral-chroma) h
     );
     --overlay-foreground: var(--foreground);
+    /* The raised pill in a segmented control. On light it is the same white as a surface;
+       on dark it has to climb past --default, which is the track it sits on. */
+    --segment: var(--surface);
+    --segment-foreground: var(--foreground);
     --separator: color-mix(in oklab, var(--foreground) 14%, transparent);
     --success: #46a758;
     --success-foreground: #ffffff;
@@ -235,6 +241,10 @@
       from var(--accent) calc(var(--neutral-base) - 0.24) var(--bc-neutral-chroma) h
     );
     --overlay-foreground: var(--foreground);
+    --segment: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.14) var(--bc-neutral-chroma) h
+    );
+    --segment-foreground: var(--foreground);
     --separator: color-mix(in oklab, var(--foreground) 14%, transparent);
     --success: #5bc86b;
     --success-foreground: #102414;
@@ -399,5 +409,26 @@
   :focus-visible {
     outline: 2px solid var(--focus);
     outline-offset: var(--ring-offset-width);
+  }
+}
+
+/*
+ * Every keyframe in the system lives here rather than beside the component that uses it, because
+ * @keyframes resolve by document order regardless of @layer — two component stylesheets
+ * declaring the same name would silently override each other depending on import order.
+ */
+@keyframes bc-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes bc-spinner-fade {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.15;
   }
 }
