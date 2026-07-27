@@ -1,0 +1,45 @@
+@layer components {
+  /*
+   * A grid rather than flex: the auto-flow axis is the only thing that changes between the
+   * two orientations, so neither needs its own layout rules.
+   */
+  .toolbar {
+    display: grid;
+    width: fit-content;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    grid-auto-flow: column;
+  }
+
+  .toolbar--vertical {
+    align-items: flex-start;
+    justify-content: flex-start;
+    grid-auto-flow: row;
+  }
+
+  .toolbar--vertical .button-group {
+    justify-content: flex-start;
+  }
+
+  /* Attached gives the toolbar a surface of its own, for floating over content. */
+  .toolbar--attached {
+    padding: calc(0.25rem * var(--spacing-scale));
+    border-radius: var(--radius-3xl);
+    background: var(--surface);
+  }
+
+  /*
+   * Separators inside a toolbar are half-height and centred, so they read as spacing between
+   * groups rather than as a rule cutting the bar in two.
+   */
+  .toolbar .separator--vertical {
+    height: 50%;
+    align-self: center;
+  }
+
+  .toolbar .separator--horizontal {
+    width: 50%;
+    justify-content: center;
+    justify-self: center;
+  }
+}

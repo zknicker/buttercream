@@ -1,0 +1,149 @@
+@layer components {
+  .accordion {
+    /* Panels animate their own height; containing layout stops that reflowing the page. */
+    width: 100%;
+    contain: layout style;
+  }
+
+  .accordion__item {
+    position: relative;
+    border: none;
+  }
+
+  /*
+   * The rule is a pseudo-element rather than a border so the last item can drop it without
+   * changing the item's box, which would shift every panel below by a pixel.
+   */
+  .accordion__item::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    border-radius: var(--radius-xs);
+    background: var(--separator);
+    content: "";
+  }
+
+  .accordion__item:last-child::after {
+    content: none;
+  }
+
+  .accordion__header {
+    display: flex;
+  }
+
+  .accordion__trigger {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: calc(1rem * var(--spacing-scale));
+    padding-block: calc(1rem * var(--spacing-scale));
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    cursor: var(--cursor-interactive);
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    text-align: start;
+    transition: background-color 150ms cubic-bezier(0, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Only closed items tint on hover — an open one is already marked by its panel. */
+  .accordion__trigger:hover:not([data-panel-open]) {
+    background: color-mix(in oklab, var(--foreground) 3%, transparent);
+  }
+
+  .accordion__trigger:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: calc(-1 * var(--ring-offset-width));
+  }
+
+  .accordion__trigger[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .accordion__indicator {
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+    flex-shrink: 0;
+    margin-left: auto;
+    color: var(--muted);
+    transition: rotate 150ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .accordion__trigger[data-panel-open] .accordion__indicator {
+    rotate: -180deg;
+  }
+
+  /*
+   * Base UI measures the panel and publishes its height as a variable, which is what makes
+   * the open and close animate — `auto` is not a value CSS can transition to.
+   */
+  .accordion__panel {
+    height: var(--accordion-panel-height);
+    opacity: 0;
+    overflow: clip;
+    transition:
+      height 200ms cubic-bezier(0.5, 0, 0.75, 0),
+      opacity 200ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .accordion__panel[data-open] {
+    opacity: 1;
+    will-change: height, opacity;
+  }
+
+  .accordion__panel[data-starting-style],
+  .accordion__panel[data-ending-style] {
+    height: 0;
+  }
+
+  .accordion__body {
+    padding-inline: calc(1rem * var(--spacing-scale));
+    padding-block-end: calc(1rem * var(--spacing-scale));
+    color: var(--muted);
+    font-size: calc(0.875rem * var(--font-size-scale));
+  }
+
+  /*
+   * Surface puts the whole accordion on a card, so its rules inset from the edges and the
+   * outer triggers round to match the corners they now sit against.
+   */
+  .accordion--surface {
+    border-radius: min(2rem, var(--radius-3xl));
+    background: var(--surface);
+  }
+
+  .accordion--surface .accordion__trigger:hover:not([data-panel-open]) {
+    background: var(--default);
+  }
+
+  .accordion--surface .accordion__item::after {
+    left: 3%;
+    width: 94%;
+    background: color-mix(in oklab, var(--surface-foreground) 6%, transparent);
+  }
+
+  .accordion--surface .accordion__item:first-child .accordion__trigger {
+    border-start-start-radius: min(2rem, var(--radius-3xl));
+    border-start-end-radius: min(2rem, var(--radius-3xl));
+  }
+
+  .accordion--surface .accordion__item:last-child .accordion__trigger:not([data-panel-open]) {
+    border-end-start-radius: min(2rem, var(--radius-3xl));
+    border-end-end-radius: min(2rem, var(--radius-3xl));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion__panel,
+  .accordion__indicator {
+    transition: none;
+  }
+}

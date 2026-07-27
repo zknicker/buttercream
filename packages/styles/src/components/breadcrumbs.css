@@ -1,0 +1,61 @@
+@layer components {
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-sans);
+  }
+
+  /* An ordered list carries the trail's sequence; the markers and indent are not wanted. */
+  .breadcrumbs__list {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .breadcrumbs__item {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: calc(0.125rem * var(--spacing-scale));
+    padding-inline: calc(0.125rem * var(--spacing-scale));
+  }
+
+  .breadcrumbs__link {
+    position: relative;
+    padding-inline: calc(0.125rem * var(--spacing-scale));
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: calc(1.25rem * var(--spacing-scale));
+    text-decoration-line: none;
+  }
+
+  .breadcrumbs__link:hover {
+    text-decoration-line: underline;
+  }
+
+  .breadcrumbs__link:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
+  }
+
+  /* The trail's last crumb is where you are, so it takes the link colour, not the muted one. */
+  .breadcrumbs__link[data-current] {
+    color: var(--link);
+  }
+
+  .breadcrumbs__separator {
+    width: calc(0.75rem * var(--spacing-scale));
+    height: calc(0.75rem * var(--spacing-scale));
+    color: var(--muted);
+  }
+
+  /* The chevron points along the reading direction, so it turns with the script. */
+  [dir="rtl"] .breadcrumbs__separator {
+    rotate: 180deg;
+  }
+}

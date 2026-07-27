@@ -1,3 +1,9 @@
+export {
+  Accordion,
+  type AccordionProps,
+  type AccordionTriggerProps,
+  type AccordionVariant,
+} from "./accordion.tsx";
 export { Alert, type AlertColor, type AlertProps } from "./alert.tsx";
 export {
   AgentAvatar,
@@ -18,6 +24,11 @@ export {
   type BadgeSize,
   type BadgeVariant,
 } from "./badge.tsx";
+export {
+  type BreadcrumbProps,
+  Breadcrumbs,
+  type BreadcrumbsProps,
+} from "./breadcrumbs.tsx";
 export {
   Button,
   type ButtonProps,
@@ -57,6 +68,7 @@ export {
   type DrawerProps,
   type DrawerTriggerProps,
 } from "./drawer.tsx";
+export { ErrorMessage, type ErrorMessageProps } from "./error-message.tsx";
 export { Field, type FieldLabelProps, type FieldProps } from "./field.tsx";
 export { Fieldset, type FieldsetProps } from "./fieldset.tsx";
 export { Form, type FormProps } from "./form.tsx";
@@ -74,6 +86,12 @@ export {
   type ModalTriggerProps,
 } from "./modal.tsx";
 export { NumberField, type NumberFieldProps } from "./number-field.tsx";
+export {
+  Pagination,
+  type PaginationLinkProps,
+  type PaginationProps,
+  type PaginationSize,
+} from "./pagination.tsx";
 export {
   Popover,
   type PopoverContentProps,
@@ -140,6 +158,7 @@ export {
   type ToggleButtonSize,
   type ToggleButtonVariant,
 } from "./toggle-button.tsx";
+export { Toolbar, type ToolbarProps, type ToolbarVariant } from "./toolbar.tsx";
 export {
   Tooltip,
   type TooltipContentProps,
