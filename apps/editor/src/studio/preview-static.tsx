@@ -118,12 +118,32 @@ export function ButtonGroupPreview(): ReactElement {
         <div className="specimen__label">Variants</div>
       </section>
       <section className="specimen">
+        {/*
+         * Icon-only, as the reference shows it. A vertical stack of text labels reads as a
+         * tall slab rather than one control, which is why that is not a shape it offers.
+         */}
         <ButtonGroup orientation="vertical">
-          <Button variant="secondary">Top</Button>
-          <Button variant="secondary">Middle</Button>
-          <Button variant="secondary">Bottom</Button>
+          {["Zoom in", "Zoom out", "Reset zoom"].map((label, index) => (
+            <Button aria-label={label} iconOnly key={label} variant="tertiary">
+              <svg
+                aria-hidden="true"
+                fill="none"
+                role="presentation"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <path
+                  d={index === 0 ? "M8 4v8M4 8h8" : index === 1 ? "M4 8h8" : "M4 4h8v8H4z"}
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.75"
+                />
+              </svg>
+            </Button>
+          ))}
         </ButtonGroup>
-        <div className="specimen__label">Vertical</div>
+        <div className="specimen__label">Vertical, icon-only</div>
       </section>
       <section className="specimen">
         <ButtonGroup>

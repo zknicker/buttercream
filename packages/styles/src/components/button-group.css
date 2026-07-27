@@ -17,16 +17,17 @@
   }
 
   /*
-   * Stretched, not centred. A column of buttons that each size to their own label reads as a
-   * lumpy stack rather than one control — the reference only ever demonstrates this variant
-   * with icon-only buttons, which are uniform by construction and hide the problem.
+   * The reference only ever shows this variant with icon-only buttons, which are uniform by
+   * construction. Stretching is the guard for the case it does not cover: text labels would
+   * otherwise each size to their own content and read as a lumpy stack. Icon-only buttons keep
+   * their fixed square, since stretching those would defeat the point of the shape.
    */
   .button-group--vertical {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .button-group--vertical .button {
+  .button-group--vertical .button:not(.button--icon-only) {
     width: 100%;
   }
 
