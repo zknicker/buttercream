@@ -3,6 +3,7 @@
 import { Button as BaseButton } from "@base-ui/react/button";
 import type { ReactElement } from "react";
 import { classes } from "./classes.ts";
+import { Spinner } from "./spinner.tsx";
 
 export type ButtonVariant =
   | "primary"
@@ -52,7 +53,9 @@ export function Button({
       {...props}
     >
       {children}
-      {loading ? <span aria-hidden className="button__spinner" /> : null}
+      {/* The same Spinner the rest of the system uses, so a loading button cannot drift into
+          being a second spinner with its own look and speed. */}
+      {loading ? <Spinner className="button__spinner" label={null} size="sm" /> : null}
     </BaseButton>
   );
 }
