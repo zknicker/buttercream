@@ -1,4 +1,4 @@
-export { exportGlobalCss, importThemeCss } from "./css.ts";
+export { exportGlobalCss, importThemeCss, themeCssVariables } from "./css.ts";
 export {
   createDefaultDesignSystem,
   defaultDarkTheme,
@@ -15,6 +15,10 @@ export {
   hugeiconsTreatmentSchema,
   type IconSettings,
   iconSettingsSchema,
+  type ShadowLevel,
+  type SkeletonStyle,
+  shadowLevelSchema,
+  skeletonStyleSchema,
   type ThemeTokens,
   themeTokensSchema,
 } from "./design-system.ts";
@@ -26,3 +30,11 @@ export {
   type ProjectExport,
 } from "./exports.ts";
 export { exportDesignGuidance } from "./guidance.ts";
+export {
+  applyThemePreset,
+  getThemePreset,
+  type ThemePreset,
+  type ThemePresetId,
+  type ThemeTokenOverrides,
+  themePresets,
+} from "./presets.ts";

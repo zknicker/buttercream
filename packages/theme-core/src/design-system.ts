@@ -5,7 +5,13 @@ const positiveScale = z.number().positive();
 const componentSizeSchema = z.enum(["sm", "md", "lg"]);
 const componentSideSchema = z.enum(["top", "right", "bottom", "left"]);
 const backdropVariantSchema = z.enum(["opaque", "blur", "transparent"]);
-const defaultOverlayShadow = "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)";
+
+/**
+ * Shadows are authored as a level, never as raw CSS. `@buttercream/styles` maps each level to a
+ * per-theme stack (`--bc-shadow-<kind>-<level>`); light and dark stacks are authored separately.
+ */
+export const shadowLevelSchema = z.enum(["none", "subtle", "medium", "strong"]);
+export const skeletonStyleSchema = z.enum(["shimmer", "pulse", "none"]);
 
 export const hugeiconsTreatmentSchema = z.enum([
   "stroke-rounded",
@@ -159,33 +165,45 @@ export const componentSettingsSchema = z.object({
     }),
 });
 
-function createThemeTokensSchema(overlayShadow: string, backdrop: string) {
+/**
+ * Authored tokens only. Derived tokens (`*-hover`, `*-soft*`, `background-secondary/-tertiary/
+ * -inverse`, `surface-hover`, `border-secondary/-tertiary`, `separator-secondary/-tertiary`,
+ * `field-background-hover`, `field-border-hover/-focus`, the `radius-*` steps, and the `text-*`
+ * scale) are fixed projections computed in `@buttercream/styles` and never stored here.
+ */
+function createThemeTokensSchema(
+  shadowOverlay: z.infer<typeof shadowLevelSchema>,
+  backdrop: string,
+) {
   return z.object({
     colors: z.object({
       accent: cssValue,
       accentForeground: cssValue,
-      accentSoft: cssValue,
-      background: cssValue,
       backdrop: cssValue.default(backdrop),
+      background: cssValue,
       border: cssValue,
-      card: cssValue,
-      cardForeground: cssValue,
       danger: cssValue,
       dangerForeground: cssValue,
-      dangerSoft: cssValue,
       default: cssValue,
       defaultForeground: cssValue,
+      focus: cssValue,
       foreground: cssValue,
-      ring: cssValue,
+      link: cssValue,
+      muted: cssValue,
+      overlay: cssValue,
+      overlayForeground: cssValue,
+      separator: cssValue,
       success: cssValue,
       successForeground: cssValue,
-      successSoft: cssValue,
+      surface: cssValue,
+      surfaceForeground: cssValue,
+      surfaceSecondary: cssValue,
+      surfaceTertiary: cssValue,
       warning: cssValue,
       warningForeground: cssValue,
-      warningSoft: cssValue,
     }),
     corners: z.object({
-      formRadius: cssValue,
+      fieldRadius: cssValue,
       radius: cssValue,
     }),
     density: z.object({
@@ -193,15 +211,39 @@ function createThemeTokensSchema(overlayShadow: string, backdrop: string) {
       spacing: positiveScale,
     }),
     effects: z.object({
+      borderWidth: cssValue,
+      cursorPointer: z.boolean().default(true),
       disabledOpacity: z.number().min(0).max(1),
-      fieldBorder: cssValue,
-      fieldShadow: cssValue.default("0 2px 4px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.1)"),
-      hardShadowColor: cssValue,
-      hardShadowDepth: cssValue,
-      overlayShadow: cssValue.default(overlayShadow),
+      fieldBorderWidth: cssValue,
+      ringOffsetWidth: cssValue,
+      shadowField: shadowLevelSchema.default("medium"),
+      shadowOverlay: shadowLevelSchema.default(shadowOverlay),
+      shadowSurface: shadowLevelSchema.default("medium"),
+      skeleton: skeletonStyleSchema.default("shimmer"),
     }),
+    fields: z.object({
+      background: cssValue,
+      border: cssValue,
+      focus: cssValue,
+      foreground: cssValue,
+      placeholder: cssValue,
+    }),
+    /**
+     * Generator inputs for the neutral family (`background`, `foreground`, `default`, `surface`,
+     * `overlay`, `field-background`). Hue comes from the accent, chroma is a small constant when
+     * `vibrant` is on (0 when off), and each role's lightness sits at a fixed per-theme offset
+     * from `base`. The neutral colour tokens stay authored (and individually pinnable) — their
+     * default values are CSS expressions over `--neutral-base` and `--neutral-vibrant`.
+     */
+    neutrals: z
+      .object({
+        base: z.number().min(0).max(1),
+        vibrant: z.boolean(),
+      })
+      .default({ base: 0.48, vibrant: false }),
     typography: z.object({
       fontHeading: cssValue,
+      fontMono: cssValue,
       fontSans: cssValue,
       letterSpacing: cssValue,
       lineHeight: z.number().positive(),
@@ -209,7 +251,7 @@ function createThemeTokensSchema(overlayShadow: string, backdrop: string) {
   });
 }
 
-export const themeTokensSchema = createThemeTokensSchema(defaultOverlayShadow, "rgb(0 0 0 / 0.38)");
+export const themeTokensSchema = createThemeTokensSchema("medium", "rgb(0 0 0 / 0.38)");
 
 export const designSystemSchema = z.object({
   components: componentSettingsSchema,
@@ -239,4 +281,6 @@ export type ComponentSettings = z.infer<typeof componentSettingsSchema>;
 export type DesignSystem = z.infer<typeof designSystemSchema>;
 export type HugeiconsTreatment = z.infer<typeof hugeiconsTreatmentSchema>;
 export type IconSettings = z.infer<typeof iconSettingsSchema>;
+export type ShadowLevel = z.infer<typeof shadowLevelSchema>;
+export type SkeletonStyle = z.infer<typeof skeletonStyleSchema>;
 export type ThemeTokens = z.infer<typeof themeTokensSchema>;

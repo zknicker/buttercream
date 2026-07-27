@@ -4,6 +4,7 @@ export { defaultIconSettings };
 
 const sharedTypography: ThemeTokens["typography"] = {
   fontHeading: "ui-rounded, system-ui, sans-serif",
+  fontMono: "ui-monospace, SFMono-Regular, Menlo, monospace",
   fontSans: "Inter, ui-sans-serif, system-ui, sans-serif",
   letterSpacing: "0em",
   lineHeight: 1.4,
@@ -15,45 +16,75 @@ const sharedDensity: ThemeTokens["density"] = {
 };
 
 const sharedCorners: ThemeTokens["corners"] = {
-  formRadius: "0.75rem",
+  fieldRadius: "0.75rem",
   radius: "0.625rem",
 };
+
+const sharedNeutrals: ThemeTokens["neutrals"] = {
+  base: 0.48,
+  vibrant: false,
+};
+
+/*
+ * Neutral defaults are generator expressions, not literals: hue comes from the accent, chroma
+ * from `--bc-neutral-chroma` (0.0093 when `--neutral-vibrant` is 1, otherwise 0), and lightness
+ * from `--neutral-base` plus a fixed per-role, per-theme offset. At the default base of 0.48 the
+ * offsets land on the lightness of the previous literal palette. Pinning a token in the
+ * Variables tab simply replaces the expression with a literal.
+ */
+function neutral(offset: number): string {
+  const sign = offset < 0 ? "-" : "+";
+  return `oklch(from var(--accent) calc(var(--neutral-base) ${sign} ${Math.abs(offset)}) var(--bc-neutral-chroma) h)`;
+}
 
 export const defaultLightTheme: ThemeTokens = {
   colors: {
     accent: "#1b1b1b",
     accentForeground: "#ffffff",
-    accentSoft: "color-mix(in oklab, #1b1b1b 10%, transparent)",
-    background: "#f8f8f8",
     backdrop: "rgb(0 0 0 / 0.38)",
-    border: "color-mix(in oklab, #1b1b1b 14%, transparent)",
-    card: "#ffffff",
-    cardForeground: "#1b1b1b",
+    background: neutral(0.5),
+    border: "color-mix(in oklab, var(--foreground) 14%, transparent)",
     danger: "#ef476f",
     dangerForeground: "#ffffff",
-    dangerSoft: "color-mix(in oklab, #ef476f 15%, transparent)",
-    default: "#eaebea",
-    defaultForeground: "#1b1b1b",
-    foreground: "#292524",
-    ring: "#1b1b1b",
+    default: neutral(0.46),
+    defaultForeground: "var(--foreground)",
+    focus: "var(--accent)",
+    foreground: neutral(-0.21),
+    link: "var(--accent)",
+    muted: "color-mix(in oklab, var(--foreground) 60%, transparent)",
+    overlay: neutral(0.52),
+    overlayForeground: "var(--foreground)",
+    separator: "color-mix(in oklab, var(--foreground) 14%, transparent)",
     success: "#46a758",
     successForeground: "#ffffff",
-    successSoft: "color-mix(in oklab, #46a758 15%, transparent)",
+    surface: neutral(0.52),
+    surfaceForeground: "var(--foreground)",
+    surfaceSecondary: "color-mix(in oklab, var(--surface) 96%, var(--foreground) 4%)",
+    surfaceTertiary: "color-mix(in oklab, var(--surface) 92%, var(--foreground) 8%)",
     warning: "#f59e0b",
     warningForeground: "#1b1b1b",
-    warningSoft: "color-mix(in oklab, #f59e0b 18%, transparent)",
   },
   corners: sharedCorners,
   density: sharedDensity,
   effects: {
+    borderWidth: "1px",
+    cursorPointer: true,
     disabledOpacity: 0.5,
-    fieldBorder: "1px",
-    fieldShadow:
-      "0 2px 4px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.06), 0 0 1px rgb(0 0 0 / 0.06)",
-    hardShadowColor: "color-mix(in oklab, #1b1b1b 30%, transparent)",
-    hardShadowDepth: "4px",
-    overlayShadow: "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)",
+    fieldBorderWidth: "1px",
+    ringOffsetWidth: "2px",
+    shadowField: "medium",
+    shadowOverlay: "medium",
+    shadowSurface: "medium",
+    skeleton: "shimmer",
   },
+  fields: {
+    background: neutral(0.52),
+    border: "color-mix(in oklab, var(--foreground) 14%, transparent)",
+    focus: "color-mix(in oklab, var(--field-background) 96%, var(--foreground) 4%)",
+    foreground: "var(--foreground)",
+    placeholder: "color-mix(in oklab, var(--foreground) 48%, transparent)",
+  },
+  neutrals: { ...sharedNeutrals },
   typography: sharedTypography,
 };
 
@@ -61,36 +92,50 @@ export const defaultDarkTheme: ThemeTokens = {
   colors: {
     accent: "#f5f5f4",
     accentForeground: "#1c1917",
-    accentSoft: "color-mix(in oklab, #f5f5f4 12%, transparent)",
-    background: "#161514",
     backdrop: "rgb(0 0 0 / 0.56)",
-    border: "color-mix(in oklab, #ffffff 14%, transparent)",
-    card: "#201f1e",
-    cardForeground: "#f5f5f4",
+    background: neutral(-0.28),
+    border: "color-mix(in oklab, var(--foreground) 14%, transparent)",
     danger: "#ff5d7d",
     dangerForeground: "#1c1917",
-    dangerSoft: "color-mix(in oklab, #ff5d7d 18%, transparent)",
-    default: "#302f2d",
-    defaultForeground: "#f5f5f4",
-    foreground: "#f5f5f4",
-    ring: "#f5f5f4",
+    default: neutral(-0.18),
+    defaultForeground: "var(--foreground)",
+    focus: "var(--accent)",
+    foreground: neutral(0.49),
+    link: "var(--accent)",
+    muted: "color-mix(in oklab, var(--foreground) 60%, transparent)",
+    overlay: neutral(-0.24),
+    overlayForeground: "var(--foreground)",
+    separator: "color-mix(in oklab, var(--foreground) 14%, transparent)",
     success: "#5bc86b",
     successForeground: "#102414",
-    successSoft: "color-mix(in oklab, #5bc86b 18%, transparent)",
+    surface: neutral(-0.24),
+    surfaceForeground: "var(--foreground)",
+    surfaceSecondary: "color-mix(in oklab, var(--surface) 96%, var(--foreground) 4%)",
+    surfaceTertiary: "color-mix(in oklab, var(--surface) 92%, var(--foreground) 8%)",
     warning: "#ffb340",
     warningForeground: "#2a1b00",
-    warningSoft: "color-mix(in oklab, #ffb340 20%, transparent)",
   },
   corners: sharedCorners,
   density: sharedDensity,
   effects: {
+    borderWidth: "1px",
+    cursorPointer: true,
     disabledOpacity: 0.5,
-    fieldBorder: "1px",
-    fieldShadow: "0 2px 4px rgb(0 0 0 / 0.24), 0 1px 2px rgb(0 0 0 / 0.3)",
-    hardShadowColor: "rgba(0, 0, 0, 0.55)",
-    hardShadowDepth: "4px",
-    overlayShadow: "none",
+    fieldBorderWidth: "1px",
+    ringOffsetWidth: "2px",
+    shadowField: "medium",
+    shadowOverlay: "none",
+    shadowSurface: "medium",
+    skeleton: "shimmer",
   },
+  fields: {
+    background: neutral(-0.24),
+    border: "color-mix(in oklab, var(--foreground) 14%, transparent)",
+    focus: "color-mix(in oklab, var(--field-background) 96%, var(--foreground) 4%)",
+    foreground: "var(--foreground)",
+    placeholder: "color-mix(in oklab, var(--foreground) 48%, transparent)",
+  },
+  neutrals: { ...sharedNeutrals },
   typography: sharedTypography,
 };
 

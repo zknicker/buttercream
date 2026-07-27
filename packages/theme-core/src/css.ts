@@ -1,41 +1,61 @@
 import { createDefaultDesignSystem, defaultDarkTheme, defaultLightTheme } from "./defaults.ts";
-import type { DesignSystem, ThemeTokens } from "./design-system.ts";
+import { type DesignSystem, skeletonStyleSchema, type ThemeTokens } from "./design-system.ts";
 
 type ThemePath = readonly [section: keyof ThemeTokens, key: string];
+type ThemeValue = string | number | boolean;
 
+/**
+ * Every authored token, and only authored tokens. Derived tokens (`*-hover`, `*-soft*`,
+ * `background-secondary`, `surface-hover`, the `radius-*` steps, the `text-*` scale, …) are
+ * computed in `@buttercream/styles` and never serialized or imported here.
+ */
 const variablePaths = {
   accent: ["colors", "accent"],
   "accent-foreground": ["colors", "accentForeground"],
-  "accent-soft": ["colors", "accentSoft"],
-  background: ["colors", "background"],
   backdrop: ["colors", "backdrop"],
+  background: ["colors", "background"],
   border: ["colors", "border"],
-  card: ["colors", "card"],
-  "card-foreground": ["colors", "cardForeground"],
   danger: ["colors", "danger"],
   "danger-foreground": ["colors", "dangerForeground"],
-  "danger-soft": ["colors", "dangerSoft"],
   default: ["colors", "default"],
   "default-foreground": ["colors", "defaultForeground"],
+  focus: ["colors", "focus"],
   foreground: ["colors", "foreground"],
-  ring: ["colors", "ring"],
+  link: ["colors", "link"],
+  muted: ["colors", "muted"],
+  overlay: ["colors", "overlay"],
+  "overlay-foreground": ["colors", "overlayForeground"],
+  separator: ["colors", "separator"],
   success: ["colors", "success"],
   "success-foreground": ["colors", "successForeground"],
-  "success-soft": ["colors", "successSoft"],
+  surface: ["colors", "surface"],
+  "surface-foreground": ["colors", "surfaceForeground"],
+  "surface-secondary": ["colors", "surfaceSecondary"],
+  "surface-tertiary": ["colors", "surfaceTertiary"],
   warning: ["colors", "warning"],
   "warning-foreground": ["colors", "warningForeground"],
-  "warning-soft": ["colors", "warningSoft"],
-  "form-radius": ["corners", "formRadius"],
+  "field-background": ["fields", "background"],
+  "field-border": ["fields", "border"],
+  "field-focus": ["fields", "focus"],
+  "field-foreground": ["fields", "foreground"],
+  "field-placeholder": ["fields", "placeholder"],
+  "field-radius": ["corners", "fieldRadius"],
   radius: ["corners", "radius"],
+  "neutral-base": ["neutrals", "base"],
+  "neutral-vibrant": ["neutrals", "vibrant"],
   "font-size-scale": ["density", "fontSize"],
   "spacing-scale": ["density", "spacing"],
+  "border-width": ["effects", "borderWidth"],
+  "cursor-interactive": ["effects", "cursorPointer"],
   "disabled-opacity": ["effects", "disabledOpacity"],
-  "field-border": ["effects", "fieldBorder"],
-  "field-shadow": ["effects", "fieldShadow"],
-  "overlay-shadow": ["effects", "overlayShadow"],
-  "bc-hard-shadow": ["effects", "hardShadowColor"],
-  "bc-hard-shadow-depth": ["effects", "hardShadowDepth"],
+  "field-border-width": ["effects", "fieldBorderWidth"],
+  "ring-offset-width": ["effects", "ringOffsetWidth"],
+  "shadow-field": ["effects", "shadowField"],
+  "shadow-overlay": ["effects", "shadowOverlay"],
+  "shadow-surface": ["effects", "shadowSurface"],
+  "skeleton-animation": ["effects", "skeleton"],
   "font-heading": ["typography", "fontHeading"],
+  "font-mono": ["typography", "fontMono"],
   "font-sans": ["typography", "fontSans"],
   "letter-spacing": ["typography", "letterSpacing"],
   "line-height": ["typography", "lineHeight"],
@@ -45,8 +65,76 @@ const numericVariables = new Set([
   "disabled-opacity",
   "font-size-scale",
   "line-height",
+  "neutral-base",
   "spacing-scale",
 ]);
+
+/** Shadow levels serialize to a reference into the per-theme stacks in `@buttercream/styles`. */
+const shadowVariables: Record<string, string> = {
+  "shadow-field": "field",
+  "shadow-overlay": "overlay",
+  "shadow-surface": "surface",
+};
+
+const shadowLevelPattern = /^var\(--bc-shadow-(?:field|overlay|surface)-(subtle|medium|strong)\)$/u;
+
+/**
+ * Document value → CSS custom-property value. Booleans and shadow levels are stored typed in the
+ * document but must project to something CSS can consume directly.
+ */
+function serializeValue(variable: string, value: ThemeValue): string {
+  if (variable === "neutral-vibrant") {
+    return value ? "1" : "0";
+  }
+  if (variable === "cursor-interactive") {
+    return value ? "pointer" : "default";
+  }
+  const shadowKind = shadowVariables[variable];
+  if (shadowKind) {
+    return value === "none" ? "none" : `var(--bc-shadow-${shadowKind}-${String(value)})`;
+  }
+  return String(value);
+}
+
+/** CSS custom-property value → document value. Returns undefined for unparseable values. */
+function parseValue(variable: string, value: string): ThemeValue | undefined {
+  if (numericVariables.has(variable)) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  if (variable === "neutral-vibrant") {
+    return value === "1" || value === "true";
+  }
+  if (variable === "cursor-interactive") {
+    return value === "pointer";
+  }
+  if (variable in shadowVariables) {
+    if (value === "none") {
+      return "none";
+    }
+    return shadowLevelPattern.exec(value)?.[1];
+  }
+  if (variable === "skeleton-animation") {
+    const parsed = skeletonStyleSchema.safeParse(value);
+    return parsed.success ? parsed.data : undefined;
+  }
+  return value;
+}
+
+/**
+ * The same variable registry the CSS export uses, as a plain map. The studio preview applies
+ * these to its themed wrapper instead of generating a stylesheet, so dragging a control
+ * repaints without re-parsing CSS.
+ */
+export function themeCssVariables(theme: ThemeTokens): Record<string, string> {
+  const variables: Record<string, string> = {};
+
+  for (const [variable, path] of Object.entries(variablePaths)) {
+    variables[`--${variable}`] = serializeValue(variable, getThemeValue(theme, path));
+  }
+
+  return variables;
+}
 
 export function exportGlobalCss(designSystem: DesignSystem): string {
   const customCss = designSystem.rules.customCss.trim();
@@ -86,12 +174,15 @@ function serializeTheme(theme: ThemeTokens, indentation: number): string {
   const prefix = " ".repeat(indentation);
 
   return Object.entries(variablePaths)
-    .map(([variable, path]) => `${prefix}--${variable}: ${getThemeValue(theme, path)};`)
+    .map(
+      ([variable, path]) =>
+        `${prefix}--${variable}: ${serializeValue(variable, getThemeValue(theme, path))};`,
+    )
     .join("\n");
 }
 
-function getThemeValue(theme: ThemeTokens, [section, key]: ThemePath): string | number {
-  const record = theme[section] as Record<string, string | number>;
+function getThemeValue(theme: ThemeTokens, [section, key]: ThemePath): ThemeValue {
+  const record = theme[section] as Record<string, ThemeValue>;
   return record[key] ?? "";
 }
 
@@ -99,14 +190,19 @@ function applyVariables(base: ThemeTokens, variables: Map<string, string>): Them
   const theme = structuredClone(base);
 
   for (const [variable, path] of Object.entries(variablePaths)) {
-    const value = variables.get(variable);
+    const raw = variables.get(variable);
+    if (raw === undefined) {
+      continue;
+    }
+
+    const value = parseValue(variable, raw);
     if (value === undefined) {
       continue;
     }
 
     const [section, key] = path;
-    const record = theme[section] as Record<string, string | number>;
-    record[key] = numericVariables.has(variable) ? Number(value) : value;
+    const record = theme[section] as Record<string, ThemeValue>;
+    record[key] = value;
   }
 
   return theme;
