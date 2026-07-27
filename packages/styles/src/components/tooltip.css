@@ -27,13 +27,31 @@
       opacity 150ms ease-out;
   }
 
-  .tooltip__popup[data-starting-style],
-  .tooltip__popup[data-ending-style] {
+  /* Same motion as the popover: a pop in from 0.9, a shorter fade out from 0.95. */
+  .tooltip__popup[data-starting-style] {
     opacity: 0;
-    transform: scale(0.98);
+    transform: scale(0.9);
+  }
+
+  .tooltip__popup[data-starting-style][data-side="top"] {
+    transform: scale(0.9) translateY(calc(0.25rem * var(--spacing-scale)));
+  }
+
+  .tooltip__popup[data-starting-style][data-side="bottom"] {
+    transform: scale(0.9) translateY(calc(-0.25rem * var(--spacing-scale)));
+  }
+
+  .tooltip__popup[data-starting-style][data-side="left"] {
+    transform: scale(0.9) translateX(calc(0.25rem * var(--spacing-scale)));
+  }
+
+  .tooltip__popup[data-starting-style][data-side="right"] {
+    transform: scale(0.9) translateX(calc(-0.25rem * var(--spacing-scale)));
   }
 
   .tooltip__popup[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.95);
     transition-duration: 100ms;
   }
 

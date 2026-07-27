@@ -11,13 +11,18 @@
     line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
+  /*
+   * Tabs and Segment are the same visual object in the reference — a sunken track with a
+   * raised pill — so they share the --segment tokens, the pill easing, and the retracting
+   * hairlines. Only the semantics differ: tabs reveal a panel, segments pick a value.
+   */
   .tabs__list {
     position: relative;
     display: flex;
     min-width: 0;
     padding: calc(0.25rem * var(--spacing-scale));
     overflow-x: auto;
-    border-radius: var(--field-radius);
+    border-radius: calc(var(--radius) * 2.5);
     background: var(--default);
     scrollbar-width: none;
   }
@@ -38,18 +43,26 @@
     gap: calc(0.5rem * var(--spacing-scale));
     padding: 0 calc(1rem * var(--spacing-scale));
     border: 0;
-    border-radius: var(--field-radius);
+    border-radius: var(--radius-3xl);
     outline: none;
     background: transparent;
-    color: color-mix(in oklab, var(--foreground) 62%, transparent);
+    color: var(--muted);
     cursor: var(--cursor-interactive);
     font: inherit;
+    font-weight: 500;
     white-space: nowrap;
+    transition:
+      color 150ms ease,
+      opacity 150ms ease;
   }
 
-  .tabs__tab:hover:not([data-disabled]),
   .tabs__tab[data-active] {
-    color: var(--foreground);
+    color: var(--segment-foreground);
+  }
+
+  /* Fades rather than brightening, so hover cannot be mistaken for selection. */
+  .tabs__tab:not([data-active]):not([data-disabled]):hover {
+    opacity: 0.7;
   }
 
   .tabs__tab:focus-visible {
@@ -69,14 +82,15 @@
     left: 0;
     width: var(--active-tab-width);
     height: var(--active-tab-height);
-    border-radius: var(--field-radius);
-    background: var(--surface);
-    box-shadow: var(--shadow-field);
+    border-radius: var(--radius-3xl);
+    background: var(--segment);
+    box-shadow: var(--shadow-surface);
     transform: translate(var(--active-tab-left), var(--active-tab-top));
+    /* The same fluid curve the segment pill uses, so the two never travel differently. */
     transition:
-      width 150ms ease,
-      height 150ms ease,
-      transform 150ms ease;
+      width 250ms cubic-bezier(0.32, 0.72, 0, 1),
+      height 250ms cubic-bezier(0.32, 0.72, 0, 1),
+      transform 250ms cubic-bezier(0.32, 0.72, 0, 1);
   }
 
   .tabs__panel {
@@ -115,14 +129,30 @@
     transform: translateX(var(--active-tab-left));
   }
 
+  /*
+   * Hairlines between adjacent tabs, retracting either side of the selected pill so it never
+   * appears to have a line glued to its edge — the same behaviour as the segmented control.
+   */
   .tabs__list--separated .tabs__tab + .tabs__tab::before {
     position: absolute;
     top: 25%;
     bottom: 25%;
     left: 0;
     width: 1px;
-    background: var(--border);
+    border-radius: var(--radius-sm);
+    background: color-mix(in oklab, var(--muted) 25%, transparent);
     content: "";
+    transition: opacity 150ms ease;
+  }
+
+  .tabs__list--separated .tabs__tab[data-active] + .tabs__tab::before,
+  .tabs__list--separated .tabs__tab[data-active] + .tabs__tab + .tabs__tab::before {
+    opacity: 1;
+  }
+
+  .tabs__list--separated .tabs__tab[data-active]::before,
+  .tabs__list--separated .tabs__tab[data-active] + .tabs__tab::before {
+    opacity: 0;
   }
 
   .tabs[data-orientation="vertical"] {

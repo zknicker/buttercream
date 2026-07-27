@@ -36,13 +36,35 @@
       opacity 150ms ease-out;
   }
 
-  .popover__popup[data-starting-style],
-  .popover__popup[data-ending-style] {
+  /*
+   * Enters from further away than it leaves — a noticeable pop on open, a quick fade on
+   * close — and slides a step against its own placement so it reads as coming from the
+   * trigger. Base UI reports the side as data-side where the reference used data-placement.
+   */
+  .popover__popup[data-starting-style] {
     opacity: 0;
-    transform: scale(0.98);
+    transform: scale(0.9);
+  }
+
+  .popover__popup[data-starting-style][data-side="top"] {
+    transform: scale(0.9) translateY(calc(0.25rem * var(--spacing-scale)));
+  }
+
+  .popover__popup[data-starting-style][data-side="bottom"] {
+    transform: scale(0.9) translateY(calc(-0.25rem * var(--spacing-scale)));
+  }
+
+  .popover__popup[data-starting-style][data-side="left"] {
+    transform: scale(0.9) translateX(calc(0.25rem * var(--spacing-scale)));
+  }
+
+  .popover__popup[data-starting-style][data-side="right"] {
+    transform: scale(0.9) translateX(calc(-0.25rem * var(--spacing-scale)));
   }
 
   .popover__popup[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.95);
     transition-duration: 100ms;
   }
 
