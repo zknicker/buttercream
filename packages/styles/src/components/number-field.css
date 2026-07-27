@@ -1,0 +1,125 @@
+@layer components {
+  /*
+   * A three-column grid rather than a flex row: the steppers keep a fixed width whatever the
+   * value is, so the input never shifts as digits are added.
+   */
+  .number-field__group {
+    display: grid;
+    height: calc(2.25rem * var(--spacing-scale));
+    align-items: center;
+    grid-template-columns:
+      calc(2.5rem * var(--spacing-scale)) 1fr
+      calc(2.5rem * var(--spacing-scale));
+    border: var(--field-border-width) solid var(--field-border);
+    border-radius: var(--field-radius);
+    outline: none;
+    background: var(--field-background);
+    color: var(--field-foreground);
+    box-shadow: var(--shadow-field);
+    overflow: hidden;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .number-field__group:hover:not(:focus-within) {
+    border-color: var(--field-border-hover);
+    background: var(--field-background-hover);
+  }
+
+  .number-field__group:focus-within {
+    border-color: var(--field-border-focus);
+    background: var(--field-focus);
+    outline: 2px solid var(--focus);
+    outline-offset: -1px;
+  }
+
+  .number-field__group[aria-invalid="true"] {
+    border-color: var(--danger);
+    background: var(--field-focus);
+  }
+
+  .number-field__group[aria-invalid="true"]:focus-within {
+    outline-color: var(--danger);
+  }
+
+  .number-field__group[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .number-field__input {
+    min-width: 0;
+    padding: calc(0.5rem * var(--spacing-scale)) calc(0.75rem * var(--spacing-scale));
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    font-size: calc(0.875rem * var(--font-size-scale));
+    /* Tabular figures so the value does not jitter as it counts. */
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .number-field__decrement,
+  .number-field__increment {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    border: var(--field-border-width) solid var(--field-border);
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+    color: var(--field-foreground);
+    cursor: var(--cursor-interactive);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  /* Only the edge that meets the input is drawn, so the group reads as one control. */
+  .number-field__decrement {
+    border-block-width: 0;
+    border-inline-start-width: 0;
+  }
+
+  .number-field__increment {
+    border-block-width: 0;
+    border-inline-end-width: 0;
+  }
+
+  .number-field__decrement:hover,
+  .number-field__increment:hover {
+    background: var(--field-background-hover);
+  }
+
+  .number-field__decrement:active,
+  .number-field__increment:active {
+    background: var(--default);
+  }
+
+  .number-field__decrement:focus-visible,
+  .number-field__increment:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: calc(-1 * var(--ring-offset-width));
+  }
+
+  .number-field__decrement[data-disabled],
+  .number-field__increment[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .number-field__group,
+  .number-field__decrement,
+  .number-field__increment {
+    transition: none;
+  }
+}
