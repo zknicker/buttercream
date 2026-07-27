@@ -120,14 +120,20 @@ describe("design-system exports", () => {
     const { icons: _icons, ...documentWithoutIcons } = current;
     const { backdrop: _lightBackdrop, ...lightColors } = current.theme.light.colors;
     const { backdrop: _darkBackdrop, ...darkColors } = current.theme.dark.colors;
-    const { overlayShadow: _lightOverlayShadow, ...lightEffects } = current.theme.light.effects;
-    const { overlayShadow: _darkOverlayShadow, ...darkEffects } = current.theme.dark.effects;
+    const {
+      cursorPointer: _lightCursorPointer,
+      shadowOverlay: _lightShadowOverlay,
+      skeleton: _lightSkeleton,
+      ...lightEffects
+    } = current.theme.light.effects;
+    const { shadowOverlay: _darkShadowOverlay, ...darkEffects } = current.theme.dark.effects;
+    const { neutrals: _lightNeutrals, ...lightTheme } = current.theme.light;
     const source = JSON.stringify({
       ...documentWithoutIcons,
       components,
       theme: {
         dark: { ...current.theme.dark, colors: darkColors, effects: darkEffects },
-        light: { ...current.theme.light, colors: lightColors, effects: lightEffects },
+        light: { ...lightTheme, colors: lightColors, effects: lightEffects },
       },
     });
 
@@ -181,10 +187,11 @@ describe("design-system exports", () => {
       strokeWidth: 2,
       treatment: "stroke-rounded",
     });
-    expect(imported.theme.light.effects.overlayShadow).toBe(
-      "0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08)",
-    );
-    expect(imported.theme.dark.effects.overlayShadow).toBe("none");
+    expect(imported.theme.light.effects.shadowOverlay).toBe("medium");
+    expect(imported.theme.dark.effects.shadowOverlay).toBe("none");
+    expect(imported.theme.light.effects.cursorPointer).toBe(true);
+    expect(imported.theme.light.effects.skeleton).toBe("shimmer");
+    expect(imported.theme.light.neutrals).toEqual({ base: 0.48, vibrant: false });
     expect(imported.theme.light.colors.backdrop).toBe("rgb(0 0 0 / 0.38)");
     expect(imported.theme.dark.colors.backdrop).toBe("rgb(0 0 0 / 0.56)");
   });
