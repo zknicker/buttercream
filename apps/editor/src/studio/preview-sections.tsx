@@ -14,7 +14,9 @@ import { DrawerPreview } from "./preview-drawer.tsx";
 import {
   CloseButtonPreview,
   FieldsetPreview,
+  MeterPreview,
   NumberFieldPreview,
+  ProgressBarPreview,
   SearchFieldPreview,
   TextareaPreview,
   TextFieldPreview,
@@ -40,9 +42,11 @@ export type PreviewSection =
   | "Drawer"
   | "Fieldset"
   | "Input"
+  | "Meter"
   | "Modal"
   | "Number Field"
   | "Popover"
+  | "Progress Bar"
   | "Radio Group"
   | "Search Field"
   | "Segment"
@@ -94,8 +98,14 @@ export function renderPreviewSection(
   if (section === "Search Field") {
     return <SearchFieldPreview />;
   }
+  if (section === "Meter") {
+    return <MeterPreview />;
+  }
   if (section === "Number Field") {
     return <NumberFieldPreview />;
+  }
+  if (section === "Progress Bar") {
+    return <ProgressBarPreview />;
   }
   if (section === "Text Field") {
     return <TextFieldPreview />;

@@ -3,7 +3,9 @@ import {
   Field,
   Fieldset,
   Input,
+  Meter,
   NumberField,
+  ProgressBar,
   SearchField,
   Textarea,
 } from "@buttercream/react";
@@ -173,6 +175,57 @@ export function CloseButtonPreview(): ReactElement {
       <section className="specimen">
         <CloseButton disabled />
         <div className="specimen__label">Disabled</div>
+      </section>
+    </div>
+  );
+}
+
+export function ProgressBarPreview(): ReactElement {
+  return (
+    <div className="specimens">
+      <section className="specimen specimen--stack">
+        <ProgressBar label="Uploading" showValue value={40} />
+        <div className="specimen__label">With label and value</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <ProgressBar size="sm" value={30} />
+        <ProgressBar value={55} />
+        <ProgressBar size="lg" value={80} />
+        <div className="specimen__label">Sizes</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <ProgressBar color="accent" value={45} />
+        <ProgressBar color="success" value={60} />
+        <ProgressBar color="warning" value={75} />
+        <ProgressBar color="danger" value={90} />
+        <div className="specimen__label">Colours</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <ProgressBar label="Preparing" value={null} />
+        <div className="specimen__label">Indeterminate</div>
+      </section>
+    </div>
+  );
+}
+
+export function MeterPreview(): ReactElement {
+  return (
+    <div className="specimens">
+      <section className="specimen specimen--stack">
+        <Meter label="Storage" showValue value={62} />
+        <div className="specimen__label">With label and value</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Meter size="sm" value={30} />
+        <Meter value={55} />
+        <Meter size="lg" value={80} />
+        <div className="specimen__label">Sizes</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Meter color="success" value={35} />
+        <Meter color="warning" value={70} />
+        <Meter color="danger" value={95} />
+        <div className="specimen__label">Colours</div>
       </section>
     </div>
   );
