@@ -1,0 +1,38 @@
+@layer components {
+  .fieldset {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: calc(1.5rem * var(--spacing-scale));
+    padding: 0;
+    border: none;
+    margin: 0;
+  }
+
+  .fieldset__legend {
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: calc(1rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: calc(1.5rem * var(--font-size-scale) * var(--line-height) / 1.4);
+  }
+
+  /*
+   * The gap belongs between fields, not around them, so it is set as a margin on all but the
+   * last child. That keeps a group flush with the legend above and the actions below.
+   */
+  .fieldset__field-group {
+    width: 100%;
+  }
+
+  .fieldset__field-group > :not(:last-child) {
+    margin-block-end: calc(1rem * var(--spacing-scale));
+  }
+
+  .fieldset__actions {
+    display: flex;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    padding-block-start: calc(0.25rem * var(--spacing-scale));
+  }
+}

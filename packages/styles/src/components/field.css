@@ -1,0 +1,91 @@
+/*
+ * The parts every labelled control shares. The reference ships Label, Description and
+ * FieldError as separate components; they only ever appear inside a field, so they live in
+ * one stylesheet here while still carrying their own public class names.
+ */
+@layer components {
+  .field {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: calc(0.25rem * var(--spacing-scale));
+  }
+
+  .field--full-width {
+    width: 100%;
+  }
+
+  .label {
+    display: block;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
+  }
+
+  /* The asterisk is decorative; the control still carries `required` for assistive tech. */
+  .label--required::after,
+  [data-required] > .label::after {
+    margin-left: calc(0.125rem * var(--spacing-scale));
+    color: var(--danger);
+    content: "*";
+  }
+
+  .label--disabled,
+  [data-disabled] .label {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .label--invalid,
+  [data-invalid] .label {
+    color: var(--danger);
+  }
+
+  .description {
+    display: block;
+    color: var(--muted);
+    font-family: var(--font-sans);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
+  }
+
+  /* An invalid field shows its error in place of its description rather than both. */
+  .field[data-invalid] .description {
+    display: none;
+  }
+
+  .field-error {
+    display: block;
+    padding-inline: calc(0.25rem * var(--spacing-scale));
+    color: var(--danger);
+    font-family: var(--font-sans);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
+    transition:
+      opacity 150ms cubic-bezier(0, 0, 0.2, 1),
+      height 350ms ease;
+  }
+
+  /*
+   * Inline controls put their own label beside the box, so an error underneath would sit in a
+   * gutter of its own. Flatten it and mute it so it reads as a hint on the row instead.
+   */
+  .checkbox > .field-error,
+  .radio > .field-error,
+  .switch > .field-error {
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    color: var(--muted);
+    opacity: 1;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field-error {
+    transition: none;
+  }
+}
