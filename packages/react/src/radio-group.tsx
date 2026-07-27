@@ -99,25 +99,27 @@ function RadioGroupItem<Value = unknown>({
       data-disabled={disabled || undefined}
       data-slot="radio"
     >
-      <BaseRadio.Root
-        aria-describedby={descriptionId}
-        className="radio__control"
-        data-slot="radio-control"
-        disabled={disabled}
-        {...props}
-      >
-        <BaseRadio.Indicator className="radio__indicator" data-slot="radio-indicator" />
-      </BaseRadio.Root>
-      {children !== undefined || description !== undefined ? (
-        <span className="radio__copy">
-          {children !== undefined ? <span className="radio__label">{children}</span> : null}
-          {description !== undefined ? (
-            <span className="radio__description" id={descriptionId}>
-              {description}
-            </span>
-          ) : null}
-        </span>
-      ) : null}
+      <span className="radio__content" data-slot="radio-content">
+        <BaseRadio.Root
+          aria-describedby={descriptionId}
+          className="radio__control"
+          data-slot="radio-control"
+          disabled={disabled}
+          {...props}
+        >
+          <BaseRadio.Indicator className="radio__indicator" data-slot="radio-indicator" />
+        </BaseRadio.Root>
+        {children !== undefined || description !== undefined ? (
+          <span className="radio__copy">
+            {children !== undefined ? <span className="radio__label">{children}</span> : null}
+            {description !== undefined ? (
+              <span className="radio__description" id={descriptionId}>
+                {description}
+              </span>
+            ) : null}
+          </span>
+        ) : null}
+      </span>
     </label>
   );
 }
