@@ -2,103 +2,390 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-background-inverse: var(--background-inverse);
   --color-foreground: var(--foreground);
   --color-backdrop: var(--backdrop);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-foreground: var(--accent-soft-foreground);
+  --color-accent-soft-hover: var(--accent-soft-hover);
   --color-default: var(--default);
   --color-default-foreground: var(--default-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  --color-default-hover: var(--default-hover);
+  --color-default-soft: var(--default-soft);
+  --color-default-soft-foreground: var(--default-soft-foreground);
+  --color-default-soft-hover: var(--default-soft-hover);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
+  --color-success-hover: var(--success-hover);
   --color-success-soft: var(--success-soft);
+  --color-success-soft-foreground: var(--success-soft-foreground);
+  --color-success-soft-hover: var(--success-soft-hover);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-warning-hover: var(--warning-hover);
   --color-warning-soft: var(--warning-soft);
+  --color-warning-soft-foreground: var(--warning-soft-foreground);
+  --color-warning-soft-hover: var(--warning-soft-hover);
   --color-danger: var(--danger);
   --color-danger-foreground: var(--danger-foreground);
+  --color-danger-hover: var(--danger-hover);
   --color-danger-soft: var(--danger-soft);
+  --color-danger-soft-foreground: var(--danger-soft-foreground);
+  --color-danger-soft-hover: var(--danger-soft-hover);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-secondary-foreground: var(--surface-secondary-foreground);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-tertiary-foreground: var(--surface-tertiary-foreground);
+  --color-surface-hover: var(--surface-hover);
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
+  --color-muted: var(--muted);
+  --color-link: var(--link);
+  --color-focus: var(--focus);
   --color-border: var(--border);
-  --color-ring: var(--ring);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-tertiary: var(--border-tertiary);
+  --color-separator: var(--separator);
+  --color-separator-secondary: var(--separator-secondary);
+  --color-separator-tertiary: var(--separator-tertiary);
+  --color-field-background: var(--field-background);
+  --color-field-background-hover: var(--field-background-hover);
+  --color-field-foreground: var(--field-foreground);
+  --color-field-placeholder: var(--field-placeholder);
+  --color-field-border: var(--field-border);
+  --color-field-border-hover: var(--field-border-hover);
+  --color-field-border-focus: var(--field-border-focus);
+  --color-field-focus: var(--field-focus);
   --font-sans: var(--font-sans);
   --font-heading: var(--font-heading);
+  --font-mono: var(--font-mono);
+  --shadow-surface: var(--shadow-surface);
+  --shadow-field: var(--shadow-field);
+  --shadow-overlay: var(--shadow-overlay);
+  --spacing: calc(0.25rem * var(--spacing-scale));
+  --radius-xs: calc(var(--radius) * 0.25);
   --radius-sm: calc(var(--radius) * 0.5);
   --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 3);
+  --radius-4xl: calc(var(--radius) * 4);
+  --text-xs: calc(0.75rem * var(--font-size-scale));
+  --text-xs--line-height: calc(1 / 0.75);
+  --text-sm: calc(0.875rem * var(--font-size-scale));
+  --text-sm--line-height: calc(1.25 / 0.875);
+  --text-base: calc(1rem * var(--font-size-scale));
+  --text-base--line-height: calc(1.5 / 1);
+  --text-lg: calc(1.125rem * var(--font-size-scale));
+  --text-lg--line-height: calc(1.75 / 1.125);
+  --text-xl: calc(1.25rem * var(--font-size-scale));
+  --text-xl--line-height: calc(1.75 / 1.25);
+  --text-2xl: calc(1.5rem * var(--font-size-scale));
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: calc(1.875rem * var(--font-size-scale));
+  --text-3xl--line-height: calc(2.25 / 1.875);
+  --text-4xl: calc(2.25rem * var(--font-size-scale));
+  --text-4xl--line-height: calc(2.5 / 2.25);
 }
 
 @layer theme {
+  /* Authored tokens. These mirror the canonical DesignSystem document exactly; everything a
+     consumer edits lives in one of these two blocks. */
   :root,
   [data-theme="light"],
   [data-theme="default"] {
     color-scheme: light;
-    --background: #f8f8f8;
-    --foreground: #292524;
-    --backdrop: rgb(0 0 0 / 0.38);
     --accent: #1b1b1b;
     --accent-foreground: #ffffff;
-    --accent-soft: color-mix(in oklab, #1b1b1b 10%, transparent);
-    --default: #eaebea;
-    --default-foreground: #1b1b1b;
-    --card: #ffffff;
-    --card-foreground: #1b1b1b;
-    --success: #46a758;
-    --success-foreground: #ffffff;
-    --success-soft: color-mix(in oklab, #46a758 15%, transparent);
-    --warning: #f59e0b;
-    --warning-foreground: #1b1b1b;
-    --warning-soft: color-mix(in oklab, #f59e0b 18%, transparent);
+    --backdrop: rgb(0 0 0 / 0.38);
+    /* Generated neutrals: hue from the accent, chroma from --bc-neutral-chroma (0 unless
+       --neutral-vibrant is 1), lightness anchored on --neutral-base with a fixed per-role
+       offset. At the default base of 0.48 these land on the previous literal palette. Pinning
+       any of these tokens to a literal opts it out of generation. */
+    --neutral-base: 0.48;
+    --neutral-vibrant: 0;
+    --background: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.5) var(--bc-neutral-chroma) h
+    );
+    --border: color-mix(in oklab, var(--foreground) 14%, transparent);
     --danger: #ef476f;
     --danger-foreground: #ffffff;
-    --danger-soft: color-mix(in oklab, #ef476f 15%, transparent);
-    --border: color-mix(in oklab, #1b1b1b 14%, transparent);
-    --ring: #1b1b1b;
-    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-    --font-heading: ui-rounded, system-ui, sans-serif;
-    --line-height: 1.4;
-    --letter-spacing: 0em;
-    --spacing-scale: 1;
-    --font-size-scale: 1;
+    --default: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.46) var(--bc-neutral-chroma) h
+    );
+    --default-foreground: var(--foreground);
+    --focus: var(--accent);
+    --foreground: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.21) var(--bc-neutral-chroma) h
+    );
+    --link: var(--accent);
+    --muted: color-mix(in oklab, var(--foreground) 60%, transparent);
+    --overlay: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.52) var(--bc-neutral-chroma) h
+    );
+    --overlay-foreground: var(--foreground);
+    --separator: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --success: #46a758;
+    --success-foreground: #ffffff;
+    --surface: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.52) var(--bc-neutral-chroma) h
+    );
+    --surface-foreground: var(--foreground);
+    --surface-secondary: color-mix(in oklab, var(--surface) 96%, var(--foreground) 4%);
+    --surface-tertiary: color-mix(in oklab, var(--surface) 92%, var(--foreground) 8%);
+    --warning: #f59e0b;
+    --warning-foreground: #1b1b1b;
+    --field-background: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.52) var(--bc-neutral-chroma) h
+    );
+    --field-border: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --field-focus: color-mix(in oklab, var(--field-background) 96%, var(--foreground) 4%);
+    --field-foreground: var(--foreground);
+    --field-placeholder: color-mix(in oklab, var(--foreground) 48%, transparent);
+    --field-radius: 0.75rem;
     --radius: 0.625rem;
-    --form-radius: 0.75rem;
-    --field-border: 1px;
-    --field-shadow:
-      0 2px 4px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.06), 0 0 1px rgb(0 0 0 / 0.06);
-    --overlay-shadow: 0 12px 32px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.08);
+    --font-size-scale: 1;
+    --spacing-scale: 1;
+    --border-width: 1px;
+    --cursor-interactive: pointer;
     --disabled-opacity: 0.5;
-    --bc-hard-shadow: color-mix(in oklab, #1b1b1b 30%, transparent);
-    --bc-hard-shadow-depth: 4px;
+    --field-border-width: 1px;
+    --ring-offset-width: 2px;
+    --skeleton-animation: shimmer;
+    /* Shadows are authored per theme, not shared. heroui.pro's light stacks are not tints of the
+       dark ones: light drops the hard 1px ring entirely and runs the drop layers at a tenth of
+       the alpha, because on a light canvas those layers have far more contrast to spend. The
+       measured stacks are the medium rungs; subtle and strong are built around them. The public
+       --shadow-* tokens hold a level reference, which is what the CSS export writes. */
+    --bc-shadow-field-subtle:
+      inset 0 0 2px 0 rgba(0, 0, 0, 0.02), inset 0 0 3px 0 rgba(0, 0, 0, 0.02);
+    --bc-shadow-field-medium:
+      inset 0 0 2px 0 rgba(0, 0, 0, 0.04), inset 0 0 4px 0 rgba(0, 0, 0, 0.03),
+      inset 0 0 2px 0 rgba(0, 0, 0, 0.03);
+    --bc-shadow-field-strong:
+      inset 0 1px 3px 0 rgba(0, 0, 0, 0.07), inset 0 0 6px 0 rgba(0, 0, 0, 0.05),
+      inset 0 0 2px 0 rgba(0, 0, 0, 0.05);
+    --bc-shadow-overlay-subtle:
+      0 12px 20px -8px rgb(0 0 0 / 0.06), 0 8px 14px -6px rgb(0 0 0 / 0.03),
+      0 2px 4px -2px rgb(0 0 0 / 0.03), 0 0 2px 0 rgb(0 0 0 / 0.03), 0 0 0 1px rgb(0 0 0 / 0.03);
+    --bc-shadow-overlay-medium:
+      0 24px 40px -12px rgb(0 0 0 / 0.08), 0 16px 28px -8px rgb(0 0 0 / 0.04),
+      0 4px 6px -2px rgb(0 0 0 / 0.04), 0 0 2px 0 rgb(0 0 0 / 0.04),
+      0 0 0 1px rgb(0 0 0 / 0.04);
+    --bc-shadow-overlay-strong:
+      0 32px 56px -12px rgb(0 0 0 / 0.14), 0 20px 36px -8px rgb(0 0 0 / 0.08),
+      0 6px 10px -2px rgb(0 0 0 / 0.06), 0 0 2px 0 rgb(0 0 0 / 0.05),
+      0 0 0 1px rgb(0 0 0 / 0.05);
+    --bc-shadow-surface-subtle:
+      0 0 3px 0 rgba(0, 0, 0, 0.02), 0 1px 5px 0 rgba(0, 0, 0, 0.03), 0 0 1px 0 rgba(0, 0, 0, 0.14);
+    --bc-shadow-surface-medium:
+      0 0 5px 0 rgba(0, 0, 0, 0.02), 0 2px 10px 0 rgba(0, 0, 0, 0.06), 0 0 1px 0 rgba(0, 0, 0, 0.2);
+    --bc-shadow-surface-strong:
+      0 4px 16px -2px rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.07),
+      0 0 5px 0 rgba(0, 0, 0, 0.03), 0 0 1px 0 rgba(0, 0, 0, 0.26);
+    --shadow-field: var(--bc-shadow-field-medium);
+    --shadow-overlay: var(--bc-shadow-overlay-medium);
+    --shadow-surface: var(--bc-shadow-surface-medium);
+    --bc-shadow-raised:
+      inset 0 1px 2px -0.5px rgba(255, 255, 255, 0.12),
+      inset 0 0.5px 0.5px 0 rgba(255, 255, 255, 0.16),
+      inset 0 8px 24px -4px rgba(255, 255, 255, 0.16), 0 8px 8px -3px rgba(0, 0, 0, 0.03),
+      0 5px 5px -2.5px rgba(0, 0, 0, 0.03), 0 3px 3px -1.5px rgba(0, 0, 0, 0.03),
+      0 2px 2px -1px rgba(0, 0, 0, 0.03), 0 1px 1px -0.5px rgba(0, 0, 0, 0.03),
+      0 0.5px 0.5px 0 rgba(0, 0, 0, 0.03);
+    --font-heading: ui-rounded, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+    --letter-spacing: 0em;
+    --line-height: 1.4;
   }
 
   [data-theme="dark"] {
     color-scheme: dark;
-    --background: #161514;
-    --foreground: #f5f5f4;
-    --backdrop: rgb(0 0 0 / 0.56);
     --accent: #f5f5f4;
     --accent-foreground: #1c1917;
-    --accent-soft: color-mix(in oklab, #f5f5f4 12%, transparent);
-    --default: #302f2d;
-    --default-foreground: #f5f5f4;
-    --card: #201f1e;
-    --card-foreground: #f5f5f4;
-    --success: #5bc86b;
-    --success-foreground: #102414;
-    --success-soft: color-mix(in oklab, #5bc86b 18%, transparent);
-    --warning: #ffb340;
-    --warning-foreground: #2a1b00;
-    --warning-soft: color-mix(in oklab, #ffb340 20%, transparent);
+    --backdrop: rgb(0 0 0 / 0.56);
+    --neutral-base: 0.48;
+    --neutral-vibrant: 0;
+    --background: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.28) var(--bc-neutral-chroma) h
+    );
+    --border: color-mix(in oklab, var(--foreground) 14%, transparent);
     --danger: #ff5d7d;
     --danger-foreground: #1c1917;
-    --danger-soft: color-mix(in oklab, #ff5d7d 18%, transparent);
-    --border: color-mix(in oklab, #ffffff 14%, transparent);
-    --ring: #f5f5f4;
-    --field-shadow: 0 2px 4px rgb(0 0 0 / 0.24), 0 1px 2px rgb(0 0 0 / 0.3);
-    --overlay-shadow: none;
-    --bc-hard-shadow: rgba(0, 0, 0, 0.55);
+    --default: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.18) var(--bc-neutral-chroma) h
+    );
+    --default-foreground: var(--foreground);
+    --focus: var(--accent);
+    --foreground: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.49) var(--bc-neutral-chroma) h
+    );
+    --link: var(--accent);
+    --muted: color-mix(in oklab, var(--foreground) 60%, transparent);
+    --overlay: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.24) var(--bc-neutral-chroma) h
+    );
+    --overlay-foreground: var(--foreground);
+    --separator: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --success: #5bc86b;
+    --success-foreground: #102414;
+    --surface: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.24) var(--bc-neutral-chroma) h
+    );
+    --surface-foreground: var(--foreground);
+    --surface-secondary: color-mix(in oklab, var(--surface) 96%, var(--foreground) 4%);
+    --surface-tertiary: color-mix(in oklab, var(--surface) 92%, var(--foreground) 8%);
+    --warning: #ffb340;
+    --warning-foreground: #2a1b00;
+    --field-background: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.24) var(--bc-neutral-chroma) h
+    );
+    --field-border: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --field-focus: color-mix(in oklab, var(--field-background) 96%, var(--foreground) 4%);
+    --field-foreground: var(--foreground);
+    --field-placeholder: color-mix(in oklab, var(--foreground) 48%, transparent);
+    /* Dark stacks are authored independently of light (see the note in the light block). The
+       measured stacks are the medium rungs; dark overlays default to the "none" level, but the
+       rungs exist for themes that opt in. */
+    --bc-shadow-field-subtle:
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.01), inset 0 -0.5px 1px 0 rgba(255, 255, 255, 0.03),
+      inset 1px 1.5px 3px 0 rgba(0, 0, 0, 0.04);
+    --bc-shadow-field-medium:
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.02), inset 0 -0.5px 1px 0 rgba(255, 255, 255, 0.06),
+      inset 1px 1.5px 4px 0 rgba(0, 0, 0, 0.06), inset 1px 1.5px 4px 0 rgba(0, 0, 0, 0.08);
+    --bc-shadow-field-strong:
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.03), inset 0 -0.5px 1px 0 rgba(255, 255, 255, 0.08),
+      inset 1px 1.5px 5px 0 rgba(0, 0, 0, 0.12), inset 1px 1.5px 5px 0 rgba(0, 0, 0, 0.14);
+    --bc-shadow-overlay-subtle:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.3),
+      0 8px 16px -6px rgba(0, 0, 0, 0.3), 0 16px 28px -8px rgba(0, 0, 0, 0.25);
+    --bc-shadow-overlay-medium:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+      0 0 0 1px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.35),
+      0 16px 28px -8px rgba(0, 0, 0, 0.35), 0 24px 40px -12px rgba(0, 0, 0, 0.35);
+    --bc-shadow-overlay-strong:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 0 0 1px rgba(0, 0, 0, 0.5), 0 6px 10px -2px rgba(0, 0, 0, 0.45),
+      0 20px 36px -8px rgba(0, 0, 0, 0.45), 0 32px 56px -12px rgba(0, 0, 0, 0.45);
+    --bc-shadow-surface-subtle:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+      0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 1px -0.5px rgba(0, 0, 0, 0.1),
+      0 3px 3px -1.5px rgba(0, 0, 0, 0.1), 0 6px 6px -3px rgba(0, 0, 0, 0.1);
+    --bc-shadow-surface-medium:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+      0 0 0 1px rgba(0, 0, 0, 0.16), 0 1px 1px -0.5px rgba(0, 0, 0, 0.18),
+      0 3px 3px -1.5px rgba(0, 0, 0, 0.18), 0 6px 6px -3px rgba(0, 0, 0, 0.18),
+      0 12px 12px -6px rgba(0, 0, 0, 0.18);
+    --bc-shadow-surface-strong:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 0 1px rgba(0, 0, 0, 0.24), 0 1px 1px -0.5px rgba(0, 0, 0, 0.28),
+      0 3px 3px -1.5px rgba(0, 0, 0, 0.28), 0 6px 6px -3px rgba(0, 0, 0, 0.28),
+      0 12px 12px -6px rgba(0, 0, 0, 0.28), 0 24px 24px -12px rgba(0, 0, 0, 0.28);
+    --shadow-field: var(--bc-shadow-field-medium);
+    --shadow-overlay: none;
+    --shadow-surface: var(--bc-shadow-surface-medium);
+    --bc-shadow-raised:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2), inset 0 1px 2px -0.5px rgba(255, 255, 255, 0.14),
+      inset 0 8px 24px -4px rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.4),
+      0 1px 1px -0.5px rgba(0, 0, 0, 0.3), 0 3px 3px -1.5px rgba(0, 0, 0, 0.3),
+      0 6px 6px -3px rgba(0, 0, 0, 0.3), 0 12px 12px -6px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Derived tokens. Every declaration below is a fixed projection of the authored tokens above;
+     never author these directly. Declared on both :root and every themed scope so nested theme
+     switches re-resolve against the local authored values. */
+  :root,
+  [data-theme] {
+    /* Neutral generation: the chroma every generated neutral shares. 0 unless the theme opts
+       into a vibrant palette, then a small constant tint taken up by the accent's hue. */
+    --bc-neutral-chroma: calc(var(--neutral-vibrant) * 0.0093);
+
+    /* Colour roles. The soft percentages and hover mix targets differ per role on purpose. */
+    --accent-hover: color-mix(in oklab, var(--accent) 90%, var(--foreground) 10%);
+    --accent-soft: color-mix(in oklab, var(--accent) 15%, transparent);
+    --accent-soft-foreground: color-mix(in oklab, var(--accent) 80%, var(--foreground) 30%);
+    --accent-soft-hover: color-mix(in oklab, var(--accent) 16%, transparent);
+    --default-hover: color-mix(in oklab, var(--default) 96%, var(--foreground) 4%);
+    --default-soft: color-mix(in oklab, var(--default) 50%, transparent);
+    --default-soft-foreground: var(--foreground);
+    --default-soft-hover: color-mix(in oklab, var(--default) 60%, transparent);
+    --success-hover: color-mix(in oklab, var(--success) 90%, var(--success-foreground) 10%);
+    --success-soft: color-mix(in oklab, var(--success) 12%, transparent);
+    --success-soft-foreground: color-mix(in oklab, var(--success) 80%, var(--foreground) 30%);
+    --success-soft-hover: color-mix(in oklab, var(--success) 16%, transparent);
+    --warning-hover: color-mix(in oklab, var(--warning) 90%, var(--warning-foreground) 10%);
+    --warning-soft: color-mix(in oklab, var(--warning) 12%, transparent);
+    --warning-soft-foreground: color-mix(in oklab, var(--warning) 80%, var(--foreground) 30%);
+    --warning-soft-hover: color-mix(in oklab, var(--warning) 16%, transparent);
+    --danger-hover: color-mix(in oklab, var(--danger) 90%, var(--foreground) 10%);
+    --danger-soft: color-mix(in oklab, var(--danger) 15%, transparent);
+    --danger-soft-foreground: color-mix(in oklab, var(--danger) 80%, var(--foreground) 30%);
+    --danger-soft-hover: color-mix(in oklab, var(--danger) 20%, transparent);
+
+    /* Surfaces */
+    --background-secondary: color-mix(in oklab, var(--background) 96%, var(--foreground) 4%);
+    --background-tertiary: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
+    --background-inverse: var(--foreground);
+    --surface-hover: color-mix(in oklab, var(--surface) 92%, var(--foreground) 8%);
+    --surface-secondary-foreground: var(--surface-foreground);
+    --surface-tertiary-foreground: var(--surface-foreground);
+
+    /* Borders and separators */
+    --border-secondary: color-mix(in oklab, var(--surface) 78%, var(--foreground) 22%);
+    --border-tertiary: color-mix(in oklab, var(--surface) 66%, var(--foreground) 34%);
+    --separator-secondary: color-mix(in oklab, var(--surface) 85%, var(--foreground) 15%);
+    --separator-tertiary: color-mix(in oklab, var(--surface) 81%, var(--foreground) 19%);
+
+    /* Fields */
+    --field-background-hover: color-mix(
+      in oklab,
+      var(--field-background) 90%,
+      var(--foreground) 2%
+    );
+    --field-border-hover: color-mix(in oklab, var(--field-border) 88%, var(--foreground) 10%);
+    --field-border-focus: color-mix(in oklab, var(--field-border) 74%, var(--foreground) 22%);
+
+    /* Structure */
+    --spacing: calc(0.25rem * var(--spacing-scale));
+    --radius-xs: calc(var(--radius) * 0.25);
+    --radius-sm: calc(var(--radius) * 0.5);
+    --radius-md: calc(var(--radius) * 0.75);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.5);
+    --radius-2xl: calc(var(--radius) * 2);
+    --radius-3xl: calc(var(--radius) * 3);
+    --radius-4xl: calc(var(--radius) * 4);
+
+    /* Type scale */
+    --text-xs: calc(0.75rem * var(--font-size-scale));
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: calc(0.875rem * var(--font-size-scale));
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-base: calc(1rem * var(--font-size-scale));
+    --text-base--line-height: calc(1.5 / 1);
+    --text-lg: calc(1.125rem * var(--font-size-scale));
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: calc(1.25rem * var(--font-size-scale));
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: calc(1.5rem * var(--font-size-scale));
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: calc(1.875rem * var(--font-size-scale));
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --text-4xl: calc(2.25rem * var(--font-size-scale));
+    --text-4xl--line-height: calc(2.5 / 2.25);
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
   }
 }
 
@@ -110,7 +397,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
   }
 }

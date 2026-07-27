@@ -32,7 +32,7 @@
   ],
   "scripts": {
     "build": "bun -e \"console.log('CSS source ready')\"",
-    "test": "bun -e \"console.log('No style tests yet')\"",
+    "test": "bun test",
     "typecheck": "bun -e \"console.log('No style types')\""
   },
   "peerDependencies": {
