@@ -60,6 +60,8 @@
    */
   .slider__fill {
     position: absolute;
+    /* Same colour as the fill, so it adds no edge — it insets the highlight by a pixel. */
+    border: var(--border-width) solid var(--accent);
     border-radius: var(--radius-xl);
     background: var(--accent);
     box-shadow: var(--bc-shadow-raised);
