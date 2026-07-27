@@ -423,6 +423,17 @@
   }
 }
 
+/* The indeterminate progress shuttle: a fixed-width fill sweeping the full track and out. */
+@keyframes bc-progress-indeterminate {
+  from {
+    translate: -100%;
+  }
+
+  to {
+    translate: 250%;
+  }
+}
+
 @keyframes bc-spinner-fade {
   from {
     opacity: 1;

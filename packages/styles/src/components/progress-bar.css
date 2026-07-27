@@ -1,0 +1,118 @@
+/*
+ * ProgressBar and Meter are the same object with different semantics — one reports a task
+ * advancing, the other a static reading against a range — so their stylesheets mirror each
+ * other rather than sharing selectors. Keeping them apart means either can drift on purpose.
+ */
+@layer components {
+  .progress-bar {
+    --bc-progress-fill: var(--default-foreground);
+
+    display: grid;
+    width: min(100%, 20rem);
+    gap: calc(0.25rem * var(--spacing-scale));
+    /* Label and value share a row; the track spans beneath both. */
+    grid-template-areas:
+      "label output"
+      "track track";
+    grid-template-columns: minmax(0, 1fr) auto;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  .progress-bar__label {
+    width: fit-content;
+    grid-area: label;
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+  }
+
+  .progress-bar__output {
+    grid-area: output;
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-bar__track {
+    position: relative;
+    height: calc(0.5rem * var(--spacing-scale));
+    border-radius: var(--radius-sm);
+    background: var(--default);
+    grid-area: track;
+    overflow: hidden;
+  }
+
+  .progress-bar__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: var(--radius-sm);
+    background: var(--bc-progress-fill);
+    transition: width 300ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  /*
+   * With no value to report, the fill becomes a fixed-width shuttle. Keyed off the missing
+   * aria-valuenow so it follows the accessible state rather than a separate flag.
+   */
+  .progress-bar:not([aria-valuenow]) .progress-bar__fill {
+    width: 40%;
+    animation: bc-progress-indeterminate 1.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  .progress-bar--sm .progress-bar__track {
+    height: calc(0.25rem * var(--spacing-scale));
+    border-radius: var(--radius-xs);
+  }
+
+  .progress-bar--sm .progress-bar__fill {
+    border-radius: var(--radius-xs);
+  }
+
+  .progress-bar--lg .progress-bar__track {
+    height: calc(0.75rem * var(--spacing-scale));
+    border-radius: var(--radius-md);
+  }
+
+  .progress-bar--lg .progress-bar__fill {
+    border-radius: var(--radius-md);
+  }
+
+  .progress-bar--accent {
+    --bc-progress-fill: var(--accent);
+  }
+
+  .progress-bar--success {
+    --bc-progress-fill: var(--success);
+  }
+
+  .progress-bar--warning {
+    --bc-progress-fill: var(--warning);
+  }
+
+  .progress-bar--danger {
+    --bc-progress-fill: var(--danger);
+  }
+
+  .progress-bar[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  /* The label stays legible while disabled; only the bar itself dims. */
+  .progress-bar[data-disabled] .progress-bar__label {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar__fill {
+    transition: none;
+  }
+
+  /* The shuttle is the only signal that work is happening, so it slows rather than stopping. */
+  .progress-bar:not([aria-valuenow]) .progress-bar__fill {
+    animation-duration: 4s;
+  }
+}

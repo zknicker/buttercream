@@ -39,6 +39,7 @@ export { Field, type FieldLabelProps, type FieldProps } from "./field.tsx";
 export { Fieldset, type FieldsetProps } from "./fieldset.tsx";
 export { Form, type FormProps } from "./form.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
+export { Meter, type MeterColor, type MeterProps, type MeterSize } from "./meter.tsx";
 export {
   Modal,
   type ModalBackdropProps,
@@ -55,6 +56,12 @@ export {
   type PopoverProps,
   type PopoverTriggerProps,
 } from "./popover.tsx";
+export {
+  ProgressBar,
+  type ProgressBarColor,
+  type ProgressBarProps,
+  type ProgressBarSize,
+} from "./progress-bar.tsx";
 export {
   RadioGroup,
   type RadioGroupItemProps,

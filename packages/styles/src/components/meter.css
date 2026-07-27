@@ -1,0 +1,97 @@
+@layer components {
+  .meter {
+    --bc-meter-fill: var(--default-foreground);
+
+    display: grid;
+    width: min(100%, 20rem);
+    gap: calc(0.25rem * var(--spacing-scale));
+    grid-template-areas:
+      "label output"
+      "track track";
+    grid-template-columns: minmax(0, 1fr) auto;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  .meter__label {
+    width: fit-content;
+    grid-area: label;
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+  }
+
+  .meter__output {
+    grid-area: output;
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meter__track {
+    position: relative;
+    height: calc(0.5rem * var(--spacing-scale));
+    border-radius: var(--radius-sm);
+    background: var(--default);
+    grid-area: track;
+    overflow: hidden;
+  }
+
+  .meter__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: var(--radius-sm);
+    background: var(--bc-meter-fill);
+    transition: width 300ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .meter--sm .meter__track {
+    height: calc(0.25rem * var(--spacing-scale));
+    border-radius: var(--radius-xs);
+  }
+
+  .meter--sm .meter__fill {
+    border-radius: var(--radius-xs);
+  }
+
+  .meter--lg .meter__track {
+    height: calc(0.75rem * var(--spacing-scale));
+    border-radius: var(--radius-md);
+  }
+
+  .meter--lg .meter__fill {
+    border-radius: var(--radius-md);
+  }
+
+  .meter--accent {
+    --bc-meter-fill: var(--accent);
+  }
+
+  .meter--success {
+    --bc-meter-fill: var(--success);
+  }
+
+  .meter--warning {
+    --bc-meter-fill: var(--warning);
+  }
+
+  .meter--danger {
+    --bc-meter-fill: var(--danger);
+  }
+
+  .meter[data-disabled] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .meter[data-disabled] .meter__label {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meter__fill {
+    transition: none;
+  }
+}
