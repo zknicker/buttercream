@@ -22,7 +22,17 @@
     min-width: 0;
     padding: calc(0.25rem * var(--spacing-scale));
     overflow-x: auto;
-    border-radius: calc(var(--radius) * 2.5);
+    /*
+     * Concentric with the pill inside it: outer radius = inner radius + the padding between
+     * them. The pill asks for --radius-3xl but a browser clamps any radius to half the box,
+     * so the min() reproduces that clamp — without it the track keeps its full radius once it
+     * is tall enough not to clamp (a vertical list), and the two curves stop agreeing.
+     */
+    border-radius: calc(
+      min(var(--radius-3xl), 1rem * var(--spacing-scale)) +
+      0.25rem *
+      var(--spacing-scale)
+    );
     background: var(--default);
     scrollbar-width: none;
   }
