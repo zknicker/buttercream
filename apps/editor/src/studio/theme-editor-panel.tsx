@@ -1,19 +1,29 @@
-import type { DesignSystem } from "@buttercream/theme-core";
+import {
+  applyThemePreset,
+  type DesignSystem,
+  getThemePreset,
+  type ThemePresetId,
+  themePresets,
+} from "@buttercream/theme-core";
 import { HugeiconsIcon } from "@hugeicons/react";
 import SidebarRight01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarRight01Icon";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, classes, Segmented } from "../ui/index.ts";
 import { CodeDialog } from "./code-dialog.tsx";
 import { ImportDialog } from "./import-dialog.tsx";
 import {
   ColorControl,
-  ControlRow,
   ControlSection,
+  FontControl,
   RangeControl,
+  SelectControl,
+  type SelectControlOption,
   TextControl,
+  ToggleControl,
 } from "./theme-controls.tsx";
 import { ThemeIconControls } from "./theme-icon-controls.tsx";
 import type { SaveState } from "./use-design-system-draft.ts";
+import { VariablesPanel } from "./variables-panel.tsx";
 
 const TABS = ["Style", "Variables", "Agent"] as const;
 type Tab = (typeof TABS)[number];
@@ -70,116 +80,307 @@ export function ThemeEditorPanel({
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-6 scrollbar-none">
         <Segmented label="Editor mode" onChange={setTab} options={TABS} value={tab} />
 
-        <div className="mt-3">
-          <ControlRow>
-            <span className="truncate font-medium text-fg">Theme</span>
-            <span className="shrink-0 font-mono text-xs text-muted">Custom</span>
-          </ControlRow>
-        </div>
-
-        {showSaveState ? (
-          <ControlSection title="General">
-            <TextControl
-              label="Name"
-              maxLength={80}
-              onChange={(name) =>
-                onUpdate((next) => {
-                  next.identity.name = name;
-                })
-              }
-              value={designSystem.identity.name}
-            />
-          </ControlSection>
+        {tab === "Style" ? (
+          <StylePanel
+            designSystem={designSystem}
+            onUpdate={onUpdate}
+            showSaveState={showSaveState}
+          />
         ) : null}
-
-        <ControlSection title="Color">
-          <ColorControl
-            label="Accent"
-            onChange={(value) =>
-              onUpdate((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.colors.accent = value;
-                });
-              })
-            }
-            value={designSystem.theme.light.colors.accent}
-          />
-        </ControlSection>
-
-        <ControlSection title="Density">
-          <RangeControl
-            label="Spacing"
-            max={1.3}
-            min={0.7}
-            onChange={(value) =>
-              onUpdate((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.density.spacing = value;
-                });
-              })
-            }
-            step={0.05}
-            value={designSystem.theme.light.density.spacing}
-          />
-          <RangeControl
-            label="Font size"
-            max={1.25}
-            min={0.8}
-            onChange={(value) =>
-              onUpdate((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.density.fontSize = value;
-                });
-              })
-            }
-            step={0.05}
-            value={designSystem.theme.light.density.fontSize}
-          />
-        </ControlSection>
-        <ThemeIconControls
-          icons={designSystem.icons}
-          onChange={(icons) =>
-            onUpdate((next) => {
-              next.icons = icons;
-            })
-          }
-        />
-
-        <ControlSection title="Corners">
-          <RangeControl
-            label="General radius"
-            max={24}
-            min={0}
-            onChange={(value) =>
-              onUpdate((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.corners.radius = `${value}px`;
-                });
-              })
-            }
-            step={1}
-            value={Number.parseFloat(designSystem.theme.light.corners.radius)}
-          />
-        </ControlSection>
-
-        <ControlSection title="Effects">
-          <RangeControl
-            label="Hard shadow"
-            max={8}
-            min={0}
-            onChange={(value) =>
-              onUpdate((next) => {
-                updateBothThemes(next, (theme) => {
-                  theme.effects.hardShadowDepth = `${value}px`;
-                });
-              })
-            }
-            step={1}
-            value={Number.parseFloat(designSystem.theme.light.effects.hardShadowDepth)}
-          />
-        </ControlSection>
+        {tab === "Variables" ? (
+          <VariablesPanel designSystem={designSystem} onUpdate={onUpdate} />
+        ) : null}
+        {/* The Agent tab has no panel yet; the Segmented option is a placeholder. */}
       </div>
     </aside>
+  );
+}
+
+interface StylePanelProps {
+  designSystem: DesignSystem;
+  onUpdate: (mutate: (designSystem: DesignSystem) => void) => void;
+  showSaveState: boolean;
+}
+
+function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) {
+  const activePreset = useMemo(() => matchThemePreset(designSystem), [designSystem]);
+  const presetOptions = useMemo<readonly SelectControlOption<string>[]>(() => {
+    const options = themePresets.map((preset) => ({ label: preset.name, value: preset.id }));
+    return activePreset ? options : [{ label: "Custom", value: "custom" }, ...options];
+  }, [activePreset]);
+
+  return (
+    <>
+      <div className="mt-3">
+        <SelectControl
+          label="Theme"
+          onChange={(id) => {
+            const preset = getThemePreset(id);
+            if (!preset) {
+              return;
+            }
+            onUpdate((next) => {
+              next.theme = applyThemePreset(next, preset).theme;
+            });
+          }}
+          options={presetOptions}
+          value={activePreset ?? "custom"}
+        />
+      </div>
+
+      {showSaveState ? (
+        <ControlSection title="General">
+          <TextControl
+            label="Name"
+            maxLength={80}
+            onChange={(name) =>
+              onUpdate((next) => {
+                next.identity.name = name;
+              })
+            }
+            value={designSystem.identity.name}
+          />
+        </ControlSection>
+      ) : null}
+
+      <ControlSection title="Color">
+        <ColorControl
+          label="Accent"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.colors.accent = value;
+              });
+            })
+          }
+          value={designSystem.theme.light.colors.accent}
+        />
+        {/*
+         * Base anchors the generated neutral family (background, default, surface, overlay,
+         * field background, foreground): each role sits at a fixed lightness offset from it,
+         * at the accent's hue. There is no "Default" colour picker any more — the neutrals
+         * derive from Base + Accent, and individual roles are pinned in the Variables tab.
+         */}
+        <RangeControl
+          label="Base"
+          max={1}
+          min={0}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.neutrals.base = value;
+              });
+            })
+          }
+          step={0.01}
+          value={designSystem.theme.light.neutrals.base}
+        />
+        <ColorControl
+          label="Success"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.colors.success = value;
+              });
+            })
+          }
+          value={designSystem.theme.light.colors.success}
+        />
+        <ColorControl
+          label="Warning"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.colors.warning = value;
+              });
+            })
+          }
+          value={designSystem.theme.light.colors.warning}
+        />
+        <ColorControl
+          label="Danger"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.colors.danger = value;
+              });
+            })
+          }
+          value={designSystem.theme.light.colors.danger}
+        />
+        {/* On: the generated neutrals take a whisper of the accent's chroma. Off: pure grey. */}
+        <ToggleControl
+          label="Vibrant palette"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.neutrals.vibrant = value;
+              });
+            })
+          }
+          value={designSystem.theme.light.neutrals.vibrant}
+        />
+      </ControlSection>
+
+      <ControlSection title="Typography">
+        <FontControl
+          label="Heading Font"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.typography.fontHeading = value;
+              });
+            })
+          }
+          value={designSystem.theme.light.typography.fontHeading}
+        />
+        <FontControl
+          label="Body Font"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.typography.fontSans = value;
+              });
+            })
+          }
+          value={designSystem.theme.light.typography.fontSans}
+        />
+        <RangeControl
+          label="Line Height"
+          max={2}
+          min={1}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.typography.lineHeight = value;
+              });
+            })
+          }
+          step={0.05}
+          value={designSystem.theme.light.typography.lineHeight}
+        />
+        <RangeControl
+          label="Letter Spacing"
+          max={0.1}
+          min={-0.05}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.typography.letterSpacing = `${value}em`;
+              });
+            })
+          }
+          step={0.01}
+          value={Number.parseFloat(designSystem.theme.light.typography.letterSpacing)}
+        />
+      </ControlSection>
+
+      <ControlSection title="Density">
+        <RangeControl
+          label="Spacing"
+          max={1.3}
+          min={0.7}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.density.spacing = value;
+              });
+            })
+          }
+          step={0.05}
+          value={designSystem.theme.light.density.spacing}
+        />
+        <RangeControl
+          label="Font size"
+          max={1.25}
+          min={0.8}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.density.fontSize = value;
+              });
+            })
+          }
+          step={0.05}
+          value={designSystem.theme.light.density.fontSize}
+        />
+      </ControlSection>
+      <ThemeIconControls
+        icons={designSystem.icons}
+        onChange={(icons) =>
+          onUpdate((next) => {
+            next.icons = icons;
+          })
+        }
+      />
+
+      <ControlSection title="Corners">
+        {/*
+         * Two authored bases, in rem to match the exported tokens: General Radius drives
+         * `--radius` (the xs-4xl steps derive from it in @buttercream/styles) and Forms
+         * Radius drives `--field-radius` for inputs, checkboxes, and friends.
+         */}
+        <RangeControl
+          label="General Radius"
+          max={2}
+          min={0}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.corners.radius = `${value}rem`;
+              });
+            })
+          }
+          step={0.125}
+          value={Number.parseFloat(designSystem.theme.light.corners.radius)}
+        />
+        <RangeControl
+          label="Forms Radius"
+          max={2}
+          min={0}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.corners.fieldRadius = `${value}rem`;
+              });
+            })
+          }
+          step={0.125}
+          value={Number.parseFloat(designSystem.theme.light.corners.fieldRadius)}
+        />
+      </ControlSection>
+
+      <ControlSection title="Effects">
+        <RangeControl
+          label="Border width"
+          max={4}
+          min={1}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.effects.borderWidth = `${value}px`;
+              });
+            })
+          }
+          step={1}
+          value={Number.parseFloat(designSystem.theme.light.effects.borderWidth)}
+        />
+        <RangeControl
+          label="Disabled opacity"
+          max={1}
+          min={0.1}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.effects.disabledOpacity = value;
+              });
+            })
+          }
+          step={0.05}
+          value={designSystem.theme.light.effects.disabledOpacity}
+        />
+      </ControlSection>
+    </>
   );
 }
 
@@ -206,6 +407,34 @@ function SaveStatus({ state }: { state: SaveState }) {
     >
       {labels[state]}
     </span>
+  );
+}
+
+/**
+ * A preset reads as "active" only when the document's themes are exactly what applying it
+ * would produce. There is no stored preset id — selection derives from the document, so any
+ * hand-edited token drops the picker back to Custom.
+ */
+function matchThemePreset(designSystem: DesignSystem): ThemePresetId | undefined {
+  return themePresets.find((preset) =>
+    deepEqual(applyThemePreset(designSystem, preset).theme, designSystem.theme),
+  )?.id;
+}
+
+/** Key-order-insensitive equality over the plain-JSON theme blocks. */
+function deepEqual(a: unknown, b: unknown): boolean {
+  if (a === b) {
+    return true;
+  }
+  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
+    return false;
+  }
+  const left = a as Record<string, unknown>;
+  const right = b as Record<string, unknown>;
+  const keys = Object.keys(left);
+  return (
+    keys.length === Object.keys(right).length &&
+    keys.every((key) => deepEqual(left[key], right[key]))
   );
 }
 

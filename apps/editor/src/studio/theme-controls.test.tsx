@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
-import { SelectControl } from "./theme-controls.tsx";
+import { FontControl, fontOptions, SelectControl, ToggleControl } from "./theme-controls.tsx";
 import {
   isStrokeBasedIconTreatment,
   normalizeIconFamily,
@@ -25,6 +25,41 @@ describe("SelectControl", () => {
     expect(markup).toContain('name="family"');
     expect(markup).toContain('value="hugeicons" selected=""');
     expect(markup).toContain('aria-hidden="true"');
+  });
+});
+
+describe("ToggleControl", () => {
+  test("renders a named switch bound to the value", () => {
+    const markup = renderToStaticMarkup(
+      <ToggleControl label="Vibrant palette" onChange={() => undefined} value={true} />,
+    );
+
+    expect(markup).toContain('role="switch"');
+    expect(markup).toContain('type="checkbox"');
+    expect(markup).toContain('name="vibrant-palette"');
+    expect(markup).toContain("checked");
+  });
+});
+
+describe("FontControl", () => {
+  test("offers the curated stacks and selects the current one", () => {
+    const inter = fontOptions.find((option) => option.label === "Inter");
+    const markup = renderToStaticMarkup(
+      <FontControl label="Body Font" onChange={() => undefined} value={inter?.value ?? ""} />,
+    );
+
+    expect(inter).toBeDefined();
+    expect(markup).toContain("selected");
+    expect(markup).not.toContain("Custom");
+  });
+
+  test("surfaces an unknown stack as Custom instead of misreporting", () => {
+    const markup = renderToStaticMarkup(
+      <FontControl label="Heading Font" onChange={() => undefined} value="Comic Sans MS" />,
+    );
+
+    expect(markup).toContain(">Custom<");
+    expect(markup).toContain("Comic Sans MS");
   });
 });
 
