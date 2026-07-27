@@ -1,5 +1,7 @@
 import { Button, ButtonGroup, ColorSwatch, Kbd, Link } from "@buttercream/react";
+import type { DesignSystem } from "@buttercream/theme-core";
 import type { ReactElement } from "react";
+import { createPreviewIconElements } from "./preview-icons.ts";
 
 const SWATCH_SIZES = ["xs", "sm", "md", "lg", "xl"] as const;
 
@@ -80,22 +82,17 @@ export function ColorSwatchPreview(): ReactElement {
 
 const GROUP_VARIANTS = ["primary", "secondary", "tertiary", "outline", "ghost", "danger"] as const;
 
-export function ButtonGroupPreview(): ReactElement {
+export function ButtonGroupPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
+  /* Real icons from the configured family, so the Icons panel drives these specimens too. */
+  const icon = createPreviewIconElements(icons);
+
   return (
     <div className="specimens">
       <section className="specimen">
         <ButtonGroup>
           <Button>Merge pull request</Button>
           <Button aria-label="More merge options" iconOnly>
-            <svg aria-hidden="true" fill="none" role="presentation" viewBox="0 0 16 16" width="16">
-              <path
-                d="m4 6 4 4 4-4"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.75"
-              />
-            </svg>
+            {icon.more}
           </Button>
         </ButtonGroup>
         <div className="specimen__label">Split button</div>
@@ -123,25 +120,15 @@ export function ButtonGroupPreview(): ReactElement {
          * tall slab rather than one control, which is why that is not a shape it offers.
          */}
         <ButtonGroup orientation="vertical">
-          {["Zoom in", "Zoom out", "Reset zoom"].map((label, index) => (
-            <Button aria-label={label} iconOnly key={label} variant="tertiary">
-              <svg
-                aria-hidden="true"
-                fill="none"
-                role="presentation"
-                viewBox="0 0 16 16"
-                width="16"
-              >
-                <path
-                  d={index === 0 ? "M8 4v8M4 8h8" : index === 1 ? "M4 8h8" : "M4 4h8v8H4z"}
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.75"
-                />
-              </svg>
-            </Button>
-          ))}
+          <Button aria-label="Add item" iconOnly variant="tertiary">
+            {icon.add}
+          </Button>
+          <Button aria-label="Search" iconOnly variant="tertiary">
+            {icon.search}
+          </Button>
+          <Button aria-label="Settings" iconOnly variant="tertiary">
+            {icon.settings}
+          </Button>
         </ButtonGroup>
         <div className="specimen__label">Vertical, icon-only</div>
       </section>

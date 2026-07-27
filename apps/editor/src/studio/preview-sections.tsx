@@ -124,7 +124,7 @@ export function renderPreviewSection(
     return <SkeletonPreview />;
   }
   if (section === "Button Group") {
-    return <ButtonGroupPreview />;
+    return <ButtonGroupPreview icons={iconSettings} />;
   }
   if (section === "Color Swatch") {
     return <ColorSwatchPreview />;
