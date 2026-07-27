@@ -78,24 +78,44 @@ export function ColorSwatchPreview(): ReactElement {
   );
 }
 
+const GROUP_VARIANTS = ["primary", "secondary", "tertiary", "outline", "ghost", "danger"] as const;
+
 export function ButtonGroupPreview(): ReactElement {
   return (
     <div className="specimens">
       <section className="specimen">
         <ButtonGroup>
-          <Button variant="secondary">Cut</Button>
-          <Button variant="secondary">Copy</Button>
-          <Button variant="secondary">Paste</Button>
+          <Button>Merge pull request</Button>
+          <Button aria-label="More merge options" iconOnly>
+            <svg aria-hidden="true" fill="none" role="presentation" viewBox="0 0 16 16" width="16">
+              <path
+                d="m4 6 4 4 4-4"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.75"
+              />
+            </svg>
+          </Button>
         </ButtonGroup>
-        <div className="specimen__label">Horizontal</div>
+        <div className="specimen__label">Split button</div>
       </section>
       <section className="specimen">
         <ButtonGroup>
-          <Button variant="outline">Day</Button>
-          <Button variant="outline">Week</Button>
-          <Button variant="outline">Month</Button>
+          <Button variant="tertiary">Previous</Button>
+          <Button variant="tertiary">Next</Button>
         </ButtonGroup>
-        <div className="specimen__label">Outline, sharing borders</div>
+        <div className="specimen__label">Paged</div>
+      </section>
+      <section className="specimen specimen--stack">
+        {GROUP_VARIANTS.map((variant) => (
+          <ButtonGroup key={variant}>
+            <Button variant={variant}>First</Button>
+            <Button variant={variant}>Second</Button>
+            <Button variant={variant}>Third</Button>
+          </ButtonGroup>
+        ))}
+        <div className="specimen__label">Variants</div>
       </section>
       <section className="specimen">
         <ButtonGroup orientation="vertical">
