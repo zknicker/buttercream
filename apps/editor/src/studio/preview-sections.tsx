@@ -4,7 +4,19 @@ import { AvatarPreview } from "./preview-avatar.tsx";
 import { ButtonPreview } from "./preview-button.tsx";
 import { CardPreview } from "./preview-card.tsx";
 import { CheckboxPreview, SwitchPreview } from "./preview-choice-controls.tsx";
+import {
+  SegmentPreview,
+  SeparatorPreview,
+  SpinnerPreview,
+  ToggleButtonPreview,
+} from "./preview-display.tsx";
 import { DrawerPreview } from "./preview-drawer.tsx";
+import {
+  FieldsetPreview,
+  NumberFieldPreview,
+  TextareaPreview,
+  TextFieldPreview,
+} from "./preview-fields.tsx";
 import { InputPreview } from "./preview-form-controls.tsx";
 import { createPreviewIconElements } from "./preview-icons.ts";
 import { ModalPreview } from "./preview-modal.tsx";
@@ -15,22 +27,31 @@ import { SliderPreview } from "./preview-slider.tsx";
 import { TabsPreview } from "./preview-tabs.tsx";
 import { TooltipPreview } from "./preview-tooltip.tsx";
 
+/* Alphabetical after Guides, matching the order the nav lists them in. */
 export type PreviewSection =
   | "Guides"
+  | "Avatar"
   | "Button"
+  | "Card"
+  | "Checkbox"
+  | "Drawer"
+  | "Fieldset"
   | "Input"
   | "Modal"
-  | "Drawer"
+  | "Number Field"
   | "Popover"
-  | "Checkbox"
   | "Radio Group"
+  | "Segment"
   | "Select"
+  | "Separator"
   | "Slider"
+  | "Spinner"
   | "Switch"
   | "Tabs"
-  | "Tooltip"
-  | "Card"
-  | "Avatar";
+  | "Text Field"
+  | "Textarea"
+  | "Toggle Button"
+  | "Tooltip";
 
 export function renderPreviewSection(
   section: PreviewSection,
@@ -60,17 +81,41 @@ export function renderPreviewSection(
   if (section === "Radio Group") {
     return <RadioGroupPreview />;
   }
+  if (section === "Fieldset") {
+    return <FieldsetPreview />;
+  }
+  if (section === "Number Field") {
+    return <NumberFieldPreview />;
+  }
+  if (section === "Text Field") {
+    return <TextFieldPreview />;
+  }
+  if (section === "Textarea") {
+    return <TextareaPreview />;
+  }
+  if (section === "Segment") {
+    return <SegmentPreview />;
+  }
   if (section === "Select") {
     return <SelectPreview />;
   }
+  if (section === "Separator") {
+    return <SeparatorPreview />;
+  }
   if (section === "Slider") {
     return <SliderPreview />;
+  }
+  if (section === "Spinner") {
+    return <SpinnerPreview />;
   }
   if (section === "Switch") {
     return <SwitchPreview />;
   }
   if (section === "Tabs") {
     return <TabsPreview />;
+  }
+  if (section === "Toggle Button") {
+    return <ToggleButtonPreview />;
   }
   if (section === "Tooltip") {
     return <TooltipPreview />;

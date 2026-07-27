@@ -17,22 +17,31 @@ import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { ThemeEditorPanel } from "./theme-editor-panel.tsx";
 import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
 
+/* Keep the component names alphabetical — the nav renders them in this order. */
 const sections = [
   "Guides",
+  "Avatar",
   "Button",
+  "Card",
+  "Checkbox",
+  "Drawer",
+  "Fieldset",
   "Input",
   "Modal",
-  "Drawer",
+  "Number Field",
   "Popover",
-  "Checkbox",
   "Radio Group",
+  "Segment",
   "Select",
+  "Separator",
   "Slider",
+  "Spinner",
   "Switch",
   "Tabs",
+  "Text Field",
+  "Textarea",
+  "Toggle Button",
   "Tooltip",
-  "Card",
-  "Avatar",
 ] as const;
 type Section = (typeof sections)[number];
 
@@ -41,20 +50,28 @@ const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
   {
     label: "Components",
     items: [
+      "Avatar",
       "Button",
+      "Card",
+      "Checkbox",
+      "Drawer",
+      "Fieldset",
       "Input",
       "Modal",
-      "Drawer",
+      "Number Field",
       "Popover",
-      "Checkbox",
       "Radio Group",
+      "Segment",
       "Select",
+      "Separator",
       "Slider",
+      "Spinner",
       "Switch",
       "Tabs",
+      "Text Field",
+      "Textarea",
+      "Toggle Button",
       "Tooltip",
-      "Card",
-      "Avatar",
     ],
   },
 ];

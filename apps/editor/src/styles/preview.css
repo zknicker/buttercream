@@ -179,6 +179,20 @@
   gap: 20px;
 }
 
+/* A separator fills its container, so both demos need one to stretch across rather than hug. */
+.separator-demo {
+  display: grid;
+  width: 100%;
+  gap: 20px;
+}
+
+.separator-row {
+  display: flex;
+  height: 2rem;
+  align-items: center;
+  gap: 12px;
+}
+
 .control-status {
   color: color-mix(in oklab, var(--foreground) 55%, transparent);
   font-size: 13px;
