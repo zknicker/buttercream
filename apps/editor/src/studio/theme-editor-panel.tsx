@@ -15,6 +15,7 @@ import {
   ColorControl,
   ControlSection,
   FontControl,
+  monoFontOptions,
   RangeControl,
   SelectControl,
   type SelectControlOption,
@@ -245,6 +246,18 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
           }
           value={designSystem.theme.light.typography.fontSans}
         />
+        <FontControl
+          label="Mono Font"
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.typography.fontMono = value;
+              });
+            })
+          }
+          options={monoFontOptions}
+          value={designSystem.theme.light.typography.fontMono}
+        />
         <RangeControl
           label="Line Height"
           max={2}
@@ -364,6 +377,21 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
           }
           step={1}
           value={Number.parseFloat(designSystem.theme.light.effects.borderWidth)}
+        />
+        {/* A focus ring offset lives in single-digit pixels; 0-8 covers hugging the edge through a visibly detached ring. */}
+        <RangeControl
+          label="Ring offset"
+          max={8}
+          min={0}
+          onChange={(value) =>
+            onUpdate((next) => {
+              updateBothThemes(next, (theme) => {
+                theme.effects.ringOffsetWidth = `${value}px`;
+              });
+            })
+          }
+          step={1}
+          value={Number.parseFloat(designSystem.theme.light.effects.ringOffsetWidth)}
         />
         <RangeControl
           label="Disabled opacity"
