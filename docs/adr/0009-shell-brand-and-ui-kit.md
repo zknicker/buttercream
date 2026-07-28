@@ -44,8 +44,10 @@ frosting-swirl underline per page.
 Shell tokens live in `apps/editor/src/styles/shell.css` under Tailwind's `@theme` and are named for
 brand nouns (`--color-parchment`, `--color-ink`). They are deliberately unrelated to the semantic
 tokens in `@buttercream/styles` (`--background`, `--foreground`, `--accent`), which belong to the
-design system being edited. Previews stay in an isolated iframe, so the two never mix — this is the
-mechanism behind invariant 4.
+design system being edited. The two never mix because a preview's tokens are inline custom
+properties on the surface element and its custom CSS is `@scope`d to that one element — see
+`docs/adr/0004-editor-runtime.md`. That is the mechanism behind invariant 4, and it is what lets a
+page render many differently-themed previews at once, as the design-systems index does.
 
 ## The shell UI kit is scaffolding
 

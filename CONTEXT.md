@@ -12,7 +12,10 @@ guides, previews, and project-specific agent guidance.
 - A **preset** is a reusable starting value for a new design system.
 - A **guide** is a generated view of the current design system.
 - A **preview** renders Buttercream components with the current design system in a `@scope`-contained
-  surface, themed with inline custom properties -- not an iframe.
+  surface, themed with inline custom properties -- not an iframe. Scoping is per surface, so one page
+  can render many previews of different systems without their custom CSS colliding.
+- The **workspace** is `/systems`: an account's own design systems, each card a live miniature
+  preview of that system. Opening one enters the editor.
 - **Custom CSS** is authored BEM and utility CSS stored separately from structured theme tokens.
 - **Agent rules** are project-specific design instructions exported as `DESIGN.md`.
 - **Component settings** are typed default props for Buttercream components.
@@ -57,7 +60,8 @@ hand-tuned consequences that have no business being stored as JSON.
 3. Custom CSS is edited separately and is not inferred from arbitrary imported rules.
 4. The editor shell never inherits the theme being edited.
 5. Saved systems are private unless sharing is explicitly enabled.
-6. `/ds/:id` is the only public design-system route. Owners edit; shared visitors read.
+6. `/ds/:id` is the only public design-system route. Owners edit; shared visitors read. `/systems`
+   lists an account's own systems and is never public.
 7. Undo and redo are browser-memory concerns and disappear on reload.
 8. Server writes use an integer version; the first edit against stale state opens a conflict dialog.
 9. The CLI reads and exports. It does not mutate consuming repositories.
