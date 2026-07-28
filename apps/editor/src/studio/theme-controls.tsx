@@ -154,14 +154,31 @@ export function ColorControl({
      * legible rather than being hidden or shrunk; they simply stop looking like something you can
      * act on. The swatch keeps full strength, because the colour is the point.
      */
-    <div className={classes(rowClass, onChange ? "" : "ring-fg/6")}>
+    <div className={classes(rowClass, "relative", onChange ? "" : "ring-fg/6")}>
+      {/*
+       * Sits on the row's top-right corner rather than inside it: out of the flow, so it takes no
+       * width from either line — the formula underneath is how you find out where a colour came
+       * from, and it had been truncating to make room.
+       *
+       * It overhangs by four pixels, not by half its height: the rows sit six apart, so a tag
+       * centred on the edge would clip the row above it.
+       *
+       * It is filled in the grey the row outlines itself in, so it reads as a piece of the row's
+       * own edge rather than a sticker on top of it. Uppercase mono with tracking, which is the
+       * only form uppercase should take. Butter would have been wrong twice over — the loudest
+       * mark in a row whose point is a colour, and it already means "primary action" in this rail.
+       */}
+      {onChange === undefined && description !== undefined ? (
+        <Badge className="absolute -top-1 right-2 h-4 px-1 text-[9px]" variant="line">
+          Derived
+        </Badge>
+      ) : null}
       <ColorSwatch color={swatchColor ?? value} />
       {draft === null ? (
         <RowText
           description={description}
           dim={onChange === undefined}
           label={label}
-          readOnly={onChange === undefined}
           {...(onChange ? { onEdit: () => setDraft(value) } : {})}
         />
       ) : (
@@ -213,13 +230,11 @@ function RowText({
   dim = false,
   label,
   onEdit,
-  readOnly = false,
 }: {
   description: string | undefined;
   dim?: boolean;
   label: string;
   onEdit?: () => void;
-  readOnly?: boolean;
 }) {
   const labelClass = classes(
     ROW_LABEL,
@@ -229,24 +244,8 @@ function RowText({
 
   return (
     <span className="group/row grid min-w-0 flex-1 text-left">
-      <span className="flex min-w-0 items-center gap-1.5">
-        <span className={classes(labelClass, "min-w-0 flex-1")} title={label}>
-          {label}
-        </span>
-        {/*
-         * Says what the greying already implies, for anyone who cannot rely on colour alone. It
-         * takes the kit's muted chip, whose fill sits a shade off the row it is on, so the tag
-         * reads when looked for and recedes when not — a filled or buttered chip would be the
-         * loudest thing in a row whose point is the colour.
-         *
-         * On the name's line rather than the row's: as a sibling of the whole text block it stole
-         * width from the formula underneath too, and the formula is the part worth reading.
-         */}
-        {readOnly && description !== undefined ? (
-          <Badge className="h-4 shrink-0 px-1 text-[9px]" variant="muted">
-            Derived
-          </Badge>
-        ) : null}
+      <span className={labelClass} title={label}>
+        {label}
       </span>
       {description === undefined ? null : onEdit ? (
         <button

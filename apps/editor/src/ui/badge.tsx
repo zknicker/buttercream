@@ -5,7 +5,7 @@ import { classes } from "./classes.ts";
 
 type SpanProps = useRender.ComponentProps<"span">;
 
-export type BadgeVariant = "accent" | "ink" | "muted" | "success" | "danger";
+export type BadgeVariant = "accent" | "danger" | "ink" | "line" | "muted" | "success";
 
 export interface BadgeProps extends SpanProps {
   variant?: BadgeVariant;
@@ -15,6 +15,11 @@ const VARIANTS: Record<BadgeVariant, string> = {
   // Butter stays light in both themes, so its text is always the fixed dark ink.
   accent: "bg-butter text-ink",
   danger: "bg-berry/15 text-berry",
+  /*
+   * Cut from the same grey a surface outlines itself in, for a tag that sits on an edge rather
+   * than inside a fill. No ring: it IS the ring, so outlining it would draw the line twice.
+   */
+  line: "bg-fg/10 text-muted",
   // Inverted chip: reads against the canvas it sits on, so both ends must flip.
   ink: "bg-fg text-canvas",
   muted: "bg-sunken text-muted ring-1 ring-fg/8 ring-inset",
