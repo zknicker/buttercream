@@ -1,6 +1,9 @@
 import type { DesignSystem } from "@buttercream/theme-core";
-import type { CSSProperties, ReactElement } from "react";
+import type { ReactElement } from "react";
+import { ChatAppPreview } from "./preview-app-chat.tsx";
 import { DashboardAppPreview } from "./preview-app-dashboard.tsx";
+import { FinancesAppPreview } from "./preview-app-finances.tsx";
+import { MailAppPreview } from "./preview-app-mail.tsx";
 import { AvatarPreview } from "./preview-avatar.tsx";
 import { ButtonPreview } from "./preview-button.tsx";
 import { CardPreview } from "./preview-card.tsx";
@@ -72,7 +75,10 @@ export type PreviewSection =
   | "Button"
   | "Button Group"
   | "Card"
-  | "App: Dashboard"
+  | "Chat"
+  | "Dashboard"
+  | "Finances"
+  | "Mail"
   | "Charts"
   | "Checkbox"
   | "Checkbox Group"
@@ -135,8 +141,17 @@ export function renderPreviewSection(
   if (section === "Popover") {
     return <PopoverPreview />;
   }
-  if (section === "App: Dashboard") {
+  if (section === "Chat") {
+    return <ChatAppPreview icons={iconSettings} />;
+  }
+  if (section === "Dashboard") {
     return <DashboardAppPreview icons={iconSettings} />;
+  }
+  if (section === "Finances") {
+    return <FinancesAppPreview icons={iconSettings} />;
+  }
+  if (section === "Mail") {
+    return <MailAppPreview icons={iconSettings} />;
   }
   if (section === "Charts") {
     return <ChartsPreview />;
