@@ -177,6 +177,10 @@ export function ColorControl({
          * the window too. The row clips too, which is what keeps the tag inside the card: without it
          * the tag's corner sailed past the card's rounded one and hung over the edge.
          *
+         * A pixel of padding under the word, because the row's own border runs along the tag's
+         * underside and reads as part of it — centred on the box, the label sat a pixel low
+         * against what the eye takes for the edge.
+         *
          * Thirty degrees, hinged on the top-left corner. Steeper than a true diagonal so the notch
          * stays a nick in the edge rather than a wedge taken out of the row, and it travels seven
          * pixels across instead of twelve, which is what lets the word sit close to the cut. About its centre the skew throws the
@@ -189,7 +193,7 @@ export function ColorControl({
          */
         <span className="pointer-events-none absolute top-0 right-0 flex overflow-hidden">
           <Badge
-            className="origin-top-left skew-x-[30deg] pr-2 pl-2.5 tracking-[0.09em]"
+            className="origin-top-left skew-x-[30deg] pr-2.5 pb-px pl-2 tracking-[0.09em]"
             size="sm"
             /*
              * Inline, because the kit's badge rounds all four corners in its base class and a
