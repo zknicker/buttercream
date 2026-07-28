@@ -43,7 +43,9 @@ Add the CSS imports in this order:
 @import "@buttercream/styles";
 ```
 
-Do not add a Tailwind plugin or `tailwind.config.js` for Buttercream.
+Tailwind itself is required -- it's a declared peer dependency of `@buttercream/styles`, and that
+is deliberate. Only a Tailwind plugin is declined: do not add one, and skip `tailwind.config.js`.
+See `docs/adr/0008-theming-pipeline.md` (in the Buttercream repo itself) for the reasons.
 
 ## Build interfaces
 
@@ -80,21 +82,58 @@ export function Confirmation() {
 
 ## Theme
 
-Use semantic variables:
+The hosted editor edits one JSON document, a `DesignSystem` -- ~49 authored tokens per theme
+(light/dark): five colour roles, a neutral anchor, radius, density, shadow levels, fonts. It stores
+intent, not implementation -- `shadow: "medium"`, never a literal shadow stack. (Defined in
+`packages/theme-core/src/design-system.ts` and `packages/theme-core/src/defaults.ts`, in the
+Buttercream repo itself -- these aren't shipped to a consuming repo's `node_modules`, so don't try
+to read them from there.)
+
+Export writes those tokens as CSS custom properties inside `@layer theme`, into the consumer's
+`global.css`. The light block's selector list is `:root, [data-theme="light"],
+[data-theme="default"]`, mirroring the shipped defaults, so dropping the exported file in applies
+immediately -- `data-theme` is for switching to dark or scoping a themed subtree, never a
+prerequisite for the theme to apply at all. A consumer's imported `global.css` overrides the
+shipped defaults purely by import order: both sit in `@layer theme` at equal specificity, and the
+consumer's `@import` comes after `@import "@buttercream/styles"`, so it wins for every token it
+redeclares. No `!important`, no config merge. Full flow (configure -> preview -> export -> consume)
+and the layer-order mechanism are in `docs/adr/0008-theming-pipeline.md`, in the Buttercream repo
+itself -- read it there before explaining theming to a user; it isn't shipped to consuming repos
+either.
+
+The theme tokens round-trip exactly through CSS (export then import reproduces the document), but
+CSS is not the lossless format: import only ever restores `theme.light` / `theme.dark`, never
+`customCss`, `icons`, or `components`, even though export does write `customCss` into the file.
+`design-system.json` is the lossless document format; treat CSS round-tripping as tokens-only.
+
+`shadow`, `radius`, and density are intent-level tokens, not literal CSS values. Their consequences
+are computed in the shipped stylesheet: `--radius` becomes the radius step scale and nested-corner
+math, `shadow: "medium"` becomes a reference into a hand-tuned three-tier stack (e.g.
+`--bc-shadow-field-medium`), and `--accent` plus the neutral anchor become the whole derived colour
+ladder (hover/soft/foreground variants, greys, chart-ladder stops). The two authored `@layer theme`
+blocks hold exactly the document's tokens; everything derived or hand-tuned -- `color-scheme`, the
+shadow stacks, the chart ladder -- lives in adjacent blocks under the same selectors. In a
+consuming repo, read the real values at `node_modules/@buttercream/styles/src/theme.css` rather
+than restating them here -- this doc has already drifted from the source once and is not a place to
+keep a third hand-maintained copy. If a theming request looks like it needs a new literal token,
+check whether that file already derives it before adding one.
+
+Example is illustrative -- a made-up brand colour, not the shipped palette:
 
 ```css
+:root,
 [data-theme="light"],
 [data-theme="default"] {
   --background: #f8f8f8;
   --foreground: #292524;
-  --accent: #1b1b1b;
+  --accent: #7c3aed;
   --accent-foreground: #ffffff;
 }
 
 [data-theme="dark"] {
   --background: #161514;
   --foreground: #f5f5f4;
-  --accent: #f5f5f4;
+  --accent: #a78bfa;
   --accent-foreground: #1c1917;
 }
 ```

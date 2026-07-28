@@ -15,5 +15,7 @@ events. Styling is Tailwind v4 CSS-first:
 ```
 
 Public component classes and semantic tokens remain unprefixed. Private implementation variables
-use `--bc-*`. Buttercream does not require a Tailwind plugin or JavaScript configuration file.
+use `--bc-*`. Tailwind v4 itself is required -- it is a declared peer dependency of
+`@buttercream/styles`, and consumers are expected to already have it. Only a Tailwind *plugin* is
+declined; see `docs/adr/0008-theming-pipeline.md` for why.
 

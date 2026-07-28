@@ -1,4 +1,4 @@
-# 0007: Shell brand and shell UI kit
+# 0009: Shell brand and shell UI kit
 
 The Buttercream brand is warm-neutral editorial typography with hard-edged pixel and ordered-dither
 accents. The chrome stays quiet on purpose: visitors are evaluating their own components inside it,

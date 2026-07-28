@@ -10,5 +10,9 @@ developer's Buttercream user. Clerk is an authentication boundary; product recor
 Clerk identifier as their owner key.
 
 The editor shell has a fixed internal visual system built directly on Base UI and internal CSS. It
-does not depend on `@buttercream/react`. Themeable component previews render in an isolated iframe
-so edited tokens and custom CSS cannot restyle editor controls.
+does not depend on `@buttercream/react`. Themeable component previews render inline in the editor
+document, not in an iframe: `PreviewSurface` (`apps/editor/src/studio/preview-surface.tsx`) applies
+the design system's tokens as inline custom properties on a preview wrapper, and confines the
+user's own custom CSS to that wrapper with `@scope (.preview-surface)`. Edited tokens and custom
+CSS still cannot restyle editor controls -- the containment is scoping, not process isolation. See
+`apps/editor/src/studio/preview-surface.test.ts` for the tests guarding that boundary.

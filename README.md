@@ -141,6 +141,50 @@ Import accepts either the complete JSON document or generated CSS. JSON replaces
 editor state. CSS replaces recognized theme variables and resets omitted variables to defaults.
 The current JSON Schema is served from `https://buttercream.studio/schema.json`.
 
+## Using an exported theme
+
+You already have Tailwind v4—it's a peer dependency of `@buttercream/styles`. Install the packages
+above, then use the editor's exported `global.css` as your stylesheet entry point instead of
+hand-writing the `@import` block:
+
+```css
+@import "tailwindcss";
+@import "@buttercream/styles";
+
+@layer theme {
+  :root,
+  [data-theme="light"],
+  [data-theme="default"] {
+    --accent: #0485f7;
+    /* …49 tokens */
+  }
+
+  [data-theme="dark"] {
+    --accent: #0485f7;
+    /* …49 tokens */
+  }
+}
+```
+
+The exported file already contains both `@import` lines, so it applies as-is—no extra setup, and
+no separate stylesheet importing it after `@buttercream/styles` (that would just duplicate the
+imports). Its `:root` block means the theme is live the moment the file loads; `data-theme` isn't
+a prerequisite for the theme to apply.
+
+Its tokens win over the defaults shipped in `@buttercream/styles`: both declare inside the same
+`@layer theme`, at equal specificity, and later wins within a layer—no `!important`, no config
+merge.
+
+Components render real BEM classes against those variables—`<Button variant="secondary">` renders
+`class="button button--secondary"`—so styling is CSS you can read, not a runtime theme prop.
+
+`data-theme` is for switching or scoping, not for turning the theme on: set `data-theme="dark"` on
+an element to switch that subtree to dark (or `"light"` to force light), so a dark panel can sit
+inside an otherwise light page.
+
+See [docs/adr/0008-theming-pipeline.md](./docs/adr/0008-theming-pipeline.md) for the full pipeline,
+including why the document only stores ~49 tokens and how the rest of `theme.css` is derived.
+
 ## Editor development
 
 Copy `.env.example` to `.env` and add the Hugeicons Pro license key before installing dependencies.
