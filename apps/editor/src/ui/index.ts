@@ -3,6 +3,13 @@ export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from ".
 export { Card, type CardRootProps, type CardVariant } from "./card.tsx";
 export { classes } from "./classes.ts";
 export {
+  ColorPicker,
+  ColorPickerPopover,
+  type ColorPickerPopoverProps,
+  type ColorPickerProps,
+  ColorSwatch,
+} from "./color-picker.tsx";
+export {
   DialogFooter,
   DialogHeader,
   dialogBackdropClass,

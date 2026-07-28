@@ -1,7 +1,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
-import { classes, Slider } from "../ui/index.ts";
+import { ColorPickerPopover, classes, Slider } from "../ui/index.ts";
 
 /** Shared shape for every row in the controls rail: label left, value right. */
 const ROW =
@@ -64,21 +64,21 @@ export function ColorControl({
   value: string;
 }) {
   return (
-    <label className={ROW}>
+    <div className={ROW}>
       <span className={ROW_LABEL}>{label}</span>
-      <span className="flex shrink-0 items-center gap-2 font-mono text-[11px] text-muted">
-        {value.toUpperCase()}
-        <input
-          aria-label={label}
-          /* The ring keeps the swatch legible when the chosen colour matches the row. */
-          className="size-4 shrink-0 cursor-pointer appearance-none overflow-hidden rounded-full bg-transparent p-0 ring-1 ring-fg/25 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-full [&::-webkit-color-swatch]:border-0"
-          name={label}
-          onChange={(event) => onChange(event.currentTarget.value)}
-          type="color"
-          value={normalizeHex(value)}
-        />
-      </span>
-    </label>
+      {/*
+       * The picker writes hex back because that is what the design system document stores; it
+       * still shows the other formats, so a value can be read in OkLCH without the document
+       * gaining a second representation of the same colour.
+       */}
+      <ColorPickerPopover
+        defaultFormat="hex"
+        onValueChange={(next) => onChange(next)}
+        triggerClassName="shrink-0 font-mono text-[11px] text-muted"
+        triggerShowValue
+        value={normalizeHex(value)}
+      />
+    </div>
   );
 }
 
