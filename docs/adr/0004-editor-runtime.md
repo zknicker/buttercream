@@ -22,5 +22,12 @@ while one page renders one preview and wrong the moment a page renders several -
 custom CSS would repaint its neighbours. The design-systems index renders one live preview per card,
 so per-instance scoping is what makes many differently-themed previews on one page correct.
 
-See `apps/editor/src/studio/preview-surface.test.ts` and `preview-surface-scope.test.tsx` for the
-tests guarding that boundary.
+Most sections are themed content and the shell frames them in one surface. Brand is not: it
+authors the document's prose, so it is editor chrome that mounts its own surface island around the
+themed material it shows. `sectionOwnsSurface` in `preview-sections.tsx` is where a section
+declares which of the two it is, and the shell wraps accordingly. A section that authors the
+document also receives the draft's mutator, and only when the route supplies `onSave` -- a shared
+visitor reads the same page with no affordance that would write to it.
+
+See `apps/editor/src/studio/preview-surface.test.ts`, `preview-surface-scope.test.tsx`, and
+`brand-page.test.tsx` for the tests guarding that boundary.
