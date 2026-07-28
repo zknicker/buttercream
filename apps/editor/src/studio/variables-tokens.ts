@@ -20,6 +20,8 @@ export const colorTokenCategories = [
   "Surface",
   "Field",
   "Background",
+  "Chart",
+  "Lines",
   "Misc",
 ] as const;
 export type ColorTokenCategory = (typeof colorTokenCategories)[number];
@@ -64,6 +66,22 @@ export function categorizeColorToken(name: string): ColorTokenCategory {
   }
   if (name.startsWith("background") || name.startsWith("foreground")) {
     return "Background";
+  }
+  /*
+   * Charts are a subsystem, not an oddment. Left in Misc they were 28 of its 38 rows, which made
+   * the bucket meaningless and hid the whole data-viz ladder behind a label nobody would think to
+   * open looking for it.
+   */
+  if (name.startsWith("chart")) {
+    return "Chart";
+  }
+  /*
+   * Follows the family rather than the prefix. `surface-secondary` landed in Surface while
+   * `border-secondary` landed in Misc, so sibling tokens of the same shape were filed in different
+   * places depending only on which word they started with.
+   */
+  if (name.startsWith("border") || name.startsWith("separator")) {
+    return "Lines";
   }
   return "Misc";
 }
