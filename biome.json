@@ -8,7 +8,8 @@
       "!**/.output",
       "!**/.wrangler",
       "!**/routeTree.gen.ts",
-      "!**/packages/react/src/charts"
+      "!**/packages/react/src/charts",
+      "!**/packages/styles/src/theme-defaults.css"
     ]
   },
   "css": {

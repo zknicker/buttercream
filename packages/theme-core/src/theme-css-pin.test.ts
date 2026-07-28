@@ -5,13 +5,14 @@ import { themeCssVariables } from "./css.ts";
 import { defaultDarkTheme, defaultLightTheme } from "./defaults.ts";
 
 /**
- * `packages/styles/src/theme.css` hand-maintains the same default preset that `defaults.ts`
- * generates. Nothing pins the two together, so they can (and have) drifted -- this test is that
- * pin. `defaults.ts` is the source of truth: it is where the reference preset's values were
- * transcribed, so any mismatch here means theme.css failed to keep up, not the other way round.
+ * `packages/styles/src/theme-defaults.css` is generated from this package's default document, so
+ * the two cannot drift the way `theme.css` once did. What this pins is the generator itself: it
+ * reads the shipped file and compares it against the token registry, a different path from the one
+ * that printed it. A file-equality check in `@buttercream/styles` proves the file matches its
+ * generator; only this proves the generator matches the document.
  */
 
-const themeCssPath = fileURLToPath(new URL("../../styles/src/theme.css", import.meta.url));
+const themeCssPath = fileURLToPath(new URL("../../styles/src/theme-defaults.css", import.meta.url));
 const themeCss = readFileSync(themeCssPath, "utf8");
 
 /** Collapse prettier's line-wrapping so a multi-line declaration compares equal to a one-line one. */
