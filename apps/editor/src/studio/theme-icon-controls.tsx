@@ -37,7 +37,8 @@ export function ThemeIconControls({
   onChange,
 }: {
   icons: IconSettings;
-  onChange: (icons: IconSettings) => void;
+  /* The sliders name their gesture so a drag is one history entry; the pickers are discrete. */
+  onChange: (icons: IconSettings, coalesceKey?: string) => void;
 }) {
   return (
     <ControlSection title="Icons">
@@ -67,7 +68,7 @@ export function ThemeIconControls({
         label="Size"
         max={32}
         min={12}
-        onChange={(size) => onChange({ ...icons, size })}
+        onChange={(size) => onChange({ ...icons, size }, "icons.size")}
         step={1}
         value={icons.size}
       />
@@ -76,7 +77,7 @@ export function ThemeIconControls({
           label="Stroke width"
           max={3}
           min={0.5}
-          onChange={(strokeWidth) => onChange({ ...icons, strokeWidth })}
+          onChange={(strokeWidth) => onChange({ ...icons, strokeWidth }, "icons.strokeWidth")}
           step={0.25}
           value={icons.strokeWidth}
         />
