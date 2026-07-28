@@ -188,8 +188,8 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
           <Avatar shape="circle" size="lg">
             <Avatar.Fallback>BC</Avatar.Fallback>
           </Avatar>
-          <span className="overview__profile-name">Buttercream</span>
-          <span className="overview__profile-handle">@buttercream</span>
+          <Card.Title>Buttercream</Card.Title>
+          <Card.Description>@buttercream</Card.Description>
           <p className="overview__profile-bio">
             A design system you can drive from one config, for web and native.
           </p>
@@ -211,15 +211,9 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
           Get a paid plan for more credits
         </Alert>
 
-        <div className="overview__switch-row">
-          <span className="overview__switch-text">
-            <span className="overview__switch-title">Allow notifications</span>
-            <span className="overview__switch-hint">
-              Receive push notifications from Buttercream
-            </span>
-          </span>
-          <Switch defaultChecked />
-        </div>
+        <Switch defaultChecked description="Receive push notifications from Buttercream">
+          Allow notifications
+        </Switch>
       </div>
 
       <div className="overview__column overview__column--wide">
@@ -228,10 +222,8 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
           <span aria-hidden className="overview__dialog-icon">
             {icon.users}
           </span>
-          <span className="overview__dialog-title">Create an account</span>
-          <p className="overview__dialog-body">
-            Start your free 7-day trial. No credit card required.
-          </p>
+          <Card.Title>Create an account</Card.Title>
+          <Card.Description>Start your free 7-day trial. No credit card required.</Card.Description>
           <Button fullWidth>Get started</Button>
           <span className="overview__or">OR</span>
           {/*
@@ -251,8 +243,8 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
           {COMMUNITIES.map((community) => (
             <Card className="overview__community" key={community.name}>
               <span aria-hidden className="overview__community-art" />
-              <span className="overview__community-name">{community.name}</span>
-              <p className="overview__community-blurb">{community.blurb}</p>
+              <Card.Title>{community.name}</Card.Title>
+              <Card.Description>{community.blurb}</Card.Description>
               <span className="overview__community-author">
                 <Avatar shape="circle" size="sm">
                   <Avatar.Fallback>{community.author[0]}</Avatar.Fallback>
@@ -268,12 +260,12 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
           <span aria-hidden className="overview__dialog-icon">
             {icon.upload}
           </span>
-          <span className="overview__dialog-title">Unsaved changes</span>
-          <p className="overview__dialog-body">Do you want to save or discard changes?</p>
-          <span className="overview__dialog-actions">
+          <Card.Title>Unsaved changes</Card.Title>
+          <Card.Description>Do you want to save or discard changes?</Card.Description>
+          <Card.Footer className="overview__dialog-actions">
             <Button variant="secondary">Discard</Button>
             <Button>Save changes</Button>
-          </span>
+          </Card.Footer>
         </Card>
       </div>
     </div>
