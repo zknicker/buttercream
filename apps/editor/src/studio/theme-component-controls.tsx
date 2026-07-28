@@ -1,4 +1,4 @@
-import type { ComponentSettings, DesignSystem } from "@buttercream/theme-core";
+import type { ComponentSettings } from "@buttercream/theme-core";
 import type { ReactElement } from "react";
 import {
   ControlSection,
@@ -7,6 +7,7 @@ import {
   type SelectControlOption,
   ToggleControl,
 } from "./theme-controls.tsx";
+import type { UpdateDesignSystem } from "./use-design-system-draft.ts";
 
 /*
  * Component defaults: the typed props every `@buttercream/react` component takes when a call site
@@ -58,7 +59,7 @@ export function ComponentsPanel({
   onUpdate,
 }: {
   components: ComponentSettings;
-  onUpdate: (mutate: (designSystem: DesignSystem) => void) => void;
+  onUpdate: UpdateDesignSystem;
 }): ReactElement {
   return (
     <>
@@ -370,7 +371,7 @@ export function ComponentsPanel({
           onChange={(value) =>
             onUpdate((next) => {
               next.components.tooltip.defaultDelay = value;
-            })
+            }, "components.tooltip.defaultDelay")
           }
           step={50}
           value={components.tooltip.defaultDelay}

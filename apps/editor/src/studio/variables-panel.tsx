@@ -11,7 +11,6 @@ import type { CSSProperties, ReactElement } from "react";
 import { useMemo, useState } from "react";
 import type { ShellTheme } from "../shell-theme.ts";
 import { classes } from "../ui/index.ts";
-import { ROW_FLEX, ROW_LABEL } from "./control-row.ts";
 import type { UpdateDesignSystem } from "./use-design-system-draft.ts";
 import {
   ColorTokenRow,
