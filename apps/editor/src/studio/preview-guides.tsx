@@ -1,61 +1,8 @@
 import type { ReactElement } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useResolvedTokens } from "./preview-tokens.ts";
 
-/*
- * The guides page is the design system explaining itself, so every value on it is read back
- * out of the DOM rather than retyped here. A hardcoded hex would keep reading #1B1B1B after the
- * accent moved, and a page that lies about the theme is worse than no page.
- */
-function useResolvedTokens(names: string[]): Record<string, string> {
-  const ref = useRef<HTMLDivElement>(null);
-  const [values, setValues] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    const host = ref.current;
-    if (host === null) {
-      return;
-    }
-
-    /*
-     * Reading the custom property back gives whatever was declared, which for a generated
-     * neutral is the generator expression rather than a colour. Painting each token onto a
-     * probe and reading `color` back makes the browser resolve it, so the page reports the
-     * colour you actually get.
-     */
-    const read = (): void => {
-      const styles = getComputedStyle(host);
-      const probe = document.createElement("span");
-      probe.style.display = "none";
-      host.appendChild(probe);
-
-      const resolve = (name: string): string => {
-        const declared = styles.getPropertyValue(name).trim();
-        if (!declared.startsWith("oklch(from") && !declared.startsWith("color-mix(")) {
-          return declared;
-        }
-        probe.style.color = `var(${name})`;
-        return getComputedStyle(probe).color || declared;
-      };
-
-      setValues(Object.fromEntries(names.map((name) => [name, resolve(name)])));
-      probe.remove();
-    };
-
-    read();
-
-    /* The Style panel writes tokens as an inline style on an ancestor, so watch for that. */
-    const surface = host.closest(".preview-surface");
-    if (surface === null) {
-      return;
-    }
-
-    const observer = new MutationObserver(read);
-    observer.observe(surface, { attributeFilter: ["style", "data-theme"] });
-    return () => observer.disconnect();
-  }, [names]);
-
-  return { ...values, __ref: ref } as unknown as Record<string, string>;
-}
+/* The guides page is the design system explaining itself, so every value on it is read back out
+   of the DOM rather than retyped here — see useResolvedTokens. */
 
 const ROLES = [
   { name: "accent", purpose: "Primary action" },
@@ -88,9 +35,7 @@ const TOKEN_NAMES = [
 ];
 
 export function GuidesPreview(): ReactElement {
-  const tokens = useResolvedTokens(TOKEN_NAMES);
-  const ref = tokens.__ref as unknown as React.RefObject<HTMLDivElement>;
-  const value = (name: string): string => tokens[name] ?? "";
+  const { ref, value } = useResolvedTokens(TOKEN_NAMES);
 
   return (
     <div className="guides" ref={ref}>
