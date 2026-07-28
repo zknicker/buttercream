@@ -178,6 +178,14 @@ interface ColorPickerProps
 
 interface ColorPickerPopoverProps extends ColorPickerProps {
   triggerLabel?: ReactNode;
+  /**
+   * Contents for the trigger, replacing the tile-and-value the picker composes itself.
+   *
+   * A caller whose trigger is a whole row needs that row to look the same whether or not this
+   * value happens to be pickable; letting it supply the contents is what keeps one description of
+   * a row instead of one here and one there.
+   */
+  renderTrigger?: ReactNode;
   triggerLabelPosition?: "left" | "right";
   triggerShowValue?: boolean;
   triggerShowRemove?: boolean;
@@ -2235,6 +2243,7 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
     {
       triggerLabel,
       triggerLabelPosition = "left",
+      renderTrigger,
       triggerShowValue = true,
       triggerShowRemove = false,
       onTriggerRemove,
@@ -2331,46 +2340,50 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
             )}
             style={{ fontVariationSettings: fontWeights.medium }}
           >
-            {triggerLabel && triggerLabelPosition === "left" && (
-              /*
-               * Grows to fill, so the swatch and value sit at the far edge of whatever the trigger
-               * is stretched across. Without this the label hugs its text and a full-width trigger
-               * leaves the value stranded mid-row.
-               */
-              <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-fg select-none">
-                {triggerLabel}
-              </span>
-            )}
-            <ColorTile color={swatchColor} size={20} />
-            {triggerShowValue && (
-              <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">
-                {valueLabel}
-              </span>
-            )}
-            {triggerLabel && triggerLabelPosition === "right" && (
-              <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-fg select-none">
-                {triggerLabel}
-              </span>
-            )}
-            {triggerShowRemove && (
-              <button
-                type="button"
-                aria-label="Remove color"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onTriggerRemove?.();
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    onTriggerRemove?.();
-                  }
-                }}
-                className="ml-1 text-muted hover:text-fg cursor-pointer flex items-center"
-              >
-                <HugeiconsIcon aria-hidden icon={Cancel01Icon} size={14} strokeWidth={1.5} />
-              </button>
+            {renderTrigger ?? (
+              <>
+                {triggerLabel && triggerLabelPosition === "left" && (
+                  /*
+                   * Grows to fill, so the swatch and value sit at the far edge of whatever the trigger
+                   * is stretched across. Without this the label hugs its text and a full-width trigger
+                   * leaves the value stranded mid-row.
+                   */
+                  <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-fg select-none">
+                    {triggerLabel}
+                  </span>
+                )}
+                <ColorTile color={swatchColor} size={20} />
+                {triggerShowValue && (
+                  <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">
+                    {valueLabel}
+                  </span>
+                )}
+                {triggerLabel && triggerLabelPosition === "right" && (
+                  <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-fg select-none">
+                    {triggerLabel}
+                  </span>
+                )}
+                {triggerShowRemove && (
+                  <button
+                    type="button"
+                    aria-label="Remove color"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onTriggerRemove?.();
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        onTriggerRemove?.();
+                      }
+                    }}
+                    className="ml-1 text-muted hover:text-fg cursor-pointer flex items-center"
+                  >
+                    <HugeiconsIcon aria-hidden icon={Cancel01Icon} size={14} strokeWidth={1.5} />
+                  </button>
+                )}
+              </>
             )}
           </Popover.Trigger>
           <Popover.Portal>

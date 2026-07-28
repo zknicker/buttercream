@@ -79,14 +79,6 @@ export function ColorControl({
   value: string;
 }) {
   const [draft, setDraft] = useState<string | null>(null);
-  const twoLine = description !== undefined;
-  /*
-   * No extra vertical padding on the two-line row. The picker's trigger carries a fixed height, so
-   * it ignored the padding and sat at thirty-six while the read-only rows grew to forty-four —
-   * the same component rendering two row heights depending on which branch a value took. Two lines
-   * of sixteen fit the thirty-six the row already reserves.
-   */
-  const rowClass = ROW_FLEX;
 
   const commit = (next: string) => {
     const trimmed = next.trim();
@@ -97,6 +89,27 @@ export function ColorControl({
   };
 
   /*
+   * The row's contents, described once and handed to whichever element ends up wrapping them.
+   *
+   * They used to be written twice — once as the picker's trigger, once as a plain div — and the two
+   * drifted every time either was touched: a different swatch, a different height, a different
+   * corner radius, each found only by measuring. One description cannot disagree with itself.
+   */
+  const contents = (
+    <RowContents
+      description={description}
+      draft={draft}
+      label={label}
+      onCommit={commit}
+      onDraftChange={setDraft}
+      readOnly={onChange === undefined}
+      swatchColor={swatchColor ?? value}
+      value={value}
+      {...(onChange ? { onEdit: () => setDraft(value) } : {})}
+    />
+  );
+
+  /*
    * Three kinds of value wear three different controls, because they are three different things.
    *
    * A literal opens the picker. An expression — `oklch(from var(--accent) …)`, `var(--foreground)`
@@ -105,22 +118,16 @@ export function ColorControl({
    * ladder. A value with no setter is neither, and renders as text.
    *
    * Seventeen of the twenty-five authored colour tokens are expressions, so the text path is the
-   * common case rather than the exception.
+   * common case rather than the exception. What differs between them is the element around the row
+   * and what it does when clicked — never the row itself.
    */
   if (onChange && isPickableColor(value)) {
     return (
       <ColorPickerPopover
         defaultFormat="hex"
         onValueChange={onChange}
-        triggerClassName={classes(rowClass, "hover:bg-fg/5")}
-        triggerLabel={<RowText description={description} label={label} />}
-        /*
-         * Two-line rows put the swatch first, so an editable token and a derived one line up: the
-         * derived row has no trigger to hang a swatch inside, so it draws its own on the left, and
-         * a picker that put its tile on the right made the two look like different kinds of row.
-         */
-        triggerLabelPosition={twoLine ? "right" : "left"}
-        triggerShowValue={!twoLine}
+        renderTrigger={contents}
+        triggerClassName={classes(ROW_FLEX, "hover:bg-fg/5")}
         value={normalizeHex(value)}
       />
     );
@@ -133,79 +140,51 @@ export function ColorControl({
      * legible rather than being hidden or shrunk; they simply stop looking like something you can
      * act on. The swatch keeps full strength, because the colour is the point.
      */
-    <div className={classes(rowClass, "relative overflow-hidden", onChange ? "" : "ring-fg/6")}>
-      {/*
-       * Fills the row's top-right corner: flush with both edges, sharing the row's own radius
-       * there and rounding only where it cuts into the row. The row's outline runs around it
-       * rather than past it, which is what makes the tag read as part of this row.
-       *
-       * It sat in the gap above the row before, four pixels clear of everything, which put it
-       * closer to the row above than to the one it labels.
-       *
-       * Out of the flow either way, so it takes no width from either line — the formula
-       * underneath is how you find out where a colour came from, and it had been truncating to
-       * make room. The right side of a derived row is empty, so the corner is free.
-       */}
-      {onChange === undefined && description !== undefined ? (
-        /*
-         * A square-cornered window at the row's corner, holding a skewed tag.
-         *
-         * The window clips the lean's overhang, so the tag's right edge is a vertical cut rather
-         * than a slant. Hinged at the top-left the bottom travels right on its own, so the tag
-         * needs no negative margin to produce that overhang — with one it pushed the word out of
-         * the window too. The row clips too, which is what keeps the tag inside the card: without it
-         * the tag's corner sailed past the card's rounded one and hung over the edge.
-         *
-         * A pixel of padding under the word, because the row's own border runs along the tag's
-         * underside and reads as part of it — centred on the box, the label sat a pixel low
-         * against what the eye takes for the edge.
-         *
-         * Thirty degrees, hinged on the top-left corner. Steeper than a true diagonal so the notch
-         * stays a nick in the edge rather than a wedge taken out of the row, and it travels seven
-         * pixels across instead of twelve, which is what lets the word sit close to the cut. About its centre the skew throws the
-         * tag's top corner outward past the window, which clips it flat — that is a vertical drop
-         * from the card's edge before the diagonal even starts. Hinged at the corner the top edge
-         * stays put and only the bottom travels, so the cut leaves the card's edge on the angle. It rounds where it meets the
-         * tag's underside — square, the two edges read as two shapes meeting; rounded, as one line
-         * changing direction. The lean is positive so the tag narrows toward its base; a cut
-         * widening as it fell would undercut the row rather than nick its top edge.
-         */
-        <span className="pointer-events-none absolute top-0 right-0 flex overflow-hidden">
-          <Badge
-            className="origin-top-left skew-x-[30deg] pr-2.5 pb-px pl-2 tracking-[0.09em]"
-            size="sm"
-            /*
-             * Inline, because the kit's badge rounds all four corners in its base class and a
-             * class here would only win or lose on stylesheet order. Only the corner where the
-             * slant meets the underside is round; the rest are cuts.
-             *
-             * Two pixels, not five. The skew stretches a corner horizontally by the tangent of its
-             * angle, so at forty-five degrees a radius spends twice its width along the edge — five
-             * left ten pixels of curve on a twelve-pixel tag, which is the whole diagonal. Two
-             * leaves the cut straight and rounds only where it lands.
-             */
-            style={{ borderRadius: "0 0 0 0.125rem" }}
-            variant="line"
-          >
-            {/* Back upright: the notch leans, the word in it does not. */}
-            <span className="inline-block skew-x-[-30deg]">Derived</span>
-          </Badge>
-        </span>
-      ) : null}
-      {/*
-       * The picker's own tile, not a lookalike. These branches used to draw their own circle while
-       * the picker drew a rounded square, so a row's swatch changed shape according to whether its
-       * value happened to be editable — and the two tabs disagreed for the same reason.
-       */}
-      <ColorTile color={swatchColor ?? value} size={20} />
-      {draft === null ? (
-        <RowText
-          description={description}
-          dim={onChange === undefined}
-          label={label}
-          {...(onChange ? { onEdit: () => setDraft(value) } : {})}
-        />
-      ) : (
+    <div className={classes(ROW_FLEX, "relative overflow-hidden", onChange ? "" : "ring-fg/6")}>
+      {onChange === undefined && description !== undefined ? <DerivedTag /> : null}
+      {contents}
+    </div>
+  );
+}
+
+/*
+ * Everything inside a colour row: the swatch, the name, and either the value or the field editing
+ * it. The order flips with the shape — a two-line row leads with the swatch so an editable token
+ * and a derived one line up, while a one-line row keeps its label left and its value right, where
+ * every other row in the rail puts them.
+ */
+function RowContents({
+  description,
+  draft,
+  label,
+  onCommit,
+  onDraftChange,
+  onEdit,
+  readOnly,
+  swatchColor,
+  value,
+}: {
+  description: string | undefined;
+  draft: string | null;
+  label: string;
+  onCommit: (value: string) => void;
+  onDraftChange: (draft: string | null) => void;
+  onEdit?: () => void;
+  readOnly: boolean;
+  swatchColor: string;
+  value: string;
+}) {
+  /*
+   * The picker's own tile, not a lookalike. The non-picker paths used to draw their own circle
+   * while the picker drew a rounded square, so a row's swatch changed shape according to whether
+   * its value happened to be editable — and the two tabs disagreed for the same reason.
+   */
+  const swatch = <ColorTile color={swatchColor} size={20} />;
+
+  if (draft !== null) {
+    return (
+      <>
+        {swatch}
         <input
           aria-label={`${label} value`}
           // biome-ignore lint/a11y/noAutofocus: the input replaces the text the user just clicked; focus has to follow it.
@@ -214,20 +193,84 @@ export function ColorControl({
             "min-w-0 flex-1 rounded-(--radius-shell-sm) bg-sunken px-2 py-1 font-mono text-[11px] text-fg outline-0",
             FOCUS_OUTLINE,
           )}
-          onBlur={(event) => commit(event.currentTarget.value)}
-          onChange={(event) => setDraft(event.currentTarget.value)}
+          onBlur={(event) => onCommit(event.currentTarget.value)}
+          onChange={(event) => onDraftChange(event.currentTarget.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
-              commit(event.currentTarget.value);
+              onCommit(event.currentTarget.value);
             }
             if (event.key === "Escape") {
-              setDraft(null);
+              onDraftChange(null);
             }
           }}
           value={draft}
         />
-      )}
-    </div>
+      </>
+    );
+  }
+
+  const text = (
+    <RowText
+      description={description}
+      dim={readOnly}
+      label={label}
+      {...(onEdit ? { onEdit } : {})}
+    />
+  );
+
+  if (description !== undefined) {
+    return (
+      <>
+        {swatch}
+        {text}
+      </>
+    );
+  }
+
+  return (
+    <>
+      {text}
+      {swatch}
+      <span className={ROW_VALUE}>{normalizeHex(value).toUpperCase()}</span>
+    </>
+  );
+}
+
+/*
+ * The tag on a derived row's corner.
+ *
+ * A square-cornered window holds a skewed badge: the window clips the lean's overhang, so the tag's
+ * right edge is a vertical cut rather than a slant, and the row clips in turn so the tag cannot
+ * sail past the card's rounded corner and hang over the edge.
+ *
+ * Thirty degrees, hinged on the top-left. Steeper than a true diagonal so the notch stays a nick in
+ * the edge rather than a wedge out of the row. Hinged at the corner because about its centre the
+ * skew throws the top corner outward past the window, which clips it flat — a vertical drop from
+ * the card's edge before the diagonal even starts. The lean is positive so the tag narrows toward
+ * its base; a cut widening as it fell would undercut the row rather than nick its top edge.
+ */
+function DerivedTag() {
+  return (
+    <span className="pointer-events-none absolute top-0 right-0 flex overflow-hidden">
+      <Badge
+        className="origin-top-left skew-x-[30deg] pr-2.5 pb-px pl-2 tracking-[0.09em]"
+        size="sm"
+        /*
+         * Inline, because the kit's badge rounds all four corners in its base class and a class
+         * here would only win or lose on stylesheet order. Only the corner where the slant meets
+         * the underside is round; the rest are cuts.
+         *
+         * Two pixels, not five. A skew stretches a corner horizontally by the tangent of its angle,
+         * so a radius spends more than its width along the edge — five left ten pixels of curve on
+         * a twelve-pixel tag, which was the whole diagonal.
+         */
+        style={{ borderRadius: "0 0 0 0.125rem" }}
+        variant="line"
+      >
+        {/* Back upright: the notch leans, the word in it does not. */}
+        <span className="inline-block skew-x-[-30deg]">Derived</span>
+      </Badge>
+    </span>
   );
 }
 
