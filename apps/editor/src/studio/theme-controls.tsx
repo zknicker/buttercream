@@ -14,21 +14,22 @@ export function ControlSection({ children, title }: { children: ReactNode; title
   return (
     <section className="mt-5 flex flex-col gap-1">
       {/*
-       * The brand's divider, doing the job a hairline was doing. It is the one place the rail
-       * carries the marketing page's texture, and it earns it by being structural rather than
-       * decorative: the stipple dissolves downward, so it reads as the end of what came before
-       * rather than a lid on what follows.
+       * Header and divider on one line: the band starts where the title ends and runs to the edge,
+       * so it reads as a rule the heading sits in rather than a stripe stacked above it.
        *
-       * Butter at a tenth of the band's height is an accent, not a stripe — the chrome still has
-       * to sit behind whatever theme the preview is wearing.
+       * It needs real height to read as dither at all — below about ten pixels the stipple is too
+       * few rows to resolve and just looks like a soft line. Larger cells for the same reason: the
+       * texture has to be legible as pixels, which is the whole point of the motif.
        */}
-      <DitherBand aria-hidden className="mb-2 text-butter/60" height={6} pixel={2} />
-      {/*
-       * Sentence-case sans, not the brand's uppercase mono. Section headers in a dense
-       * control rail should recede behind the values they label; the mono eyebrow is an
-       * expressive device that belongs on marketing, where it has room to be loud.
-       */}
-      <h2 className="mb-1 text-[11px] font-medium text-muted">{title}</h2>
+      <div className="mb-1 flex items-center gap-2.5">
+        {/*
+         * Sentence-case sans, not the brand's uppercase mono. Section headers in a dense
+         * control rail should recede behind the values they label; the mono eyebrow is an
+         * expressive device that belongs on marketing, where it has room to be loud.
+         */}
+        <h2 className="shrink-0 text-[11px] font-medium text-muted">{title}</h2>
+        <DitherBand aria-hidden className="min-w-0 flex-1 text-butter" height={16} pixel={4} />
+      </div>
       {children}
     </section>
   );
@@ -143,13 +144,13 @@ export function RangeControl({
       <Slider.Control className="absolute inset-0 px-[3px]">
         <Slider.Track className="-mx-[3px] h-full w-[calc(100%+6px)]">
           {/*
-           * A washed butter fill under a solid butter thumb. A neutral fill cannot work
-           * here: the rail sits on a rgb(234) panel, so any grey light enough to stay
-           * quiet composites to almost exactly that, and a half-filled slider reads as a
-           * gap in the row rather than a value. Hue separates where lightness cannot.
-           * Kept well under the thumb's full strength so the thumb still marks the value.
+           * Neutral, not butter. The note this replaces argued a grey fill would vanish because
+           * the rail sat on a rgb(234) panel — but the row is --shell-raised, pure white, so a
+           * tenth of the foreground reads clearly against it. Butter here competed with the
+           * genuine accents (the section rail, the primary action) and lost the row to a colour
+           * that carried no meaning: a density value is not a brand moment.
            */}
-          <Slider.Indicator className="h-full bg-butter/25 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none dark:bg-butter/22" />
+          <Slider.Indicator className="h-full bg-fg/8 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none dark:bg-fg/12" />
           <Slider.Ticks max={max} min={min} step={step} />
         </Slider.Track>
         {/*
@@ -159,7 +160,7 @@ export function RangeControl({
          */}
         <Slider.Thumb
           className={classes(
-            "h-[62%] w-[3px] rounded-[1px] bg-butter outline-none",
+            "h-[62%] w-[3px] rounded-[1px] bg-fg/55 outline-none",
             "transition-[height,left] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
             "data-dragging:h-full data-[dragging]:duration-100",
             "motion-reduce:transition-none",
