@@ -51,9 +51,9 @@ function Specimen({
 
 export function ChartsPreview(): ReactElement {
   return (
-    <div className="specimens specimens--wide">
+    <div className="specimens">
       <Specimen caption="Line">
-        <LineChart aspectRatio="16 / 9" data={SERIES}>
+        <LineChart data={SERIES}>
           <Grid horizontal />
           <XAxis />
           <Line dataKey="revenue" />
@@ -66,7 +66,7 @@ export function ChartsPreview(): ReactElement {
          * Adjacent steps of the ramp rather than two unrelated hues, so the pair reads as one
          * measurement split in two.
          */}
-        <LineChart aspectRatio="16 / 9" data={SERIES}>
+        <LineChart data={SERIES}>
           <Grid horizontal />
           <XAxis />
           <Line dataKey="revenue" stroke="var(--chart-2)" />
@@ -76,7 +76,7 @@ export function ChartsPreview(): ReactElement {
       </Specimen>
 
       <Specimen caption="Area">
-        <AreaChart aspectRatio="16 / 9" data={SERIES}>
+        <AreaChart data={SERIES}>
           <Grid horizontal />
           <XAxis />
           <Area dataKey="revenue" />
@@ -85,7 +85,7 @@ export function ChartsPreview(): ReactElement {
       </Specimen>
 
       <Specimen caption="Bar">
-        <BarChart aspectRatio="16 / 9" data={SERIES}>
+        <BarChart data={SERIES}>
           <Grid horizontal />
           <BarXAxis />
           <Bar dataKey="revenue" />
@@ -94,7 +94,7 @@ export function ChartsPreview(): ReactElement {
       </Specimen>
 
       <Specimen caption="Stacked bars">
-        <BarChart aspectRatio="16 / 9" data={SERIES} stacked>
+        <BarChart data={SERIES} stacked>
           <Grid horizontal />
           <BarXAxis />
           <Bar dataKey="expenses" fill="var(--chart-4)" />
@@ -104,7 +104,7 @@ export function ChartsPreview(): ReactElement {
       </Specimen>
 
       <Specimen caption="Horizontal bars">
-        <BarChart aspectRatio="16 / 9" data={SERIES.slice(0, 6)} orientation="horizontal">
+        <BarChart data={SERIES.slice(0, 6)} orientation="horizontal">
           <Grid vertical />
           <Bar dataKey="revenue" />
           <ChartTooltip />
@@ -113,12 +113,7 @@ export function ChartsPreview(): ReactElement {
 
       <Specimen caption="Loading">
         {/* The shimmer reads --chart-foreground-muted, so it tracks the theme too. */}
-        <LineChart
-          aspectRatio="16 / 9"
-          data={SERIES}
-          loadingLabel="Loading revenue…"
-          status="loading"
-        >
+        <LineChart data={SERIES} loadingLabel="Loading revenue…" status="loading">
           <Grid horizontal />
           <XAxis />
           <Line dataKey="revenue" />

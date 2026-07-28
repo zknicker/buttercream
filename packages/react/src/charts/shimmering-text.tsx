@@ -62,7 +62,7 @@ export function ShimmeringText({
   return (
     <motion.span
       className={cn(
-        "inline-flex select-none items-center leading-none",
+        "chart-shimmer",
         "[--color:var(--muted-foreground)] [--shimmering-color:var(--foreground)]",
         className,
       )}

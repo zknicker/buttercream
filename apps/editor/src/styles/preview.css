@@ -642,11 +642,10 @@
   font-size: 0.6875rem;
 }
 
-/* Charts need width to be readable, so their specimens run one per row. */
-.specimens--wide {
-  grid-template-columns: minmax(0, 1fr);
-}
-
+/*
+ * Charts size themselves from their own aspect ratio, so the demo only supplies width. Giving
+ * it a height instead fights that sizing and the plot overflows its card.
+ */
 .chart-demo {
   width: 100%;
   min-width: 0;

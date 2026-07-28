@@ -12,9 +12,46 @@
     font-family: var(--font-sans);
   }
 
+  /*
+   * The absolutely-placed axis and overlay layers resolve against this box. Without the
+   * positioning they escape to the nearest positioned ancestor and the tick labels land
+   * outside the chart entirely.
+   */
+  .chart--overflow-visible {
+    overflow: visible;
+  }
+
   /* Axis labels and overlays are positioned against the plot, so they must not clip. */
   .chart__svg {
     overflow: visible;
+  }
+
+  .chart__tick-label {
+    color: var(--chart-label);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    white-space: nowrap;
+  }
+
+  .chart__tick-label--end {
+    overflow: hidden;
+    text-align: end;
+    text-overflow: ellipsis;
+  }
+
+  .chart__loading-overlay {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .chart-shimmer {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    user-select: none;
   }
 
   /* Overlay planes: axes, crosshairs and hit areas stacked on the plot. */

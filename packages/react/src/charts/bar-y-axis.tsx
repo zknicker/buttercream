@@ -34,7 +34,7 @@ function BarYAxisLabel({ label, y, bandHeight, isHovered }: BarYAxisLabelProps) 
           opacity: isHovered ? 1 : 0.7,
           color: isHovered ? "var(--foreground)" : "var(--chart-label, var(--color-zinc-500))",
         }}
-        className={cn("truncate whitespace-nowrap text-right text-xs")}
+        className={cn("chart__tick-label chart__tick-label--end")}
         initial={{
           opacity: 0.7,
           color: "var(--chart-label, var(--color-zinc-500))",

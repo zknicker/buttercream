@@ -651,7 +651,7 @@ export function BarChart({
 
   return (
     <div
-      className={cn("relative w-full overflow-visible", className)}
+      className={cn("chart chart--overflow-visible", className)}
       ref={containerRef}
       style={{ aspectRatio }}
     >

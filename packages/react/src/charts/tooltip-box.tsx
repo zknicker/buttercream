@@ -185,7 +185,7 @@ function TooltipBoxInner({
   if (!entrance) {
     return createPortal(
       <div
-        className={cn("pointer-events-none absolute z-50", className)}
+        className={cn("chart__floating", className)}
         ref={tooltipRef}
         style={{ left: staticPosition.left, top: staticPosition.top }}
       >
@@ -200,7 +200,7 @@ function TooltipBoxInner({
   return createPortal(
     <motion.div
       animate={{ opacity: 1 }}
-      className={cn("pointer-events-none absolute z-50", className)}
+      className={cn("chart__floating", className)}
       exit={{ opacity: 0 }}
       initial={{ opacity: 0 }}
       ref={tooltipRef}

@@ -51,7 +51,7 @@ function BarXAxisLabel({ label, x, crosshairX, isHovering, tickerHalfWidth }: Ba
     >
       <motion.span
         animate={{ opacity }}
-        className={cn("whitespace-nowrap text-chart-label text-xs")}
+        className={cn("chart__tick-label")}
         initial={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >

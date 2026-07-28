@@ -247,7 +247,7 @@ export function LineChart({
 
   return (
     <div
-      className={cn("relative w-full", className)}
+      className={cn("chart", className)}
       ref={containerRef}
       style={{
         ...(aspectRatio ? { aspectRatio } : undefined),

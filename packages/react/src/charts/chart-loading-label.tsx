@@ -35,7 +35,7 @@ export function ChartLoadingLabel({
       }}
       aria-live="polite"
       className={cn(
-        "pointer-events-none absolute inset-0 flex items-center justify-center",
+        "chart__loading-overlay",
         className,
       )}
       initial={false}
