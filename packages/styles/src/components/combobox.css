@@ -1,16 +1,24 @@
 @layer components {
   .combobox {
-    display: grid;
+    display: flex;
     width: min(100%, 16rem);
+    flex-direction: column;
     gap: calc(0.25rem * var(--spacing-scale));
     font-family: var(--font-sans);
+  }
+
+  .combobox__control {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    isolation: isolate;
   }
 
   .combobox__input {
     width: 100%;
     height: calc(2.25rem * var(--spacing-scale));
     padding-inline: calc(0.75rem * var(--spacing-scale));
-    padding-inline-end: calc(2rem * var(--spacing-scale));
+    padding-inline-end: calc(1.75rem * var(--spacing-scale));
     border: var(--field-border-width) solid var(--field-border);
     border-radius: var(--field-radius);
     outline: none;
@@ -28,7 +36,7 @@
     color: var(--field-placeholder);
   }
 
-  .combobox__input:hover:not(:focus) {
+  .combobox__input:hover:not(:focus, [data-disabled]) {
     border-color: var(--field-border-hover);
     background: var(--field-background-hover);
   }
@@ -41,41 +49,60 @@
   }
 
   .combobox__input[data-disabled] {
-    pointer-events: none;
     opacity: var(--disabled-opacity);
+    pointer-events: none;
   }
 
   /*
    * Sits over the input's trailing padding rather than beside it, so the text can run the
-   * full width of the field without colliding with the chevron.
+   * full width of the field without colliding with the chevron. Full height so the whole
+   * trailing edge is the hit target, not just the glyph.
    */
   .combobox__trigger {
     position: absolute;
     top: 50%;
-    inset-inline-end: calc(0.5rem * var(--spacing-scale));
-    display: inline-flex;
+    inset-inline-end: 0;
+    display: flex;
+    height: 100%;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
+    padding-inline-end: calc(0.5rem * var(--spacing-scale));
     border: none;
     outline: none;
     background: transparent;
-    color: var(--muted);
+    color: var(--field-placeholder);
     cursor: var(--cursor-interactive);
+    transition: color 150ms ease;
     translate: 0 -50%;
   }
 
-  .combobox__control {
-    position: relative;
-    display: flex;
-    align-items: center;
+  .combobox__trigger:hover:not([data-disabled]) {
+    color: var(--field-foreground);
+  }
+
+  .combobox__trigger[data-pressed] {
+    opacity: 0.7;
+  }
+
+  /* Still receives pointer events while disabled, so it needs to say so with the cursor. */
+  .combobox__trigger[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--disabled-opacity);
   }
 
   .combobox__chevron {
+    display: inline-block;
     width: 0.5rem;
     height: 0.5rem;
     border-right: 1.5px solid currentcolor;
     border-bottom: 1.5px solid currentcolor;
     transform: translateY(-0.125rem) rotate(45deg);
+    transition: transform 150ms ease;
+  }
+
+  .combobox__trigger[data-popup-open] .combobox__chevron {
+    transform: translateY(0.125rem) rotate(225deg);
   }
 
   .combobox__positioner {
@@ -87,8 +114,7 @@
     min-width: var(--anchor-width);
     max-width: min(24rem, var(--available-width));
     max-height: var(--available-height);
-    padding: calc(0.375rem * var(--spacing-scale));
-    border-radius: var(--field-radius);
+    border-radius: min(2rem, var(--radius-3xl));
     outline: none;
     background: var(--overlay);
     box-shadow: var(--shadow-overlay);
@@ -96,6 +122,7 @@
     font-size: calc(0.875rem * var(--font-size-scale));
     overflow-y: auto;
     overscroll-behavior: contain;
+    scroll-padding-block: calc(0.25rem * var(--spacing-scale));
     transform-origin: var(--transform-origin);
     transition:
       transform 150ms ease,
@@ -113,27 +140,59 @@
     transition-duration: 100ms;
   }
 
+  /* The padding lives here rather than on the popup so the scrollbar hugs the popup edge. */
+  .combobox__list {
+    width: 100%;
+    padding: calc(0.375rem * var(--spacing-scale));
+  }
+
   .combobox__item {
-    display: grid;
+    position: relative;
+    display: flex;
+    width: 100%;
     min-height: calc(2.25rem * var(--spacing-scale));
     align-items: center;
+    justify-content: flex-start;
     gap: calc(0.75rem * var(--spacing-scale));
     padding-inline: calc(0.625rem * var(--spacing-scale));
     padding-block: calc(0.375rem * var(--spacing-scale));
-    border-radius: min(var(--field-radius), 0.625rem);
+    border-radius: calc(var(--radius) * 2);
     outline: none;
     cursor: var(--cursor-interactive);
-    grid-template-columns: minmax(0, 1fr) 1rem;
+    transition: transform 250ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  /* The indicator is absolutely placed, so the row reserves its column with padding. */
+  .combobox__item:has(.combobox__item-indicator) {
+    padding-inline-end: calc(1.75rem * var(--spacing-scale));
   }
 
   .combobox__item[data-highlighted] {
     background: var(--default);
-    color: var(--default-foreground);
+  }
+
+  .combobox__item:active:not([data-disabled]) {
+    transform: scale(0.98);
   }
 
   .combobox__item[data-disabled] {
-    pointer-events: none;
+    cursor: var(--cursor-disabled);
     opacity: var(--disabled-opacity);
+    pointer-events: none;
+  }
+
+  .combobox__item-indicator {
+    position: absolute;
+    top: 50%;
+    inset-inline-end: calc(0.5rem * var(--spacing-scale));
+    display: flex;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    color: var(--default-foreground);
+    translate: 0 -50%;
   }
 
   .combobox__check {
@@ -144,6 +203,24 @@
     transform: translateY(-0.125rem) rotate(-45deg);
   }
 
+  .combobox__group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .combobox__group-label {
+    width: 100%;
+    padding-inline: calc(0.5rem * var(--spacing-scale));
+    padding-block-start: calc(0.375rem * var(--spacing-scale));
+    padding-block-end: calc(0.25rem * var(--spacing-scale));
+    color: var(--muted);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+    text-align: start;
+  }
+
   /* Shown when a query matches nothing, so the popup is never an unexplained empty box. */
   .combobox__empty {
     padding-inline: calc(0.625rem * var(--spacing-scale));
@@ -151,11 +228,22 @@
     color: var(--muted);
     font-size: calc(0.875rem * var(--font-size-scale));
   }
+
+  /*
+   * Base UI keeps this element mounted so screen readers announce the change; it is empty
+   * when there are matches, and an empty box would still take up its own padding.
+   */
+  .combobox__empty:empty {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .combobox__chevron,
   .combobox__input,
-  .combobox__popup {
+  .combobox__item,
+  .combobox__popup,
+  .combobox__trigger {
     transition: none;
   }
 }

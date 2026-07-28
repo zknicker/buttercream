@@ -74,7 +74,7 @@ describe("Combobox", () => {
   test("renders an input with a trigger beside it", () => {
     const markup = renderToStaticMarkup(
       <Combobox items={["Apple", "Banana"]} placeholder="Search fruit">
-        <Combobox.Item value="Apple">Apple</Combobox.Item>
+        {(fruit: string) => <Combobox.Item value={fruit}>{fruit}</Combobox.Item>}
       </Combobox>,
     );
 
@@ -82,7 +82,7 @@ describe("Combobox", () => {
     expect(markup).toContain("combobox__trigger");
     expect(markup).toContain('placeholder="Search fruit"');
     /* The chevron is decorative; the trigger carries the accessible name. */
-    expect(markup).toContain('aria-label="Open"');
+    expect(markup).toContain('aria-label="Show suggestions"');
   });
 
   test("keeps the popup portalled until opened", () => {
