@@ -1,0 +1,19 @@
+CORRECTION: this commit did NOT cause "no visual change".
+
+An audit of the diff against the library CSS found three changes:
+
+1. The Switch flipped sides. The removed .overview__switch-row was flex with
+   justify-content: space-between and the text before the control, so the label sat left
+   and the switch at the right edge, full width. The library Switch renders the control
+   first with the copy after it at a fixed 0.75rem gap, so the control moved to the left
+   of the text and the row stopped being edge-to-edge.
+
+2. Card.Title collapsed three sizes onto one. The removed rules were 15px/600 sans,
+   16px/600 and 14px/600; card__title is 14px/500 in the heading font. The dialog titles
+   lost 2px and a weight step and changed family.
+
+3. Card.Description grew. The removed rules were 13px, 13px and 12px; card__description
+   is 14px.
+
+The conversion itself was right and should stand — it is what the library owns. The
+accurate claim was: "converges the page onto the library type ramp, which is the point."
