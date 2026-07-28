@@ -26,9 +26,6 @@ export const colorTokenCategories = [
 ] as const;
 export type ColorTokenCategory = (typeof colorTokenCategories)[number];
 
-export const colorFilters = ["All", ...colorTokenCategories] as const;
-export type ColorFilter = (typeof colorFilters)[number];
-
 export interface AuthoredTokenPath {
   key: string;
   section: "colors" | "fields";

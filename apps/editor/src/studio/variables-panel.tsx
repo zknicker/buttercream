@@ -13,7 +13,6 @@ import { useMemo, useState } from "react";
 import { classes, Segmented } from "../ui/index.ts";
 import {
   ColorTokenRow,
-  FilterChips,
   LevelRow,
   RangeRow,
   SelectRow,
@@ -21,12 +20,7 @@ import {
   VariablesSection,
 } from "./variables-rows.tsx";
 import type { ColorTokenCategory } from "./variables-tokens.ts";
-import {
-  type ColorFilter,
-  type ColorToken,
-  collectColorTokens,
-  colorTokenCategories,
-} from "./variables-tokens.ts";
+import { type ColorToken, collectColorTokens, colorTokenCategories } from "./variables-tokens.ts";
 
 /*
  * Variables tab: the token inspector. Colours list every token — authored ones editable,

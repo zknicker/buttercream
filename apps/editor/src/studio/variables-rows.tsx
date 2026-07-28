@@ -2,7 +2,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactElement, ReactNode } from "react";
 import { useRef, useState } from "react";
-import { classes, Select, Slider } from "../ui/index.ts";
+import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
 import { describeTokenValue, formatTokenDisplay } from "./variables-tokens.ts";
 
 /*
@@ -36,54 +36,26 @@ export function VariablesSection({
   title: string;
 }): ReactElement {
   return (
-    <section className="mt-7 flex flex-col gap-1">
-      <h2 className="mb-1 flex items-baseline justify-between text-[11px] font-medium text-muted">
-        {title}
-        {count === undefined ? null : <span className="font-mono tabular-nums">{count}</span>}
-      </h2>
+    /* The Style tab's section head, so the two tabs stop disagreeing about what a section is. */
+    <section className="mt-6 flex flex-col gap-1.5">
+      <div className="mb-2 flex items-center gap-3">
+        <h2 className="shrink-0 font-mono text-[13px] tracking-tight text-muted">{title}</h2>
+        <DitherBand
+          aria-hidden
+          className="min-w-0 flex-1 text-fg/25 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
+          density={0.5}
+          height={6}
+          pixel={3}
+        />
+        {count === undefined ? null : (
+          <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted">{count}</span>
+        )}
+      </div>
       {children}
     </section>
   );
 }
 
-export function FilterChips<Value extends string>({
-  label,
-  onChange,
-  options,
-  value,
-}: {
-  label: string;
-  onChange: (value: Value) => void;
-  options: readonly Value[];
-  value: Value;
-}): ReactElement {
-  return (
-    <fieldset aria-label={label} className="mb-1 flex min-w-0 flex-wrap gap-1">
-      {options.map((option) => (
-        <button
-          aria-pressed={option === value}
-          className={classes(
-            "h-5.5 rounded-full px-2 text-[11px] whitespace-nowrap",
-            FOCUS_OUTLINE,
-            option === value ? "bg-raised text-fg ring-1 ring-fg/10" : "text-muted hover:text-fg",
-          )}
-          key={option}
-          onClick={() => onChange(option)}
-          type="button"
-        >
-          {option}
-        </button>
-      ))}
-    </fieldset>
-  );
-}
-
-/**
- * One colour token. Authored tokens (given `onCommit`) edit inline — a literal hex gets a
- * colour picker swatch, and clicking the value swaps in a text input so any token can be
- * pinned to a literal over its default expression. Derived tokens render their formula
- * read-only. The swatch resolves `var(--name)` against the enclosing themed scope.
- */
 export function ColorTokenRow({
   name,
   onCommit,
@@ -108,13 +80,19 @@ export function ColorTokenRow({
   return (
     <div className="group/token relative flex items-center gap-2.5 px-3 py-1.5 hover:bg-fg/4">
       {hex !== undefined && onCommit ? (
-        <input
+        /*
+         * The same picker the Style tab uses. This row kept a native <input type="color"> after
+         * Style moved off it, so editing an authored token here still opened the operating
+         * system's dialog — and the two tabs offered different tools for the same job.
+         *
+         * The ring keeps the swatch legible when the chosen colour matches the row behind it.
+         */
+        <ColorPickerPopover
           aria-label={`${name} colour`}
-          /* The ring keeps the swatch legible when the chosen colour matches the row. */
-          className="size-4 shrink-0 cursor-pointer appearance-none overflow-hidden rounded-full bg-transparent p-0 ring-1 ring-fg/25 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-full [&::-webkit-color-swatch]:border-0"
-          name={name}
-          onChange={(event) => onCommit(event.currentTarget.value)}
-          type="color"
+          defaultFormat="hex"
+          onValueChange={(next) => onCommit(next)}
+          triggerClassName="size-4 shrink-0 rounded-full p-0 ring-1 ring-fg/25 [&>*]:size-full [&>*]:rounded-full"
+          triggerShowValue={false}
           value={hex}
         />
       ) : (
