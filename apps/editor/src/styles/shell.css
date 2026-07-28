@@ -82,6 +82,13 @@
 
   /* Squarer than the design-system default so the chrome reads as a tool, not a card. */
   --radius-shell: 0.5rem;
+
+  /*
+   * The frame around the preview. Its own token rather than a rounded-* utility: those resolve
+   * against the design system's radius scale, so the chrome's corners would move whenever the
+   * user dragged General Radius — the one thing the shell must not do.
+   */
+  --radius-shell-frame: 1.5rem;
 }
 
 @layer theme {

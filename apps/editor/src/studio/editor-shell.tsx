@@ -367,7 +367,12 @@ export function EditorShell({
        * plane. The top gutter clears the floating topbar.
        */}
       <main className="min-h-0 min-w-0 bg-sunken px-3 pt-12 pb-3">
-        <div className="h-full w-full overflow-hidden rounded-xl bg-raised ring-1 ring-line">
+        {/*
+         * No ring and no background of its own: the themed surface inside paints the whole
+         * area, so anything drawn here would show as a seam around the artifact being
+         * previewed. The reference frames its preview the same way — a radius and nothing else.
+         */}
+        <div className="h-full w-full overflow-hidden rounded-(--radius-shell-frame)">
           <PreviewSurface
             customCss={designSystem.rules.customCss}
             style={themeVariables}
