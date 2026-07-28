@@ -16,6 +16,7 @@ import { PreviewSurface } from "./preview-surface.tsx";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { DESIGN_SYSTEM_NAME_FIELD_ID, ThemeEditorPanel } from "./theme-editor-panel.tsx";
 import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
+import { useHistoryShortcuts } from "./use-history-shortcuts.ts";
 
 /* Keep the component names alphabetical — the nav renders them in this order. */
 const sections = [
@@ -161,17 +162,23 @@ export function EditorShell({
    */
   const { theme, toggleTheme } = useShellTheme();
   const {
+    canRedo,
+    canUndo,
     conflictVersion,
     designSystem,
     overwriteConflict,
+    redo,
     replaceDesignSystem,
     saveState,
+    undo,
     updateDesignSystem,
   } = useDesignSystemDraft({
     initialDesignSystem,
     ...(initialVersion === undefined ? {} : { initialVersion }),
     ...(onSave ? { onSave } : {}),
   });
+
+  useHistoryShortcuts({ redo, undo });
 
   useEffect(() => {
     const compactViewport = window.matchMedia("(max-width: 720px)");
@@ -272,10 +279,24 @@ export function EditorShell({
         <strong className="truncate text-sm font-medium text-fg">{section}</strong>
 
         <div className="flex items-center justify-end gap-1">
-          <Button aria-label="Undo" disabled iconOnly size="md" variant="ghost">
+          <Button
+            aria-label="Undo"
+            disabled={!canUndo}
+            iconOnly
+            onClick={undo}
+            size="md"
+            variant="ghost"
+          >
             <HugeiconsIcon aria-hidden="true" icon={Undo02Icon} size={16} strokeWidth={2} />
           </Button>
-          <Button aria-label="Redo" disabled iconOnly size="md" variant="ghost">
+          <Button
+            aria-label="Redo"
+            disabled={!canRedo}
+            iconOnly
+            onClick={redo}
+            size="md"
+            variant="ghost"
+          >
             <HugeiconsIcon aria-hidden="true" icon={Redo02Icon} size={16} strokeWidth={2} />
           </Button>
           <span aria-hidden className="mx-1.5 h-6 w-px bg-fg/12" />

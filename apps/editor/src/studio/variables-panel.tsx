@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import type { ShellTheme } from "../shell-theme.ts";
 import { classes } from "../ui/index.ts";
 import { ROW_FLEX, ROW_LABEL } from "./control-row.ts";
+import type { UpdateDesignSystem } from "./use-design-system-draft.ts";
 import {
   ColorTokenRow,
   LevelRow,
@@ -48,7 +49,7 @@ export function VariablesPanel({
   theme: themeKey,
 }: {
   designSystem: DesignSystem;
-  onUpdate: (mutate: (designSystem: DesignSystem) => void) => void;
+  onUpdate: UpdateDesignSystem;
   /*
    * Which theme this panel inspects, handed down rather than resolved here. The rail used to carry
    * its own light/dark switch, so it could be showing the dark theme while the preview beside it
@@ -98,10 +99,14 @@ export function VariablesPanel({
    */
   const swatchVariables = useMemo(() => themeCssVariables(theme) as CSSProperties, [theme]);
 
-  const updateTheme = (mutate: (tokens: ThemeTokens) => void) =>
-    onUpdate((next) => {
-      mutate(next.theme[themeKey]);
-    });
+  /* Gestures are keyed per theme as well as per token: this tab edits one theme at a time. */
+  const updateTheme = (mutate: (tokens: ThemeTokens) => void, coalesceKey?: string) =>
+    onUpdate(
+      (next) => {
+        mutate(next.theme[themeKey]);
+      },
+      coalesceKey === undefined ? undefined : `${themeKey}.${coalesceKey}`,
+    );
 
   /** Writes a literal over the token's default expression, opting it out of generation. */
   const pinToken = (token: ColorToken, value: string) => {
@@ -111,7 +116,7 @@ export function VariablesPanel({
     }
     updateTheme((tokens) => {
       (tokens[authored.section] as Record<string, string>)[authored.key] = value;
-    });
+    }, `token.${token.name}`);
   };
 
   return (
@@ -216,7 +221,7 @@ export function VariablesPanel({
           onChange={(value) =>
             updateTheme((tokens) => {
               tokens.effects.fieldBorderWidth = `${value}px`;
-            })
+            }, "effects.fieldBorderWidth")
           }
           step={1}
           value={Number.parseFloat(theme.effects.fieldBorderWidth)}
@@ -228,7 +233,7 @@ export function VariablesPanel({
           onChange={(value) =>
             updateTheme((tokens) => {
               tokens.effects.disabledOpacity = value;
-            })
+            }, "effects.disabledOpacity")
           }
           step={0.05}
           value={theme.effects.disabledOpacity}

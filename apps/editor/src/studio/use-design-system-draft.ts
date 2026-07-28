@@ -1,5 +1,15 @@
 import type { DesignSystem } from "@buttercream/theme-core";
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  canRedo,
+  canUndo,
+  createDraft,
+  type DesignSystemDraft,
+  editDraft,
+  redoDraft,
+  replaceDraft,
+  undoDraft,
+} from "./design-system-history.ts";
 
 const AUTOSAVE_DELAY_MS = 700;
 
@@ -14,6 +24,16 @@ export type SaveDesignSystem = (
 
 export type SaveState = "clean" | "conflict" | "dirty" | "error" | "saving";
 
+/**
+ * One mutation of the draft document. Controls that emit a stream of changes — a slider drag, a
+ * colour picker, a text field being typed into — name their gesture with `coalesceKey` so the
+ * stream lands as one history entry. Discrete changes leave it off and land as one entry each.
+ */
+export type UpdateDesignSystem = (
+  mutate: (designSystem: DesignSystem) => void,
+  coalesceKey?: string,
+) => void;
+
 export function useDesignSystemDraft({
   initialDesignSystem,
   initialVersion,
@@ -23,14 +43,17 @@ export function useDesignSystemDraft({
   initialVersion?: number;
   onSave?: SaveDesignSystem;
 }) {
-  const [designSystem, setDesignSystem] = useState(initialDesignSystem);
+  const [draft, setDraft] = useState(() => createDraft(initialDesignSystem));
   const [version, setVersion] = useState(initialVersion);
   const [revision, setRevision] = useState(0);
   const [savedRevision, setSavedRevision] = useState(0);
   const [saveState, setSaveState] = useState<SaveState>("clean");
   const [conflictVersion, setConflictVersion] = useState<number>();
+  /* Edits read the draft they mutate, so several in one tick have to see each other. */
+  const draftRef = useRef(draft);
   const revisionRef = useRef(revision);
   const savingRef = useRef(false);
+  const designSystem = draft.designSystem;
 
   const markChanged = useCallback(() => {
     revisionRef.current += 1;
@@ -40,25 +63,40 @@ export function useDesignSystemDraft({
     }
   }, [onSave]);
 
-  const updateDesignSystem = useCallback(
-    (mutate: (next: DesignSystem) => void) => {
-      setDesignSystem((current) => {
-        const next = structuredClone(current);
-        mutate(next);
-        return next;
-      });
+  /* Undo and redo are edits like any other: an undone document is unsaved until it is saved. */
+  const applyDraft = useCallback(
+    (next: DesignSystemDraft) => {
+      if (next === draftRef.current) {
+        return;
+      }
+      draftRef.current = next;
+      setDraft(next);
       markChanged();
     },
     [markChanged],
   );
 
+  const updateDesignSystem = useCallback<UpdateDesignSystem>(
+    (mutate, coalesceKey) => {
+      applyDraft(editDraft(draftRef.current, mutate, coalesceKey));
+    },
+    [applyDraft],
+  );
+
   const replaceDesignSystem = useCallback(
     (next: DesignSystem) => {
-      setDesignSystem(next);
-      markChanged();
+      applyDraft(replaceDraft(draftRef.current, next));
     },
-    [markChanged],
+    [applyDraft],
   );
+
+  const undo = useCallback(() => {
+    applyDraft(undoDraft(draftRef.current));
+  }, [applyDraft]);
+
+  const redo = useCallback(() => {
+    applyDraft(redoDraft(draftRef.current));
+  }, [applyDraft]);
 
   const persist = useCallback(
     async (snapshot: DesignSystem, expectedVersion: number, snapshotRevision: number) => {
@@ -108,15 +146,19 @@ export function useDesignSystemDraft({
     if (conflictVersion === undefined) {
       return;
     }
-    await persist(designSystem, conflictVersion, revisionRef.current);
-  }, [conflictVersion, designSystem, persist]);
+    await persist(draftRef.current.designSystem, conflictVersion, revisionRef.current);
+  }, [conflictVersion, persist]);
 
   return {
+    canRedo: canRedo(draft),
+    canUndo: canUndo(draft),
     conflictVersion,
     designSystem,
     overwriteConflict,
+    redo,
     replaceDesignSystem,
     saveState,
+    undo,
     updateDesignSystem,
   };
 }

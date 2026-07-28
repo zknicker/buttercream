@@ -25,7 +25,7 @@ import {
   ToggleControl,
 } from "./theme-controls.tsx";
 import { ThemeIconControls } from "./theme-icon-controls.tsx";
-import type { SaveState } from "./use-design-system-draft.ts";
+import type { SaveState, UpdateDesignSystem } from "./use-design-system-draft.ts";
 import { VariablesPanel } from "./variables-panel.tsx";
 
 /*
@@ -51,7 +51,7 @@ interface ThemeEditorPanelProps {
   designSystemId: string;
   onClose: () => void;
   onImport: (designSystem: DesignSystem) => void;
-  onUpdate: (mutate: (designSystem: DesignSystem) => void) => void;
+  onUpdate: UpdateDesignSystem;
   open: boolean;
   saveState: SaveState;
   showSaveState: boolean;
@@ -121,7 +121,7 @@ export function ThemeEditorPanel({
 
 interface StylePanelProps {
   designSystem: DesignSystem;
-  onUpdate: (mutate: (designSystem: DesignSystem) => void) => void;
+  onUpdate: UpdateDesignSystem;
   showSaveState: boolean;
 }
 
@@ -160,7 +160,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
             onChange={(name) =>
               onUpdate((next) => {
                 next.identity.name = name;
-              })
+              }, "identity.name")
             }
             value={designSystem.identity.name}
           />
@@ -175,7 +175,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.colors.accent = value;
               });
-            })
+            }, "colors.accent")
           }
           value={designSystem.theme.light.colors.accent}
         />
@@ -194,7 +194,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.neutrals.base = value;
               });
-            })
+            }, "neutrals.base")
           }
           step={0.01}
           value={designSystem.theme.light.neutrals.base}
@@ -206,7 +206,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.colors.success = value;
               });
-            })
+            }, "colors.success")
           }
           value={designSystem.theme.light.colors.success}
         />
@@ -217,7 +217,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.colors.warning = value;
               });
-            })
+            }, "colors.warning")
           }
           value={designSystem.theme.light.colors.warning}
         />
@@ -228,7 +228,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.colors.danger = value;
               });
-            })
+            }, "colors.danger")
           }
           value={designSystem.theme.light.colors.danger}
         />
@@ -290,7 +290,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.typography.lineHeight = value;
               });
-            })
+            }, "typography.lineHeight")
           }
           step={0.05}
           value={designSystem.theme.light.typography.lineHeight}
@@ -304,7 +304,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.typography.letterSpacing = `${value}em`;
               });
-            })
+            }, "typography.letterSpacing")
           }
           step={0.01}
           value={Number.parseFloat(designSystem.theme.light.typography.letterSpacing)}
@@ -321,7 +321,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.density.spacing = value;
               });
-            })
+            }, "density.spacing")
           }
           step={0.05}
           value={designSystem.theme.light.density.spacing}
@@ -335,7 +335,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.density.fontSize = value;
               });
-            })
+            }, "density.fontSize")
           }
           step={0.05}
           value={designSystem.theme.light.density.fontSize}
@@ -343,10 +343,10 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
       </ControlSection>
       <ThemeIconControls
         icons={designSystem.icons}
-        onChange={(icons) =>
+        onChange={(icons, coalesceKey) =>
           onUpdate((next) => {
             next.icons = icons;
-          })
+          }, coalesceKey)
         }
       />
 
@@ -365,7 +365,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.corners.radius = `${value}rem`;
               });
-            })
+            }, "corners.radius")
           }
           step={0.125}
           value={Number.parseFloat(designSystem.theme.light.corners.radius)}
@@ -379,7 +379,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.corners.fieldRadius = `${value}rem`;
               });
-            })
+            }, "corners.fieldRadius")
           }
           step={0.125}
           value={Number.parseFloat(designSystem.theme.light.corners.fieldRadius)}
@@ -396,7 +396,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.effects.borderWidth = `${value}px`;
               });
-            })
+            }, "effects.borderWidth")
           }
           step={1}
           value={Number.parseFloat(designSystem.theme.light.effects.borderWidth)}
@@ -411,7 +411,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.effects.ringOffsetWidth = `${value}px`;
               });
-            })
+            }, "effects.ringOffsetWidth")
           }
           step={1}
           value={Number.parseFloat(designSystem.theme.light.effects.ringOffsetWidth)}
@@ -425,7 +425,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
               updateBothThemes(next, (theme) => {
                 theme.effects.disabledOpacity = value;
               });
-            })
+            }, "effects.disabledOpacity")
           }
           step={0.05}
           value={designSystem.theme.light.effects.disabledOpacity}
