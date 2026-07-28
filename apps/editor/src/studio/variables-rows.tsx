@@ -1,9 +1,6 @@
-import { HugeiconsIcon } from "@hugeicons/react";
-import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactElement, ReactNode } from "react";
-import { useRef, useState } from "react";
-import { ColorPickerPopover, classes, SectionHeading, Select, Slider } from "../ui/index.ts";
-import { controlName, FOCUS_OUTLINE, ROW, ROW_FLEX, ROW_LABEL, ROW_VALUE } from "./control-row.ts";
+import { classes, SectionHeading } from "../ui/index.ts";
+import { FOCUS_OUTLINE } from "./control-row.ts";
 import { ColorControl, RangeControl, SelectControl, ToggleControl } from "./theme-controls.tsx";
 import { describeTokenValue, formatTokenDisplay } from "./variables-tokens.ts";
 

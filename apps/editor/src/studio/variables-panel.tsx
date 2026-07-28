@@ -6,7 +6,6 @@ import {
   themeCssVariables,
 } from "@buttercream/theme-core";
 import { HugeiconsIcon } from "@hugeicons/react";
-import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import Search01Icon from "@hugeicons-pro/core-stroke-rounded/Search01Icon";
 import type { CSSProperties, ReactElement } from "react";
 import { useMemo, useState } from "react";
@@ -20,7 +19,6 @@ import {
   ToggleRow,
   VariablesSection,
 } from "./variables-rows.tsx";
-import type { ColorTokenCategory } from "./variables-tokens.ts";
 import { type ColorToken, collectColorTokens, colorTokenCategories } from "./variables-tokens.ts";
 
 /*
@@ -32,9 +30,6 @@ import { type ColorToken, collectColorTokens, colorTokenCategories } from "./var
 
 const THEMES = ["Light", "Dark"] as const;
 type ThemeName = (typeof THEMES)[number];
-
-/** Rows shown before the list collapses behind "Show all N". */
-const COLLAPSED_ROWS = 12;
 
 const SHADOW_LEVELS = [
   { label: "None", value: "none" },
@@ -63,16 +58,6 @@ export function VariablesPanel({
    */
   const [themeName, setThemeName] = useState<ThemeName>("Light");
   const [query, setQuery] = useState("");
-  const [expanded, setExpanded] = useState<ReadonlySet<ColorTokenCategory>>(new Set());
-
-  const toggleGroup = (category: ColorTokenCategory) =>
-    setExpanded((current) => {
-      const next = new Set(current);
-      if (!next.delete(category)) {
-        next.add(category);
-      }
-      return next;
-    });
 
   const themeKey = themeName === "Light" ? "light" : "dark";
   const theme = designSystem.theme[themeKey];
@@ -83,7 +68,6 @@ export function VariablesPanel({
    * Matches the name and the value, so a derived token can be found by what it is built from —
    * searching "accent" turns up `accent-hover` and every formula that mixes the accent in.
    */
-  const searching = query.trim().length > 0;
   const groups = useMemo(() => {
     const needle = query.trim().toLowerCase();
     const matched = needle

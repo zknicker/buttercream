@@ -1,5 +1,3 @@
-import { HugeiconsIcon } from "@hugeicons/react";
-import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import {
