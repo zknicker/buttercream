@@ -1778,3 +1778,198 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/*
+ * The design-system card miniature.
+ *
+ * Rendered on the workspace index, many at once, inside a fixed-width stage that is then
+ * transform-scaled down to card size. Everything is sized in rem so the design system's own
+ * radius and spacing tokens scale with the artwork rather than staying at card scale — that
+ * proportional honesty is the whole point of a live miniature over a screenshot.
+ */
+.miniature {
+  display: grid;
+  overflow: hidden;
+  height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  grid-template-columns: 13rem minmax(0, 1fr);
+}
+
+.miniature__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 0.875rem;
+  border-inline-end: var(--border-width) solid var(--border);
+}
+
+.miniature__identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.25rem;
+}
+
+.miniature__identity-name {
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.miniature__nav {
+  display: grid;
+  gap: 0.1875rem;
+}
+
+.miniature__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-xl);
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.miniature__nav-item[data-current] {
+  background: var(--default);
+  color: var(--foreground);
+}
+
+.miniature__main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.miniature__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.miniature__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing);
+  line-height: 1.2;
+}
+
+.miniature__subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.miniature__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.miniature__stats {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Card already supplies surface, radius, and shadow; this only lays the contents out. */
+.miniature__stat {
+  display: grid;
+  gap: 0.25rem;
+  justify-items: start;
+  padding: 0.875rem 1rem;
+}
+
+.miniature__stat-label {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.miniature__stat-value {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.miniature__panel {
+  display: grid;
+  gap: 0.875rem;
+  padding: 1rem;
+}
+
+.miniature__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.miniature__chips {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/*
+ * The card's stage. The surface normally owns the canvas's padding and scrolling because it
+ * stands in for the old iframe's body; inside a fixed-size miniature there is nothing to
+ * scroll and no room for a gutter, so both are pinned off here rather than made conditional
+ * in the component.
+ */
+.miniature-stage > .preview-surface {
+  overflow: hidden;
+  padding: 0;
+}
+
+.miniature__list {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  /* Takes the slack in the column so the vignette reaches the bottom of the frame. */
+  flex: 1;
+  padding: 1rem;
+}
+
+.miniature__row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.miniature__row-text {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+}
+
+.miniature__row-name {
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.miniature__row-meta {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

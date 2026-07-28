@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SchemaDotjsonRouteImport } from './routes/schema[.]json'
+import { Route as SystemsRouteImport } from './routes/systems'
 import { Route as DsIdRouteImport } from './routes/ds.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const SchemaDotjsonRoute = SchemaDotjsonRouteImport.update({
   path: '/schema.json',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SystemsRoute = SystemsRouteImport.update({
+  id: '/systems',
+  path: '/systems',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DsIdRoute = DsIdRouteImport.update({
   id: '/ds/$id',
   path: '/ds/$id',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/schema.json': typeof SchemaDotjsonRoute
+  '/systems': typeof SystemsRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/schema.json': typeof SchemaDotjsonRoute
+  '/systems': typeof SystemsRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/schema.json': typeof SchemaDotjsonRoute
+  '/systems': typeof SystemsRoute
   '/ds/$id': typeof DsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pricing' | '/schema.json' | '/ds/$id'
+  fullPaths: '/' | '/pricing' | '/schema.json' | '/systems' | '/ds/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pricing' | '/schema.json' | '/ds/$id'
-  id: '__root__' | '/' | '/pricing' | '/schema.json' | '/ds/$id'
+  to: '/' | '/pricing' | '/schema.json' | '/systems' | '/ds/$id'
+  id: '__root__' | '/' | '/pricing' | '/schema.json' | '/systems' | '/ds/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PricingRoute: typeof PricingRoute
   SchemaDotjsonRoute: typeof SchemaDotjsonRoute
+  SystemsRoute: typeof SystemsRoute
   DsIdRoute: typeof DsIdRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchemaDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/systems': {
+      id: '/systems'
+      path: '/systems'
+      fullPath: '/systems'
+      preLoaderRoute: typeof SystemsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ds/$id': {
       id: '/ds/$id'
       path: '/ds/$id'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PricingRoute: PricingRoute,
   SchemaDotjsonRoute: SchemaDotjsonRoute,
+  SystemsRoute: SystemsRoute,
   DsIdRoute: DsIdRoute,
 }
 export const routeTree = rootRouteImport
