@@ -12,6 +12,7 @@ import {
   RadioGroup,
   Segment,
   Select,
+  Separator,
   Slider,
   Switch,
   Tabs,
@@ -159,9 +160,9 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
           <InputOTP defaultValue="4320" groupSize={3} length={6} />
           <span className="overview__verify-hint">
             Didn&rsquo;t receive a code?{" "}
-            <button className="overview__link" type="button">
+            <Button size="sm" variant="ghost">
               Resend
-            </button>
+            </Button>
           </span>
         </div>
 
@@ -225,7 +226,7 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
           <Card.Title>Create an account</Card.Title>
           <Card.Description>Start your free 7-day trial. No credit card required.</Card.Description>
           <Button fullWidth>Get started</Button>
-          <span className="overview__or">OR</span>
+          <Separator>OR</Separator>
           {/*
            * The reference offers Google and Apple here. Those are brand marks rather than part of
            * the icon vocabulary, and drawing them by hand is the thing this system avoids — so

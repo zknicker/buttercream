@@ -791,15 +791,6 @@
   padding: 0.25rem;
 }
 
-.app__avatar {
-  width: 2rem;
-  height: 2rem;
-  flex: none;
-  border-radius: 999px;
-  /* Stands in for a photo without shipping one; reads as an avatar at a glance. */
-  background: linear-gradient(140deg, var(--chart-4), var(--chart-2));
-}
-
 .app__identity-text {
   display: grid;
   min-width: 0;
@@ -886,13 +877,6 @@
   gap: 1rem;
 }
 
-.app__title {
-  font-family: var(--font-heading);
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
 .app__subtitle {
   margin-top: 2px;
   color: var(--muted);
@@ -943,37 +927,9 @@
   color: var(--danger);
 }
 
+/* Card supplies the surface, radius and shadow; the panel only pins the column. */
 .panel {
-  display: flex;
   min-width: 0;
-  flex-direction: column;
-  border-radius: var(--radius-2xl);
-  background: var(--surface);
-  box-shadow: var(--shadow-surface);
-}
-
-.panel__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.875rem 1rem 0;
-}
-
-.panel__title {
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
-.panel__actions {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-
-.panel__body {
-  min-width: 0;
-  padding: 1rem;
 }
 
 .app__split {
@@ -1588,13 +1544,7 @@
 }
 
 /* Lets the holdings list push its footer button to the bottom of the panel beside the chart. */
-.panel:has(.finances__holdings-body) .panel__body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-}
-
-.finances__holdings-body {
+.panel:has(.finances__holdings-body) .finances__holdings-body {
   display: flex;
   min-height: 0;
   flex: 1;
@@ -1857,15 +1807,6 @@
   font-size: 0.8125rem;
 }
 
-.overview__link {
-  border: 0;
-  background: none;
-  color: var(--link);
-  cursor: var(--cursor-interactive);
-  font: inherit;
-  font-weight: 500;
-}
-
 /*
  * Sized to its content rather than the column, and the buttons fill their cells. Stretching
  * the grid to full width and centring each button inside its cell is what pushed them apart:
@@ -1924,24 +1865,6 @@
 .overview__dialog-actions {
   display: flex;
   gap: 0.5rem;
-}
-
-/* A rule with the word centred on it, so the alternatives read as genuinely alternative. */
-.overview__or {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--muted);
-  font-size: 0.6875rem;
-}
-
-.overview__or::before,
-.overview__or::after {
-  height: var(--border-width);
-  flex: 1;
-  background: var(--separator);
-  content: "";
 }
 
 .overview__communities {

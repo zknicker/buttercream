@@ -1,3 +1,4 @@
+import { Avatar, Card, Typography } from "@buttercream/react";
 import type { DesignSystem } from "@buttercream/theme-core";
 import type { ReactElement, ReactNode } from "react";
 import { createPreviewIconElements } from "./preview-icons.ts";
@@ -33,7 +34,14 @@ export function AppFrame({
 export function AppIdentity({ email, name }: { email: string; name: string }): ReactElement {
   return (
     <div className="app__identity">
-      <span aria-hidden className="app__avatar" />
+      <Avatar shape="circle" size="sm">
+        <Avatar.Fallback>
+          {name
+            .split(" ")
+            .map((part) => part[0])
+            .join("")}
+        </Avatar.Fallback>
+      </Avatar>
       <span className="app__identity-text">
         <span className="app__identity-name">{name}</span>
         <span className="app__identity-email">{email}</span>
@@ -76,8 +84,12 @@ export function AppHeader({
   return (
     <header className="app__header">
       <div className="app__header-text">
-        <h2 className="app__title">{title}</h2>
-        {subtitle === undefined ? null : <p className="app__subtitle">{subtitle}</p>}
+        <Typography variant="h5">{title}</Typography>
+        {subtitle === undefined ? null : (
+          <Typography className="app__subtitle" variant="body-sm">
+            {subtitle}
+          </Typography>
+        )}
       </div>
       {actions === undefined ? null : <div className="app__header-actions">{actions}</div>}
     </header>
@@ -119,14 +131,14 @@ export function AppPanel({
   title?: ReactNode;
 }): ReactElement {
   return (
-    <section className="panel">
+    <Card className="panel">
       {title === undefined ? null : (
-        <header className="panel__head">
-          <h3 className="panel__title">{title}</h3>
-          {actions === undefined ? null : <div className="panel__actions">{actions}</div>}
-        </header>
+        <Card.Header>
+          <Card.Title>{title}</Card.Title>
+          {actions === undefined ? null : <Card.Action>{actions}</Card.Action>}
+        </Card.Header>
       )}
-      <div className="panel__body">{children}</div>
-    </section>
+      <Card.Content>{children}</Card.Content>
+    </Card>
   );
 }
