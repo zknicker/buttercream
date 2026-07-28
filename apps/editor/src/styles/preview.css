@@ -92,61 +92,7 @@
   gap: 16px;
 }
 
-.preview-card--horizontal {
-  display: grid;
-  grid-template-columns: 5rem minmax(0, 1fr) auto;
-  align-items: start;
-}
-
-.preview-card__media {
-  width: 5rem;
-  height: 5rem;
-  grid-row: span 2;
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
-}
-
-.preview-card__meta {
-  display: grid;
-  grid-column: 2;
-  align-self: end;
-  font-size: 12px;
-}
-
 .preview-card__meta span,
-.preview-byline {
-  color: color-mix(in oklab, var(--foreground) 55%, transparent);
-}
-
-.preview-card-stack {
-  display: grid;
-  width: min(100%, 23.375rem);
-  gap: 16px;
-}
-
-.preview-card--community {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-}
-
-.preview-byline {
-  display: inline-flex;
-  grid-column: 2;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-}
-
-.preview-card__actions {
-  justify-content: space-between;
-}
-
-.preview-login {
-  display: grid;
-  gap: 12px;
-}
-
 .input-demo {
   display: grid;
   width: min(100%, 15rem);
@@ -155,28 +101,6 @@
 
 .input-demo--types {
   gap: 12px;
-}
-
-.input-field {
-  display: grid;
-  gap: 6px;
-}
-
-.input-field__label {
-  color: var(--foreground);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.input-field__helper {
-  color: color-mix(in oklab, var(--foreground) 55%, transparent);
-  font-size: 12px;
-}
-
-.surface-demo {
-  width: min(100%, 22rem);
-  padding: 40px;
-  border-radius: var(--radius-xl);
 }
 
 .control-stack {
@@ -221,11 +145,6 @@
   color: color-mix(in oklab, var(--foreground) 55%, transparent);
 }
 
-.control-status {
-  color: color-mix(in oklab, var(--foreground) 55%, transparent);
-  font-size: 13px;
-}
-
 .placement-cross {
   display: grid;
   grid-template:
@@ -259,53 +178,9 @@
   grid-area: bottom;
 }
 
-.profile-trigger {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--foreground);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
 .profile-trigger > span:last-child,
-.profile-popover__header > span:nth-child(2) {
-  display: grid;
-  min-width: 0;
-}
-
 .profile-trigger strong,
-.profile-popover__header strong {
-  font-size: 14px;
-  font-weight: 500;
-}
-
 .profile-trigger small,
-.profile-popover__header small {
-  color: color-mix(in oklab, var(--foreground) 55%, transparent);
-  font-size: 12px;
-}
-
-.profile-popover {
-  width: 280px;
-}
-
-.profile-popover__header {
-  display: grid;
-  min-width: 0;
-  align-items: center;
-  gap: 8px;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-}
-
-.profile-popover .popover__description {
-  margin-top: 8px;
-}
-
 /*
  * The guides page. It is the one page whose job is to be looked at rather than clicked, so it
  * gets more air than the specimen grids and leans on the tokens it is describing.
@@ -679,11 +554,6 @@
   display: grid;
   width: min(100%, 18rem);
   gap: 1rem;
-}
-
-/* Headroom for the value tooltip that pops above the thumb while dragging. */
-.slider-demo--tooltip {
-  padding-top: 2.5rem;
 }
 
 /* Vertical sliders fill their container's height, so the demo fixes one. */
