@@ -74,6 +74,7 @@ export function SiteHeader({
       <div className="flex flex-1 items-center justify-end gap-2">
         <Button
           className="font-mono max-sm:hidden"
+          nativeButton={false}
           render={
             <a href="https://github.com/zknicker/buttercream" rel="noreferrer" target="_blank">
               github
