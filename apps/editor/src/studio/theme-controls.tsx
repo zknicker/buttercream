@@ -23,14 +23,33 @@ export function ControlSection({ children, title }: { children: ReactNode; title
        * it was meant to separate, so it takes the muted tone the heading already uses and lets the
        * pattern, not the hue, carry the brand.
        */}
-      <div className="mb-1 flex items-center gap-2.5">
+      <div className="mb-1 flex items-center gap-3">
         {/*
          * Sentence-case sans, not the brand's uppercase mono. Section headers in a dense
          * control rail should recede behind the values they label; the mono eyebrow is an
          * expressive device that belongs on marketing, where it has room to be loud.
          */}
         <h2 className="shrink-0 text-[11px] font-medium text-muted">{title}</h2>
-        <DitherBand aria-hidden className="min-w-0 flex-1 text-fg/35" height={10} pixel={2} />
+        {/*
+         * Read off the reference rather than guessed at. Three things make it work, and the
+         * earlier attempts had none of them:
+         *
+         * Even, not fading. A dissolving band carries its weight at the solid end, so it can
+         * never look vertically centred beside a word. A flat field can.
+         *
+         * Small and quiet. Eight pixels tall at a quarter strength — the rule is the quietest
+         * thing on the row, which is what lets it separate without announcing itself.
+         *
+         * Masked at both ends. This is the detail that reads as craft: the field fades in after
+         * the heading and out before the edge, so it never butts hard against either.
+         */}
+        <DitherBand
+          aria-hidden
+          className="min-w-0 flex-1 text-fg/25 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
+          density={0.5}
+          height={8}
+          pixel={2}
+        />
       </div>
       {children}
     </section>

@@ -30,6 +30,14 @@ const OFF_TIER = 0.4;
 
 export interface DitherBandProps {
   className?: string;
+  /**
+   * Hold every row at one density (0–1) instead of fading. Turns the band into an even field of
+   * stipple — a rule rather than a transition — and `direction` stops applying.
+   *
+   * A fading band also carries its visual weight at the solid end, so it never looks vertically
+   * centred beside text no matter where the box sits. An even field does.
+   */
+  density?: number;
   /** "down" is solid at the top dissolving downward; "up" reverses it. */
   direction?: "down" | "up";
   /** Band height in px. Rounded to a whole number of dither cells. */
@@ -40,6 +48,7 @@ export interface DitherBandProps {
 
 export function DitherBand({
   className,
+  density: fixedDensity,
   direction = "down",
   height = 40,
   pixel = 2,
@@ -51,14 +60,23 @@ export function DitherBand({
 
   const rows = Array.from({ length: rowCount }, (_, index) => {
     const progress = index / (rowCount - 1);
-    const density = direction === "down" ? 1 - progress : progress;
+    const density = fixedDensity ?? (direction === "down" ? 1 - progress : progress);
     const base = 0.3 + density * 0.7;
 
     return {
       cells: (BAYER_4X4[index % 4] ?? []).map((threshold, column) => ({
-        // Density drives both which cells light up and how strongly, so the band
-        // fades on two axes at once.
-        opacity: (density > threshold ? base : base * OFF_TIER) * density,
+        /*
+         * Density drives both which cells light up and how strongly, so a fading band fades on
+         * two axes at once. Held constant, the second axis would only scale the whole field down
+         * uniformly — so an even band skips it and lets the caller set the level with the text
+         * colour instead.
+         */
+        opacity:
+          fixedDensity === undefined
+            ? (density > threshold ? base : base * OFF_TIER) * density
+            : density > threshold
+              ? 1
+              : OFF_TIER,
         x: column * pixel,
         key: `${id}-${index}-${column}`,
       })),
