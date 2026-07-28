@@ -302,8 +302,10 @@ export function EditorShell({
           /* Top-aligned on desktop: the rail is a list that happens to be short, and centring it
              left it floating with no relationship to the header it sits under. Still centred in
              the compact bottom bar, where it is a row rather than a list. */
-          "relative z-2 flex justify-center px-2 py-4",
-          "max-[720px]:items-center min-[721px]:items-start",
+          /* Clears the floating topbar by the same gutter the preview uses, so the rail starts
+             level with the artifact instead of running up behind the header. */
+          "relative z-2 flex justify-center px-2 pb-4",
+          "max-[720px]:items-center max-[720px]:pt-4 min-[721px]:items-start min-[721px]:pt-12",
           "max-[720px]:order-last max-[720px]:border-t max-[720px]:border-fg/10 max-[720px]:bg-sunken",
         )}
         data-open={navOpen}
@@ -357,7 +359,7 @@ export function EditorShell({
                made everything past it unreachable. overscroll-contain stops the page from
                scrolling on behind it once the menu hits an end. */
             /* Opens toward the preview, away from the controls panel it sits against. */
-            "absolute top-4 right-12 z-10 w-44 max-h-[80vh] overflow-y-auto overscroll-contain rounded-(--radius-shell) bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
+            "absolute top-12 right-12 z-10 w-44 max-h-[80vh] overflow-y-auto overscroll-contain rounded-(--radius-shell) bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
             "max-[720px]:top-auto max-[720px]:right-auto max-[720px]:bottom-14 max-[720px]:left-2",
             navOpen ? "visible opacity-100" : "invisible opacity-0",
           )}
