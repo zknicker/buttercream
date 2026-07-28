@@ -29,6 +29,7 @@
    */
   .toolbar--attached {
     --bc-toolbar-inset: calc(0.25rem * var(--spacing-scale));
+    /* The md button height. A toolbar holding sm or lg controls should move this. */
     --bc-toolbar-control-height: calc(2.25rem * var(--spacing-scale));
     --bc-toolbar-control-radius: min(var(--radius-3xl), calc(var(--bc-toolbar-control-height) / 2));
 

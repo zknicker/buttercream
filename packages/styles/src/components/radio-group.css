@@ -148,13 +148,20 @@
     opacity: var(--disabled-opacity);
   }
 
+  /* The size drives the clamp, so a variant must move the token, not just the box. */
   .radio-group--sm .radio__control {
-    width: calc(0.875rem * var(--spacing-scale));
-    height: calc(0.875rem * var(--spacing-scale));
+    --bc-radio-control-size: calc(0.875rem * var(--spacing-scale));
+    --bc-radio-indicator-size: 0.6875rem;
+
+    width: var(--bc-radio-control-size);
+    height: var(--bc-radio-control-size);
   }
 
   .radio-group--lg .radio__control {
-    width: calc(1.25rem * var(--spacing-scale));
-    height: calc(1.25rem * var(--spacing-scale));
+    --bc-radio-control-size: calc(1.25rem * var(--spacing-scale));
+    --bc-radio-indicator-size: 1rem;
+
+    width: var(--bc-radio-control-size);
+    height: var(--bc-radio-control-size);
   }
 }

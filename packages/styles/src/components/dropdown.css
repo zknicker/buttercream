@@ -33,8 +33,15 @@
    */
   .dropdown__popup {
     --bc-dropdown-padding: calc(0.375rem * var(--spacing-scale));
+    /*
+     * Clamped against the row height as well as the 2rem ceiling. A browser silently
+     * clamps a radius to half the box, so the row renders tighter than it asks for and a
+     * container derived from the asked-for value comes out too round. The ceiling alone
+     * never binds on a single-line row — the height always gets there first.
+     */
     --bc-dropdown-item-radius: min(
       calc(2rem - var(--bc-dropdown-padding)),
+      calc(2rem * var(--spacing-scale) / 2),
       calc(var(--radius) * 2)
     );
 
