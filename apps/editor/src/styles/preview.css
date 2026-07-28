@@ -1714,6 +1714,12 @@
   width: 100%;
 }
 
+/* Select renders its own label, so the required marker has to travel with the text. */
+.overview__required {
+  margin-inline-start: 0.125rem;
+  color: var(--danger);
+}
+
 .overview__controls {
   display: flex;
   align-items: center;

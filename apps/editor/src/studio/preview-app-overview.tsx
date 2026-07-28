@@ -54,12 +54,20 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
     <div className="overview">
       <div className="overview__column overview__column--narrow">
         <Field name="overview-email">
-          <Field.Label>Your email</Field.Label>
+          <Field.Label required>Your email</Field.Label>
           <Input placeholder="john@email.com" required type="email" />
           <Field.Description>We won&rsquo;t share your email</Field.Description>
         </Field>
 
-        <Select container={surface} label="State" placeholder="Select one">
+        <Select
+          container={surface}
+          label={
+            <>
+              State<span className="overview__required">*</span>
+            </>
+          }
+          placeholder="Select one"
+        >
           {STATES.map((state) => (
             <Select.Item key={state} value={state}>
               {state}
@@ -159,8 +167,8 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
 
         <div className="overview__buttons">
           <Button>Click me</Button>
+          <Button variant="secondary">Click me</Button>
           <Button variant="tertiary">Click me</Button>
-          <Button variant="outline">Click me</Button>
           <Button variant="danger">Click me</Button>
           <Button variant="danger-soft">Click me</Button>
           <Button variant="ghost">Click me</Button>
@@ -219,10 +227,10 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
            * the icon vocabulary, and drawing them by hand is the thing this system avoids — so
            * these say what they do instead.
            */}
-          <Button fullWidth variant="secondary">
+          <Button fullWidth variant="tertiary">
             Continue with email
           </Button>
-          <Button fullWidth variant="secondary">
+          <Button fullWidth variant="tertiary">
             Continue with single sign-on
           </Button>
         </Card>
