@@ -12,6 +12,7 @@ import type { ShellTheme } from "../shell-theme.ts";
 import { Button, classes, Segmented } from "../ui/index.ts";
 import { CodeDialog } from "./code-dialog.tsx";
 import { ImportDialog } from "./import-dialog.tsx";
+import { ComponentsPanel } from "./theme-component-controls.tsx";
 import {
   ColorControl,
   ControlSection,
@@ -27,7 +28,16 @@ import { ThemeIconControls } from "./theme-icon-controls.tsx";
 import type { SaveState } from "./use-design-system-draft.ts";
 import { VariablesPanel } from "./variables-panel.tsx";
 
-const TABS = ["Style", "Variables", "Agent"] as const;
+/*
+ * Three tabs, each a different kind of decision: the shape of the system, the individual tokens
+ * behind that shape, and the props its components take when a call site says nothing.
+ *
+ * A fourth, "Agent", used to sit here as an empty placeholder. Agent rules are prose — a
+ * paragraph an author writes once, not a value they nudge — so they are authored on the Brand
+ * page with the rest of the identity, and the placeholder is gone rather than left to imply a
+ * panel that does not exist.
+ */
+const TABS = ["Style", "Variables", "Components"] as const;
 type Tab = (typeof TABS)[number];
 
 /*
@@ -101,7 +111,9 @@ export function ThemeEditorPanel({
         {tab === "Variables" ? (
           <VariablesPanel designSystem={designSystem} onUpdate={onUpdate} theme={theme} />
         ) : null}
-        {/* The Agent tab has no panel yet; the Segmented option is a placeholder. */}
+        {tab === "Components" ? (
+          <ComponentsPanel components={designSystem.components} onUpdate={onUpdate} />
+        ) : null}
       </div>
     </aside>
   );
