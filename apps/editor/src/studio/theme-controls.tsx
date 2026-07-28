@@ -170,21 +170,23 @@ export function ColorControl({
       {onChange === undefined && description !== undefined ? (
         <Badge
           className={classes(
-            "absolute top-0 right-0 h-3.5 rounded-none pr-1.5 pl-2.5 text-[8px] tracking-[0.08em]",
             /*
-             * The notch's inner edge is cut on the diagonal, so the row's outline runs along the
-             * top, turns down across the slant and continues under the tag as one line. Square, it
-             * read as a block sitting in the corner; angled, the corner reads as having been taken
-             * out of the row.
+             * Skewed rather than clipped. A clip path cannot round a corner, and the join where the
+             * slant meets the tag's underside wants to be round — square, the two edges read as two
+             * shapes meeting; rounded, as one line changing direction.
              *
-             * The row clips its own rounded corner for us, which is why the tag needs no radius of
-             * its own — the two would have had to be kept in step by hand otherwise.
+             * It runs past the row's right edge and the row clips it, so the skew never shows on
+             * that side and the tag stays flush into the corner. The row clips its own radius for
+             * us too, which is why the tag only declares the one corner it owns: two radii kept in
+             * step by hand is a thing that goes wrong later.
              */
-            "[clip-path:polygon(0_0,100%_0,100%_100%,0.4375rem_100%)]",
+            "absolute top-0 -right-3 h-3 skew-x-[-18deg] pr-5 pl-4 text-[8px] tracking-[0.09em]",
+            "[border-radius:0_0_0_0.3125rem]",
           )}
           variant="line"
         >
-          Derived
+          {/* Back upright: the notch is skewed, the word in it is not. */}
+          <span className="inline-block skew-x-[18deg]">Derived</span>
         </Badge>
       ) : null}
       <ColorSwatch color={swatchColor ?? value} />
