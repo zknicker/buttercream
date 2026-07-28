@@ -8,6 +8,7 @@ export {
   type ColorPickerPopoverProps,
   type ColorPickerProps,
   ColorSwatch,
+  ColorTile,
 } from "./color-picker.tsx";
 export {
   DialogFooter,

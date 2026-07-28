@@ -2,7 +2,15 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { Badge, ColorPickerPopover, classes, SectionHeading, Select, Slider } from "../ui/index.ts";
+import {
+  Badge,
+  ColorPickerPopover,
+  ColorTile,
+  classes,
+  SectionHeading,
+  Select,
+  Slider,
+} from "../ui/index.ts";
 import { controlName, FOCUS_OUTLINE, ROW, ROW_FLEX, ROW_LABEL, ROW_VALUE } from "./control-row.ts";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
@@ -180,7 +188,12 @@ export function ColorControl({
           </Badge>
         </span>
       ) : null}
-      <ColorSwatch color={swatchColor ?? value} />
+      {/*
+       * The picker's own tile, not a lookalike. These branches used to draw their own circle while
+       * the picker drew a rounded square, so a row's swatch changed shape according to whether its
+       * value happened to be editable — and the two tabs disagreed for the same reason.
+       */}
+      <ColorTile color={swatchColor ?? value} size={20} />
       {draft === null ? (
         <RowText
           description={description}
@@ -211,17 +224,6 @@ export function ColorControl({
         />
       )}
     </div>
-  );
-}
-
-function ColorSwatch({ color }: { color: string }) {
-  /* The ring keeps the swatch legible when the colour it holds matches the row behind it. */
-  return (
-    <span
-      aria-hidden
-      className="size-4 shrink-0 rounded-full ring-1 ring-fg/25"
-      style={{ background: color }}
-    />
   );
 }
 
