@@ -12,6 +12,7 @@ import {
   ToggleButtonPreview,
 } from "./preview-display.tsx";
 import { DrawerPreview } from "./preview-drawer.tsx";
+import { AutocompletePreview, CheckboxGroupPreview, InputOTPPreview } from "./preview-entry.tsx";
 import {
   AlertPreview,
   BadgePreview,
@@ -61,6 +62,7 @@ export type PreviewSection =
   | "Accordion"
   | "Alert"
   | "Alert Dialog"
+  | "Autocomplete"
   | "Avatar"
   | "Badge"
   | "Breadcrumbs"
@@ -68,6 +70,7 @@ export type PreviewSection =
   | "Button Group"
   | "Card"
   | "Checkbox"
+  | "Checkbox Group"
   | "Chip"
   | "Close Button"
   | "Color Swatch"
@@ -77,6 +80,7 @@ export type PreviewSection =
   | "Error Message"
   | "Fieldset"
   | "Input"
+  | "Input OTP"
   | "Kbd"
   | "Link"
   | "Meter"
@@ -128,6 +132,15 @@ export function renderPreviewSection(
   }
   if (section === "Checkbox") {
     return <CheckboxPreview />;
+  }
+  if (section === "Checkbox Group") {
+    return <CheckboxGroupPreview />;
+  }
+  if (section === "Autocomplete") {
+    return <AutocompletePreview />;
+  }
+  if (section === "Input OTP") {
+    return <InputOTPPreview />;
   }
   if (section === "Radio Group") {
     return <RadioGroupPreview />;

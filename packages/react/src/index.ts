@@ -11,6 +11,11 @@ export {
   type AlertDialogProps,
 } from "./alert-dialog.tsx";
 export {
+  Autocomplete,
+  type AutocompleteItemProps,
+  type AutocompleteProps,
+} from "./autocomplete.tsx";
+export {
   AgentAvatar,
   type AgentAvatarProps,
   Avatar,
@@ -52,6 +57,7 @@ export {
   type CheckboxSize,
   type CheckboxVariant,
 } from "./checkbox.tsx";
+export { CheckboxGroup, type CheckboxGroupProps } from "./checkbox-group.tsx";
 export { Chip, type ChipColor, type ChipProps, type ChipSize, type ChipVariant } from "./chip.tsx";
 export {
   CloseButton,
@@ -85,6 +91,7 @@ export { Field, type FieldLabelProps, type FieldProps } from "./field.tsx";
 export { Fieldset, type FieldsetProps } from "./fieldset.tsx";
 export { Form, type FormProps } from "./form.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
+export { InputOTP, type InputOTPProps } from "./input-otp.tsx";
 export { Kbd, type KbdProps } from "./kbd.tsx";
 export { Link, type LinkProps } from "./link.tsx";
 export { Meter, type MeterColor, type MeterProps, type MeterSize } from "./meter.tsx";

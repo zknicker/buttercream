@@ -365,6 +365,31 @@
   font-weight: 700;
 }
 
+/* OTP specimens carry their own surrounding copy, the way the reference frames them. */
+.otp-demo {
+  display: grid;
+  justify-items: start;
+  gap: 0.625rem;
+}
+
+.otp-demo__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.otp-demo__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.otp-demo__error {
+  color: var(--danger);
+  font-size: 0.75rem;
+}
+
 @container (max-width: 800px) {
   .specimens,
   .guide-grid {
