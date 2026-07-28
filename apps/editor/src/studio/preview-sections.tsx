@@ -31,6 +31,7 @@ import {
   TextFieldPreview,
 } from "./preview-fields.tsx";
 import { InputPreview } from "./preview-form-controls.tsx";
+import { GuidesPreview } from "./preview-guides.tsx";
 import { createPreviewIconElements } from "./preview-icons.ts";
 import { ModalPreview } from "./preview-modal.tsx";
 import {
@@ -257,37 +258,4 @@ export function renderPreviewSection(
     return <AvatarPreview />;
   }
   return <ButtonPreview icons={createPreviewIconElements(iconSettings)} />;
-}
-
-const semanticRoles = ["accent", "default", "success", "warning", "danger"] as const;
-
-function GuidesPreview(): ReactElement {
-  return (
-    <div className="guide-grid">
-      {semanticRoles.map((name) => (
-        <div className="swatch" key={name} style={swatchStyle(`--${name}`)}>
-          {label(name)}
-          <br />
-          <small>--{name}</small>
-        </div>
-      ))}
-      <div className="swatch" style={swatchStyle("--surface")}>
-        Surface
-        <br />
-        <small>--surface</small>
-      </div>
-    </div>
-  );
-}
-
-/* Inline styles stay a custom-property map; .swatch in preview.css reads the pair. */
-function swatchStyle(token: string): CSSProperties {
-  return {
-    "--bc-swatch-bg": `var(${token})`,
-    "--bc-swatch-fg": `var(${token}-foreground)`,
-  } as CSSProperties;
-}
-
-function label(name: string): string {
-  return name.charAt(0).toUpperCase() + name.slice(1);
 }

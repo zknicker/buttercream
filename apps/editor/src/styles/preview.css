@@ -301,20 +301,363 @@
   margin-top: 8px;
 }
 
-.guide-grid {
+/*
+ * The guides page. It is the one page whose job is to be looked at rather than clicked, so it
+ * gets more air than the specimen grids and leans on the tokens it is describing.
+ */
+.guides {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 56px;
+  container-type: inline-size;
 }
 
-/* Swatches take their colour pair as a private custom-property map set inline by Guides. */
+.guides__heading {
+  max-width: 62ch;
+  margin-bottom: 20px;
+}
+
+.guides__title {
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.guides__lede {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* The accent leads at twice the size; the other roles fall in beside it. */
+.guides__palette {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .swatch {
-  min-height: 180px;
-  padding: 20px;
-  border-radius: var(--radius-xl);
-  font-weight: 700;
+  display: flex;
+  min-height: 148px;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: var(--radius-2xl);
   background: var(--bc-swatch-bg);
+  box-shadow: var(--shadow-surface);
   color: var(--bc-swatch-fg);
+}
+
+.swatch--hero {
+  min-height: 308px;
+  grid-row: span 2;
+  grid-column: span 2;
+}
+
+.swatch__head {
+  display: grid;
+  gap: 2px;
+}
+
+.swatch__name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+}
+
+.swatch--hero .swatch__name {
+  font-size: 1.5rem;
+}
+
+.swatch__purpose {
+  font-size: 0.75rem;
+  opacity: 0.72;
+}
+
+/* Pushed to the bottom so every card's values sit on one line however tall the card is. */
+.swatch__tokens {
+  display: grid;
+  margin-top: auto;
+  gap: 4px;
+}
+
+.swatch__token {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.swatch__token dt {
+  flex: none;
+  opacity: 0.66;
+}
+
+/* Generated tokens resolve to long colour expressions, so the value truncates rather than
+   wrapping and shoving the card's layout around. */
+.swatch__token dd {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-align: end;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.soft-row {
+  display: grid;
+  margin-top: 12px;
+  gap: 12px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.soft-chip {
+  display: grid;
+  gap: 3px;
+  padding: 12px 14px;
+  border-radius: var(--radius-xl);
+  background: var(--bc-soft-bg);
+  color: var(--bc-soft-fg);
+}
+
+.soft-chip__name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.soft-chip__token {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  opacity: 0.75;
+}
+
+.guides__surfaces {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.depth {
+  display: grid;
+  gap: 3px;
+  padding: 18px;
+  border-radius: var(--radius-2xl);
+  background: var(--bc-depth-bg);
+  color: var(--bc-depth-fg);
+}
+
+.depth--background {
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.depth--surface {
+  box-shadow: var(--shadow-surface);
+}
+
+.depth--overlay {
+  box-shadow: var(--shadow-overlay);
+}
+
+.depth__name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.depth__token,
+.depth__value {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  overflow-wrap: anywhere;
+}
+
+.guides__type {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.type-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border-radius: var(--radius-2xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
+}
+
+.type-card__role {
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.type-card__specimen {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.type-card__specimen--heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+.type-card__specimen--mono {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+}
+
+.type-card__family {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  overflow-wrap: anywhere;
+}
+
+.type-scale {
+  display: grid;
+  margin-top: 12px;
+  gap: 2px;
+  list-style: none;
+}
+
+.type-scale__row {
+  display: grid;
+  align-items: baseline;
+  gap: 16px;
+  padding: 7px 12px;
+  border-radius: var(--radius-lg);
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+}
+
+.type-scale__row:nth-child(odd) {
+  background: var(--default);
+}
+
+.type-scale__label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.type-scale__sample {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guides__radii {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.radius-chip {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+}
+
+.radius-chip__box {
+  width: 60px;
+  height: 60px;
+  background: var(--default);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.radius-chip__label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.nesting {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+/* The rule drawn rather than described: outer radius = inner radius + the gap between them. */
+.nesting__outer {
+  padding: 10px;
+  border-radius: calc(var(--radius-2xl) + 10px);
+  background: var(--default);
+}
+
+.nesting__inner {
+  display: grid;
+  min-width: 148px;
+  height: 52px;
+  align-content: center;
+  border-radius: var(--radius-2xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-surface);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.nesting__note {
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.nesting__note code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.chart-ramp {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.chart-ramp__step {
+  display: grid;
+  flex: 1;
+  justify-items: center;
+  gap: 8px;
+}
+
+.chart-ramp__fill {
+  width: 100%;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-sm);
+}
+
+.chart-ramp__label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+@container (max-width: 720px) {
+  .soft-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .guides__palette,
+  .guides__surfaces,
+  .guides__type {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .swatch--hero {
+    grid-row: auto;
+    grid-column: span 2;
+    min-height: 180px;
+  }
 }
 
 /* Slider specimens: the slider root is width: 100%, so demos pin the column. */
@@ -391,8 +734,7 @@
 }
 
 @container (max-width: 800px) {
-  .specimens,
-  .guide-grid {
+  .specimens {
     grid-template-columns: 1fr;
   }
 }
