@@ -3,6 +3,7 @@ import type { CSSProperties, ReactElement } from "react";
 import { AvatarPreview } from "./preview-avatar.tsx";
 import { ButtonPreview } from "./preview-button.tsx";
 import { CardPreview } from "./preview-card.tsx";
+import { ChartsPreview } from "./preview-charts.tsx";
 import { CheckboxPreview, SwitchPreview } from "./preview-choice-controls.tsx";
 import { TablePreview, TypographyPreview } from "./preview-data.tsx";
 import {
@@ -70,6 +71,7 @@ export type PreviewSection =
   | "Button"
   | "Button Group"
   | "Card"
+  | "Charts"
   | "Checkbox"
   | "Checkbox Group"
   | "Chip"
@@ -130,6 +132,9 @@ export function renderPreviewSection(
   }
   if (section === "Popover") {
     return <PopoverPreview />;
+  }
+  if (section === "Charts") {
+    return <ChartsPreview />;
   }
   if (section === "Checkbox") {
     return <CheckboxPreview />;

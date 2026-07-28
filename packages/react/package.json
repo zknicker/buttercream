@@ -12,6 +12,10 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
     },
+    "./charts": {
+      "types": "./dist/charts/index.d.mts",
+      "import": "./dist/charts/index.mjs"
+    },
     "./avatar": {
       "types": "./dist/avatar.d.mts",
       "import": "./dist/avatar.mjs"

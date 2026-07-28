@@ -642,6 +642,16 @@
   font-size: 0.6875rem;
 }
 
+/* Charts need width to be readable, so their specimens run one per row. */
+.specimens--wide {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.chart-demo {
+  width: 100%;
+  min-width: 0;
+}
+
 @container (max-width: 720px) {
   .soft-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));

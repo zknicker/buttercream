@@ -5,9 +5,10 @@ export default defineConfig({
   deps: {
     neverBundle: ["react", "react-dom"],
   },
-  dts: true,
+  dts: { tsconfig: "tsconfig.build.json" },
   entry: [
     "src/index.ts",
+    "src/charts/index.ts",
     "src/avatar.tsx",
     "src/button.tsx",
     "src/card.tsx",

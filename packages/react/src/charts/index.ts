@@ -13,6 +13,8 @@
 export { Area, type AreaProps } from "./area";
 export { AreaChart, type AreaChartProps } from "./area-chart";
 export { Bar, type BarProps } from "./bar";
+export { BarXAxis, type BarXAxisProps } from "./bar-x-axis";
+export { BarYAxis, type BarYAxisProps } from "./bar-y-axis";
 export { BarChart, type BarChartProps, type BarOrientation } from "./bar-chart";
 export { ChartTooltip, type ChartTooltipProps } from "./chart-tooltip";
 export { DateTicker, type DateTickerProps } from "./date-ticker";

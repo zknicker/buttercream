@@ -1,0 +1,9 @@
+{
+  "//": "Declaration emit only. Covers the vendored charts as well as our own source, which tsconfig.json deliberately excludes so authored code can be typechecked more strictly than third-party code. The relaxed flags exist for the vendored tree; see tsconfig.charts.json.",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": false,
+    "noImplicitAny": false
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}
