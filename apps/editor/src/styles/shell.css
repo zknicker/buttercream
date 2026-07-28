@@ -97,6 +97,14 @@
     color-scheme: light;
 
     /*
+     * Alpha checkerboard behind translucent colours in the picker. Pure neutral like every other
+     * shell surface, so a partly transparent swatch reads as "nothing behind this" rather than as
+     * a colour competing with the one being chosen.
+     */
+    --checker-a: oklch(0.95 0 0);
+    --checker-b: oklch(0.88 0 0);
+
+    /*
      * Surfaces are pure neutral — zero chroma. The studio frames whatever theme the
      * user is building, so any tint in the chrome reads as a clash against their
      * background rather than as warmth. Character comes from the accents, the pixel
@@ -119,6 +127,9 @@
 
   [data-shell-theme="dark"] {
     color-scheme: dark;
+
+    --checker-a: oklch(0.28 0 0);
+    --checker-b: oklch(0.22 0 0);
 
     --shell-canvas: #141414;
     --shell-raised: #1e1e1e;

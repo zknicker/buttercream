@@ -932,7 +932,7 @@ function FormatItem({
         <span
           className={classes(
             "col-start-1 row-start-1 transition-[color,font-variation-settings] duration-80",
-            isActive || checked ? "text-foreground" : "text-muted-foreground",
+            isActive || checked ? "text-fg" : "text-muted",
           )}
           style={{
             fontVariationSettings: checked ? fontWeights.semibold : fontWeights.normal,
@@ -1024,8 +1024,8 @@ function FormatDropdown({
     >
       <Menu.Trigger
         className={classes(
-          "flex items-center justify-between gap-2 h-9 px-3 text-[13px] bg-transparent hover:bg-hover hover:text-foreground transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--focus-ring,#6B97FF)] cursor-pointer",
-          open ? "bg-active text-foreground" : "text-muted-foreground active:bg-active",
+          "flex items-center justify-between gap-2 h-9 px-3 text-[13px] bg-transparent hover:bg-fg/5 hover:text-fg transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)] cursor-pointer",
+          open ? "bg-fg/10 text-fg" : "text-muted active:bg-fg/10",
           shape.input,
         )}
         style={{ fontVariationSettings: fontWeights.medium }}
@@ -1036,10 +1036,7 @@ function FormatDropdown({
           icon={ArrowDown01Icon}
           size={14}
           strokeWidth={1.5}
-          className={classes(
-            "text-muted-foreground transition-transform duration-150",
-            open && "rotate-180",
-          )}
+          className={classes("text-muted transition-transform duration-150", open && "rotate-180")}
         />
       </Menu.Trigger>
       <Menu.Portal container={portalContainer ?? undefined}>
@@ -1097,7 +1094,7 @@ function FormatDropdown({
                 <AnimatePresence>
                   {checkedRect && (
                     <motion.div
-                      className={`absolute ${menuShape.bg} bg-active pointer-events-none`}
+                      className={`absolute ${menuShape.bg} bg-fg/10 pointer-events-none`}
                       initial={false}
                       animate={{
                         top: checkedRect.top,
@@ -1120,7 +1117,7 @@ function FormatDropdown({
                   {activeRect && (
                     <motion.div
                       key={String(sessionRef.current)}
-                      className={`absolute ${menuShape.bg} bg-hover pointer-events-none`}
+                      className={`absolute ${menuShape.bg} bg-fg/5 pointer-events-none`}
                       initial={{
                         opacity: 0,
                         top: checkedRect?.top ?? activeRect.top,
@@ -1148,7 +1145,7 @@ function FormatDropdown({
                 <AnimatePresence>
                   {focusRect && (
                     <motion.div
-                      className={`absolute ${menuShape.focusRing} pointer-events-none z-20 border border-[color:var(--focus-ring,#6B97FF)]`}
+                      className={`absolute ${menuShape.focusRing} pointer-events-none z-20 border border-[color:var(--color-fg)]`}
                       initial={false}
                       animate={{
                         left: focusRect.left - 2,
@@ -1280,15 +1277,13 @@ const TextColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
     return (
       <div
         className={classes(
-          "flex items-center h-9 px-2 bg-transparent hover:bg-hover active:bg-active transition-colors duration-80 focus-within:ring-1 focus-within:ring-[color:var(--focus-ring,#6B97FF)] select-none",
+          "flex items-center h-9 px-2 bg-transparent hover:bg-fg/5 active:bg-fg/10 transition-colors duration-80 focus-within:ring-1 focus-within:ring-[color:var(--color-fg)] select-none",
           shape.input,
           className,
         )}
         style={{ width }}
       >
-        {prefix && (
-          <span className="text-[12px] text-muted-foreground mr-1 select-none">{prefix}</span>
-        )}
+        {prefix && <span className="text-[12px] text-muted mr-1 select-none">{prefix}</span>}
         <input
           ref={ref}
           value={draft}
@@ -1325,7 +1320,7 @@ const TextColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
           inputMode={inputMode}
           aria-label={ariaLabel}
           className={classes(
-            "flex-1 min-w-0 bg-transparent text-foreground text-[13px] outline-none tabular-nums",
+            "flex-1 min-w-0 bg-transparent text-fg text-[13px] outline-none tabular-nums",
             align === "center" && "text-center",
             align === "right" && "text-right",
             inputClassName,
@@ -1448,7 +1443,7 @@ const ScrubColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
         largeStep={nudgeShiftStep ?? 10}
         format={format}
         className={classes(
-          "flex items-center h-9 bg-transparent hover:bg-hover active:bg-active transition-colors duration-80 focus-within:ring-1 focus-within:ring-[color:var(--focus-ring,#6B97FF)] select-none",
+          "flex items-center h-9 bg-transparent hover:bg-fg/5 active:bg-fg/10 transition-colors duration-80 focus-within:ring-1 focus-within:ring-[color:var(--color-fg)] select-none",
           shape.input,
           className,
         )}
@@ -1487,9 +1482,7 @@ const ScrubColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
               <path d="M0.5 7l5-5v3.5h13V2l5 5-5 5V8.5h-13V12l-5-5z" />
             </svg>
           </NumberField.ScrubAreaCursor>
-          {prefix && (
-            <span className="text-[12px] text-muted-foreground mr-1 select-none">{prefix}</span>
-          )}
+          {prefix && <span className="text-[12px] text-muted mr-1 select-none">{prefix}</span>}
           <NumberField.Input
             ref={setInputRef}
             aria-label={ariaLabel}
@@ -1531,7 +1524,7 @@ const ScrubColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
               }
             }}
             className={classes(
-              "flex-1 min-w-0 bg-transparent text-foreground text-[13px] outline-none tabular-nums",
+              "flex-1 min-w-0 bg-transparent text-fg text-[13px] outline-none tabular-nums",
               align === "center" && "text-center",
               align === "right" && "text-right",
               !editing && "pointer-events-none",
@@ -1588,7 +1581,7 @@ function EyeDropperButton({ onPick }: { onPick: (hex: string) => void }) {
       onClick={handleClick}
       aria-label="Pick color from screen"
       className={classes(
-        "flex items-center justify-center h-9 px-3 text-muted-foreground bg-transparent hover:bg-hover hover:text-foreground active:bg-active transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--focus-ring,#6B97FF)] cursor-pointer",
+        "flex items-center justify-center h-9 px-3 text-muted bg-transparent hover:bg-fg/5 hover:text-fg active:bg-fg/10 transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)] cursor-pointer",
         shape.input,
       )}
     >
@@ -1633,9 +1626,9 @@ const ColorSwatch = forwardRef<HTMLButtonElement, ColorSwatchProps>(
   ({ color, size = 28, selected, className, onMouseEnter, onMouseLeave, ...props }, ref) => {
     const [hovered, setHovered] = useState(false);
     const ring = selected
-      ? "inset 0 0 0 1px rgba(127,127,127,0.25), 0 0 0 2px var(--background), 0 0 0 4px #6B97FF"
+      ? "inset 0 0 0 1px rgba(127,127,127,0.25), 0 0 0 2px var(--color-raised), 0 0 0 4px var(--color-fg)"
       : hovered
-        ? "inset 0 0 0 1px rgba(127,127,127,0.25), 0 0 0 2px var(--background), 0 0 0 4px rgba(127,127,127,0.4)"
+        ? "inset 0 0 0 1px rgba(127,127,127,0.25), 0 0 0 2px var(--color-raised), 0 0 0 4px rgba(127,127,127,0.4)"
         : "inset 0 0 0 1px rgba(127,127,127,0.25)";
     return (
       <button
@@ -1868,7 +1861,7 @@ const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
     const solidG = Math.round(solidHueRgb.g);
     const solidB = Math.round(solidHueRgb.b);
     const solidColorString = `rgb(${solidR}, ${solidG}, ${solidB})`;
-    // The picker panel uses bg-card (surface-3) by default; when wrapped in
+    // The picker panel uses bg-raised (surface-3) by default; when wrapped in
     // ColorPickerPopover the className override pushes it higher. Either way,
     // announce the panel's effective level so descendants (FormatDropdown,
     // etc.) elevate above it instead of colliding at the same surface.
@@ -2312,25 +2305,21 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
         <div ref={ref} className="inline-flex">
           <Popover.Trigger
             className={classes(
-              "flex items-center gap-2 h-9 px-2 border border-border bg-transparent hover:bg-hover transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--focus-ring,#6B97FF)] cursor-pointer",
+              "flex items-center gap-2 h-9 px-2 ring-1 ring-fg/10 bg-transparent hover:bg-fg/5 transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)] cursor-pointer",
               shape.input,
               triggerClassName,
             )}
             style={{ fontVariationSettings: fontWeights.medium }}
           >
             {triggerLabel && triggerLabelPosition === "left" && (
-              <span className="text-[13px] text-muted-foreground px-1 select-none">
-                {triggerLabel}
-              </span>
+              <span className="text-[13px] text-muted px-1 select-none">{triggerLabel}</span>
             )}
             <ColorTile color={swatchColor} size={20} />
             {triggerShowValue && (
-              <span className="text-[13px] text-foreground tabular-nums">{valueLabel}</span>
+              <span className="text-[13px] text-fg tabular-nums">{valueLabel}</span>
             )}
             {triggerLabel && triggerLabelPosition === "right" && (
-              <span className="text-[13px] text-muted-foreground px-1 select-none">
-                {triggerLabel}
-              </span>
+              <span className="text-[13px] text-muted px-1 select-none">{triggerLabel}</span>
             )}
             {triggerShowRemove && (
               <button
@@ -2347,7 +2336,7 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
                     onTriggerRemove?.();
                   }
                 }}
-                className="ml-1 text-muted-foreground hover:text-foreground cursor-pointer flex items-center"
+                className="ml-1 text-muted hover:text-fg cursor-pointer flex items-center"
               >
                 <HugeiconsIcon aria-hidden icon={Cancel01Icon} size={14} strokeWidth={1.5} />
               </button>
