@@ -18,6 +18,12 @@ const ROW_FLEX =
 /** Row labels carry the medium weight; at 400 they read unfinished against the values. */
 const ROW_LABEL = "truncate font-medium text-fg";
 
+/*
+ * Every row's right-hand side reads the same: mono, small, muted, and never wrapping. The rows
+ * differ in what they do, and they should not also differ in how their value looks.
+ */
+const ROW_VALUE = "shrink-0 font-mono text-[11px] tabular-nums text-muted";
+
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
   return (
     <section className="mt-5 flex flex-col gap-1">
@@ -80,11 +86,11 @@ export function TextControl({
   value: string;
 }) {
   return (
-    <label className={ROW}>
-      <span className={ROW_LABEL}>{label}</span>
+    <label className={classes(ROW_FLEX, "focus-within:bg-fg/5")}>
+      <span className={classes(ROW_LABEL, "shrink-0")}>{label}</span>
       <input
         aria-label={label}
-        className="w-36 rounded-[calc(var(--radius-shell)-0.125rem)] bg-transparent py-1 pl-2 text-right text-fg outline-0 focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg"
+        className="min-w-0 flex-1 rounded-[calc(var(--radius-shell)-0.125rem)] bg-transparent py-1 pl-2 text-right text-fg outline-0 focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg"
         maxLength={maxLength}
         name={label}
         onChange={(event) => onChange(event.currentTarget.value)}
@@ -142,14 +148,15 @@ export function RangeControl({
 }) {
   return (
     /*
-     * Behaviour comes from the published Slider; the styling is the shell's own. The
-     * control is stretched behind the row so the whole row reads as one continuous
-     * slider, with the fill sitting under the label rather than beside it.
+     * The row is the slider — a drag anywhere across it moves the value — but the track is a
+     * hairline on the bottom edge rather than a fill behind the label. A half-filled row read as a
+     * different kind of component next to the clean colour and select rows; a rule under the row
+     * says the same thing without changing what the row looks like.
      */
     <Slider
       className={classes(
-        ROW,
-        "cursor-ew-resize overflow-hidden",
+        ROW_FLEX,
+        "relative cursor-ew-resize overflow-hidden hover:bg-fg/5",
         "has-focus-visible:outline-[1.5px] has-focus-visible:-outline-offset-1 has-focus-visible:outline-fg",
       )}
       max={max}
@@ -160,41 +167,31 @@ export function RangeControl({
       value={value}
     >
       {/*
-       * Padded by half the thumb's width so the handle stays wholly inside the row at both
-       * ends. Base UI lays thumbs out within the control's content box, so the inset is
-       * enough — no transform trick, and the fill still runs edge to edge because the track
-       * sits outside the padding.
+       * The control still covers the whole row, so the hit area is the row even though the track it
+       * draws is four pixels tall. items-end drops the track and its handle onto the bottom edge;
+       * the horizontal padding keeps the handle inside the row at both extremes.
        */}
-      <Slider.Control className="absolute inset-0 px-[3px]">
-        <Slider.Track className="-mx-[3px] h-full w-[calc(100%+6px)]">
-          {/*
-           * Neutral, not butter. The note this replaces argued a grey fill would vanish because
-           * the rail sat on a rgb(234) panel — but the row is --shell-raised, pure white, so a
-           * tenth of the foreground reads clearly against it. Butter here competed with the
-           * genuine accents (the section rail, the primary action) and lost the row to a colour
-           * that carried no meaning: a density value is not a brand moment.
-           */}
-          <Slider.Indicator className="h-full bg-fg/8 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none dark:bg-fg/12" />
+      <Slider.Control className="absolute inset-0 flex items-end px-[3px]">
+        <Slider.Track className="-mx-[3px] h-[3px] w-[calc(100%+6px)] bg-fg/8">
+          <Slider.Indicator className="h-full bg-fg/35 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none" />
           <Slider.Ticks max={max} min={min} step={step} />
         </Slider.Track>
-        {/*
-         * Grows out from the row's midline while dragging rather than growing taller, which
-         * a full-height thumb has no room to do. The same easing as the fill, so handle and
-         * fill arrive together instead of the thumb snapping ahead of the colour.
-         */}
+        {/* Straddles the rule so the handle is findable against a three-pixel track. */}
         <Slider.Thumb
           className={classes(
-            "h-[62%] w-[3px] rounded-[1px] bg-fg/55 outline-none",
+            "-mb-[2px] h-[7px] w-[3px] rounded-[1px] bg-fg/70 outline-none",
             "transition-[height,left] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
-            "data-dragging:h-full data-[dragging]:duration-100",
+            "data-dragging:-mb-[3px] data-dragging:h-[9px] data-[dragging]:duration-100",
             "motion-reduce:transition-none",
           )}
           getAriaLabel={() => label}
           index={0}
         />
       </Slider.Control>
-      <Slider.Label className={classes(ROW_LABEL, "pointer-events-none z-1")}>{label}</Slider.Label>
-      <output className="pointer-events-none z-1 shrink-0 font-mono text-[11px] tabular-nums text-muted">
+      <Slider.Label className={classes(ROW_LABEL, "pointer-events-none z-1 min-w-0 flex-1")}>
+        {label}
+      </Slider.Label>
+      <output className={classes(ROW_VALUE, "pointer-events-none z-1")}>
         {value.toFixed(step < 1 ? 2 : 0)}
       </output>
     </Slider>
@@ -211,8 +208,12 @@ export function ToggleControl({
   value: boolean;
 }) {
   return (
-    <label className={ROW}>
-      <span className={ROW_LABEL}>{label}</span>
+    /*
+     * A label is right here — the switch is a real checkbox, so wrapping it makes the whole row
+     * toggle the value, which is the same "the row is the control" rule the other rows follow.
+     */
+    <label className={classes(ROW_FLEX, "cursor-pointer hover:bg-fg/5")}>
+      <span className={classes(ROW_LABEL, "min-w-0 flex-1")}>{label}</span>
       <input
         aria-checked={value}
         aria-label={label}
@@ -251,21 +252,40 @@ export const fontOptions: readonly SelectControlOption<string>[] = [
   { label: "Young Serif", value: "'Young Serif', Georgia, serif" },
 ];
 
+/**
+ * Curated stacks for the mono font picker. Departure Mono ships with the shell (see the
+ * `@font-face` rules in shell.css) and the preview renders in the same document, so it
+ * resolves without a network fetch; the rest are system stacks.
+ */
+export const monoFontOptions: readonly SelectControlOption<string>[] = [
+  { label: "Consolas", value: "Consolas, ui-monospace, SFMono-Regular, Menlo, monospace" },
+  { label: "Courier", value: "'Courier New', Courier, monospace" },
+  {
+    label: "Departure Mono",
+    value: "'Departure Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
+  },
+  { label: "System Mono", value: "ui-monospace, SFMono-Regular, Menlo, monospace" },
+];
+
 export function FontControl({
   label,
   onChange,
+  options = fontOptions,
   value,
 }: {
   label: string;
   onChange: (value: string) => void;
+  options?: readonly SelectControlOption<string>[];
   value: string;
 }) {
   /* Imported themes can carry any stack; surface it as "Custom" instead of misreporting. */
-  const options = fontOptions.some((option) => option.value === value)
-    ? fontOptions
-    : [{ label: "Custom", value }, ...fontOptions];
+  const resolvedOptions = options.some((option) => option.value === value)
+    ? options
+    : [{ label: "Custom", value }, ...options];
 
-  return <SelectControl label={label} onChange={onChange} options={options} value={value} />;
+  return (
+    <SelectControl label={label} onChange={onChange} options={resolvedOptions} value={value} />
+  );
 }
 
 export function SelectControl<Value extends string>({

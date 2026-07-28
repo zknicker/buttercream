@@ -777,7 +777,7 @@ function ChannelSlider({
       value={value}
     >
       {/* Inset by the handle's radius so it cannot hang off either end of the rail. */}
-      <Slider.Control className="absolute inset-0 px-1.5">
+      <Slider.Control className="absolute inset-0 items-center px-1.5">
         <Slider.Track
           className={classes("-mx-1.5 h-3 w-[calc(100%+0.75rem)] rounded-full ring-1 ring-fg/10")}
           style={trackStyle}

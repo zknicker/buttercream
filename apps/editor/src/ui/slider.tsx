@@ -55,7 +55,12 @@ function SliderControl({
 }: Omit<BaseSlider.Control.Props, "className"> & { className?: string }): ReactElement {
   return (
     <BaseSlider.Control
-      className={classes("flex items-center", className)}
+      /*
+       * No alignment here. Tailwind resolves conflicting utilities by their order in the generated
+       * stylesheet, not by their order in the class string, so a default `items-center` baked in
+       * here cannot be overridden by a call site that wants its track on an edge.
+       */
+      className={classes("flex", className)}
       data-slot="slider-control"
       {...props}
     />
