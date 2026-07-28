@@ -1,6 +1,5 @@
 import { type DesignSystem, themeCssVariables } from "@buttercream/theme-core";
 import { HugeiconsIcon } from "@hugeicons/react";
-import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import Moon02Icon from "@hugeicons-pro/core-stroke-rounded/Moon02Icon";
 import Redo02Icon from "@hugeicons-pro/core-stroke-rounded/Redo02Icon";
 import SidebarLeft01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarLeft01Icon";
@@ -11,10 +10,11 @@ import { useEffect, useMemo, useState } from "react";
 import "../styles/preview.css";
 import { useShellTheme } from "../shell-theme.ts";
 import { Button, CupcakeMark, classes } from "../ui/index.ts";
+import { DesignSystemFileMenu } from "../workspace/design-system-file-menu.tsx";
 import { renderPreviewSection } from "./preview-sections.tsx";
 import { PreviewSurface } from "./preview-surface.tsx";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
-import { ThemeEditorPanel } from "./theme-editor-panel.tsx";
+import { DESIGN_SYSTEM_NAME_FIELD_ID, ThemeEditorPanel } from "./theme-editor-panel.tsx";
 import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
 
 /* Keep the component names alphabetical — the nav renders them in this order. */
@@ -183,6 +183,22 @@ export function EditorShell({
     [designSystem, theme],
   );
 
+  /*
+   * Rename has one home — the Name field in the controls panel. The topbar entry opens the
+   * panel and hands focus over rather than duplicating the field in a dialog, which would edit
+   * the saved document behind the draft's back.
+   */
+  const renameInPanel = () => {
+    setControlsOpen(true);
+    requestAnimationFrame(() => {
+      const field = document.getElementById(DESIGN_SYSTEM_NAME_FIELD_ID);
+      if (field instanceof HTMLInputElement) {
+        field.focus();
+        field.select();
+      }
+    });
+  };
+
   return (
     <div
       className={classes(
@@ -204,26 +220,32 @@ export function EditorShell({
           controlsOpen ? "right-2 min-[721px]:right-[17.25rem]" : "right-2",
         )}
       >
-        <a
-          aria-label="Homepage"
-          className="flex min-w-0 max-w-40 items-center gap-1.5 rounded-(--radius-shell) px-2 text-fg focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg min-[721px]:max-w-60"
-          href="/"
-        >
-          {/*
-           * Optically aligned, not geometrically. The cupcake's mass sits in the lower
-           * two thirds of its grid — stem and cherry occupy the top rows — so centring
-           * the box leaves the ink sitting visibly low against the wordmark.
-           */}
-          <CupcakeMark className="-mt-0.5" size={16} />
-          <span className="truncate text-sm font-medium">{designSystem.identity.name}</span>
-          <HugeiconsIcon
-            aria-hidden="true"
-            className="shrink-0 text-muted"
-            icon={ArrowDown01Icon}
-            size={14}
-            strokeWidth={2}
+        {/*
+         * Owners get the file menu; the public preview has no workspace to open, so its
+         * identity stays a plain link home. `onSave` is the same signal the route already uses
+         * to decide whether this document is editable at all.
+         */}
+        {onSave ? (
+          <DesignSystemFileMenu
+            designSystemId={designSystemId}
+            name={designSystem.identity.name}
+            onRename={renameInPanel}
           />
-        </a>
+        ) : (
+          <a
+            aria-label="Homepage"
+            className="flex min-w-0 max-w-40 items-center gap-1.5 rounded-(--radius-shell) px-2 text-fg focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg min-[721px]:max-w-60"
+            href="/"
+          >
+            {/*
+             * Optically aligned, not geometrically. The cupcake's mass sits in the lower
+             * two thirds of its grid — stem and cherry occupy the top rows — so centring
+             * the box leaves the ink sitting visibly low against the wordmark.
+             */}
+            <CupcakeMark className="-mt-0.5" size={16} />
+            <span className="truncate text-sm font-medium">{designSystem.identity.name}</span>
+          </a>
+        )}
 
         {/*
          * Matches the wordmark's size and weight so the bar reads as three deliberate

@@ -1,19 +1,20 @@
-import { Show, SignUpButton, useAuth } from "@clerk/tanstack-react-start";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Copy01Icon from "@hugeicons-pro/core-stroke-rounded/Copy01Icon";
 import Tick02Icon from "@hugeicons-pro/core-stroke-rounded/Tick02Icon";
-import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { type Feature, FeatureRow } from "../marketing/feature-row.tsx";
 import { ProductShot } from "../marketing/product-shot.tsx";
 import { SiteFooter } from "../marketing/site-footer.tsx";
 import { SiteHeader } from "../marketing/site-header.tsx";
-import { createDesignSystemFn, listDesignSystemsFn } from "../server/design-system-functions.ts";
-import { Button, Card, DitherBand, Eyebrow, Swirled } from "../ui/index.ts";
+import { Button, DitherBand, Eyebrow, Swirled } from "../ui/index.ts";
 
+/*
+ * Marketing only. The signed-in workspace lives at /systems, so this page no longer runs a
+ * per-visit list query for the majority of visitors who are not signed in.
+ */
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: () => listDesignSystemsFn(),
 });
 
 const FEATURES: readonly Feature[] = [
@@ -37,9 +38,6 @@ const FEATURES: readonly Feature[] = [
 const PROOF = ["Acme", "Northwood", "Lattice", "Veridian", "Cloudline"];
 
 function Home() {
-  const clerkEnabled = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
-  const { designSystems } = Route.useLoaderData();
-
   return (
     <div className="min-h-dvh">
       <SiteHeader />
@@ -94,13 +92,6 @@ function Home() {
             ))}
           </ul>
         </section>
-
-        {clerkEnabled ? (
-          <Show when="signed-in">
-            <RefreshOnSignIn />
-            <DesignSystemList designSystems={designSystems} />
-          </Show>
-        ) : null}
       </main>
 
       <SiteFooter />
@@ -140,93 +131,4 @@ function InstallChip() {
       />
     </Button>
   );
-}
-
-function RefreshOnSignIn() {
-  const { isLoaded, isSignedIn } = useAuth();
-  const router = useRouter();
-  const refreshed = useRef(false);
-
-  useEffect(() => {
-    if (isLoaded && isSignedIn && !refreshed.current) {
-      refreshed.current = true;
-      void router.invalidate();
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  return null;
-}
-
-function DesignSystemList({
-  designSystems,
-}: {
-  designSystems: Array<{ id: string; name: string; updatedAt: number }>;
-}) {
-  const navigate = useNavigate();
-  const [creating, setCreating] = useState(false);
-
-  const create = async () => {
-    setCreating(true);
-    try {
-      const designSystem = await createDesignSystemFn({
-        data: { name: "Untitled design system" },
-      });
-      await navigate({ params: { id: designSystem.id }, to: "/ds/$id" });
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  return (
-    <section
-      aria-labelledby="your-design-systems"
-      className="mx-auto w-full max-w-6xl px-6 py-20 lg:px-10"
-    >
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <Eyebrow>Workspace</Eyebrow>
-          <h2
-            className="mt-2 font-display text-3xl tracking-tight text-fg"
-            id="your-design-systems"
-          >
-            Your design systems
-          </h2>
-        </div>
-        <SignUpButton>
-          <Button className="max-sm:hidden" variant="secondary">
-            Create account
-          </Button>
-        </SignUpButton>
-        <Button disabled={creating} loading={creating} onClick={() => void create()}>
-          New design system
-        </Button>
-      </div>
-
-      {designSystems.length ? (
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" role="list">
-          {designSystems.map((designSystem) => (
-            <li key={designSystem.id}>
-              <Card
-                className="flex h-full min-h-32 flex-col justify-between gap-6 p-5 hover:ring-fg/25"
-                render={<Link params={{ id: designSystem.id }} to="/ds/$id" />}
-              >
-                <p className="font-display text-lg text-fg">{designSystem.name}</p>
-                <p className="font-mono text-xs text-muted">
-                  Updated {formatDate(designSystem.updatedAt)}
-                </p>
-              </Card>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-8 rounded-(--radius-shell) border border-dashed border-fg/15 p-8 text-center text-base text-muted sm:text-sm">
-          Create your first saved design system.
-        </p>
-      )}
-    </section>
-  );
-}
-
-function formatDate(timestamp: number): string {
-  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(timestamp);
 }

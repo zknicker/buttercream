@@ -29,6 +29,12 @@ import { VariablesPanel } from "./variables-panel.tsx";
 const TABS = ["Style", "Variables", "Agent"] as const;
 type Tab = (typeof TABS)[number];
 
+/*
+ * The name lives in this panel, not in a dialog. The topbar's Rename entry opens the panel and
+ * sends focus here rather than offering a second way to edit the same field.
+ */
+export const DESIGN_SYSTEM_NAME_FIELD_ID = "design-system-name";
+
 interface ThemeEditorPanelProps {
   designSystem: DesignSystem;
   designSystemId: string;
@@ -132,6 +138,7 @@ function StylePanel({ designSystem, onUpdate, showSaveState }: StylePanelProps) 
       {showSaveState ? (
         <ControlSection title="General">
           <TextControl
+            id={DESIGN_SYSTEM_NAME_FIELD_ID}
             label="Name"
             maxLength={80}
             onChange={(name) =>
