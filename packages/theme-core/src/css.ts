@@ -144,6 +144,13 @@ export function exportGlobalCss(designSystem: DesignSystem): string {
     '@import "@buttercream/styles";',
     "",
     "@layer theme {",
+    /*
+     * `:root` matches the shipped defaults' own selector list, so dropping this file into a
+     * project is enough for the theme to take effect. Without it the export applies only where a
+     * `data-theme` attribute happens to sit, and a consumer who never sets one silently renders
+     * the default preset instead of their own.
+     */
+    "  :root,",
     '  [data-theme="light"],',
     '  [data-theme="default"] {',
     serializeTheme(designSystem.theme.light, 4),
