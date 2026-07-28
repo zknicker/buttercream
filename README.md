@@ -187,10 +187,18 @@ including why the document only stores ~49 tokens and how the rest of `theme.css
 
 ## Editor development
 
-Copy `.env.example` to `.env` and add the Hugeicons Pro license key before installing dependencies.
-Copy `apps/editor/.env.example` to `apps/editor/.env.local`, add the Clerk development keys, and
-optionally configure the local-only automatic sign-in values. Development uses the hosted D1
-database configured in `apps/editor/wrangler.jsonc`.
+Copy `.env.example` to `.env` and fill it in — the Hugeicons Pro licence key is read at install
+time, so set it before running `bun install`. Everything else in that file is Clerk's, including
+the optional local-only automatic sign-in values.
+
+One env file per checkout. `apps/editor/.env.local` is a symlink to it, because Vite and the
+Cloudflare plugin both resolve the environment relative to `apps/editor` and neither follows the
+repository root on its own. `scripts/bootstrap-checkout.sh` creates that link, and seeds a new
+worktree's `.env` from the main checkout — a worktree materialises tracked files only, so it starts
+with no environment at all and fails at the first request with a missing Clerk secret. A
+`SessionStart` hook runs it, and it is safe to run by hand at any time.
+
+Development uses the hosted D1 database configured in `apps/editor/wrangler.jsonc`.
 
 ```bash
 bun run dev
