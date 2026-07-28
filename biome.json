@@ -2,7 +2,14 @@
   "$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!**/dist", "!**/.output", "!**/.wrangler", "!**/routeTree.gen.ts"]
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/.output",
+      "!**/.wrangler",
+      "!**/routeTree.gen.ts",
+      "!**/packages/react/src/charts"
+    ]
   },
   "css": {
     "parser": {

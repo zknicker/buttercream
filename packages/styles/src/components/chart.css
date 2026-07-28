@@ -1,0 +1,195 @@
+/*
+ * Charts. The plotting itself is vendored from the bklit registry and paints entirely from
+ * --chart-* custom properties, which theme.css maps onto semantic tokens — no colour is decided
+ * in the chart source. This file supplies the layout the vendored markup expects, in place of
+ * the Tailwind utilities it originally carried.
+ */
+@layer components {
+  .chart {
+    position: relative;
+    width: 100%;
+    color: var(--chart-foreground);
+    font-family: var(--font-sans);
+  }
+
+  /* Axis labels and overlays are positioned against the plot, so they must not clip. */
+  .chart__svg {
+    overflow: visible;
+  }
+
+  /* Overlay planes: axes, crosshairs and hit areas stacked on the plot. */
+  .chart__layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .chart__layer--vertical {
+    top: 0;
+    bottom: 0;
+    inset-inline: auto;
+  }
+
+  .chart__floating {
+    position: absolute;
+    z-index: 50;
+    pointer-events: none;
+  }
+
+  .chart__tick {
+    position: absolute;
+    color: var(--chart-label);
+    font-size: calc(0.75rem * var(--font-size-scale));
+  }
+
+  .chart__y-tick {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-inline-end: calc(0.5rem * var(--spacing-scale));
+    inset-inline-end: 0;
+    color: var(--chart-label);
+    font-size: calc(0.75rem * var(--font-size-scale));
+  }
+
+  .chart__loading-label {
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    letter-spacing: 0.025em;
+
+    /* The shimmer reads these two by name. */
+    --color: var(--chart-foreground-muted);
+    --shimmering-color: var(--chart-foreground);
+  }
+
+  .chart-shimmer__char {
+    display: inline-block;
+    line-height: 1;
+    white-space: pre;
+  }
+
+  /* Present for screen readers while the shimmer animates the visible characters. */
+  .chart-shimmer__label {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .chart-tooltip {
+    border-radius: var(--radius-xl);
+    background: var(--chart-tooltip-background);
+    box-shadow: var(--shadow-overlay);
+    color: var(--chart-tooltip-foreground);
+  }
+
+  .chart-tooltip__clip {
+    overflow: hidden;
+  }
+
+  .chart-tooltip__body {
+    padding: calc(0.625rem * var(--spacing-scale)) calc(0.75rem * var(--spacing-scale));
+  }
+
+  .chart-tooltip__title {
+    margin-block-end: calc(0.5rem * var(--spacing-scale));
+    color: var(--chart-tooltip-foreground);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+    text-align: start;
+  }
+
+  .chart-tooltip__rows {
+    display: grid;
+    gap: calc(0.375rem * var(--spacing-scale));
+  }
+
+  .chart-tooltip__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(1rem * var(--spacing-scale));
+  }
+
+  .chart-tooltip__key {
+    display: flex;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .chart-tooltip__dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    flex: none;
+    border-radius: 999px;
+  }
+
+  .chart-tooltip__name {
+    color: var(--chart-tooltip-muted);
+    font-size: calc(0.875rem * var(--font-size-scale));
+  }
+
+  /* Tabular figures so a value does not jitter sideways as it changes under the cursor. */
+  .chart-tooltip__value {
+    color: var(--chart-tooltip-foreground);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chart-tooltip__footer {
+    margin-block-start: calc(0.5rem * var(--spacing-scale));
+    transition: opacity 200ms ease-out;
+  }
+
+  /* The date pill under the cursor. Reads as the inverse of the page, like a tooltip. */
+  .chart-ticker {
+    padding: calc(0.25rem * var(--spacing-scale)) calc(1rem * var(--spacing-scale));
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--chart-tooltip-background);
+    box-shadow: var(--shadow-overlay);
+    color: var(--chart-tooltip-foreground);
+  }
+
+  .chart-ticker__window {
+    position: relative;
+    height: calc(1.5rem * var(--spacing-scale));
+    overflow: hidden;
+  }
+
+  .chart-ticker__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(0.25rem * var(--spacing-scale));
+  }
+
+  .chart-ticker__reel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-ticker__cell {
+    display: flex;
+    height: calc(1.5rem * var(--spacing-scale));
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chart-ticker__value {
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-tooltip__footer {
+    transition: none;
+  }
+}

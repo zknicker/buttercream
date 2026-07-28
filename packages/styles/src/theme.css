@@ -376,6 +376,32 @@
     --chart-5: oklch(from var(--accent) 0.82 c h);
     --chart-accent: var(--accent);
 
+    /*
+     * The plot's own furniture. The chart components are vendored and read these by name, so
+     * this block is the whole seam between them and the theme: every colour they can paint is
+     * mapped onto a semantic token here, and none of it is decided inside the chart source.
+     */
+    --chart-foreground: var(--foreground);
+    --chart-foreground-muted: var(--muted);
+    --chart-background: var(--surface);
+    --chart-label: var(--muted);
+    --chart-line-primary: var(--chart-3);
+    --chart-line-secondary: var(--chart-5);
+    --chart-crosshair: color-mix(in oklab, var(--foreground) 22%, transparent);
+    --chart-brush-border: var(--border);
+    --chart-segment-background: color-mix(in oklab, var(--accent) 8%, transparent);
+    --chart-segment-line: color-mix(in oklab, var(--foreground) 16%, transparent);
+    --chart-indicator-color: var(--chart-3);
+    --chart-indicator-secondary-color: var(--chart-5);
+    --chart-marker-background: var(--overlay);
+    --chart-marker-foreground: var(--overlay-foreground);
+    --chart-marker-border: var(--border);
+    --chart-marker-badge-background: var(--accent);
+    --chart-marker-badge-foreground: var(--accent-foreground);
+    --chart-tooltip-background: var(--background-inverse, var(--foreground));
+    --chart-tooltip-foreground: var(--background);
+    --chart-tooltip-muted: color-mix(in oklab, var(--background) 70%, transparent);
+
     /* The plot's own furniture, kept off the colour roles so a chart never invents a grey. */
     --chart-grid: color-mix(in oklab, var(--foreground) 10%, transparent);
     --chart-axis: var(--muted);

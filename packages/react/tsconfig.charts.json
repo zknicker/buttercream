@@ -1,0 +1,9 @@
+{
+  "//": "Vendored chart source from the bklit registry. Held to the same strictness as our own code it would emit ~50 errors that are not defects, only a stricter host: exactOptionalPropertyTypes and noImplicitAny. Relaxing them here keeps our authored code strict while letting third-party source typecheck as its author intended, and keeps future updates from the registry applying cleanly.",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": false,
+    "noImplicitAny": false
+  },
+  "include": ["src/charts/**/*.ts", "src/charts/**/*.tsx"]
+}
