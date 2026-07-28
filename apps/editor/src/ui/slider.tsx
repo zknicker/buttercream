@@ -67,12 +67,18 @@ function SliderControl({
   );
 }
 
+/** Most dots a row can carry before the marks read as texture rather than as steps. */
+const MAX_TICKS = 20;
+
 /*
- * A dot per step, drawn inside the track.
+ * Dots along the track, at a density the eye can resolve.
  *
- * Above a certain density ticks stop reading as steps and start reading as texture, so past the
- * cap they are dropped rather than drawn faintly — a fill with no dots is honest about being
- * continuous, where a grey smear only looks like a rendering fault.
+ * They mark every step where a row has few enough of them, and every nth step where it does not.
+ * Dropping them entirely past a threshold — which is what this did first — meant a row's step size
+ * decided whether it had dots at all, so the one slider with a hundred steps was the one slider
+ * with a bare track, and it read as a different control rather than a finer one.
+ *
+ * Subsampled dots still land on real steps, so they never imply a stop that does not exist.
  */
 function SliderTicks({
   className,
@@ -87,9 +93,13 @@ function SliderTicks({
   step: number;
 } & Omit<HTMLAttributes<HTMLSpanElement>, "children">): ReactElement | null {
   const count = Math.floor((max - min) / step);
-  if (count < 1 || count > 40) {
+  if (count < 1) {
     return null;
   }
+
+  /* Every step, or every nth, whichever keeps the row under the density the eye can read. */
+  const stride = Math.ceil(count / MAX_TICKS);
+  const drawn = Math.floor(count / stride);
 
   return (
     <span
@@ -98,7 +108,7 @@ function SliderTicks({
       data-slot="slider-ticks"
       {...props}
     >
-      {Array.from({ length: count + 1 }, (_, index) => min + index * step).map((tick) => (
+      {Array.from({ length: drawn + 1 }, (_, index) => min + index * stride * step).map((tick) => (
         <span
           className="absolute top-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-fg/25"
           key={tick}

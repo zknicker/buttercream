@@ -2308,9 +2308,15 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
       >
         <div ref={ref} className="inline-flex">
           <Popover.Trigger
+            /*
+             * No radius of its own. Tailwind resolves conflicting utilities by their order in the
+             * generated stylesheet rather than in the class string, so a rounding baked in here
+             * silently beat the one the row asked for — the colour rows sat at 4px while every
+             * other row in the rail sat at 8px.
+             */
             className={classes(
-              "flex items-center gap-2 h-9 px-2 hover:bg-fg/5 transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)] cursor-pointer",
-              shape.input,
+              "flex h-9 cursor-pointer items-center gap-2 px-2 outline-none transition-colors duration-80",
+              "hover:bg-fg/5 focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)]",
               triggerClassName,
             )}
             style={{ fontVariationSettings: fontWeights.medium }}
