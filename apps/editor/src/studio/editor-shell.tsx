@@ -189,9 +189,12 @@ export function EditorShell({
         "isolate grid h-dvh min-w-0 overflow-hidden bg-sunken transition-[grid-template-columns] duration-150 ease-out",
         "max-[720px]:grid-cols-[minmax(0,1fr)] max-[720px]:grid-rows-[minmax(0,1fr)_52px]",
         "min-[721px]:grid-rows-[minmax(0,1fr)]",
+        /* Preview first, then the section rail, then the controls. The rail sits between the
+           artifact and the panel that edits it, so both things that act on the preview are on
+           the same side of it and the eye travels one way. */
         controlsOpen
-          ? "min-[721px]:grid-cols-[3rem_minmax(0,1fr)_17.25rem]"
-          : "min-[721px]:grid-cols-[3rem_minmax(0,1fr)_0rem]",
+          ? "min-[721px]:grid-cols-[minmax(0,1fr)_3rem_17.25rem]"
+          : "min-[721px]:grid-cols-[minmax(0,1fr)_3rem_0rem]",
       )}
     >
       <header
@@ -270,6 +273,29 @@ export function EditorShell({
         </div>
       </header>
 
+      {/*
+       * The preview is a surface floating on the chrome, not a region bleeding into
+       * it. The gutter and radius are what make the chrome read as a frame and the
+       * preview as the artifact inside it; without them the two fight for the same
+       * plane. The top gutter clears the floating topbar.
+       */}
+      <main className="min-h-0 min-w-0 bg-sunken px-3 pt-12 pb-3">
+        {/*
+         * No ring and no background of its own: the themed surface inside paints the whole
+         * area, so anything drawn here would show as a seam around the artifact being
+         * previewed. The reference frames its preview the same way — a radius and nothing else.
+         */}
+        <div className="h-full w-full overflow-hidden rounded-(--radius-shell-frame)">
+          <PreviewSurface
+            customCss={designSystem.rules.customCss}
+            style={themeVariables}
+            theme={theme}
+          >
+            {renderPreviewSection(section, designSystem.icons)}
+          </PreviewSurface>
+        </div>
+      </main>
+
       <aside
         aria-label="Preview navigation"
         className={classes(
@@ -295,7 +321,7 @@ export function EditorShell({
         >
           {sectionGroups.map((group, groupIndex) => (
             <span
-              className="flex items-center gap-3 max-[720px]:flex-row min-[721px]:w-6 min-[721px]:flex-col min-[721px]:items-start"
+              className="flex items-center gap-3 max-[720px]:flex-row min-[721px]:w-6 min-[721px]:flex-col min-[721px]:items-end"
               key={group.label}
             >
               {/* Gap between tick groups, oriented with the rail. */}
@@ -326,8 +352,9 @@ export function EditorShell({
             /* Scrolls rather than clips: the list outgrew 80vh, and overflow-hidden simply
                made everything past it unreachable. overscroll-contain stops the page from
                scrolling on behind it once the menu hits an end. */
-            "absolute top-1/2 left-12 z-10 w-44 max-h-[80vh] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-(--radius-shell) bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
-            "max-[720px]:top-auto max-[720px]:bottom-14 max-[720px]:left-2 max-[720px]:translate-y-0",
+            /* Opens toward the preview, away from the controls panel it sits against. */
+            "absolute top-1/2 right-12 z-10 w-44 max-h-[80vh] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-(--radius-shell) bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
+            "max-[720px]:top-auto max-[720px]:right-auto max-[720px]:bottom-14 max-[720px]:left-2 max-[720px]:translate-y-0",
             navOpen ? "visible opacity-100" : "invisible opacity-0",
           )}
         >
@@ -359,29 +386,6 @@ export function EditorShell({
           ))}
         </div>
       </aside>
-
-      {/*
-       * The preview is a surface floating on the chrome, not a region bleeding into
-       * it. The gutter and radius are what make the chrome read as a frame and the
-       * preview as the artifact inside it; without them the two fight for the same
-       * plane. The top gutter clears the floating topbar.
-       */}
-      <main className="min-h-0 min-w-0 bg-sunken px-3 pt-12 pb-3">
-        {/*
-         * No ring and no background of its own: the themed surface inside paints the whole
-         * area, so anything drawn here would show as a seam around the artifact being
-         * previewed. The reference frames its preview the same way — a radius and nothing else.
-         */}
-        <div className="h-full w-full overflow-hidden rounded-(--radius-shell-frame)">
-          <PreviewSurface
-            customCss={designSystem.rules.customCss}
-            style={themeVariables}
-            theme={theme}
-          >
-            {renderPreviewSection(section, designSystem.icons)}
-          </PreviewSurface>
-        </div>
-      </main>
 
       <ThemeEditorPanel
         designSystem={designSystem}
