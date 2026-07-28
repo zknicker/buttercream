@@ -60,7 +60,9 @@ describe("preview icons", () => {
       treatment: "stroke",
     };
 
-    const markup = renderToStaticMarkup(renderPreviewSection("Button", designSystem.icons));
+    const markup = renderToStaticMarkup(
+      renderPreviewSection("Button", { designSystem, surfaceStyle: {}, theme: "light" }),
+    );
 
     expect(markup).toContain('class="lucide lucide-search preview-icon"');
     expect(markup).toContain('width="17"');

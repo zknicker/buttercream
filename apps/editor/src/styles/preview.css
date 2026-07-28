@@ -527,6 +527,121 @@
 }
 
 /*
+ * The Brand page's themed island. The page around it is editor chrome, so this block is what the
+ * design system actually looks like: resolved token values, real specimens, nothing drawn.
+ *
+ * Tighter than the guides sheet on purpose. Guides is a page you read; this is a strip you glance
+ * at on the way to the fields above and below it, and it has to stay shorter than they are.
+ */
+.brand {
+  display: grid;
+  gap: 28px;
+  container-type: inline-size;
+}
+
+.brand__title {
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brand__chips {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+}
+
+.brand-chip {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.brand-chip__fill {
+  height: 44px;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+  background: var(--bc-chip);
+}
+
+.brand-chip__name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+/* Generated neutrals resolve to long colour expressions, so the value truncates rather than wraps. */
+.brand-chip__value {
+  overflow: hidden;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand__type {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.brand-type {
+  display: grid;
+  min-width: 0;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  gap: 2px;
+}
+
+.brand-type__specimen {
+  margin-bottom: 4px;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.brand-type__role {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.brand-type__family {
+  overflow: hidden;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand__strip {
+  display: grid;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.brand__strip-column {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 20px;
+}
+
+.brand__strip-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/*
  * Charts size themselves from their own aspect ratio, so the demo only supplies width. Giving
  * it a height instead fights that sizing and the plot overflows its card.
  */

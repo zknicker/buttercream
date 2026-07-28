@@ -11,7 +11,7 @@ import "../styles/preview.css";
 import { useShellTheme } from "../shell-theme.ts";
 import { Button, CupcakeMark, classes } from "../ui/index.ts";
 import { DesignSystemFileMenu } from "../workspace/design-system-file-menu.tsx";
-import { renderPreviewSection } from "./preview-sections.tsx";
+import { renderPreviewSection, sectionOwnsSurface } from "./preview-sections.tsx";
 import { PreviewSurface } from "./preview-surface.tsx";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { DESIGN_SYSTEM_NAME_FIELD_ID, ThemeEditorPanel } from "./theme-editor-panel.tsx";
@@ -19,6 +19,7 @@ import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system
 
 /* Keep the component names alphabetical — the nav renders them in this order. */
 const sections = [
+  "Brand",
   "Guides",
   "Overview",
   "Dashboard",
@@ -78,7 +79,12 @@ const sections = [
 type Section = (typeof sections)[number];
 
 const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
-  { label: "Preview", items: ["Guides", "Overview", "Dashboard", "Mail", "Chat", "Finances"] },
+  {
+    /* Brand leads: it is the document's own description, and everything below it is a view of
+       what that description produced. */
+    label: "Preview",
+    items: ["Brand", "Guides", "Overview", "Dashboard", "Mail", "Chat", "Finances"],
+  },
   {
     label: "Components",
     items: [
@@ -182,6 +188,17 @@ export function EditorShell({
     () => themeCssVariables(designSystem.theme[theme]) as CSSProperties,
     [designSystem, theme],
   );
+
+  /*
+   * Sections that author the document get the draft's mutator; a shared visitor's copy has no
+   * `onSave`, so it renders the same page without the affordances that would write to it.
+   */
+  const sectionContent = renderPreviewSection(section, {
+    designSystem,
+    surfaceStyle: themeVariables,
+    theme,
+    ...(onSave ? { onUpdate: updateDesignSystem } : {}),
+  });
 
   /*
    * Rename has one home — the Name field in the controls panel. The topbar entry opens the
@@ -318,13 +335,17 @@ export function EditorShell({
          */}
         <div className="h-full overflow-y-auto scrollbar-none">
           <div className="min-h-full w-full overflow-hidden rounded-(--radius-shell-frame)">
-            <PreviewSurface
-              customCss={designSystem.rules.customCss}
-              style={themeVariables}
-              theme={theme}
-            >
-              {renderPreviewSection(section, designSystem.icons)}
-            </PreviewSurface>
+            {sectionOwnsSurface(section) ? (
+              sectionContent
+            ) : (
+              <PreviewSurface
+                customCss={designSystem.rules.customCss}
+                style={themeVariables}
+                theme={theme}
+              >
+                {sectionContent}
+              </PreviewSurface>
+            )}
           </div>
         </div>
       </main>

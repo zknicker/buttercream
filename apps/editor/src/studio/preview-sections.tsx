@@ -1,5 +1,7 @@
 import type { DesignSystem } from "@buttercream/theme-core";
-import type { ReactElement } from "react";
+import type { CSSProperties, ReactElement } from "react";
+import type { ShellTheme } from "../shell-theme.ts";
+import { BrandPage } from "./brand-page.tsx";
 import { ChatAppPreview } from "./preview-app-chat.tsx";
 import { DashboardAppPreview } from "./preview-app-dashboard.tsx";
 import { FinancesAppPreview } from "./preview-app-finances.tsx";
@@ -63,8 +65,9 @@ import {
 import { TabsPreview } from "./preview-tabs.tsx";
 import { TooltipPreview } from "./preview-tooltip.tsx";
 
-/* Alphabetical after Guides, matching the order the nav lists them in. */
+/* Alphabetical after Brand and Guides, matching the order the nav lists them in. */
 export type PreviewSection =
+  | "Brand"
   | "Guides"
   | "Accordion"
   | "Alert"
@@ -121,10 +124,43 @@ export type PreviewSection =
   | "Tooltip"
   | "Typography";
 
+export interface PreviewSectionContext {
+  designSystem: DesignSystem;
+  /**
+   * Absent for a shared visitor on `/ds/:id`: sections that author the document display it
+   * instead. The same signal the route uses to decide whether the document is editable at all.
+   */
+  onUpdate?: (mutate: (designSystem: DesignSystem) => void) => void;
+  /** Theme tokens, for sections that mount preview surfaces of their own. */
+  surfaceStyle: CSSProperties;
+  theme: ShellTheme;
+}
+
+/**
+ * Whether a section paints its own surfaces. Brand is editor chrome holding themed islands, so
+ * wrapping it in one would put the user's tokens and custom CSS behind the fields editing them;
+ * every other section is themed content the shell frames in a single surface.
+ */
+export function sectionOwnsSurface(section: PreviewSection): boolean {
+  return section === "Brand";
+}
+
 export function renderPreviewSection(
   section: PreviewSection,
-  iconSettings: DesignSystem["icons"],
+  { designSystem, onUpdate, surfaceStyle, theme }: PreviewSectionContext,
 ): ReactElement {
+  const iconSettings = designSystem.icons;
+
+  if (section === "Brand") {
+    return (
+      <BrandPage
+        designSystem={designSystem}
+        surfaceStyle={surfaceStyle}
+        theme={theme}
+        {...(onUpdate ? { onUpdate } : {})}
+      />
+    );
+  }
   if (section === "Guides") {
     return <GuidesPreview />;
   }
