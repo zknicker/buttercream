@@ -1,28 +1,9 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
+import { useState } from "react";
 import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
-
-/** Shared shape for every row in the controls rail: label left, value right. */
-const ROW =
-  "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
-
-/*
- * The same row, laid out with flex instead of grid, for controls whose trigger IS the row. ROW's
- * two columns cannot hold a label, a value and a chevron without wrapping the third onto its own
- * line.
- */
-const ROW_FLEX =
-  "flex min-h-9 w-full items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
-
-/** Row labels carry the medium weight; at 400 they read unfinished against the values. */
-const ROW_LABEL = "truncate font-medium text-fg";
-
-/*
- * Every row's right-hand side reads the same: mono, small, muted, and never wrapping. The rows
- * differ in what they do, and they should not also differ in how their value looks.
- */
-const ROW_VALUE = "shrink-0 font-mono text-[11px] tabular-nums text-muted";
+import { controlName, FOCUS_OUTLINE, ROW, ROW_FLEX, ROW_LABEL, ROW_VALUE } from "./control-row.ts";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
   return (
@@ -100,38 +81,163 @@ export function TextControl({
   );
 }
 
+/** Is this a literal a colour picker can round-trip, or an expression it would destroy? */
+export function isPickableColor(value: string): boolean {
+  return /^#[0-9a-f]{3,8}$/iu.test(value.trim());
+}
+
 export function ColorControl({
+  description,
   label,
   onChange,
+  swatchColor,
   value,
 }: {
+  /**
+   * A second line under the label. The Variables tab puts the token's value or formula here — the
+   * thing that says where a colour came from — which is why the row has to be able to grow.
+   */
+  description?: string;
   label: string;
-  onChange: (value: string) => void;
+  /** Omit to render the row read-only: a value with nowhere to be written is not an input. */
+  onChange?: (value: string) => void;
+  /** What the swatch paints, when that is not the value itself — a derived token's resolved colour. */
+  swatchColor?: string;
   value: string;
 }) {
+  const [draft, setDraft] = useState<string | null>(null);
+  const twoLine = description !== undefined;
+  const rowClass = classes(ROW_FLEX, twoLine && "py-1.5");
+
+  const commit = (next: string) => {
+    const trimmed = next.trim();
+    if (trimmed && trimmed !== value) {
+      onChange?.(trimmed);
+    }
+    setDraft(null);
+  };
+
+  /*
+   * Three kinds of value wear three different controls, because they are three different things.
+   *
+   * A literal opens the picker. An expression — `oklch(from var(--accent) …)`, `var(--foreground)`
+   * — gets a text field instead: the picker cannot represent one, and offering it would mean
+   * silently replacing a generated value with a literal and detaching that role from the neutral
+   * ladder. A value with no setter is neither, and renders as text.
+   *
+   * Seventeen of the twenty-five authored colour tokens are expressions, so the text path is the
+   * common case rather than the exception.
+   */
+  if (onChange && isPickableColor(value)) {
+    return (
+      <ColorPickerPopover
+        defaultFormat="hex"
+        onValueChange={onChange}
+        triggerClassName={classes(rowClass, "hover:bg-fg/5")}
+        triggerLabel={<RowText description={description} label={label} />}
+        triggerLabelPosition="left"
+        triggerShowValue={!twoLine}
+        value={normalizeHex(value)}
+      />
+    );
+  }
+
   return (
-    /*
-     * The row is the trigger. Previously only the swatch opened the picker, which made a 16px
-     * target out of a 276px row and left the rest of the line inert for no reason the user could
-     * see.
-     *
-     * The picker writes hex back because that is what the design system document stores; it still
-     * shows the other formats, so a value can be read in OkLCH — the space the neutral ladder is
-     * built in — without the document gaining a second representation of the same colour.
-     */
-    <ColorPickerPopover
-      defaultFormat="hex"
-      onValueChange={(next) => onChange(next)}
-      triggerClassName={classes(ROW_FLEX, "hover:bg-fg/5")}
-      triggerLabel={label}
-      triggerLabelPosition="left"
-      triggerShowValue
-      value={normalizeHex(value)}
+    <div className={rowClass}>
+      <ColorSwatch color={swatchColor ?? value} />
+      {draft === null ? (
+        <RowText
+          description={description}
+          label={label}
+          {...(onChange ? { onEdit: () => setDraft(value) } : {})}
+        />
+      ) : (
+        <input
+          aria-label={`${label} value`}
+          // biome-ignore lint/a11y/noAutofocus: the input replaces the text the user just clicked; focus has to follow it.
+          autoFocus
+          className={classes(
+            "min-w-0 flex-1 rounded-(--radius-shell-sm) bg-sunken px-2 py-1 font-mono text-[11px] text-fg outline-0",
+            FOCUS_OUTLINE,
+          )}
+          onBlur={(event) => commit(event.currentTarget.value)}
+          onChange={(event) => setDraft(event.currentTarget.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              commit(event.currentTarget.value);
+            }
+            if (event.key === "Escape") {
+              setDraft(null);
+            }
+          }}
+          value={draft}
+        />
+      )}
+    </div>
+  );
+}
+
+function ColorSwatch({ color }: { color: string }) {
+  /* The ring keeps the swatch legible when the colour it holds matches the row behind it. */
+  return (
+    <span
+      aria-hidden
+      className="size-4 shrink-0 rounded-full ring-1 ring-fg/25"
+      style={{ background: color }}
     />
   );
 }
 
+/*
+ * A row's label and the optional second line explaining it.
+ *
+ * When the value can be edited the second line is a button rather than a permanently open field:
+ * ninety rows of live inputs is a wall of boxes, and the value is something you read far more often
+ * than you change.
+ */
+function RowText({
+  description,
+  label,
+  onEdit,
+}: {
+  description: string | undefined;
+  label: string;
+  onEdit?: () => void;
+}) {
+  const labelClass = classes(
+    ROW_LABEL,
+    description !== undefined && "font-mono text-[11px] leading-4",
+  );
+
+  return (
+    <span className="group/row grid min-w-0 flex-1 text-left">
+      <span className={labelClass} title={label}>
+        {label}
+      </span>
+      {description === undefined ? null : onEdit ? (
+        <button
+          className={classes(
+            "truncate rounded-(--radius-shell-sm) text-left font-mono text-[10px] leading-4 text-muted",
+            "group-hover/row:text-fg",
+            FOCUS_OUTLINE,
+          )}
+          onClick={onEdit}
+          title={`${description} — click to edit`}
+          type="button"
+        >
+          {description}
+        </button>
+      ) : (
+        <span className="truncate font-mono text-[10px] leading-4 text-muted" title={description}>
+          {description}
+        </span>
+      )}
+    </span>
+  );
+}
+
 export function RangeControl({
+  format,
   label,
   max,
   min,
@@ -139,6 +245,8 @@ export function RangeControl({
   step,
   value,
 }: {
+  /** Renders the value when the bare number does not carry its unit — "2px", "60%". */
+  format?: (value: number) => string;
   label: string;
   max: number;
   min: number;
@@ -190,7 +298,7 @@ export function RangeControl({
         {label}
       </Slider.Label>
       <output className={classes(ROW_VALUE, "pointer-events-none z-1")}>
-        {value.toFixed(step < 1 ? 2 : 0)}
+        {format ? format(value) : value.toFixed(step < 1 ? 2 : 0)}
       </output>
     </Slider>
   );
@@ -321,10 +429,6 @@ export function SelectControl<Value extends string>({
       ))}
     </Select>
   );
-}
-
-function controlName(label: string): string {
-  return label.toLowerCase().replaceAll(" ", "-");
 }
 
 function normalizeHex(value: string): string {

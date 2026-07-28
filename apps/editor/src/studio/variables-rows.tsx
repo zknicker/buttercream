@@ -3,28 +3,19 @@ import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon"
 import type { ReactElement, ReactNode } from "react";
 import { useRef, useState } from "react";
 import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
+import { controlName, FOCUS_OUTLINE, ROW, ROW_FLEX, ROW_LABEL, ROW_VALUE } from "./control-row.ts";
+import { ColorControl, RangeControl, SelectControl, ToggleControl } from "./theme-controls.tsx";
 import { describeTokenValue, formatTokenDisplay } from "./variables-tokens.ts";
 
 /*
- * Row primitives for the Variables tab. Same rail idiom as theme-controls.tsx — label
- * left, value right, one raised row per control — kept self-contained so the two panels
- * can evolve independently.
+ * Rows particular to the Variables tab. The controls themselves come from theme-controls.tsx —
+ * the same picker, select and slider the Style tab uses — and what lives here is only the shapes
+ * this tab needs on top of them: a token row that carries its formula on a second line, and a
+ * level picker for the shadow scales.
+ *
+ * These were parallel implementations until they weren\'t. Keeping them separate is what let one
+ * tab keep a butter fill and a native colour input after the other had moved on.
  */
-
-const ROW =
-  "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
-
-const ROW_LABEL = "truncate font-medium text-fg";
-
-/* The flex twin of ROW, for controls whose trigger is the row rather than something inside it. */
-const ROW_FLEX =
-  "flex min-h-9 w-full items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
-
-/** Matches the Style tab: every value in the rail reads the same regardless of its control. */
-const ROW_VALUE = "shrink-0 font-mono text-[11px] tabular-nums text-muted";
-
-const FOCUS_OUTLINE =
-  "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg";
 
 export function VariablesSection({
   children,
@@ -65,99 +56,26 @@ export function ColorTokenRow({
   onCommit?: (value: string) => void;
   value: string;
 }): ReactElement {
-  const [draft, setDraft] = useState<string | null>(null);
-  const cancelled = useRef(false);
-  const display = formatTokenDisplay(describeTokenValue(value));
-  const hex = /^#[\da-f]{6}$/iu.exec(value.trim())?.[0];
-
-  const commit = (next: string) => {
-    const trimmed = next.trim();
-    if (trimmed && trimmed !== value) {
-      onCommit?.(trimmed);
-    }
-  };
-
+  /*
+   * The Style tab's colour row, in its two-line form. This used to be a parallel implementation
+   * with its own swatch, its own edit affordance and its own idea of a row, which is how the two
+   * tabs ended up offering different tools for the same token.
+   *
+   * The swatch paints `var(--token)` rather than the raw value: a derived token's value is a
+   * formula, and a formula is not a colour. The panel scopes those variables to the edited theme,
+   * so the resolved colour is the one the user is actually looking at.
+   */
   return (
-    <div className="group/token relative flex items-center gap-2.5 px-3 py-1.5 hover:bg-fg/4">
-      {hex !== undefined && onCommit ? (
-        /*
-         * The same picker the Style tab uses. This row kept a native <input type="color"> after
-         * Style moved off it, so editing an authored token here still opened the operating
-         * system's dialog — and the two tabs offered different tools for the same job.
-         *
-         * The ring keeps the swatch legible when the chosen colour matches the row behind it.
-         */
-        <ColorPickerPopover
-          aria-label={`${name} colour`}
-          defaultFormat="hex"
-          onValueChange={(next) => onCommit(next)}
-          triggerClassName="size-4 shrink-0 rounded-full p-0 ring-1 ring-fg/25 [&>*]:size-full [&>*]:rounded-full"
-          triggerShowValue={false}
-          value={hex}
-        />
-      ) : (
-        <span
-          aria-hidden
-          className="size-4 shrink-0 rounded-full ring-1 ring-fg/25"
-          style={{ background: `var(--${name})` }}
-        />
-      )}
-      <span className="grid min-w-0 flex-1">
-        <span className="truncate font-mono text-[11px] leading-4 text-fg" title={name}>
-          {name}
-        </span>
-        {draft !== null ? null : onCommit ? (
-          <button
-            className={classes(
-              "truncate rounded-(--radius-shell-sm) text-left font-mono text-[10px] leading-4 text-muted group-hover/token:text-fg",
-              FOCUS_OUTLINE,
-            )}
-            onClick={() => setDraft(value)}
-            title={`${value} — click to edit`}
-            type="button"
-          >
-            {display}
-          </button>
-        ) : (
-          <span className="truncate font-mono text-[10px] leading-4 text-muted" title={value}>
-            {display}
-          </span>
-        )}
-      </span>
-      {draft === null ? null : (
-        <input
-          aria-label={`${name} value`}
-          // biome-ignore lint/a11y/noAutofocus: the input replaces the value button the user just clicked; focus must follow it.
-          autoFocus
-          className={classes(
-            "mt-1 mb-0.5 w-full min-w-0 rounded-[calc(var(--radius-shell)-0.125rem)] bg-sunken px-2 py-1 font-mono text-[11px] text-fg outline-0",
-            FOCUS_OUTLINE,
-          )}
-          name={`${name}-value`}
-          onBlur={(event) => {
-            if (!cancelled.current) {
-              commit(event.currentTarget.value);
-            }
-            cancelled.current = false;
-            setDraft(null);
-          }}
-          onChange={(event) => setDraft(event.currentTarget.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.currentTarget.blur();
-            } else if (event.key === "Escape") {
-              cancelled.current = true;
-              setDraft(null);
-            }
-          }}
-          value={draft}
-        />
-      )}
-    </div>
+    <ColorControl
+      description={formatTokenDisplay(describeTokenValue(value))}
+      label={name}
+      swatchColor={`var(--${name})`}
+      value={value}
+      {...(onCommit ? { onChange: onCommit } : {})}
+    />
   );
 }
 
-/** One choice among a few named levels, rendered as a small in-row segmented control. */
 export function LevelRow<Value extends string>({
   label,
   onChange,
@@ -201,138 +119,16 @@ export function LevelRow<Value extends string>({
   );
 }
 
-export function ToggleRow({
-  label,
-  onChange,
-  value,
-}: {
-  label: string;
-  onChange: (value: boolean) => void;
-  value: boolean;
-}): ReactElement {
-  return (
-    <button
-      aria-checked={value}
-      className={classes(ROW, "cursor-pointer text-left", FOCUS_OUTLINE)}
-      onClick={() => onChange(!value)}
-      role="switch"
-      type="button"
-    >
-      <span className={ROW_LABEL}>{label}</span>
-      <span
-        aria-hidden
-        className={classes(
-          "flex h-4.5 w-8 shrink-0 items-center rounded-full p-0.5 transition-colors",
-          value ? "bg-butter" : "bg-fg/20",
-        )}
-      >
-        <span
-          className={classes(
-            "size-3.5 rounded-full bg-raised ring-1 ring-fg/10 transition-transform",
-            value ? "translate-x-3.5" : "translate-x-0",
-          )}
-        />
-      </span>
-    </button>
-  );
+export function ToggleRow(props: Parameters<typeof ToggleControl>[0]): ReactElement {
+  return <ToggleControl {...props} />;
 }
 
-export function SelectRow<Value extends string>({
-  label,
-  onChange,
-  options,
-  value,
-}: {
-  label: string;
-  onChange: (value: Value) => void;
-  options: readonly { label: string; value: Value }[];
-  value: Value;
-}): ReactElement {
-  return (
-    /*
-     * Not a <label>: it would wrap a custom trigger, and a label swallows the click that should
-     * open the popup. The trigger carries the accessible name instead.
-     */
-    <div className={ROW}>
-      <span className={ROW_LABEL}>{label}</span>
-      <Select
-        aria-label={label}
-        items={options as { label: string; value: Value }[]}
-        name={controlName(label)}
-        onValueChange={(next) => onChange(next as Value)}
-        value={value}
-      >
-        {options.map((option) => (
-          <Select.Item key={option.value} value={option.value}>
-            {option.label}
-          </Select.Item>
-        ))}
-      </Select>
-    </div>
-  );
+export function SelectRow<Value extends string>(
+  props: Parameters<typeof SelectControl<Value>>[0],
+): ReactElement {
+  return <SelectControl {...props} />;
 }
 
-export function RangeRow({
-  format,
-  label,
-  max,
-  min,
-  onChange,
-  step,
-  value,
-}: {
-  format?: (value: number) => string;
-  label: string;
-  max: number;
-  min: number;
-  onChange: (value: number) => void;
-  step: number;
-  value: number;
-}): ReactElement {
-  return (
-    /*
-     * Same slider row as the Style tab. This panel had kept a butter fill after the Style tab went
-     * neutral, so the two tabs disagreed about what a slider looks like.
-     */
-    <Slider
-      className={classes(
-        ROW_FLEX,
-        "relative cursor-ew-resize overflow-hidden hover:bg-fg/5",
-        "has-focus-visible:outline-[1.5px] has-focus-visible:-outline-offset-1 has-focus-visible:outline-fg",
-      )}
-      max={max}
-      min={min}
-      name={controlName(label)}
-      onValueChange={onChange}
-      step={step}
-      value={value}
-    >
-      <Slider.Control className="absolute inset-0 items-center px-[3px]">
-        <Slider.Track className="-mx-[3px] h-full w-[calc(100%+6px)]">
-          <Slider.Indicator className="h-full bg-fg/8 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none" />
-          <Slider.Ticks max={max} min={min} step={step} />
-        </Slider.Track>
-        <Slider.Thumb
-          className={classes(
-            "h-[62%] w-[3px] rounded-[1px] bg-fg/55 outline-none",
-            "transition-[height,left] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
-            "data-dragging:h-full data-[dragging]:duration-100",
-            "motion-reduce:transition-none",
-          )}
-          getAriaLabel={() => label}
-          index={0}
-        />
-      </Slider.Control>
-      <Slider.Label className={classes(ROW_LABEL, "pointer-events-none z-1 min-w-0 flex-1")}>
-        {label}
-      </Slider.Label>
-      <output className={classes(ROW_VALUE, "pointer-events-none z-1")}>
-        {format ? format(value) : value.toFixed(step < 1 ? 2 : 0)}
-      </output>
-    </Slider>
-  );
-}
-
-function controlName(label: string): string {
-  return label.toLowerCase().replaceAll(" ", "-");
+export function RangeRow(props: Parameters<typeof RangeControl>[0]): ReactElement {
+  return <RangeControl {...props} />;
 }

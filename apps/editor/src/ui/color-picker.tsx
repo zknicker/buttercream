@@ -177,7 +177,7 @@ interface ColorPickerProps
 }
 
 interface ColorPickerPopoverProps extends ColorPickerProps {
-  triggerLabel?: string;
+  triggerLabel?: ReactNode;
   triggerLabelPosition?: "left" | "right";
   triggerShowValue?: boolean;
   triggerShowRemove?: boolean;
