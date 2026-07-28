@@ -304,7 +304,7 @@ export function EditorShell({
              the compact bottom bar, where it is a row rather than a list. */
           /* Clears the floating topbar by the same gutter the preview uses, so the rail starts
              level with the artifact instead of running up behind the header. */
-          "relative z-2 flex justify-center px-2 pb-4",
+          "relative z-2 flex min-h-0 justify-center px-2 pb-4",
           "max-[720px]:items-center max-[720px]:pt-4 min-[721px]:items-start min-[721px]:pt-12",
           "max-[720px]:order-last max-[720px]:border-t max-[720px]:border-fg/10 max-[720px]:bg-sunken",
         )}
@@ -320,14 +320,20 @@ export function EditorShell({
         <button
           aria-expanded={navOpen}
           aria-label="Preview sections"
-          className="flex max-h-[60vh] w-8 flex-col items-center gap-3 overflow-y-auto px-1 py-3 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg scrollbar-none max-[720px]:flex-row"
+          /*
+           * Takes the height the column actually has rather than a fixed slice of the viewport. At
+           * 60vh the rail ran out of room while most of its own column sat empty below, so it
+           * scrolled a list that had somewhere to go. It still scrolls, but only once the ticks
+           * genuinely outgrow the window.
+           */
+          className="flex max-h-full w-8 flex-col items-center gap-2 overflow-y-auto px-1 py-3 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg scrollbar-none max-[720px]:flex-row"
           onClick={() => setNavOpen(true)}
           onPointerEnter={() => setNavOpen(true)}
           type="button"
         >
           {sectionGroups.map((group, groupIndex) => (
             <span
-              className="flex items-center gap-3 max-[720px]:flex-row min-[721px]:w-6 min-[721px]:flex-col min-[721px]:items-end"
+              className="flex items-center gap-2 max-[720px]:flex-row min-[721px]:w-6 min-[721px]:flex-col min-[721px]:items-end"
               key={group.label}
             >
               {/* Gap between tick groups, oriented with the rail. */}
