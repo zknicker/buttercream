@@ -172,18 +172,22 @@ export function ColorControl({
          * A square-cornered window at the row's corner, holding a skewed tag.
          *
          * The window clips the lean's overhang, so the tag's right edge is a vertical cut rather
-         * than a slant. The row clips too, which is what keeps the tag inside the card: without it
+         * than a slant. Hinged at the top-left the bottom travels right on its own, so the tag
+         * needs no negative margin to produce that overhang — with one it pushed the word out of
+         * the window too. The row clips too, which is what keeps the tag inside the card: without it
          * the tag's corner sailed past the card's rounded one and hung over the edge.
          *
-         * Forty-five degrees: the cut leaves the card's edge at the same rate it descends, so it
-         * reads as one clean diagonal rather than a shallow taper. It rounds where it meets the
+         * Forty-five degrees, hinged on the top-left corner. About its centre the skew throws the
+         * tag's top corner outward past the window, which clips it flat — that is a vertical drop
+         * from the card's edge before the diagonal even starts. Hinged at the corner the top edge
+         * stays put and only the bottom travels, so the cut leaves the card's edge on the angle. It rounds where it meets the
          * tag's underside — square, the two edges read as two shapes meeting; rounded, as one line
          * changing direction. The lean is positive so the tag narrows toward its base; a cut
          * widening as it fell would undercut the row rather than nick its top edge.
          */
         <span className="pointer-events-none absolute top-0 right-0 flex overflow-hidden">
           <Badge
-            className="-mr-2 skew-x-[45deg] pr-3.5 pl-4 tracking-[0.09em]"
+            className="origin-top-left skew-x-[45deg] pr-3.5 pl-4 tracking-[0.09em]"
             size="sm"
             /*
              * Inline, because the kit's badge rounds all four corners in its base class and a
