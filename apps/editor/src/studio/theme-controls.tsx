@@ -116,8 +116,14 @@ export function RangeControl({
       step={step}
       value={value}
     >
-      <Slider.Control className="absolute inset-0">
-        <Slider.Track className="h-full w-full">
+      {/*
+       * Padded by half the thumb's width so the handle stays wholly inside the row at both
+       * ends. Base UI lays thumbs out within the control's content box, so the inset is
+       * enough — no transform trick, and the fill still runs edge to edge because the track
+       * sits outside the padding.
+       */}
+      <Slider.Control className="absolute inset-0 px-[3px]">
+        <Slider.Track className="-mx-[3px] h-full w-[calc(100%+6px)]">
           {/*
            * A washed butter fill under a solid butter thumb. A neutral fill cannot work
            * here: the rail sits on a rgb(234) panel, so any grey light enough to stay
@@ -125,10 +131,21 @@ export function RangeControl({
            * gap in the row rather than a value. Hue separates where lightness cannot.
            * Kept well under the thumb's full strength so the thumb still marks the value.
            */}
-          <Slider.Indicator className="h-full bg-butter/25 dark:bg-butter/22" />
+          <Slider.Indicator className="h-full bg-butter/25 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none dark:bg-butter/22" />
+          <Slider.Ticks max={max} min={min} step={step} />
         </Slider.Track>
+        {/*
+         * Grows out from the row's midline while dragging rather than growing taller, which
+         * a full-height thumb has no room to do. The same easing as the fill, so handle and
+         * fill arrive together instead of the thumb snapping ahead of the colour.
+         */}
         <Slider.Thumb
-          className="h-full w-0.5 bg-butter outline-none"
+          className={classes(
+            "h-[62%] w-[3px] rounded-[1px] bg-butter outline-none",
+            "transition-[height,left] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "data-dragging:h-full data-[dragging]:duration-100",
+            "motion-reduce:transition-none",
+          )}
           getAriaLabel={() => label}
           index={0}
         />

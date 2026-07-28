@@ -1,5 +1,5 @@
 import { Slider as BaseSlider } from "@base-ui/react/slider";
-import type { ReactElement } from "react";
+import type { HTMLAttributes, ReactElement } from "react";
 import { classes } from "./classes.ts";
 
 /*
@@ -62,6 +62,48 @@ function SliderControl({
   );
 }
 
+/*
+ * A dot per step, drawn inside the track.
+ *
+ * Above a certain density ticks stop reading as steps and start reading as texture, so past the
+ * cap they are dropped rather than drawn faintly — a fill with no dots is honest about being
+ * continuous, where a grey smear only looks like a rendering fault.
+ */
+function SliderTicks({
+  className,
+  max,
+  min,
+  step,
+  ...props
+}: {
+  className?: string;
+  max: number;
+  min: number;
+  step: number;
+} & Omit<HTMLAttributes<HTMLSpanElement>, "children">): ReactElement | null {
+  const count = Math.floor((max - min) / step);
+  if (count < 1 || count > 40) {
+    return null;
+  }
+
+  return (
+    <span
+      aria-hidden
+      className={classes("pointer-events-none absolute inset-y-0 inset-x-1 block", className)}
+      data-slot="slider-ticks"
+      {...props}
+    >
+      {Array.from({ length: count + 1 }, (_, index) => min + index * step).map((tick) => (
+        <span
+          className="absolute top-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-fg/25"
+          key={tick}
+          style={{ left: `${((tick - min) / (max - min)) * 100}%` }}
+        />
+      ))}
+    </span>
+  );
+}
+
 function SliderTrack({
   className,
   ...props
@@ -100,6 +142,7 @@ export const Slider = Object.assign(SliderRoot, {
   Indicator: SliderIndicator,
   Label: SliderLabel,
   Thumb: SliderThumb,
+  Ticks: SliderTicks,
   Track: SliderTrack,
   Value: SliderValueText,
 });
