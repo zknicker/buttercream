@@ -1673,3 +1673,306 @@
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
+
+/*
+ * Overview preview. Three fixed columns rather than a masonry, matching the reference: the
+ * widths are deliberate so a form control and a dialog sit at their natural sizes side by side.
+ * Most items are bare on the page — only the genuine cards carry a surface, which is a
+ * distinction the page exists to make.
+ */
+.overview {
+  display: grid;
+  justify-content: center;
+  gap: 2rem;
+  grid-template-columns: 16rem 22.5rem 21.5rem;
+  container-type: inline-size;
+}
+
+.overview__column {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.overview__column > * {
+  width: 100%;
+}
+
+.overview__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overview__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.5rem;
+}
+
+.overview__menu-label {
+  padding: 0.375rem 0.5rem 0.125rem;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.overview__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-xl);
+}
+
+.overview__menu-item[data-danger] {
+  color: var(--danger);
+}
+
+.overview__menu-text {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+}
+
+.overview__menu-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.overview__menu-hint {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.overview__menu-item[data-danger] .overview__menu-hint {
+  color: color-mix(in oklab, var(--danger) 70%, transparent);
+}
+
+/* Overlapped so the group reads as one cluster rather than five separate people. */
+.overview__avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+ * The ring is the page colour, not a border: overlapping avatars need a gap punched between
+ * them or the row reads as one continuous block rather than several people.
+ */
+.overview__avatars > * {
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+.overview__avatars > * + * {
+  margin-inline-start: -0.625rem;
+}
+
+.overview__avatars-more {
+  margin-inline-start: 0.625rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.overview__verify {
+  display: grid;
+  justify-items: center;
+  gap: 0.625rem;
+  text-align: center;
+}
+
+.overview__verify-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.overview__verify-hint {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.overview__link {
+  border: 0;
+  background: none;
+  color: var(--link);
+  cursor: var(--cursor-interactive);
+  font: inherit;
+  font-weight: 500;
+}
+
+.overview__buttons {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  justify-items: center;
+}
+
+.overview__profile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+}
+
+.overview__profile-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.overview__profile-handle {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.overview__profile-bio {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.overview__profile-stats {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.overview__switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.overview__switch-text {
+  display: grid;
+  min-width: 0;
+}
+
+.overview__switch-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.overview__switch-hint {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.overview__dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.overview__dismiss {
+  position: absolute;
+  top: 0.75rem;
+  inset-inline-end: 0.75rem;
+}
+
+.overview__dialog-icon {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--default);
+  color: var(--muted);
+}
+
+.overview__dialog-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.overview__dialog-body {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.overview__dialog-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* A rule with the word centred on it, so the alternatives read as genuinely alternative. */
+.overview__or {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-size: 0.6875rem;
+}
+
+.overview__or::before,
+.overview__or::after {
+  height: var(--border-width);
+  flex: 1;
+  background: var(--separator);
+  content: "";
+}
+
+.overview__communities {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.overview__community {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Stands in for cover art without shipping an image. */
+.overview__community-art {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(140deg, var(--chart-4), var(--chart-2));
+}
+
+.overview__community-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.overview__community-blurb {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.overview__community-author {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-block-start: auto;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+/*
+ * The reference renders at about 1024px, which is exactly what its three fixed columns need.
+ * The studio's preview pane is usually narrower than that, so the columns become equal and
+ * fluid below it rather than the page dropping straight to a single column.
+ */
+@container (max-width: 1023px) {
+  .overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 560px) {
+  .overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

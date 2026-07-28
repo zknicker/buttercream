@@ -4,6 +4,7 @@ import { ChatAppPreview } from "./preview-app-chat.tsx";
 import { DashboardAppPreview } from "./preview-app-dashboard.tsx";
 import { FinancesAppPreview } from "./preview-app-finances.tsx";
 import { MailAppPreview } from "./preview-app-mail.tsx";
+import { OverviewAppPreview } from "./preview-app-overview.tsx";
 import { AvatarPreview } from "./preview-avatar.tsx";
 import { ButtonPreview } from "./preview-button.tsx";
 import { CardPreview } from "./preview-card.tsx";
@@ -76,6 +77,7 @@ export type PreviewSection =
   | "Button Group"
   | "Card"
   | "Chat"
+  | "Overview"
   | "Dashboard"
   | "Finances"
   | "Mail"
@@ -143,6 +145,9 @@ export function renderPreviewSection(
   }
   if (section === "Chat") {
     return <ChatAppPreview icons={iconSettings} />;
+  }
+  if (section === "Overview") {
+    return <OverviewAppPreview icons={iconSettings} />;
   }
   if (section === "Dashboard") {
     return <DashboardAppPreview icons={iconSettings} />;

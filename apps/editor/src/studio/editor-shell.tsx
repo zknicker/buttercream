@@ -20,6 +20,7 @@ import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system
 /* Keep the component names alphabetical — the nav renders them in this order. */
 const sections = [
   "Guides",
+  "Overview",
   "Dashboard",
   "Mail",
   "Chat",
@@ -77,7 +78,7 @@ const sections = [
 type Section = (typeof sections)[number];
 
 const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
-  { label: "Preview", items: ["Guides", "Dashboard", "Mail", "Chat", "Finances"] },
+  { label: "Preview", items: ["Guides", "Overview", "Dashboard", "Mail", "Chat", "Finances"] },
   {
     label: "Components",
     items: [
