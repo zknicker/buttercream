@@ -2,7 +2,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
+import { Badge, ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
 import { controlName, FOCUS_OUTLINE, ROW, ROW_FLEX, ROW_LABEL, ROW_VALUE } from "./control-row.ts";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
@@ -161,6 +161,7 @@ export function ColorControl({
           description={description}
           dim={onChange === undefined}
           label={label}
+          readOnly={onChange === undefined}
           {...(onChange ? { onEdit: () => setDraft(value) } : {})}
         />
       ) : (
@@ -212,11 +213,13 @@ function RowText({
   dim = false,
   label,
   onEdit,
+  readOnly = false,
 }: {
   description: string | undefined;
   dim?: boolean;
   label: string;
   onEdit?: () => void;
+  readOnly?: boolean;
 }) {
   const labelClass = classes(
     ROW_LABEL,
@@ -226,8 +229,24 @@ function RowText({
 
   return (
     <span className="group/row grid min-w-0 flex-1 text-left">
-      <span className={labelClass} title={label}>
-        {label}
+      <span className="flex min-w-0 items-center gap-1.5">
+        <span className={classes(labelClass, "min-w-0 flex-1")} title={label}>
+          {label}
+        </span>
+        {/*
+         * Says what the greying already implies, for anyone who cannot rely on colour alone. It
+         * takes the kit's muted chip, whose fill sits a shade off the row it is on, so the tag
+         * reads when looked for and recedes when not — a filled or buttered chip would be the
+         * loudest thing in a row whose point is the colour.
+         *
+         * On the name's line rather than the row's: as a sibling of the whole text block it stole
+         * width from the formula underneath too, and the formula is the part worth reading.
+         */}
+        {readOnly && description !== undefined ? (
+          <Badge className="h-4 shrink-0 px-1 text-[9px]" variant="muted">
+            Derived
+          </Badge>
+        ) : null}
       </span>
       {description === undefined ? null : onEdit ? (
         <button
