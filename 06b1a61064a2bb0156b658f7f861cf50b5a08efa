@@ -1,0 +1,1 @@
+This commit also swept in another agent's concurrent edit to theme-controls.tsx: FontControl gained an optional options prop and monoFontOptions was added, groundwork for the Mono Font control that lands in the next commit. Unrelated to the row grammar this message describes.
