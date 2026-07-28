@@ -13,6 +13,12 @@
   --color-accent-soft: var(--accent-soft);
   --color-accent-soft-foreground: var(--accent-soft-foreground);
   --color-accent-soft-hover: var(--accent-soft-hover);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-accent: var(--chart-accent);
   --color-default: var(--default);
   --color-default-foreground: var(--default-foreground);
   --color-default-hover: var(--default-hover);
@@ -349,6 +355,30 @@
     --accent-soft: color-mix(in oklab, var(--accent) 15%, transparent);
     --accent-soft-foreground: color-mix(in oklab, var(--accent) 80%, var(--foreground) 30%);
     --accent-soft-hover: color-mix(in oklab, var(--accent) 16%, transparent);
+
+    /*
+     * Chart ramp. Five steps of one hue rather than five unrelated colours, so a series reads
+     * as one measurement split into parts and stays legible when a category is added or dropped.
+     *
+     * The steps sit on a fixed lightness ladder carrying the accent's hue and chroma, rather
+     * than walking outward from the accent's own lightness. Walking outward only spreads when
+     * the accent happens to sit mid-range: against a near-black accent the lower steps both
+     * clamp at zero and the ramp collapses into one indistinguishable dark. Anchoring the
+     * ladder instead keeps five separable steps whatever the brand colour is, and a neutral
+     * accent degrades to five legible greys rather than to mud.
+     *
+     * A single-series chart should use --chart-accent, which is the accent exactly.
+     */
+    --chart-1: oklch(from var(--accent) 0.38 c h);
+    --chart-2: oklch(from var(--accent) 0.49 c h);
+    --chart-3: oklch(from var(--accent) 0.6 c h);
+    --chart-4: oklch(from var(--accent) 0.71 c h);
+    --chart-5: oklch(from var(--accent) 0.82 c h);
+    --chart-accent: var(--accent);
+
+    /* The plot's own furniture, kept off the colour roles so a chart never invents a grey. */
+    --chart-grid: color-mix(in oklab, var(--foreground) 10%, transparent);
+    --chart-axis: var(--muted);
     --default-hover: color-mix(in oklab, var(--default) 96%, var(--foreground) 4%);
     --default-soft: color-mix(in oklab, var(--default) 50%, transparent);
     --default-soft-foreground: var(--foreground);
