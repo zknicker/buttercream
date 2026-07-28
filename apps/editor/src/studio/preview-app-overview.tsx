@@ -166,12 +166,22 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
         </div>
 
         <div className="overview__buttons">
-          <Button>Click me</Button>
-          <Button variant="secondary">Click me</Button>
-          <Button variant="tertiary">Click me</Button>
-          <Button variant="danger">Click me</Button>
-          <Button variant="danger-soft">Click me</Button>
-          <Button variant="ghost">Click me</Button>
+          <Button size="sm">Click me</Button>
+          <Button size="sm" variant="secondary">
+            Click me
+          </Button>
+          <Button size="sm" variant="tertiary">
+            Click me
+          </Button>
+          <Button size="sm" variant="danger">
+            Click me
+          </Button>
+          <Button size="sm" variant="danger-soft">
+            Click me
+          </Button>
+          <Button size="sm" variant="ghost">
+            Click me
+          </Button>
         </div>
 
         <Card className="overview__profile">

@@ -1866,11 +1866,16 @@
   font-weight: 500;
 }
 
+/*
+ * Sized to its content rather than the column, and the buttons fill their cells. Stretching
+ * the grid to full width and centring each button inside its cell is what pushed them apart:
+ * the gap you see then is the leftover cell, not the gap property.
+ */
 .overview__buttons {
   display: grid;
-  gap: 0.75rem;
+  width: fit-content;
+  gap: 0.5rem 0.75rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  justify-items: center;
 }
 
 .overview__profile {
