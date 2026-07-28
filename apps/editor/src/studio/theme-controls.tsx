@@ -177,7 +177,9 @@ export function ColorControl({
          * the window too. The row clips too, which is what keeps the tag inside the card: without it
          * the tag's corner sailed past the card's rounded one and hung over the edge.
          *
-         * Forty-five degrees, hinged on the top-left corner. About its centre the skew throws the
+         * Thirty degrees, hinged on the top-left corner. Steeper than a true diagonal so the notch
+         * stays a nick in the edge rather than a wedge taken out of the row, and it travels seven
+         * pixels across instead of twelve, which is what lets the word sit close to the cut. About its centre the skew throws the
          * tag's top corner outward past the window, which clips it flat — that is a vertical drop
          * from the card's edge before the diagonal even starts. Hinged at the corner the top edge
          * stays put and only the bottom travels, so the cut leaves the card's edge on the angle. It rounds where it meets the
@@ -187,7 +189,7 @@ export function ColorControl({
          */
         <span className="pointer-events-none absolute top-0 right-0 flex overflow-hidden">
           <Badge
-            className="origin-top-left skew-x-[45deg] pr-3.5 pl-4 tracking-[0.09em]"
+            className="origin-top-left skew-x-[30deg] pr-2 pl-2.5 tracking-[0.09em]"
             size="sm"
             /*
              * Inline, because the kit's badge rounds all four corners in its base class and a
@@ -203,7 +205,7 @@ export function ColorControl({
             variant="line"
           >
             {/* Back upright: the notch leans, the word in it does not. */}
-            <span className="inline-block skew-x-[-45deg]">Derived</span>
+            <span className="inline-block skew-x-[-30deg]">Derived</span>
           </Badge>
         </span>
       ) : null}
