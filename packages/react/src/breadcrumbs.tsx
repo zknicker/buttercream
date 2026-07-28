@@ -10,6 +10,8 @@ export interface BreadcrumbsProps extends ComponentPropsWithoutRef<"nav"> {
 }
 
 export interface BreadcrumbProps extends ComponentPropsWithoutRef<"a"> {
+  /** Renders as inert text rather than a link, the same shape the current crumb takes. */
+  disabled?: boolean;
   /** The page you are on. Renders as text, since a link to here goes nowhere. */
   current?: boolean;
 }
@@ -70,16 +72,38 @@ function BreadcrumbsRoot({
   );
 }
 
-function Breadcrumb({ current = false, className, ...props }: BreadcrumbProps): ReactElement {
-  return (
-    <a
-      aria-current={current ? "page" : undefined}
-      className={classes("breadcrumbs__link", className)}
-      data-current={current || undefined}
-      data-slot="breadcrumbs-link"
-      {...props}
-    />
-  );
+/*
+ * A crumb that cannot be followed is a span, not an anchor. A disabled anchor is the shape to
+ * avoid: without an href it is neither focusable nor clickable, so styling one as a link would
+ * promise navigation the element cannot deliver. The crumb you are on is the common case of
+ * this — it is a label, not a destination.
+ */
+function Breadcrumb({
+  className,
+  current = false,
+  disabled = false,
+  ...props
+}: BreadcrumbProps): ReactElement {
+  const shared = {
+    className: classes("breadcrumbs__link", className),
+    "data-slot": "breadcrumbs-link",
+  };
+
+  if (current || disabled) {
+    return (
+      <span
+        aria-current={current ? "page" : undefined}
+        aria-disabled={disabled || undefined}
+        data-current={current || undefined}
+        data-disabled={disabled || undefined}
+        {...shared}
+      >
+        {props.children}
+      </span>
+    );
+  }
+
+  return <a {...shared} {...props} />;
 }
 
 export const Breadcrumbs = Object.assign(BreadcrumbsRoot, {

@@ -34,8 +34,13 @@
     text-decoration-line: none;
   }
 
-  .breadcrumbs__link:hover {
+  .breadcrumbs__link:hover:not([data-current], [data-disabled]) {
     text-decoration-line: underline;
+  }
+
+  .breadcrumbs__link[data-disabled] {
+    opacity: var(--disabled-opacity);
+    pointer-events: none;
   }
 
   .breadcrumbs__link:focus-visible {
