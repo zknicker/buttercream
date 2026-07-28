@@ -72,6 +72,31 @@
   --shadow-field: var(--shadow-field);
   --shadow-overlay: var(--shadow-overlay);
   --spacing: calc(0.25rem * var(--spacing-scale));
+
+  /*
+   * Every radius below is a step off `--radius`, so the whole system moves with the one
+   * control. Nothing should hardcode a corner.
+   *
+   * NESTED CORNERS. When a rounded child sits inset inside a rounded parent, the two curves
+   * are concentric only when they differ by the gap between them:
+   *
+   *   parent radius = child radius + inset
+   *
+   * Author whichever of the pair the design actually fixes and derive the other. Usually that
+   * is the child — a segment's pill or a menu's row is the shape people see, and the container
+   * follows it. Expressing the relationship rather than picking two steps off the scale is the
+   * point: two independent steps agree at one setting of `--radius` and drift at every other.
+   *
+   * Derive from the child's *effective* radius, not the authored one. A browser silently clamps
+   * any radius to half the box, so a pill asking for `--radius-3xl` on a short control renders
+   * at half its height, and a parent derived from the raw step comes out too round:
+   *
+   *   --bc-child-radius: min(var(--radius-3xl), calc(var(--child-height) / 2));
+   *   border-radius: calc(var(--bc-child-radius) + var(--inset));
+   *
+   * This also keeps the pill case honest without special-casing it: once `--radius` is large
+   * enough to clamp, the parent lands at half its own height and is a pill too.
+   */
   --radius-xs: calc(var(--radius) * 0.25);
   --radius-sm: calc(var(--radius) * 0.5);
   --radius-md: calc(var(--radius) * 0.75);
