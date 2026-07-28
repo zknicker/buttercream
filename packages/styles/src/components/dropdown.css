@@ -22,12 +22,27 @@
     outline: none;
   }
 
+  /*
+   * The outer corner is the item's corner plus the padding around it, so the two curves are
+   * concentric. Deriving it rather than reaching for a radius step keeps them in step as
+   * `--radius` moves; a fixed step drifts, leaving a tight row inside a much rounder box.
+   *
+   * The 2rem ceiling stops the menu turning into a pill, and it is the *item* that is capped
+   * against it. Capping the outer corner instead lets a large `--radius` push the rows past
+   * what their container can host, which is the same incoherence in reverse.
+   */
   .dropdown__popup {
+    --bc-dropdown-padding: calc(0.375rem * var(--spacing-scale));
+    --bc-dropdown-item-radius: min(
+      calc(2rem - var(--bc-dropdown-padding)),
+      calc(var(--radius) * 2)
+    );
+
     min-width: calc(13.75rem * var(--spacing-scale));
     /* Capped against the viewport so a long label cannot push the menu off-screen. */
     max-width: 48svw;
-    padding: calc(0.25rem * var(--spacing-scale));
-    border-radius: min(2rem, var(--radius-3xl));
+    padding: var(--bc-dropdown-padding);
+    border-radius: calc(var(--bc-dropdown-item-radius) + var(--bc-dropdown-padding));
     outline: none;
     background: var(--overlay);
     box-shadow: var(--shadow-overlay);
@@ -37,7 +52,7 @@
     /* Contained so scrolling to the end of a long menu does not start scrolling the page. */
     overflow-y: auto;
     overscroll-behavior: contain;
-    scroll-padding-block: calc(0.25rem * var(--spacing-scale));
+    scroll-padding-block: var(--bc-dropdown-padding);
     transform-origin: var(--transform-origin);
     transition:
       transform 150ms ease,
@@ -62,7 +77,7 @@
     gap: calc(0.5rem * var(--spacing-scale));
     padding-inline: calc(0.625rem * var(--spacing-scale));
     padding-block: calc(0.375rem * var(--spacing-scale));
-    border-radius: min(var(--field-radius), 0.625rem);
+    border-radius: var(--bc-dropdown-item-radius);
     outline: none;
     color: inherit;
     cursor: var(--cursor-interactive);
