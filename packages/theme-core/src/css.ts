@@ -136,6 +136,34 @@ export function themeCssVariables(theme: ThemeTokens): Record<string, string> {
   return variables;
 }
 
+/**
+ * The `@layer theme` blocks for a document's two themes.
+ *
+ * Both a consumer's exported `global.css` and the default preset `@buttercream/styles` ships are
+ * printed by this one function, which is what makes the shipped defaults the default document's
+ * own export rather than a transcription of it.
+ */
+export function themeLayerCss(theme: DesignSystem["theme"]): string {
+  return [
+    "@layer theme {",
+    /*
+     * `:root` alongside the attribute selectors, so dropping the file into a project is enough for
+     * the theme to take effect. Without it a theme applies only where a `data-theme` attribute
+     * happens to sit, and whoever never sets one silently renders the default preset instead.
+     */
+    "  :root,",
+    '  [data-theme="light"],',
+    '  [data-theme="default"] {',
+    serializeTheme(theme.light, 4),
+    "  }",
+    "",
+    '  [data-theme="dark"] {',
+    serializeTheme(theme.dark, 4),
+    "  }",
+    "}",
+  ].join("\n");
+}
+
 export function exportGlobalCss(designSystem: DesignSystem): string {
   const customCss = designSystem.rules.customCss.trim();
 
@@ -143,23 +171,7 @@ export function exportGlobalCss(designSystem: DesignSystem): string {
     '@import "tailwindcss";',
     '@import "@buttercream/styles";',
     "",
-    "@layer theme {",
-    /*
-     * `:root` matches the shipped defaults' own selector list, so dropping this file into a
-     * project is enough for the theme to take effect. Without it the export applies only where a
-     * `data-theme` attribute happens to sit, and a consumer who never sets one silently renders
-     * the default preset instead of their own.
-     */
-    "  :root,",
-    '  [data-theme="light"],',
-    '  [data-theme="default"] {',
-    serializeTheme(designSystem.theme.light, 4),
-    "  }",
-    "",
-    '  [data-theme="dark"] {',
-    serializeTheme(designSystem.theme.dark, 4),
-    "  }",
-    "}",
+    themeLayerCss(designSystem.theme),
     ...(customCss ? ["", customCss] : []),
     "",
   ].join("\n");

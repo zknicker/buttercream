@@ -1,4 +1,4 @@
-export { exportGlobalCss, importThemeCss, themeCssVariables } from "./css.ts";
+export { exportGlobalCss, importThemeCss, themeCssVariables, themeLayerCss } from "./css.ts";
 export {
   createDefaultDesignSystem,
   defaultDarkTheme,
