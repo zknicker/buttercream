@@ -17,19 +17,18 @@ export function ControlSection({ children, title }: { children: ReactNode; title
        * Header and divider on one line: the band starts where the title ends and runs to the edge,
        * so it reads as a rule the heading sits in rather than a stripe stacked above it.
        *
-       * Fine cells and a neutral tone. Dither reads as texture when the grain is near the limit of
-       * what the eye resolves — enlarge the cells and it stops being a texture and becomes a
-       * checkerboard. The same goes for colour: at full butter the band competed with the values
-       * it was meant to separate, so it takes the muted tone the heading already uses and lets the
-       * pattern, not the hue, carry the brand.
+       * Neutral, not butter. At full strength the band competed with the values it exists to
+       * separate; the muted tone lets the pattern carry the brand instead of the hue.
        */}
       <div className="mb-1 flex items-center gap-3">
         {/*
-         * Sentence-case sans, not the brand's uppercase mono. Section headers in a dense
-         * control rail should recede behind the values they label; the mono eyebrow is an
-         * expressive device that belongs on marketing, where it has room to be loud.
+         * The pixel mono the wordmark uses, at a size it can actually be read at. An earlier note
+         * here argued for small sans on the grounds that a section header should recede — but
+         * receding and being characterless are not the same thing, and at eleven pixels it was
+         * doing the second. Departure Mono carries the brand at the one point in the rail where a
+         * label is the only thing on the line.
          */}
-        <h2 className="shrink-0 text-[11px] font-medium text-muted">{title}</h2>
+        <h2 className="shrink-0 font-mono text-[13px] tracking-tight text-muted">{title}</h2>
         {/*
          * Read off the reference rather than guessed at. Three things make it work, and the
          * earlier attempts had none of them:
@@ -37,8 +36,9 @@ export function ControlSection({ children, title }: { children: ReactNode; title
          * Even, not fading. A dissolving band carries its weight at the solid end, so it can
          * never look vertically centred beside a word. A flat field can.
          *
-         * Small and quiet. Eight pixels tall at a quarter strength — the rule is the quietest
-         * thing on the row, which is what lets it separate without announcing itself.
+         * Two rows, not four. Three-pixel cells over six pixels lands on exactly the alternating
+         * checker the reference uses, and it stays a rule; at four rows the field starts reading
+         * as a band of texture with its own presence.
          *
          * Masked at both ends. This is the detail that reads as craft: the field fades in after
          * the heading and out before the edge, so it never butts hard against either.
@@ -47,8 +47,8 @@ export function ControlSection({ children, title }: { children: ReactNode; title
           aria-hidden
           className="min-w-0 flex-1 text-fg/25 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
           density={0.5}
-          height={8}
-          pixel={2}
+          height={6}
+          pixel={3}
         />
       </div>
       {children}
