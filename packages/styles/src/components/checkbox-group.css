@@ -1,0 +1,25 @@
+@layer components {
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-sans);
+  }
+
+  .checkbox-group__label {
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: 500;
+  }
+
+  .checkbox-group__description {
+    color: var(--muted);
+    font-size: calc(0.75rem * var(--font-size-scale));
+  }
+
+  /*
+   * The spacing sits on every box rather than on the group as a gap, so the first box is also
+   * pushed clear of the label and description above it.
+   */
+  .checkbox-group [data-slot="checkbox"] {
+    margin-block-start: calc(1rem * var(--spacing-scale));
+  }
+}
