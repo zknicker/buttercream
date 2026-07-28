@@ -11,26 +11,31 @@ const themeCss = await Bun.file(new URL("./theme.css", import.meta.url)).text();
 const SHADOW_KINDS = ["field", "overlay", "surface"] as const;
 const SHADOW_LEVELS = ["subtle", "medium", "strong"] as const;
 
-function extractBlock(css: string, selectorPattern: RegExp): string {
-  const match = selectorPattern.exec(css);
-  if (!match) {
-    return "";
-  }
+/*
+ * Every block on the selector, not just the first. A theme's declarations are split across sibling
+ * blocks that share a selector — the document's tokens in one, the values this stylesheet owns in
+ * another — so reading only the first would silently stop seeing the shadow stacks.
+ */
+function extractBlocks(css: string, selectorPattern: RegExp): string {
+  const blocks: string[] = [];
 
-  const openingBrace = css.indexOf("{", match.index);
-  let depth = 0;
-  for (let index = openingBrace; index < css.length; index += 1) {
-    if (css[index] === "{") {
-      depth += 1;
-    } else if (css[index] === "}") {
-      depth -= 1;
-      if (depth === 0) {
-        return css.slice(openingBrace + 1, index);
+  for (const match of css.matchAll(selectorPattern)) {
+    const openingBrace = css.indexOf("{", match.index);
+    let depth = 0;
+    for (let index = openingBrace; index < css.length; index += 1) {
+      if (css[index] === "{") {
+        depth += 1;
+      } else if (css[index] === "}") {
+        depth -= 1;
+        if (depth === 0) {
+          blocks.push(css.slice(openingBrace + 1, index));
+          break;
+        }
       }
     }
   }
 
-  return "";
+  return blocks.join("\n");
 }
 
 function declarations(block: string): Map<string, string> {
@@ -47,10 +52,10 @@ function declarations(block: string): Map<string, string> {
 
 const source = String(themeCss);
 const light = declarations(
-  extractBlock(source, /:root\s*,\s*\[data-theme="light"\]\s*,\s*\[data-theme="default"\]/u),
+  extractBlocks(source, /:root\s*,\s*\[data-theme="light"\]\s*,\s*\[data-theme="default"\]/gu),
 );
 /* Anchored to a lone selector line so the @custom-variant reference at the top cannot match. */
-const dark = declarations(extractBlock(source, /^\s*\[data-theme="dark"\]\s*\{/mu));
+const dark = declarations(extractBlocks(source, /^\s*\[data-theme="dark"\]\s*\{/gmu));
 
 describe("per-theme shadow stacks", () => {
   test("every level is authored separately for light and dark", () => {

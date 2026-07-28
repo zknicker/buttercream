@@ -130,12 +130,14 @@
 }
 
 @layer theme {
-  /* Authored tokens. These mirror the canonical DesignSystem document exactly; everything a
-     consumer edits lives in one of these two blocks. */
+  /* Authored tokens: the canonical DesignSystem document's values and nothing else, which is what
+     makes these two blocks a candidate for generation from `serializeTheme`. Values this
+     stylesheet owns rather than the document — color-scheme, the chart ladder, the shadow stacks —
+     sit in the sibling blocks below, on the same selectors, so generating these cannot delete
+     them. `theme-css-pin.test.ts` fails if either block drifts from `defaults.ts`. */
   :root,
   [data-theme="light"],
   [data-theme="default"] {
-    color-scheme: light;
     --accent: #0485f7;
     --accent-foreground: #ffffff;
     --backdrop: rgb(0 0 0 / 0.38);
@@ -145,19 +147,10 @@
        any of these tokens to a literal opts it out of generation. */
     --neutral-base: 0.48;
     --neutral-vibrant: 0;
-
-    /* Chart ladder stops. Kept clear of the page's own lightness at both ends: against a
-       near-white background the palest step has to stop well short of the paper, which is why
-       the dark theme shifts the whole ladder up rather than reusing these. */
-    --bc-chart-l1: 0.32;
-    --bc-chart-l2: 0.43;
-    --bc-chart-l3: 0.54;
-    --bc-chart-l4: 0.65;
-    --bc-chart-l5: 0.76;
     --background: oklch(
-      from var(--accent) calc(var(--neutral-base) + 0.5) var(--bc-neutral-chroma) h
+      from var(--accent) calc(var(--neutral-base) + 0.4902) var(--bc-neutral-chroma) h
     );
-    --border: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --border: oklch(from var(--accent) calc(var(--neutral-base) + 0.42) var(--bc-neutral-chroma) h);
     --danger: #ff383c;
     --danger-foreground: #ffffff;
     --default: oklch(
@@ -166,19 +159,19 @@
     --default-foreground: var(--foreground);
     --focus: var(--accent);
     --foreground: oklch(
-      from var(--accent) calc(var(--neutral-base) - 0.21) var(--bc-neutral-chroma) h
+      from var(--accent) calc(var(--neutral-base) - 0.2697) var(--bc-neutral-chroma) h
     );
     --link: var(--foreground);
-    --muted: color-mix(in oklab, var(--foreground) 60%, transparent);
+    --muted: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.0717) var(--bc-neutral-chroma) h
+    );
     --overlay: oklch(
       from var(--accent) calc(var(--neutral-base) + 0.52) var(--bc-neutral-chroma) h
     );
     --overlay-foreground: var(--foreground);
-    /* The raised pill in a segmented control. On light it is the same white as a surface;
-       on dark it has to climb past --default, which is the track it sits on. */
-    --segment: var(--surface);
-    --segment-foreground: var(--foreground);
-    --separator: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --separator: oklch(
+      from var(--accent) calc(var(--neutral-base) + 0.44) var(--bc-neutral-chroma) h
+    );
     --success: #17c964;
     --success-foreground: #ffffff;
     --surface: oklch(
@@ -206,6 +199,36 @@
     --field-border-width: 0px;
     --ring-offset-width: 2px;
     --skeleton-animation: shimmer;
+    --shadow-field: var(--bc-shadow-field-medium);
+    --shadow-overlay: var(--bc-shadow-overlay-medium);
+    --shadow-surface: var(--bc-shadow-surface-medium);
+    --font-heading: ui-rounded, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+    --letter-spacing: 0em;
+    --line-height: 1.4;
+  }
+
+  :root,
+  [data-theme="light"],
+  [data-theme="default"] {
+    /* Consequences of the tokens above: values this stylesheet owns and tunes by hand.
+       They live outside the authored block so that block stays exactly the document's
+       tokens and can be generated from it. */
+    color-scheme: light;
+
+    /* Chart ladder stops. Kept clear of the page's own lightness at both ends: against a
+       near-white background the palest step has to stop well short of the paper, which is why
+       the dark theme shifts the whole ladder up rather than reusing these. */
+    --bc-chart-l1: 0.32;
+    --bc-chart-l2: 0.43;
+    --bc-chart-l3: 0.54;
+    --bc-chart-l4: 0.65;
+    --bc-chart-l5: 0.76;
+    /* The raised pill in a segmented control. On light it is the same white as a surface;
+       on dark it has to climb past --default, which is the track it sits on. */
+    --segment: var(--surface);
+    --segment-foreground: var(--foreground);
     /* Shadows are authored per theme, not shared. heroui.pro's light stacks are not tints of the
        dark ones: light drops the hard 1px ring entirely and runs the drop layers at a tenth of
        the alpha, because on a light canvas those layers have far more contrast to spend. The
@@ -242,9 +265,6 @@
     --bc-shadow-surface-strong:
       0 4px 16px -2px rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.07),
       0 0 5px 0 rgba(0, 0, 0, 0.03), 0 0 1px 0 rgba(0, 0, 0, 0.26);
-    --shadow-field: var(--bc-shadow-field-medium);
-    --shadow-overlay: var(--bc-shadow-overlay-medium);
-    --shadow-surface: var(--bc-shadow-surface-medium);
     --bc-shadow-raised:
       inset 0 1px 2px -0.5px rgba(255, 255, 255, 0.12),
       inset 0 0.5px 0.5px 0 rgba(255, 255, 255, 0.16),
@@ -252,22 +272,9 @@
       0 5px 5px -2.5px rgba(0, 0, 0, 0.03), 0 3px 3px -1.5px rgba(0, 0, 0, 0.03),
       0 2px 2px -1px rgba(0, 0, 0, 0.03), 0 1px 1px -0.5px rgba(0, 0, 0, 0.03),
       0 0.5px 0.5px 0 rgba(0, 0, 0, 0.03);
-    --font-heading: ui-rounded, system-ui, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-    --letter-spacing: 0em;
-    --line-height: 1.4;
   }
 
   [data-theme="dark"] {
-    /* Shifted up against a dark page: the light theme's darkest step would sink into it. */
-    --bc-chart-l1: 0.46;
-    --bc-chart-l2: 0.56;
-    --bc-chart-l3: 0.66;
-    --bc-chart-l4: 0.76;
-    --bc-chart-l5: 0.86;
-
-    color-scheme: dark;
     --accent: #0485f7;
     --accent-foreground: #ffffff;
     --backdrop: rgb(0 0 0 / 0.56);
@@ -293,10 +300,6 @@
       from var(--accent) calc(var(--neutral-base) - 0.24) var(--bc-neutral-chroma) h
     );
     --overlay-foreground: var(--foreground);
-    --segment: oklch(
-      from var(--accent) calc(var(--neutral-base) - 0.14) var(--bc-neutral-chroma) h
-    );
-    --segment-foreground: var(--foreground);
     --separator: color-mix(in oklab, var(--foreground) 14%, transparent);
     --success: #5bc86b;
     --success-foreground: #102414;
@@ -315,6 +318,27 @@
     --field-focus: color-mix(in oklab, var(--field-background) 96%, var(--foreground) 4%);
     --field-foreground: var(--foreground);
     --field-placeholder: color-mix(in oklab, var(--foreground) 48%, transparent);
+    --shadow-field: var(--bc-shadow-field-medium);
+    --shadow-overlay: none;
+    --shadow-surface: var(--bc-shadow-surface-medium);
+  }
+
+  [data-theme="dark"] {
+    /* Consequences of the tokens above: values this stylesheet owns and tunes by hand.
+       They live outside the authored block so that block stays exactly the document's
+       tokens and can be generated from it. */
+    /* Shifted up against a dark page: the light theme's darkest step would sink into it. */
+    --bc-chart-l1: 0.46;
+    --bc-chart-l2: 0.56;
+    --bc-chart-l3: 0.66;
+    --bc-chart-l4: 0.76;
+    --bc-chart-l5: 0.86;
+
+    color-scheme: dark;
+    --segment: oklch(
+      from var(--accent) calc(var(--neutral-base) - 0.14) var(--bc-neutral-chroma) h
+    );
+    --segment-foreground: var(--foreground);
     /* Dark stacks are authored independently of light (see the note in the light block). The
        measured stacks are the medium rungs; dark overlays default to the "none" level, but the
        rungs exist for themes that opt in. */
@@ -352,9 +376,6 @@
       0 0 0 1px rgba(0, 0, 0, 0.24), 0 1px 1px -0.5px rgba(0, 0, 0, 0.28),
       0 3px 3px -1.5px rgba(0, 0, 0, 0.28), 0 6px 6px -3px rgba(0, 0, 0, 0.28),
       0 12px 12px -6px rgba(0, 0, 0, 0.28), 0 24px 24px -12px rgba(0, 0, 0, 0.28);
-    --shadow-field: var(--bc-shadow-field-medium);
-    --shadow-overlay: none;
-    --shadow-surface: var(--bc-shadow-surface-medium);
     --bc-shadow-raised:
       inset 0 1px 0 0 rgba(255, 255, 255, 0.2), inset 0 1px 2px -0.5px rgba(255, 255, 255, 0.14),
       inset 0 8px 24px -4px rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.4),
