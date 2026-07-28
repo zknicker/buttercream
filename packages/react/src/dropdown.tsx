@@ -33,6 +33,15 @@ function DropdownTrigger({
 export interface DropdownContentProps extends Omit<BaseMenu.Popup.Props, "className"> {
   align?: BaseMenu.Positioner.Props["align"];
   className?: string;
+  /**
+   * Where the menu is portalled. Defaults to the document body.
+   *
+   * Pass the element the theme tokens are set on whenever they are scoped to a subtree rather
+   * than `:root`. Custom properties inherit through the DOM, not through React, so a menu
+   * portalled to the body sits outside that subtree and silently falls back to the defaults —
+   * the trigger restyles and the menu does not.
+   */
+  container?: BaseMenu.Portal.Props["container"];
   side?: BaseMenu.Positioner.Props["side"];
   sideOffset?: number;
 }
@@ -46,12 +55,13 @@ function DropdownContent({
   align = "start",
   children,
   className,
+  container,
   side = "bottom",
   sideOffset = 6,
   ...props
 }: DropdownContentProps): ReactElement {
   return (
-    <BaseMenu.Portal>
+    <BaseMenu.Portal container={container}>
       <BaseMenu.Positioner
         align={align}
         className="dropdown__positioner"

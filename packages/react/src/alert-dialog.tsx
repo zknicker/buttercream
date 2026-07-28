@@ -11,6 +11,14 @@ export interface AlertDialogContentProps
   /** The buttons. Put the confirming action last — the layout aligns them trailing. */
   actions?: ReactNode;
   className?: string;
+  /**
+   * Where the dialog is portalled. Defaults to the document body.
+   *
+   * Pass the element the theme tokens are set on whenever they are scoped to a subtree rather
+   * than `:root`. Custom properties inherit through the DOM, not through React, so a dialog
+   * portalled to the body sits outside that subtree and silently falls back to the defaults.
+   */
+  container?: BaseAlertDialog.Portal.Props["container"];
   description?: ReactNode;
   title: ReactNode;
 }
@@ -47,12 +55,13 @@ function AlertDialogTrigger({
 function AlertDialogContent({
   actions,
   className,
+  container,
   description,
   title,
   ...props
 }: AlertDialogContentProps): ReactElement {
   return (
-    <BaseAlertDialog.Portal>
+    <BaseAlertDialog.Portal container={container}>
       <BaseAlertDialog.Backdrop
         className="alert-dialog__backdrop"
         data-slot="alert-dialog-backdrop"

@@ -17,6 +17,15 @@ export interface ComboboxProps<Value, Item>
    */
   children?: ReactNode | ((item: Item, index: number) => ReactNode);
   className?: string;
+  /**
+   * Where the popup is portalled. Defaults to the document body.
+   *
+   * Pass the element the theme tokens are set on whenever they are scoped to a subtree rather
+   * than `:root`. Custom properties inherit through the DOM, not through React, so a popup
+   * portalled to the body sits outside that subtree and silently falls back to the defaults —
+   * the field restyles and the popup does not.
+   */
+  container?: BaseCombobox.Portal.Props["container"];
   /** Shown in the popup when the query matches nothing. */
   emptyMessage?: ReactNode;
   /** Replaces the chevron. The default one rotates when the popup is open; a custom one does not. */
@@ -51,6 +60,7 @@ export interface ComboboxGroupProps extends Omit<BaseCombobox.Group.Props, "clas
 function ComboboxRoot<Value, Item = Value>({
   children,
   className,
+  container,
   emptyMessage = "No results",
   icon,
   placeholder,
@@ -76,7 +86,7 @@ function ComboboxRoot<Value, Item = Value>({
           </BaseCombobox.Trigger>
         </div>
       </div>
-      <BaseCombobox.Portal>
+      <BaseCombobox.Portal container={container}>
         <BaseCombobox.Positioner
           className="combobox__positioner"
           data-slot="combobox-positioner"

@@ -9,6 +9,15 @@ export interface SelectProps<Value, Multiple extends boolean | undefined = false
   extends Omit<BaseSelect.Root.Props<Value, Multiple>, "children"> {
   children: ReactNode;
   className?: string;
+  /**
+   * Where the popup is portalled. Defaults to the document body.
+   *
+   * Pass the element the theme tokens are set on whenever they are scoped to a subtree rather
+   * than `:root`. Custom properties inherit through the DOM, not through React, so a popup
+   * portalled to the body sits outside that subtree and silently falls back to the defaults —
+   * the trigger restyles and the popup does not.
+   */
+  container?: BaseSelect.Portal.Props["container"];
   description?: ReactNode;
   indicator?: ReactNode;
   label: ReactNode;
@@ -18,6 +27,7 @@ export interface SelectProps<Value, Multiple extends boolean | undefined = false
 function SelectRoot<Value, Multiple extends boolean | undefined = false>({
   children,
   className,
+  container,
   description,
   indicator,
   label,
@@ -51,7 +61,7 @@ function SelectRoot<Value, Multiple extends boolean | undefined = false>({
             {description}
           </div>
         )}
-        <BaseSelect.Portal>
+        <BaseSelect.Portal container={container}>
           <BaseSelect.Positioner
             alignItemWithTrigger={false}
             className="select__positioner"
