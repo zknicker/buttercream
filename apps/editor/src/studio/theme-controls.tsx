@@ -26,7 +26,7 @@ const ROW_VALUE = "shrink-0 font-mono text-[11px] tabular-nums text-muted";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
   return (
-    <section className="mt-5 flex flex-col gap-1">
+    <section className="mt-6 flex flex-col gap-1.5">
       {/*
        * Header and divider on one line: the band starts where the title ends and runs to the edge,
        * so it reads as a rule the heading sits in rather than a stripe stacked above it.
@@ -34,7 +34,7 @@ export function ControlSection({ children, title }: { children: ReactNode; title
        * Neutral, not butter. At full strength the band competed with the values it exists to
        * separate; the muted tone lets the pattern carry the brand instead of the hue.
        */}
-      <div className="mb-1 flex items-center gap-3">
+      <div className="mb-2 flex items-center gap-3">
         {/*
          * The pixel mono the wordmark uses, at a size it can actually be read at. An earlier note
          * here argued for small sans on the grounds that a section header should recede — but
