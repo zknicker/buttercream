@@ -40,7 +40,7 @@ function MenuPopup({
       <BaseMenu.Positioner align={align} className="z-30" sideOffset={sideOffset}>
         <BaseMenu.Popup
           className={classes(
-            "flex min-w-56 flex-col gap-1 rounded-xl bg-raised p-2 outline-none",
+            "flex min-w-56 flex-col gap-1 rounded-(--radius-shell) bg-raised p-2 outline-none",
             "shadow-xl shadow-ink/10 ring-1 ring-line dark:shadow-none",
             "origin-(--transform-origin) transition duration-150",
             "data-starting-style:scale-98 data-starting-style:opacity-0",

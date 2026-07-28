@@ -82,6 +82,7 @@
 
   /* Squarer than the design-system default so the chrome reads as a tool, not a card. */
   --radius-shell: 0.5rem;
+  --radius-shell-sm: 0.25rem;
 
   /*
    * The frame around the preview. Its own token rather than a rounded-* utility: those resolve

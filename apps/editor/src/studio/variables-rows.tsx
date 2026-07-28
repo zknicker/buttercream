@@ -124,7 +124,7 @@ export function ColorTokenRow({
         {draft !== null ? null : onCommit ? (
           <button
             className={classes(
-              "truncate rounded-sm text-left font-mono text-[10px] leading-4 text-muted group-hover/token:text-fg",
+              "truncate rounded-(--radius-shell-sm) text-left font-mono text-[10px] leading-4 text-muted group-hover/token:text-fg",
               FOCUS_OUTLINE,
             )}
             onClick={() => setDraft(value)}

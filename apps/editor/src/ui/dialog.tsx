@@ -15,7 +15,7 @@ export const dialogBackdropClass = classes(
 export const dialogViewportClass = "fixed inset-0 z-21 grid place-items-center p-6";
 
 export const dialogPanelClass = classes(
-  "flex max-h-[min(46rem,calc(100dvh-3rem))] flex-col gap-4 overflow-hidden rounded-xl bg-raised p-6",
+  "flex max-h-[min(46rem,calc(100dvh-3rem))] flex-col gap-4 overflow-hidden rounded-(--radius-shell) bg-raised p-6",
   "shadow-2xl shadow-ink/25 dark:shadow-none ring-1 ring-fg/10 outline-none",
   "transition duration-150 data-starting-style:translate-y-1 data-starting-style:scale-99 data-starting-style:opacity-0",
   "data-ending-style:translate-y-1 data-ending-style:scale-99 data-ending-style:opacity-0",

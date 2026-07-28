@@ -326,7 +326,7 @@ export function EditorShell({
             /* Scrolls rather than clips: the list outgrew 80vh, and overflow-hidden simply
                made everything past it unreachable. overscroll-contain stops the page from
                scrolling on behind it once the menu hits an end. */
-            "absolute top-1/2 left-12 z-10 w-44 max-h-[80vh] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-xl bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
+            "absolute top-1/2 left-12 z-10 w-44 max-h-[80vh] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-(--radius-shell) bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
             "max-[720px]:top-auto max-[720px]:bottom-14 max-[720px]:left-2 max-[720px]:translate-y-0",
             navOpen ? "visible opacity-100" : "invisible opacity-0",
           )}

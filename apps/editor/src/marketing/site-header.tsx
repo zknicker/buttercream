@@ -28,7 +28,7 @@ export function SiteHeader({
       <div className="flex flex-1 items-center">
         <a
           aria-label="Homepage"
-          className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg"
+          className="rounded-(--radius-shell-sm) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg"
           href="/"
         >
           <Logo />
@@ -122,7 +122,7 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Backdrop className={dialogBackdropClass} />
-        <Dialog.Popup className="fixed inset-x-3 top-3 z-21 flex flex-col gap-6 rounded-xl bg-raised p-5 shadow-2xl shadow-ink/25 dark:shadow-none ring-1 ring-fg/10 outline-none data-ending-style:opacity-0 data-starting-style:opacity-0">
+        <Dialog.Popup className="fixed inset-x-3 top-3 z-21 flex flex-col gap-6 rounded-(--radius-shell) bg-raised p-5 shadow-2xl shadow-ink/25 dark:shadow-none ring-1 ring-fg/10 outline-none data-ending-style:opacity-0 data-starting-style:opacity-0">
           <div className="flex items-center justify-between">
             <Logo />
             <Dialog.Close

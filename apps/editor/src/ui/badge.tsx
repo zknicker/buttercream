@@ -32,7 +32,7 @@ export function Badge({
     props: mergeProps<"span">(
       {
         className: classes(
-          "inline-flex h-5 items-center rounded-sm px-1.5 font-mono text-xs tracking-wide uppercase",
+          "inline-flex h-5 items-center rounded-(--radius-shell-sm) px-1.5 font-mono text-xs tracking-wide uppercase",
           VARIANTS[variant],
           className,
         ),
