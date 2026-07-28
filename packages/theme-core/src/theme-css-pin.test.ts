@@ -82,6 +82,21 @@ describe("theme.css authored defaults stay pinned to defaults.ts", () => {
     expect(darkDeclarations.size).toBeGreaterThan(0);
   });
 
+  /*
+   * `getThemeValue` returns "" for a path that does not resolve, and an empty value serializes to
+   * an empty declaration that this file would then compare equal to itself. A registry entry
+   * pointing at a key that no longer exists is exactly the kind of rename casualty that produces
+   * that, so name the tokens rather than trusting the comparison above to notice.
+   */
+  test("every token resolves to a value", () => {
+    const empty = [
+      ...Object.entries(lightExpected).map(([k, v]) => [`light ${k}`, v] as const),
+      ...Object.entries(darkExpected).map(([k, v]) => [`dark ${k}`, v] as const),
+    ].filter(([, value]) => value.trim() === "");
+
+    expect(empty.map(([name]) => name)).toEqual([]);
+  });
+
   describe("light theme", () => {
     for (const [variable, expected] of Object.entries(lightExpected)) {
       test(variable, () => {
