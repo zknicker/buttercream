@@ -19,6 +19,7 @@
    @import "@buttercream/styles";
 
    @layer theme {
+     :root,
      [data-theme="light"],
      [data-theme="default"] {
        --accent: #0485f7;
@@ -93,9 +94,9 @@ that `var(...)` reference on export, and `parseValue` is what reads it back into
 The three stacks themselves are never document state -- they are hand-tuned CSS, not generated
 from the document.
 
-The two authored `@layer theme` blocks in `theme.css` hold exactly the document's tokens -- nothing
-more. `color-scheme`, the chart-ladder stops (`--bc-chart-l1..l5`), and the `--bc-shadow-*` stacks
-live in adjacent blocks on the same selectors, outside the authored blocks, alongside the rest of
+The document's tokens arrive from the generated `theme-defaults.css`, which `theme.css` imports.
+`color-scheme`, the chart-ladder stops (`--bc-chart-l1..l5`), and the `--bc-shadow-*` stacks live
+in `theme.css` itself, in blocks on the same selectors, alongside the rest of
 `theme.css`'s derived and hand-tuned consequences -- radius steps, text scale, derived colour
 variants -- none of which has any business being represented in JSON.
 
@@ -152,21 +153,34 @@ HeroUI's current architecture rather than assume this note still holds.
 ## Invariant: shipped defaults equal document defaults
 
 `defaults.ts` (`packages/theme-core/src/defaults.ts`) is the source of truth for the default
-preset. The authored blocks in `packages/styles/src/theme.css` must serialize to the same values
-`themeCssVariables(defaultLightTheme)` and `themeCssVariables(defaultDarkTheme)` produce. Nothing
-enforced this before; the two drifted once already (commit `0a06369` recalibrated `defaults.ts`
-without carrying the change into `theme.css`), invisibly, because the editor inlines tokens (step
-2) and shadows `theme.css`'s authored blocks entirely -- only a raw npm consumer who never opens
-the editor ever renders them.
+preset, and `packages/styles/src/theme-defaults.css` is printed from it by
+`packages/styles/scripts/generate-theme-defaults.ts` — which calls the same `themeLayerCss` that
+writes a consumer's export. The default preset is therefore the default document's own export, not
+a transcription of it, and the two cannot disagree.
 
-`packages/theme-core/src/theme-css-pin.test.ts` is the pin: it extracts every declaration from
-`theme.css`'s light and dark blocks, compares each against `themeCssVariables` run over
-`defaultLightTheme` / `defaultDarkTheme`, and fails on any mismatch. `defaults.ts` is the source of
-truth for that comparison -- a failure means `theme.css` fell behind, not the other way round.
+They could before, and did: commit `0a06369` recalibrated `defaults.ts` without carrying the change
+into `theme.css`, and five light-theme tokens sat wrong until it was found by audit. It was
+invisible because the editor inlines tokens (step 2), shadowing the shipped blocks entirely — only
+a consumer who installs the package and never themes it renders them.
 
-The intended follow-up is to stop hand-maintaining `theme.css`'s two authored blocks and generate
-them from `serializeTheme`, so the pin test becomes structurally impossible to fail rather than a
-manual tripwire. That only works because the blocks now hold exactly the document's 49 tokens and
-nothing else (see "Decisions vs. consequences" above) -- generating them today, before styles-owned
-values like the shadow stacks and chart ladder moved out, would have deleted those values. The block
-split is the prerequisite that makes generation possible.
+Two tests guard the file, and it is worth being exact about what each one can catch:
+
+- `packages/styles/src/theme-defaults.test.ts` asserts the committed bytes equal what the generator
+  prints. This catches a hand edit to a generated file. It cannot catch a wrong generator, since
+  both sides come from it.
+- `packages/theme-core/src/theme-css-pin.test.ts` re-reads the shipped file and compares every
+  declaration against the token registry. Its extraction is independent — it regex-parses committed
+  bytes — so it catches a truncated file, a broken selector, a dropped registry entry, or a token
+  that serializes to nothing. Its *values* are not independent: `themeCssVariables` and
+  `serializeTheme` share `variablePaths`, `getThemeValue` and `serializeValue`, so a bug inside
+  `serializeValue` would produce a wrong file that both tests accept.
+
+The independent anchor against that last case is `packages/theme-core/src/css.test.ts`, which pins
+hand-written literals covering each distinct value shape — hex, `rgb()`, `oklch()`, `color-mix()`,
+bare numbers, lengths, keywords, and the `var(--bc-shadow-*)` level references. A serializer that
+broke a shape fails there. Keep that coverage shape-complete rather than token-complete: pinning
+all 49 by hand would reintroduce the transcription this record exists to remove.
+
+Generation is possible at all only because the shipped blocks hold exactly the document's 49 tokens
+and nothing else (see "Decisions vs. consequences" above). Before the styles-owned values moved out,
+printing over those blocks would have deleted every shadow stack in the system.

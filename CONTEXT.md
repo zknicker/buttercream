@@ -50,10 +50,9 @@ hand-tuned consequences that have no business being stored as JSON.
 
 ## Invariants
 
-1. The structured design-system document is canonical; generated files are projected from it.
-   Exception in progress: `theme.css`'s two authored default blocks are still hand-maintained CSS,
-   not generated -- a pin test (`theme-core/src/theme-css-pin.test.ts`) keeps them equal to
-   `defaults.ts`, and generating them from `serializeTheme` is the intended follow-up to close this.
+1. The structured design-system document is canonical; generated files are projected from it. The
+   default preset is no exception: `styles/src/theme-defaults.css` is printed from the default
+   document by the same function that writes a consumer's export.
 2. Imports replace recognized theme variables and reset missing values to defaults.
 3. Custom CSS is edited separately and is not inferred from arbitrary imported rules.
 4. The editor shell never inherits the theme being edited.

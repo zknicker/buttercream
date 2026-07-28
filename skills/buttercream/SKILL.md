@@ -113,7 +113,8 @@ math, `shadow: "medium"` becomes a reference into a hand-tuned three-tier stack 
 ladder (hover/soft/foreground variants, greys, chart-ladder stops). The two authored `@layer theme`
 blocks hold exactly the document's tokens; everything derived or hand-tuned -- `color-scheme`, the
 shadow stacks, the chart ladder -- lives in adjacent blocks under the same selectors. In a
-consuming repo, read the real values at `node_modules/@buttercream/styles/src/theme.css` rather
+consuming repo, read the real values at `node_modules/@buttercream/styles/src/theme-defaults.css`
+(generated from the document, and imported by `theme.css` alongside the derived rules) rather
 than restating them here -- this doc has already drifted from the source once and is not a place to
 keep a third hand-maintained copy. If a theming request looks like it needs a new literal token,
 check whether that file already derives it before adding one.
