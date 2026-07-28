@@ -28,16 +28,27 @@
     white-space: nowrap;
   }
 
+  /*
+   * The track and the thumb were two independent steps off the radius scale, which agreed at
+   * one setting and drifted at every other. The thumb is now derived from the track and the
+   * padding between them. See theme.css for the rule.
+   */
   .switch__control {
+    --bc-switch-inset: calc(0.125rem * var(--spacing-scale));
+    --bc-switch-track-radius: min(
+      var(--radius-xl),
+      calc(var(--bc-switch-height) * var(--spacing-scale) / 2)
+    );
+
     display: inline-flex;
     width: calc(var(--bc-switch-width) * var(--spacing-scale));
     height: calc(var(--bc-switch-height) * var(--spacing-scale));
     flex: none;
     align-items: center;
-    padding: calc(0.125rem * var(--spacing-scale));
+    padding: var(--bc-switch-inset);
     overflow: hidden;
     border: 0;
-    border-radius: var(--radius-xl);
+    border-radius: var(--bc-switch-track-radius);
     outline: none;
     background: var(--default);
     transition:
@@ -49,7 +60,7 @@
     display: block;
     width: calc(var(--bc-switch-thumb-width) * var(--spacing-scale));
     height: calc(var(--bc-switch-thumb-height) * var(--spacing-scale));
-    border-radius: var(--radius-lg);
+    border-radius: max(0px, calc(var(--bc-switch-track-radius) - var(--bc-switch-inset)));
     background: var(--foreground);
     box-shadow:
       0 0 5px rgba(0, 0, 0, 0.02),

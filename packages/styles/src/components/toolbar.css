@@ -22,9 +22,18 @@
   }
 
   /* Attached gives the toolbar a surface of its own, for floating over content. */
+  /*
+   * Concentric with the controls it wraps: the surface's radius is a control's plus the
+   * padding around it. Buttons ask for --radius-3xl and the browser clamps that to half
+   * their height, so the min() reproduces the clamp. See theme.css for the rule.
+   */
   .toolbar--attached {
-    padding: calc(0.25rem * var(--spacing-scale));
-    border-radius: var(--radius-3xl);
+    --bc-toolbar-inset: calc(0.25rem * var(--spacing-scale));
+    --bc-toolbar-control-height: calc(2.25rem * var(--spacing-scale));
+    --bc-toolbar-control-radius: min(var(--radius-3xl), calc(var(--bc-toolbar-control-height) / 2));
+
+    padding: var(--bc-toolbar-inset);
+    border-radius: calc(var(--bc-toolbar-control-radius) + var(--bc-toolbar-inset));
     background: var(--surface);
   }
 

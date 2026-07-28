@@ -7,20 +7,36 @@
  * exactly the width of its item without measuring anything.
  */
 @layer components {
+  /*
+   * Nested corners: the track wraps the item, so its radius is the item's plus the padding
+   * between them. See theme.css for the rule. The item's radius is the authored one because
+   * its pill shape is the point of the control; the track follows.
+   */
   .segment {
+    --bc-segment-inset: calc(0.25rem * var(--spacing-scale));
+    --bc-segment-item-height: calc(2rem * var(--spacing-scale));
+    --bc-segment-item-radius: min(var(--radius-3xl), calc(var(--bc-segment-item-height) / 2));
+
     position: relative;
     display: inline-flex;
     align-items: center;
-    padding: calc(0.25rem * var(--spacing-scale));
-    border-radius: calc(var(--radius-2xl) + 0.25rem);
+    padding: var(--bc-segment-inset);
+    border-radius: calc(var(--bc-segment-item-radius) + var(--bc-segment-inset));
     background: var(--default);
   }
 
   .segment--sm {
-    padding: calc(0.125rem * var(--spacing-scale));
+    --bc-segment-inset: calc(0.125rem * var(--spacing-scale));
+    --bc-segment-item-height: calc(1.75rem * var(--spacing-scale));
+  }
+
+  .segment--lg {
+    --bc-segment-item-height: calc(2.5rem * var(--spacing-scale));
   }
 
   .segment--ghost {
+    --bc-segment-inset: 0px;
+
     padding: 0;
     background: transparent;
   }
@@ -30,13 +46,13 @@
     z-index: 1;
     display: flex;
     width: 100%;
-    height: calc(2rem * var(--spacing-scale));
+    height: var(--bc-segment-item-height);
     align-items: center;
     justify-content: center;
     gap: calc(0.375rem * var(--spacing-scale));
     padding-inline: calc(1rem * var(--spacing-scale));
     border: none;
-    border-radius: var(--radius-3xl);
+    border-radius: var(--bc-segment-item-radius);
     outline: none;
     background: transparent;
     color: var(--muted);
@@ -80,19 +96,16 @@
   }
 
   .segment__item--sm {
-    height: calc(1.75rem * var(--spacing-scale));
     padding-inline: calc(0.625rem * var(--spacing-scale));
     font-size: calc(0.75rem * var(--font-size-scale));
   }
 
   .segment__item--md {
-    height: calc(2rem * var(--spacing-scale));
     padding-inline: calc(1rem * var(--spacing-scale));
     font-size: calc(0.875rem * var(--font-size-scale));
   }
 
   .segment__item--lg {
-    height: calc(2.5rem * var(--spacing-scale));
     padding-inline: calc(1.25rem * var(--spacing-scale));
     font-size: calc(0.875rem * var(--font-size-scale));
   }
@@ -108,7 +121,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: var(--radius-3xl);
+    /* Sits exactly on the item, so it takes the item's radius rather than the raw step. */
+    border-radius: var(--bc-segment-item-radius);
     background: var(--segment);
     box-shadow: var(--shadow-surface);
     transition:

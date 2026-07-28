@@ -62,16 +62,20 @@
   }
 
   .radio__control {
+    --bc-radio-control-size: calc(1rem * var(--spacing-scale));
+    --bc-radio-indicator-size: 0.8125rem;
+    --bc-radio-control-radius: min(var(--radius-lg), calc(var(--bc-radio-control-size) / 2));
+
     position: relative;
     display: inline-flex;
-    width: calc(1rem * var(--spacing-scale));
-    height: calc(1rem * var(--spacing-scale));
+    width: var(--bc-radio-control-size);
+    height: var(--bc-radio-control-size);
     flex: none;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     border: var(--field-border-width) solid var(--field-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--bc-radio-control-radius);
     outline: none;
     background: var(--field-background);
     color: var(--accent-foreground);
@@ -96,10 +100,21 @@
   .radio__indicator {
     position: absolute;
     inset: 0;
-    width: 0.8125rem;
-    height: 0.8125rem;
+    width: var(--bc-radio-indicator-size);
+    height: var(--bc-radio-indicator-size);
     margin: auto;
-    border-radius: inherit;
+    /*
+     * Derived, not inherited: the dot sits inset inside the control, so sharing the control's
+     * radius makes its corners rounder than the box around them.
+     */
+    border-radius: max(
+      0px,
+      calc(
+        var(--bc-radio-control-radius) -
+        (var(--bc-radio-control-size) - var(--bc-radio-indicator-size)) /
+        2
+      )
+    );
     background: currentColor;
   }
 

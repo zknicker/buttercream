@@ -17,22 +17,25 @@
    * hairlines. Only the semantics differ: tabs reveal a panel, segments pick a value.
    */
   .tabs__list {
+    --bc-tabs-inset: calc(0.25rem * var(--spacing-scale));
+    --bc-tabs-tab-height: calc(2.25rem * var(--spacing-scale));
+    --bc-tabs-tab-radius: min(var(--radius-3xl), calc(var(--bc-tabs-tab-height) / 2));
+
     position: relative;
     display: flex;
     min-width: 0;
-    padding: calc(0.25rem * var(--spacing-scale));
+    padding: var(--bc-tabs-inset);
     overflow-x: auto;
     /*
      * Concentric with the pill inside it: outer radius = inner radius + the padding between
      * them. The pill asks for --radius-3xl but a browser clamps any radius to half the box,
      * so the min() reproduces that clamp — without it the track keeps its full radius once it
      * is tall enough not to clamp (a vertical list), and the two curves stop agreeing.
+     *
+     * The clamp has to use the tab's real height. It was a stand-in constant that no longer
+     * matched, which left the track two pixels tighter than the pill it wraps.
      */
-    border-radius: calc(
-      min(var(--radius-3xl), 1rem * var(--spacing-scale)) +
-      0.25rem *
-      var(--spacing-scale)
-    );
+    border-radius: calc(var(--bc-tabs-tab-radius) + var(--bc-tabs-inset));
     background: var(--default);
     scrollbar-width: none;
   }
@@ -46,14 +49,14 @@
     z-index: 1;
     display: inline-flex;
     min-width: 0;
-    min-height: calc(2rem * var(--spacing-scale));
+    height: var(--bc-tabs-tab-height);
     flex: 1 0 auto;
     align-items: center;
     justify-content: center;
     gap: calc(0.5rem * var(--spacing-scale));
     padding: 0 calc(1rem * var(--spacing-scale));
     border: 0;
-    border-radius: var(--radius-3xl);
+    border-radius: var(--bc-tabs-tab-radius);
     outline: none;
     background: transparent;
     color: var(--muted);
@@ -92,7 +95,8 @@
     left: 0;
     width: var(--active-tab-width);
     height: var(--active-tab-height);
-    border-radius: var(--radius-3xl);
+    /* Rides on the tab, so it takes the tab's radius rather than the raw step. */
+    border-radius: var(--bc-tabs-tab-radius);
     background: var(--segment);
     box-shadow: var(--shadow-surface);
     transform: translate(var(--active-tab-left), var(--active-tab-top));
