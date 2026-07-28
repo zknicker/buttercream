@@ -1680,11 +1680,22 @@
  * Most items are bare on the page — only the genuine cards carry a surface, which is a
  * distinction the page exists to make.
  */
+/*
+ * The reference pins these columns at 16/22.5/21.5rem, which needs 1023px and exactly fills its
+ * own content box — a pane a pixel narrower drops it to one column. Ours has a wider preview
+ * column but spends more of it on padding, so the same fixed widths would not fit.
+ *
+ * The columns keep those widths as their ceiling and compress toward a floor instead, so three
+ * columns survive down to about 800px rather than falling off a cliff.
+ */
 .overview {
   display: grid;
   justify-content: center;
   gap: 2rem;
-  grid-template-columns: 16rem 22.5rem 21.5rem;
+  grid-template-columns:
+    minmax(13rem, 16rem)
+    minmax(17rem, 22.5rem)
+    minmax(16rem, 21.5rem);
   container-type: inline-size;
 }
 
@@ -1960,12 +1971,8 @@
   font-size: 0.75rem;
 }
 
-/*
- * The reference renders at about 1024px, which is exactly what its three fixed columns need.
- * The studio's preview pane is usually narrower than that, so the columns become equal and
- * fluid below it rather than the page dropping straight to a single column.
- */
-@container (max-width: 1023px) {
+/* Below the three-column floor, pair them up rather than stacking everything. */
+@container (max-width: 800px) {
   .overview {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
