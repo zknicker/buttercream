@@ -1,21 +1,23 @@
 import { Select } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
+import { usePreviewSurface } from "./preview-surface.tsx";
 
 const stateNames = ["Florida", "Georgia", "Delaware", "Vermont", "Ohio", "Nevada"];
 
 export function SelectPreview(): ReactElement {
   // Controlled so picking from the grouped listbox visibly updates the trigger.
   const [region, setRegion] = useState<string | null>("Florida");
+  const surface = usePreviewSurface();
 
   return (
     <div className="specimens">
       <section className="specimen">
         <div className="input-demo">
-          <Select label="State" placeholder="Select one">
+          <Select container={surface} label="State" placeholder="Select one">
             <StateItems />
           </Select>
-          <Select defaultValue="Florida" label="Preselected">
+          <Select container={surface} defaultValue="Florida" label="Preselected">
             <StateItems />
           </Select>
         </div>
@@ -35,10 +37,10 @@ export function SelectPreview(): ReactElement {
       </section>
       <section className="specimen">
         <div className="input-demo">
-          <Select defaultValue="Florida" disabled label="Disabled">
+          <Select container={surface} defaultValue="Florida" disabled label="Disabled">
             <StateItems />
           </Select>
-          <Select label="Disabled item" placeholder="Select one">
+          <Select container={surface} label="Disabled item" placeholder="Select one">
             <Select.Item value="Florida">Florida</Select.Item>
             <Select.Item disabled value="Vermont">
               Vermont

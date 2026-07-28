@@ -14,6 +14,7 @@ import {
 import type { DesignSystem } from "@buttercream/theme-core";
 import type { ReactElement } from "react";
 import { createPreviewIconElements } from "./preview-icons.ts";
+import { usePreviewSurface } from "./preview-surface.tsx";
 
 /* The reference's own copy, so the two pages can be read side by side. */
 const FAQ = [
@@ -256,13 +257,14 @@ export function ToolbarPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
 
 export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
   const icon = createPreviewIconElements(icons);
+  const surface = usePreviewSurface();
 
   return (
     <div className="specimens">
       <section className="specimen">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">Actions</Button>} />
-          <Dropdown.Content>
+          <Dropdown.Content container={surface}>
             <Dropdown.Item>{icon.add}Add member</Dropdown.Item>
             <Dropdown.Item>{icon.mail}Send invite</Dropdown.Item>
             <Dropdown.Separator />
@@ -274,7 +276,7 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
       <section className="specimen">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">Grouped</Button>} />
-          <Dropdown.Content>
+          <Dropdown.Content container={surface}>
             <Dropdown.Group>
               <Dropdown.GroupLabel>Workspace</Dropdown.GroupLabel>
               <Dropdown.Item>{icon.settings}Settings</Dropdown.Item>
@@ -287,7 +289,7 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
       <section className="specimen">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">With disabled</Button>} />
-          <Dropdown.Content>
+          <Dropdown.Content container={surface}>
             <Dropdown.Item>Available</Dropdown.Item>
             <Dropdown.Item disabled>Unavailable</Dropdown.Item>
           </Dropdown.Content>
@@ -299,12 +301,15 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
 }
 
 export function AlertDialogPreview(): ReactElement {
+  const surface = usePreviewSurface();
+
   return (
     <div className="specimens">
       <section className="specimen">
         <AlertDialog>
           <AlertDialog.Trigger render={<Button variant="danger">Delete project</Button>} />
           <AlertDialog.Content
+            container={surface}
             actions={
               <>
                 <AlertDialog.Close render={<Button variant="outline">Cancel</Button>} />
@@ -321,6 +326,7 @@ export function AlertDialogPreview(): ReactElement {
         <AlertDialog>
           <AlertDialog.Trigger render={<Button variant="secondary">Leave page</Button>} />
           <AlertDialog.Content
+            container={surface}
             actions={
               <>
                 <AlertDialog.Close render={<Button variant="outline">Stay</Button>} />
@@ -344,13 +350,14 @@ export function AlertDialogPreview(): ReactElement {
  */
 export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
   const icon = createPreviewIconElements(icons);
+  const surface = usePreviewSurface();
 
   return (
     <div className="specimens">
       <section className="specimen specimen--stack">
         <Field name="animal">
           <Field.Label>Favorite animal</Field.Label>
-          <Combobox items={ANIMALS} placeholder="Search animals…">
+          <Combobox container={surface} items={ANIMALS} placeholder="Search animals…">
             {(animal: string) => (
               <Combobox.Item key={animal} value={animal}>
                 {animal}
@@ -363,7 +370,7 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
       <section className="specimen specimen--stack">
         <Field name="animal-described">
           <Field.Label>Favorite animal</Field.Label>
-          <Combobox items={ANIMALS} placeholder="Search animals…">
+          <Combobox container={surface} items={ANIMALS} placeholder="Search animals…">
             {(animal: string) => (
               <Combobox.Item key={animal} value={animal}>
                 {animal}
@@ -377,7 +384,7 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
       <section className="specimen specimen--stack">
         <Field name="country">
           <Field.Label>Country</Field.Label>
-          <Combobox items={COUNTRIES} placeholder="Search countries…">
+          <Combobox container={surface} items={COUNTRIES} placeholder="Search countries…">
             {(group: { items: string[]; value: string }) => (
               <Combobox.Group items={group.items} key={group.value} label={group.value}>
                 <Combobox.Collection>
@@ -396,7 +403,7 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
       <section className="specimen specimen--stack">
         <Field name="pet">
           <Field.Label>Animal</Field.Label>
-          <Combobox items={PET_NAMES} placeholder="Search animals…">
+          <Combobox container={surface} items={PET_NAMES} placeholder="Search animals…">
             {(name: string) => (
               <Combobox.Item
                 disabled={PETS.some((pet) => pet.name === name && pet.disabled)}
@@ -413,7 +420,12 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
       <section className="specimen specimen--stack">
         <Field name="animal-custom-icon">
           <Field.Label>Favorite animal</Field.Label>
-          <Combobox icon={icon.search} items={ANIMALS} placeholder="Search animals…">
+          <Combobox
+            container={surface}
+            icon={icon.search}
+            items={ANIMALS}
+            placeholder="Search animals…"
+          >
             {(animal: string) => (
               <Combobox.Item key={animal} value={animal}>
                 {animal}
@@ -426,7 +438,7 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
       <section className="specimen specimen--stack">
         <Field name="animal-disabled">
           <Field.Label>Favorite animal</Field.Label>
-          <Combobox disabled items={ANIMALS} placeholder="Search animals…">
+          <Combobox container={surface} disabled items={ANIMALS} placeholder="Search animals…">
             {(animal: string) => (
               <Combobox.Item key={animal} value={animal}>
                 {animal}
