@@ -17,9 +17,11 @@ export function ControlSection({ children, title }: { children: ReactNode; title
        * Header and divider on one line: the band starts where the title ends and runs to the edge,
        * so it reads as a rule the heading sits in rather than a stripe stacked above it.
        *
-       * It needs real height to read as dither at all — below about ten pixels the stipple is too
-       * few rows to resolve and just looks like a soft line. Larger cells for the same reason: the
-       * texture has to be legible as pixels, which is the whole point of the motif.
+       * Fine cells and a neutral tone. Dither reads as texture when the grain is near the limit of
+       * what the eye resolves — enlarge the cells and it stops being a texture and becomes a
+       * checkerboard. The same goes for colour: at full butter the band competed with the values
+       * it was meant to separate, so it takes the muted tone the heading already uses and lets the
+       * pattern, not the hue, carry the brand.
        */}
       <div className="mb-1 flex items-center gap-2.5">
         {/*
@@ -28,7 +30,7 @@ export function ControlSection({ children, title }: { children: ReactNode; title
          * expressive device that belongs on marketing, where it has room to be loud.
          */}
         <h2 className="shrink-0 text-[11px] font-medium text-muted">{title}</h2>
-        <DitherBand aria-hidden className="min-w-0 flex-1 text-butter" height={16} pixel={4} />
+        <DitherBand aria-hidden className="min-w-0 flex-1 text-fg/35" height={10} pixel={2} />
       </div>
       {children}
     </section>
