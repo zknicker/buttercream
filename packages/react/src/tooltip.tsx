@@ -43,6 +43,20 @@ export interface TooltipContentProps
   arrow?: boolean;
   children: ReactNode;
   className?: string;
+  /**
+   * Where the content is portalled. Defaults to the document body.
+   *
+   * Pass the element the theme tokens are set on whenever they are scoped to a subtree rather
+   * than `:root`. Custom properties inherit through the DOM, not through React, so content
+   * portalled to the body sits outside that subtree and silently falls back to the defaults.
+   *
+   * Choose that element with care. A container that establishes containment or a new
+   * containing block — `contain`, `container-type`, `transform`, `filter` — becomes the
+   * containing block for fixed-position descendants, so a full-viewport backdrop will be
+   * confined to it. One that clips or scrolls will cut off content extending past its edge.
+   * The nearest themed ancestor is usually right; the nearest scroll container rarely is.
+   */
+  container?: BaseTooltip.Portal.Props["container"];
   positionerClassName?: string;
 }
 
@@ -50,13 +64,14 @@ function TooltipContent({
   arrow = false,
   children,
   className,
+  container,
   positionerClassName,
   side = "top",
   sideOffset,
   ...props
 }: TooltipContentProps): ReactElement {
   return (
-    <BaseTooltip.Portal>
+    <BaseTooltip.Portal container={container}>
       <TooltipPositioner
         side={side}
         sideOffset={sideOffset ?? (arrow ? 7 : 3)}

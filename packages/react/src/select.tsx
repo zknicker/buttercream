@@ -16,6 +16,12 @@ export interface SelectProps<Value, Multiple extends boolean | undefined = false
    * than `:root`. Custom properties inherit through the DOM, not through React, so a popup
    * portalled to the body sits outside that subtree and silently falls back to the defaults —
    * the trigger restyles and the popup does not.
+   *
+   * Choose that element with care. A container that establishes containment or a new containing
+   * block — `contain`, `container-type`, `transform`, `filter` — becomes the containing block for
+   * fixed-position descendants, so a full-viewport backdrop will be confined to it. One that clips
+   * or scrolls will cut off content extending past its edge. The nearest themed ancestor is
+   * usually right; the nearest scroll container rarely is.
    */
   container?: BaseSelect.Portal.Props["container"];
   description?: ReactNode;
