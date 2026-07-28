@@ -6,10 +6,23 @@ import { classes } from "./classes.ts";
 type SpanProps = useRender.ComponentProps<"span">;
 
 export type BadgeVariant = "accent" | "danger" | "ink" | "line" | "muted" | "success";
+export type BadgeSize = "sm" | "md";
 
 export interface BadgeProps extends SpanProps {
+  size?: BadgeSize;
   variant?: BadgeVariant;
 }
+
+/*
+ * Height and type live here rather than in the base, because a caller cannot override them from
+ * its className: Tailwind resolves competing utilities by their order in the generated stylesheet,
+ * not in the class string, so a hardcoded `h-5` wins whatever the call site asks for. Mirrors the
+ * published Badge's size vocabulary.
+ */
+const SIZES: Record<BadgeSize, string> = {
+  sm: "h-3 px-1 text-[8px]",
+  md: "h-5 px-1.5 text-xs",
+};
 
 const VARIANTS: Record<BadgeVariant, string> = {
   // Butter stays light in both themes, so its text is always the fixed dark ink.
@@ -29,6 +42,7 @@ const VARIANTS: Record<BadgeVariant, string> = {
 export function Badge({
   className,
   render,
+  size = "md",
   variant = "muted",
   ...props
 }: BadgeProps): ReactElement {
@@ -37,7 +51,8 @@ export function Badge({
     props: mergeProps<"span">(
       {
         className: classes(
-          "inline-flex h-5 items-center rounded-(--radius-shell-sm) px-1.5 font-mono text-xs tracking-wide uppercase",
+          "inline-flex items-center rounded-(--radius-shell-sm) font-mono tracking-wide uppercase",
+          SIZES[size],
           VARIANTS[variant],
           className,
         ),

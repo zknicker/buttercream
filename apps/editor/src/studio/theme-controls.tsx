@@ -175,18 +175,23 @@ export function ColorControl({
              * slant meets the tag's underside wants to be round — square, the two edges read as two
              * shapes meeting; rounded, as one line changing direction.
              *
+             * The lean is positive, so the tag narrows toward its base: the notch is taken out of
+             * the row's top edge, and a cut widening as it goes down would undercut the row rather
+             * than nick it.
+             *
              * It runs past the row's right edge and the row clips it, so the skew never shows on
              * that side and the tag stays flush into the corner. The row clips its own radius for
              * us too, which is why the tag only declares the one corner it owns: two radii kept in
              * step by hand is a thing that goes wrong later.
              */
-            "absolute top-0 -right-3 h-3 skew-x-[-18deg] pr-5 pl-4 text-[8px] tracking-[0.09em]",
+            "absolute top-0 -right-3 skew-x-[18deg] pr-5 pl-4 tracking-[0.09em]",
             "[border-radius:0_0_0_0.3125rem]",
           )}
+          size="sm"
           variant="line"
         >
           {/* Back upright: the notch is skewed, the word in it is not. */}
-          <span className="inline-block skew-x-[18deg]">Derived</span>
+          <span className="inline-block skew-x-[-18deg]">Derived</span>
         </Badge>
       ) : null}
       <ColorSwatch color={swatchColor ?? value} />
