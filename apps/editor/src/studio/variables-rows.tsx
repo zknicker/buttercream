@@ -2,7 +2,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactElement, ReactNode } from "react";
 import { useRef, useState } from "react";
-import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
+import { ColorPickerPopover, classes, SectionHeading, Select, Slider } from "../ui/index.ts";
 import { controlName, FOCUS_OUTLINE, ROW, ROW_FLEX, ROW_LABEL, ROW_VALUE } from "./control-row.ts";
 import { ColorControl, RangeControl, SelectControl, ToggleControl } from "./theme-controls.tsx";
 import { describeTokenValue, formatTokenDisplay } from "./variables-tokens.ts";
@@ -29,19 +29,7 @@ export function VariablesSection({
   return (
     /* The Style tab's section head, so the two tabs stop disagreeing about what a section is. */
     <section className="mt-6 flex flex-col gap-1.5">
-      <div className="mb-2 flex items-center gap-3">
-        <h2 className="shrink-0 font-mono text-[13px] tracking-tight text-muted">{title}</h2>
-        <DitherBand
-          aria-hidden
-          className="min-w-0 flex-1 text-fg/25 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
-          density={0.5}
-          height={6}
-          pixel={3}
-        />
-        {count === undefined ? null : (
-          <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted">{count}</span>
-        )}
-      </div>
+      <SectionHeading className="mb-2" title={title} {...(count === undefined ? {} : { count })} />
       {children}
     </section>
   );

@@ -28,6 +28,7 @@ export {
   type MenuItemVariant,
   type MenuPopupProps,
 } from "./menu.tsx";
+export { SectionHeading } from "./section-heading.tsx";
 export { Segmented, type SegmentedProps } from "./segmented.tsx";
 export { Select, type SelectProps } from "./select.tsx";
 export { Slider, type SliderProps } from "./slider.tsx";

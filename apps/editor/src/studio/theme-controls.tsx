@@ -2,50 +2,13 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { Badge, ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
+import { Badge, ColorPickerPopover, classes, SectionHeading, Select, Slider } from "../ui/index.ts";
 import { controlName, FOCUS_OUTLINE, ROW, ROW_FLEX, ROW_LABEL, ROW_VALUE } from "./control-row.ts";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
   return (
     <section className="mt-6 flex flex-col gap-1.5">
-      {/*
-       * Header and divider on one line: the band starts where the title ends and runs to the edge,
-       * so it reads as a rule the heading sits in rather than a stripe stacked above it.
-       *
-       * Neutral, not butter. At full strength the band competed with the values it exists to
-       * separate; the muted tone lets the pattern carry the brand instead of the hue.
-       */}
-      <div className="mb-2 flex items-center gap-3">
-        {/*
-         * The pixel mono the wordmark uses, at a size it can actually be read at. An earlier note
-         * here argued for small sans on the grounds that a section header should recede — but
-         * receding and being characterless are not the same thing, and at eleven pixels it was
-         * doing the second. Departure Mono carries the brand at the one point in the rail where a
-         * label is the only thing on the line.
-         */}
-        <h2 className="shrink-0 font-mono text-[13px] tracking-tight text-muted">{title}</h2>
-        {/*
-         * Read off the reference rather than guessed at. Three things make it work, and the
-         * earlier attempts had none of them:
-         *
-         * Even, not fading. A dissolving band carries its weight at the solid end, so it can
-         * never look vertically centred beside a word. A flat field can.
-         *
-         * Two rows, not four. Three-pixel cells over six pixels lands on exactly the alternating
-         * checker the reference uses, and it stays a rule; at four rows the field starts reading
-         * as a band of texture with its own presence.
-         *
-         * Masked at both ends. This is the detail that reads as craft: the field fades in after
-         * the heading and out before the edge, so it never butts hard against either.
-         */}
-        <DitherBand
-          aria-hidden
-          className="min-w-0 flex-1 text-fg/25 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
-          density={0.5}
-          height={6}
-          pixel={3}
-        />
-      </div>
+      <SectionHeading className="mb-2" title={title} />
       {children}
     </section>
   );
@@ -56,11 +19,14 @@ export function ControlRow({ children }: { children: ReactNode }) {
 }
 
 export function TextControl({
+  id,
   label,
   maxLength,
   onChange,
   value,
 }: {
+  /** Set when something outside the panel needs to move focus here — see the editor File menu. */
+  id?: string;
   label: string;
   maxLength?: number;
   onChange: (value: string) => void;
@@ -72,6 +38,7 @@ export function TextControl({
       <input
         aria-label={label}
         className="min-w-0 flex-1 rounded-[calc(var(--radius-shell)-0.125rem)] bg-transparent py-1 pl-2 text-right text-fg outline-0 focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg"
+        id={id}
         maxLength={maxLength}
         name={label}
         onChange={(event) => onChange(event.currentTarget.value)}
