@@ -75,6 +75,7 @@ export function ImportDialog({
               </span>
               <Textarea
                 className="min-h-75"
+                code
                 id="import-source"
                 name="source"
                 onChange={(event) => setSource(event.currentTarget.value)}
