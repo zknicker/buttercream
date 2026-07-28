@@ -90,6 +90,27 @@
     padding-inline: calc(0.625rem * var(--spacing-scale));
   }
 
+  /* Drawn rather than an icon: the arrows are chrome, not part of the icon vocabulary. */
+  .pagination__chevron {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-top: 1.5px solid currentcolor;
+    border-right: 1.5px solid currentcolor;
+    rotate: 45deg;
+  }
+
+  .pagination__chevron--previous {
+    rotate: -135deg;
+  }
+
+  [dir="rtl"] .pagination__chevron--next {
+    rotate: -135deg;
+  }
+
+  [dir="rtl"] .pagination__chevron--previous {
+    rotate: 45deg;
+  }
+
   .pagination__ellipsis {
     display: inline-flex;
     width: calc(2rem * var(--spacing-scale));
