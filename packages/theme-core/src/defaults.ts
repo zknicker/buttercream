@@ -17,7 +17,7 @@ const sharedDensity: ThemeTokens["density"] = {
 
 const sharedCorners: ThemeTokens["corners"] = {
   fieldRadius: "0.75rem",
-  radius: "0.625rem",
+  radius: "0.5rem",
 };
 
 const sharedNeutrals: ThemeTokens["neutrals"] = {
@@ -39,29 +39,29 @@ function neutral(offset: number): string {
 
 export const defaultLightTheme: ThemeTokens = {
   colors: {
-    accent: "#1b1b1b",
+    accent: "#0485f7",
     accentForeground: "#ffffff",
     backdrop: "rgb(0 0 0 / 0.38)",
-    background: neutral(0.5),
-    border: "color-mix(in oklab, var(--foreground) 14%, transparent)",
-    danger: "#ef476f",
+    background: neutral(0.4902),
+    border: neutral(0.42),
+    danger: "#ff383c",
     dangerForeground: "#ffffff",
     default: neutral(0.46),
     defaultForeground: "var(--foreground)",
     focus: "var(--accent)",
-    foreground: neutral(-0.21),
-    link: "var(--accent)",
-    muted: "color-mix(in oklab, var(--foreground) 60%, transparent)",
+    foreground: neutral(-0.2697),
+    link: "var(--foreground)",
+    muted: neutral(0.0717),
     overlay: neutral(0.52),
     overlayForeground: "var(--foreground)",
-    separator: "color-mix(in oklab, var(--foreground) 14%, transparent)",
-    success: "#46a758",
+    separator: neutral(0.44),
+    success: "#17c964",
     successForeground: "#ffffff",
     surface: neutral(0.52),
     surfaceForeground: "var(--foreground)",
     surfaceSecondary: "color-mix(in oklab, var(--surface) 96%, var(--foreground) 4%)",
     surfaceTertiary: "color-mix(in oklab, var(--surface) 92%, var(--foreground) 8%)",
-    warning: "#f59e0b",
+    warning: "#f5a524",
     warningForeground: "#1b1b1b",
   },
   corners: sharedCorners,
@@ -70,7 +70,7 @@ export const defaultLightTheme: ThemeTokens = {
     borderWidth: "1px",
     cursorPointer: true,
     disabledOpacity: 0.5,
-    fieldBorderWidth: "1px",
+    fieldBorderWidth: "0px",
     ringOffsetWidth: "2px",
     shadowField: "medium",
     shadowOverlay: "medium",
@@ -90,8 +90,8 @@ export const defaultLightTheme: ThemeTokens = {
 
 export const defaultDarkTheme: ThemeTokens = {
   colors: {
-    accent: "#f5f5f4",
-    accentForeground: "#1c1917",
+    accent: "#0485f7",
+    accentForeground: "#ffffff",
     backdrop: "rgb(0 0 0 / 0.56)",
     background: neutral(-0.28),
     border: "color-mix(in oklab, var(--foreground) 14%, transparent)",
@@ -101,7 +101,7 @@ export const defaultDarkTheme: ThemeTokens = {
     defaultForeground: "var(--foreground)",
     focus: "var(--accent)",
     foreground: neutral(0.49),
-    link: "var(--accent)",
+    link: "var(--foreground)",
     muted: "color-mix(in oklab, var(--foreground) 60%, transparent)",
     overlay: neutral(-0.24),
     overlayForeground: "var(--foreground)",
@@ -121,7 +121,7 @@ export const defaultDarkTheme: ThemeTokens = {
     borderWidth: "1px",
     cursorPointer: true,
     disabledOpacity: 0.5,
-    fieldBorderWidth: "1px",
+    fieldBorderWidth: "0px",
     ringOffsetWidth: "2px",
     shadowField: "medium",
     shadowOverlay: "none",

@@ -11,7 +11,7 @@ describe("theme CSS", () => {
 
     expect(css).toContain('@import "tailwindcss";');
     expect(css).toContain('@import "@buttercream/styles";');
-    expect(css).toContain("--accent: #1b1b1b;");
+    expect(css).toContain("--accent: #0485f7;");
     expect(css).toContain("--backdrop: rgb(0 0 0 / 0.38);");
     expect(css).toContain(
       "--surface: oklch(from var(--accent) calc(var(--neutral-base) + 0.52) var(--bc-neutral-chroma) h);",
