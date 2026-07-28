@@ -154,7 +154,7 @@ export function ColorControl({
      * legible rather than being hidden or shrunk; they simply stop looking like something you can
      * act on. The swatch keeps full strength, because the colour is the point.
      */
-    <div className={classes(rowClass, "relative", onChange ? "" : "ring-fg/6")}>
+    <div className={classes(rowClass, "relative overflow-hidden", onChange ? "" : "ring-fg/6")}>
       {/*
        * Fills the row's top-right corner: flush with both edges, sharing the row's own radius
        * there and rounding only where it cuts into the row. The row's outline runs around it
@@ -170,8 +170,17 @@ export function ColorControl({
       {onChange === undefined && description !== undefined ? (
         <Badge
           className={classes(
-            "absolute top-0 right-0 h-4 rounded-none px-1.5 text-[9px]",
-            "rounded-tr-(--radius-shell) rounded-bl-(--radius-shell-sm)",
+            "absolute top-0 right-0 h-3.5 rounded-none pr-1.5 pl-2.5 text-[8px] tracking-[0.08em]",
+            /*
+             * The notch's inner edge is cut on the diagonal, so the row's outline runs along the
+             * top, turns down across the slant and continues under the tag as one line. Square, it
+             * read as a block sitting in the corner; angled, the corner reads as having been taken
+             * out of the row.
+             *
+             * The row clips its own rounded corner for us, which is why the tag needs no radius of
+             * its own — the two would have had to be kept in step by hand otherwise.
+             */
+            "[clip-path:polygon(0_0,100%_0,100%_100%,0.4375rem_100%)]",
           )}
           variant="line"
         >
