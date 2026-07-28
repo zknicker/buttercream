@@ -1,0 +1,11 @@
+CORRECTION to this commit message.
+
+Two backticked words were written inside a double-quoted shell string, so the shell ran
+them as command substitution before git ever saw them. The paragraph beginning "Two
+failures the page caught" should read:
+
+  BarChart keys its categories off `name` and defaults there, not off `date`, so a
+  date-only row collapsed every bar onto one empty category and React saw duplicate keys.
+
+The message as committed reads "off  and defaults there, not off Mon Jul 27 23:51:07 EDT
+2026" — the empty gap was `name` and the timestamp was `date`.
