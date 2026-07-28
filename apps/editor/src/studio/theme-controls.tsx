@@ -189,8 +189,13 @@ export function ColorControl({
              * Inline, because the kit's badge rounds all four corners in its base class and a
              * class here would only win or lose on stylesheet order. Only the corner where the
              * slant meets the underside is round; the rest are cuts.
+             *
+             * Two pixels, not five. The skew stretches a corner horizontally by the tangent of its
+             * angle, so at forty-five degrees a radius spends twice its width along the edge — five
+             * left ten pixels of curve on a twelve-pixel tag, which is the whole diagonal. Two
+             * leaves the cut straight and rounds only where it lands.
              */
-            style={{ borderRadius: "0 0 0 0.3125rem" }}
+            style={{ borderRadius: "0 0 0 0.125rem" }}
             variant="line"
           >
             {/* Back upright: the notch leans, the word in it does not. */}
