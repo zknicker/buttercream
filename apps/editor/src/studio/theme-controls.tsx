@@ -154,7 +154,7 @@ export function ColorControl({
      * legible rather than being hidden or shrunk; they simply stop looking like something you can
      * act on. The swatch keeps full strength, because the colour is the point.
      */
-    <div className={classes(rowClass, "relative overflow-hidden", onChange ? "" : "ring-fg/6")}>
+    <div className={classes(rowClass, "relative", onChange ? "" : "ring-fg/6")}>
       {/*
        * Fills the row's top-right corner: flush with both edges, sharing the row's own radius
        * there and rounding only where it cuts into the row. The row's outline runs around it
@@ -168,31 +168,36 @@ export function ColorControl({
        * make room. The right side of a derived row is empty, so the corner is free.
        */}
       {onChange === undefined && description !== undefined ? (
-        <Badge
-          className={classes(
+        /*
+         * A square-cornered window at the row's corner, holding a skewed tag.
+         *
+         * The window is what clips the lean's overhang on the right, so the tag's outer corner
+         * meets the row's edge square instead of being rounded off by it — letting the row do the
+         * clipping handed the tag the row's own radius, which softened the one corner that should
+         * read as a cut.
+         *
+         * Skewed rather than clipped, because a clip path cannot round a corner and the join where
+         * the slant meets the tag's underside wants to be round: square, the two edges read as two
+         * shapes meeting; rounded, as one line changing direction. The lean is positive so the tag
+         * narrows toward its base — a cut widening as it fell would undercut the row rather than
+         * nick its top edge.
+         */
+        <span className="pointer-events-none absolute top-0 right-0 flex overflow-hidden">
+          <Badge
+            className="-mr-2 skew-x-[18deg] pr-3.5 pl-2.5 tracking-[0.09em]"
+            size="sm"
             /*
-             * Skewed rather than clipped. A clip path cannot round a corner, and the join where the
-             * slant meets the tag's underside wants to be round — square, the two edges read as two
-             * shapes meeting; rounded, as one line changing direction.
-             *
-             * The lean is positive, so the tag narrows toward its base: the notch is taken out of
-             * the row's top edge, and a cut widening as it goes down would undercut the row rather
-             * than nick it.
-             *
-             * It runs past the row's right edge and the row clips it, so the skew never shows on
-             * that side and the tag stays flush into the corner. The row clips its own radius for
-             * us too, which is why the tag only declares the one corner it owns: two radii kept in
-             * step by hand is a thing that goes wrong later.
+             * Inline, because the kit's badge rounds all four corners in its base class and a
+             * class here would only win or lose on stylesheet order. Only the corner where the
+             * slant meets the underside is round; the rest are cuts.
              */
-            "absolute top-0 -right-3 skew-x-[18deg] pr-5 pl-4 tracking-[0.09em]",
-            "[border-radius:0_0_0_0.3125rem]",
-          )}
-          size="sm"
-          variant="line"
-        >
-          {/* Back upright: the notch is skewed, the word in it is not. */}
-          <span className="inline-block skew-x-[-18deg]">Derived</span>
-        </Badge>
+            style={{ borderRadius: "0 0 0 0.3125rem" }}
+            variant="line"
+          >
+            {/* Back upright: the notch leans, the word in it does not. */}
+            <span className="inline-block skew-x-[-18deg]">Derived</span>
+          </Badge>
+        </span>
       ) : null}
       <ColorSwatch color={swatchColor ?? value} />
       {draft === null ? (
