@@ -43,12 +43,14 @@
   .alert__title {
     font-size: calc(0.875rem * var(--font-size-scale));
     font-weight: 500;
-    line-height: calc(1.5rem * var(--spacing-scale));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
+  /* A step below the title, matching the reference: the description is support, not body copy. */
   .alert__description {
     color: var(--muted);
-    font-size: calc(0.875rem * var(--font-size-scale));
+    font-size: calc(0.75rem * var(--font-size-scale));
+    line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   /*

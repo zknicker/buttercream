@@ -232,8 +232,13 @@
       0 0 0 1px rgb(0 0 0 / 0.05);
     --bc-shadow-surface-subtle:
       0 0 3px 0 rgba(0, 0, 0, 0.02), 0 1px 5px 0 rgba(0, 0, 0, 0.03), 0 0 1px 0 rgba(0, 0, 0, 0.14);
+    /*
+     * Taken off the reference. The old stack rang at 0.2 alpha on its hairline layer, which is
+     * what made every card read as heavier than the page it sits on.
+     */
     --bc-shadow-surface-medium:
-      0 0 5px 0 rgba(0, 0, 0, 0.02), 0 2px 10px 0 rgba(0, 0, 0, 0.06), 0 0 1px 0 rgba(0, 0, 0, 0.2);
+      0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+      0 0 1px 0 rgba(0, 0, 0, 0.06);
     --bc-shadow-surface-strong:
       0 4px 16px -2px rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.07),
       0 0 5px 0 rgba(0, 0, 0, 0.03), 0 0 1px 0 rgba(0, 0, 0, 0.26);

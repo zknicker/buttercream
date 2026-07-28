@@ -7,8 +7,8 @@
 
     position: relative;
     display: inline-flex;
-    width: calc(3.5rem * var(--spacing-scale));
-    height: calc(3.5rem * var(--spacing-scale));
+    width: calc(2.5rem * var(--spacing-scale));
+    height: calc(2.5rem * var(--spacing-scale));
     flex: none;
     overflow: hidden;
     align-items: center;
@@ -24,16 +24,16 @@
   }
 
   .avatar--sm {
-    width: calc(3rem * var(--spacing-scale));
-    height: calc(3rem * var(--spacing-scale));
+    width: calc(2rem * var(--spacing-scale));
+    height: calc(2rem * var(--spacing-scale));
     border-radius: min(var(--field-radius), 0.5rem);
     font-size: calc(0.75rem * var(--font-size-scale));
     line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
 
   .avatar--lg {
-    width: calc(4rem * var(--spacing-scale));
-    height: calc(4rem * var(--spacing-scale));
+    width: calc(3rem * var(--spacing-scale));
+    height: calc(3rem * var(--spacing-scale));
     font-size: calc(1rem * var(--font-size-scale));
     line-height: calc(1.5rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }
