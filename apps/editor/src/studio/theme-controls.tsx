@@ -1,7 +1,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
-import { ColorPickerPopover, classes, DitherBand, Slider } from "../ui/index.ts";
+import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/index.ts";
 
 /** Shared shape for every row in the controls rail: label left, value right. */
 const ROW =
@@ -279,37 +279,27 @@ export function SelectControl<Value extends string>({
   value: Value;
 }) {
   return (
-    <label
-      className={classes(
-        ROW,
-        "has-[:focus-visible]:outline-[1.5px] has-[:focus-visible]:-outline-offset-1 has-[:focus-visible]:outline-fg",
-      )}
-    >
+    /*
+     * Not a <label>: it would wrap a custom trigger, and a label swallows the click that should
+     * open the popup. The trigger carries the accessible name instead.
+     */
+    <div className={ROW}>
       <span className={ROW_LABEL}>{label}</span>
-      <span className="grid w-36 min-w-0 grid-cols-[minmax(0,1fr)_1rem] items-center">
-        <select
-          aria-label={label}
-          className="col-span-full row-start-1 h-9 min-w-0 cursor-pointer appearance-none bg-transparent pr-5 pl-2 text-right font-mono text-xs text-ellipsis text-muted outline-0 disabled:cursor-default disabled:opacity-60"
-          disabled={disabled}
-          name={controlName(label)}
-          onChange={(event) => onChange(event.currentTarget.value as Value)}
-          value={value}
-        >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <HugeiconsIcon
-          aria-hidden="true"
-          className="pointer-events-none z-1 col-start-2 row-start-1 size-4 text-muted"
-          icon={ArrowDown01Icon}
-          size={16}
-          strokeWidth={2}
-        />
-      </span>
-    </label>
+      <Select
+        aria-label={label}
+        disabled={disabled}
+        items={options as { label: string; value: Value }[]}
+        name={controlName(label)}
+        onValueChange={(next) => onChange(next as Value)}
+        value={value}
+      >
+        {options.map((option) => (
+          <Select.Item key={option.value} value={option.value}>
+            {option.label}
+          </Select.Item>
+        ))}
+      </Select>
+    </div>
   );
 }
 

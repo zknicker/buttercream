@@ -22,9 +22,12 @@ describe("SelectControl", () => {
     );
 
     expect(markup).toContain('aria-label="Family"');
+    /* Base UI keeps a hidden input so the control still posts like a native select would. */
     expect(markup).toContain('name="family"');
-    expect(markup).toContain('value="hugeicons" selected=""');
-    expect(markup).toContain('aria-hidden="true"');
+    expect(markup).toContain('value="hugeicons"');
+    /* The trigger shows the option's label, not the raw value it is stored under. */
+    expect(markup).toContain("Hugeicons");
+    expect(markup).not.toContain("Lucide");
   });
 });
 
@@ -49,7 +52,9 @@ describe("FontControl", () => {
     );
 
     expect(inter).toBeDefined();
-    expect(markup).toContain("selected");
+    /* The current stack is the one the trigger reads out. */
+    expect(markup).toContain("Inter");
+    expect(markup).toContain(`value="${inter?.value ?? ""}"`);
     expect(markup).not.toContain("Custom");
   });
 

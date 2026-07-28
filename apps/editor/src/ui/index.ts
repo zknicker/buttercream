@@ -29,6 +29,7 @@ export {
   type MenuPopupProps,
 } from "./menu.tsx";
 export { Segmented, type SegmentedProps } from "./segmented.tsx";
+export { Select, type SelectProps } from "./select.tsx";
 export { Slider, type SliderProps } from "./slider.tsx";
 export { Surface, type SurfaceProps, type SurfaceVariant } from "./surface.tsx";
 export { Swirled } from "./swirled.tsx";
