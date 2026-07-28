@@ -2306,7 +2306,9 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
         // anchor, so the panel follows its trigger instead of detaching.
         modal={false}
       >
-        <div ref={ref} className="inline-flex">
+        {/* Fills its row: an inline wrapper sized the trigger to its text, so a w-full trigger
+            inside it was full width of nothing. */}
+        <div ref={ref} className="flex w-full">
           <Popover.Trigger
             /*
              * No radius of its own. Tailwind resolves conflicting utilities by their order in the
@@ -2338,7 +2340,9 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
               </span>
             )}
             {triggerLabel && triggerLabelPosition === "right" && (
-              <span className="text-[13px] text-muted px-1 select-none">{triggerLabel}</span>
+              <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-fg select-none">
+                {triggerLabel}
+              </span>
             )}
             {triggerShowRemove && (
               <button

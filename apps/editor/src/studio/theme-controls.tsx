@@ -135,7 +135,12 @@ export function ColorControl({
         onValueChange={onChange}
         triggerClassName={classes(rowClass, "hover:bg-fg/5")}
         triggerLabel={<RowText description={description} label={label} />}
-        triggerLabelPosition="left"
+        /*
+         * Two-line rows put the swatch first, so an editable token and a derived one line up: the
+         * derived row has no trigger to hang a swatch inside, so it draws its own on the left, and
+         * a picker that put its tile on the right made the two look like different kinds of row.
+         */
+        triggerLabelPosition={twoLine ? "right" : "left"}
         triggerShowValue={!twoLine}
         value={normalizeHex(value)}
       />
@@ -143,11 +148,18 @@ export function ColorControl({
   }
 
   return (
-    <div className={rowClass}>
+    /*
+     * A read-only row keeps the shape of an editable one and loses its contrast. Derived tokens are
+     * still worth reading — the formula is how you find out where a colour came from — so they stay
+     * legible rather than being hidden or shrunk; they simply stop looking like something you can
+     * act on. The swatch keeps full strength, because the colour is the point.
+     */
+    <div className={classes(rowClass, onChange ? "" : "ring-fg/6")}>
       <ColorSwatch color={swatchColor ?? value} />
       {draft === null ? (
         <RowText
           description={description}
+          dim={onChange === undefined}
           label={label}
           {...(onChange ? { onEdit: () => setDraft(value) } : {})}
         />
@@ -197,16 +209,19 @@ function ColorSwatch({ color }: { color: string }) {
  */
 function RowText({
   description,
+  dim = false,
   label,
   onEdit,
 }: {
   description: string | undefined;
+  dim?: boolean;
   label: string;
   onEdit?: () => void;
 }) {
   const labelClass = classes(
     ROW_LABEL,
     description !== undefined && "font-mono text-[11px] leading-4",
+    dim && "text-muted",
   );
 
   return (

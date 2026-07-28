@@ -3,6 +3,8 @@ import { classes } from "./classes.ts";
 
 export interface SegmentedProps<Value extends string> {
   className?: string;
+  /** Sizes to its options instead of filling the row, for use beside a label. */
+  compact?: boolean;
   label: string;
   onChange: (value: Value) => void;
   options: readonly Value[];
@@ -11,6 +13,7 @@ export interface SegmentedProps<Value extends string> {
 
 export function Segmented<Value extends string>({
   className,
+  compact = false,
   label,
   onChange,
   options,
@@ -29,7 +32,8 @@ export function Segmented<Value extends string>({
         <button
           aria-selected={option === value}
           className={classes(
-            "h-7 flex-1 rounded-[calc(var(--radius-shell)-0.125rem)] px-2.5 text-sm whitespace-nowrap",
+            "h-7 rounded-[calc(var(--radius-shell)-0.125rem)] whitespace-nowrap",
+            compact ? "px-2 text-[11px]" : "flex-1 px-2.5 text-sm",
             "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
             /*
              * The selected pill is a surface, not a fill. Butter marks it at the edge rather than

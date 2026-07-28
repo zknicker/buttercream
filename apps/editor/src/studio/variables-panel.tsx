@@ -11,6 +11,7 @@ import Search01Icon from "@hugeicons-pro/core-stroke-rounded/Search01Icon";
 import type { CSSProperties, ReactElement } from "react";
 import { useMemo, useState } from "react";
 import { classes, Segmented } from "../ui/index.ts";
+import { ROW_FLEX, ROW_LABEL } from "./control-row.ts";
 import {
   ColorTokenRow,
   LevelRow,
@@ -126,115 +127,78 @@ export function VariablesPanel({
 
   return (
     <div>
-      <div className="mt-3">
+      {/*
+       * The theme switch is a row like any other. Full-width it read as a second, louder set of
+       * tabs directly under the real ones — two options stretched across the rail make each one
+       * enormous, which is a lot of emphasis for a scope selector.
+       */}
+      <div className={classes(ROW_FLEX, "mt-3")}>
+        <span className={classes(ROW_LABEL, "min-w-0 flex-1")}>Editing</span>
         <Segmented
+          className="bg-transparent p-0"
+          compact
           label="Variables theme"
           onChange={setThemeName}
           options={THEMES}
           value={themeName}
         />
-        {/*
-         * Accent, Success, Warning, Danger, and Disabled opacity are also curated controls on
-         * the Style tab. Style writes both themes at once because those are brand decisions;
-         * here they are per-theme tokens like any other, so the same slider or swatch means
-         * something different depending which tab moved it. A badge on five rows among ninety
-         * would be noise, so the scope difference gets said once, where the theme switch lives.
-         */}
-        <p className="mt-1.5 px-1 text-[11px] text-pretty text-muted">
-          Accent, Success, Warning, Danger, and Disabled opacity also live on the Style tab, which
-          sets both themes at once — editing them here only changes the {themeName} theme.
-        </p>
       </div>
 
-      <VariablesSection count={tokens.length} title="Colors">
-        {/*
-         * Search first, because the panel's real job is "find one token among ninety". The
-         * category chips it replaces wrapped to three lines at this rail width and could only
-         * answer "show me a family", never "where is --field-border-hover".
-         */}
-        <label className="relative mb-2 block">
-          <HugeiconsIcon
-            aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-muted"
-            icon={Search01Icon}
-            size={14}
-            strokeWidth={2}
-          />
-          <input
-            aria-label="Search colour tokens"
-            className={classes(
-              "h-8 w-full rounded-(--radius-shell) bg-raised pr-2 pl-8",
-              "font-mono text-xs text-fg placeholder:text-muted",
-              "outline-0 focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
-            )}
-            name="variables-search"
-            onChange={(event) => setQuery(event.currentTarget.value)}
-            placeholder="Search tokens"
-            type="search"
-            value={query}
-          />
-        </label>
+      {/*
+       * Search first, because the panel's real job is "find one token among ninety". The category
+       * chips it replaces wrapped to three lines at this rail width and could only answer "show me
+       * a family", never "where is field-border-hover".
+       */}
+      <label className="relative mt-6 block">
+        <HugeiconsIcon
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-muted"
+          icon={Search01Icon}
+          size={14}
+          strokeWidth={2}
+        />
+        <input
+          aria-label="Search colour tokens"
+          className={classes(
+            "h-8 w-full rounded-(--radius-shell) bg-canvas pr-2 pl-8 ring-1 ring-fg/10",
+            "font-mono text-xs text-fg placeholder:text-muted",
+            "outline-0 focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
+          )}
+          name="variables-search"
+          onChange={(event) => setQuery(event.currentTarget.value)}
+          placeholder="Search tokens"
+          type="search"
+          value={query}
+        />
+      </label>
 
-        {groups.length === 0 ? (
-          <p className="px-1 py-6 text-center text-xs text-muted">
-            No token matches &ldquo;{query}&rdquo;.
-          </p>
-        ) : (
-          <div className="flex flex-col gap-1" data-theme={themeKey} style={swatchVariables}>
-            {groups.map((group) => {
-              const open = searching || expanded.has(group.category);
-              return (
-                <div key={group.category}>
-                  {/*
-                   * Collapsed by default, so the first thing the panel shows is a ten-line index
-                   * of what exists rather than the first twelve rows of ninety. While a search is
-                   * running the groups force open — a hit you have to click to see is not a hit.
-                   */}
-                  <button
-                    aria-expanded={open}
-                    className={classes(
-                      "flex h-8 w-full items-center gap-2 rounded-(--radius-shell) px-2 text-left",
-                      "text-[13px] text-fg hover:bg-fg/5",
-                      "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
-                    )}
-                    onClick={() => toggleGroup(group.category)}
-                    type="button"
-                  >
-                    <HugeiconsIcon
-                      aria-hidden="true"
-                      className={classes(
-                        "shrink-0 text-muted transition-transform duration-100",
-                        open ? "rotate-0" : "-rotate-90",
-                      )}
-                      icon={ArrowDown01Icon}
-                      size={14}
-                      strokeWidth={2}
-                    />
-                    <span className="min-w-0 flex-1 truncate">{group.category}</span>
-                    <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted">
-                      {group.tokens.length}
-                    </span>
-                  </button>
-                  {open ? (
-                    <div className="mt-0.5 overflow-hidden rounded-(--radius-shell) bg-raised divide-y divide-fg/6">
-                      {group.tokens.map((token) => (
-                        <ColorTokenRow
-                          key={token.name}
-                          name={token.name}
-                          value={token.value}
-                          {...(token.authored
-                            ? { onCommit: (value: string) => pinToken(token, value) }
-                            : {})}
-                        />
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </VariablesSection>
+      {groups.length === 0 ? (
+        <p className="px-1 py-6 text-center text-xs text-muted">
+          No token matches &ldquo;{query}&rdquo;.
+        </p>
+      ) : (
+        /*
+         * A section per family rather than a collapsible list. Collapsing was answering the
+         * question search already answers, and it cost a click before you could see anything —
+         * the panel opened on ten closed rows telling you only that tokens existed somewhere.
+         */
+        groups.map((group) => (
+          <VariablesSection count={group.tokens.length} key={group.category} title={group.category}>
+            <div className="flex flex-col gap-1.5" data-theme={themeKey} style={swatchVariables}>
+              {group.tokens.map((token) => (
+                <ColorTokenRow
+                  key={token.name}
+                  name={token.name}
+                  value={token.value}
+                  {...(token.authored
+                    ? { onCommit: (value: string) => pinToken(token, value) }
+                    : {})}
+                />
+              ))}
+            </div>
+          </VariablesSection>
+        ))
+      )}
 
       <VariablesSection title="Shadows">
         <div className="overflow-hidden rounded-(--radius-shell) bg-raised divide-y divide-fg/6">
