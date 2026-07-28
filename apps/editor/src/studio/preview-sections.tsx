@@ -151,7 +151,7 @@ export function renderPreviewSection(
     return <ErrorMessagePreview />;
   }
   if (section === "Pagination") {
-    return <PaginationPreview />;
+    return <PaginationPreview icons={iconSettings} />;
   }
   if (section === "Toolbar") {
     return <ToolbarPreview icons={iconSettings} />;

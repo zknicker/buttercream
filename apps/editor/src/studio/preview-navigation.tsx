@@ -3,6 +3,8 @@ import {
   AlertDialog,
   Breadcrumbs,
   Button,
+  type ButtonVariant,
+  Chip,
   Combobox,
   Dropdown,
   ErrorMessage,
@@ -18,16 +20,55 @@ import { usePreviewSurface } from "./preview-surface.tsx";
 
 /* The reference's own copy, so the two pages can be read side by side. */
 const FAQ = [
-  { answer: "Add items to your basket and check out.", question: "How do I place an order?" },
   {
-    answer: "Orders can be changed until they enter fulfilment.",
+    answer:
+      "Browse our products, add items to your cart, and proceed to checkout. You'll need to provide shipping and payment information to complete your purchase.",
+    question: "How do I place an order?",
+  },
+  {
+    answer:
+      "Yes, you can modify or cancel your order before it's shipped. Once your order is processed, you can't make changes.",
     question: "Can I modify or cancel my order?",
   },
   {
-    answer: "All major cards, and bank transfer for teams.",
+    answer: "We accept all major credit cards, including Visa, Mastercard, and American Express.",
     question: "What payment methods do you accept?",
   },
-] as const;
+  {
+    answer:
+      "Shipping costs vary based on your location and the size of your order. We offer free shipping for orders over $50.",
+    question: "How much does shipping cost?",
+  },
+  {
+    answer:
+      "Yes, we ship to most countries. Please check our shipping rates and policies for more information.",
+    question: "Do you ship internationally?",
+  },
+  {
+    answer:
+      "If you're not satisfied with your purchase, you can request a refund within 30 days of purchase. Please contact our customer support team for assistance.",
+    question: "How do I request a refund?",
+  },
+];
+
+/* Its own set for the multiple-expanded example, with the product name swapped for ours. */
+const DOCS = [
+  {
+    answer:
+      "Learn the basics of Buttercream and how to integrate it into your React project. This section covers installation, setup, and your first component.",
+    question: "Getting Started",
+  },
+  {
+    answer:
+      "Understand the fundamental concepts behind Buttercream, including the compound component pattern, styling with Tailwind CSS, and accessibility features.",
+    question: "Core Concepts",
+  },
+  {
+    answer:
+      "Explore advanced features like custom variants, theme customization, and integration with other libraries in your React ecosystem.",
+    question: "Advanced Usage",
+  },
+];
 
 const ANIMALS = ["Aardvark", "Cat", "Dog", "Kangaroo", "Panda", "Snake"];
 
@@ -44,6 +85,41 @@ const PETS = [
   { disabled: true, name: "Kangaroo" },
 ];
 const PET_NAMES = PETS.map((pet) => pet.name);
+
+/*
+ * One trigger per tone, the way the reference shows them side by side. The reference gives its
+ * triggers matching button variants; ours has no success or warning variant, so the tone reads
+ * from the dialog's own copy and the trigger falls back to the nearest variant we do have.
+ */
+const ALERT_TONES: {
+  confirm: string;
+  description: string;
+  label: string;
+  title: string;
+  variant: ButtonVariant;
+}[] = [
+  {
+    confirm: "Publish",
+    description: "The project becomes visible to everyone with the link.",
+    label: "Accent",
+    title: "Publish this project?",
+    variant: "primary",
+  },
+  {
+    confirm: "Approve",
+    description: "The change is applied as soon as you approve it.",
+    label: "Success",
+    title: "Approve this change?",
+    variant: "secondary",
+  },
+  {
+    confirm: "Continue",
+    description: "Your edits have not been saved.",
+    label: "Warning",
+    title: "Leave without saving?",
+    variant: "secondary",
+  },
+];
 
 export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
   const icon = createPreviewIconElements(icons);
@@ -68,7 +144,10 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
         <Accordion className="preview-block" variant="surface">
           {FAQ.map((entry) => (
             <Accordion.Item key={entry.question} value={entry.question}>
-              <Accordion.Trigger>{entry.question}</Accordion.Trigger>
+              <Accordion.Trigger>
+                {icon.more}
+                {entry.question}
+              </Accordion.Trigger>
               <Accordion.Panel>{entry.answer}</Accordion.Panel>
             </Accordion.Item>
           ))}
@@ -77,8 +156,8 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
       </section>
       <section className="specimen specimen--stack">
         {/* `multiple` lets more than one panel stay open at a time. */}
-        <Accordion className="preview-block" defaultValue={[FAQ[0].question]} multiple>
-          {FAQ.map((entry) => (
+        <Accordion className="preview-block" defaultValue={["Getting Started"]} multiple>
+          {DOCS.map((entry) => (
             <Accordion.Item key={entry.question} value={entry.question}>
               <Accordion.Trigger>{entry.question}</Accordion.Trigger>
               <Accordion.Panel>{entry.answer}</Accordion.Panel>
@@ -89,14 +168,12 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
       </section>
       <section className="specimen specimen--stack">
         <Accordion className="preview-block">
-          <Accordion.Item value="open">
-            <Accordion.Trigger>Available section</Accordion.Trigger>
-            <Accordion.Panel>This one opens.</Accordion.Panel>
-          </Accordion.Item>
-          <Accordion.Item disabled value="locked">
-            <Accordion.Trigger>Unavailable section</Accordion.Trigger>
-            <Accordion.Panel>This one does not.</Accordion.Panel>
-          </Accordion.Item>
+          {["Disabled Item 1", "Disabled Item 2"].map((label) => (
+            <Accordion.Item disabled key={label} value={label}>
+              <Accordion.Trigger>{label}</Accordion.Trigger>
+              <Accordion.Panel>Content</Accordion.Panel>
+            </Accordion.Item>
+          ))}
         </Accordion>
         <div className="specimen__label">Disabled</div>
       </section>
@@ -141,53 +218,93 @@ export function BreadcrumbsPreview(): ReactElement {
         <Breadcrumbs separator={<span className="breadcrumbs__separator">/</span>}>
           <Breadcrumbs.Item href="#home">Home</Breadcrumbs.Item>
           <Breadcrumbs.Item href="#products">Products</Breadcrumbs.Item>
+          <Breadcrumbs.Item href="#electronics">Electronics</Breadcrumbs.Item>
           <Breadcrumbs.Item current href="#laptop">
             Laptop
           </Breadcrumbs.Item>
         </Breadcrumbs>
         <div className="specimen__label">Custom separator</div>
       </section>
+      <section className="specimen">
+        <Breadcrumbs>
+          <Breadcrumbs.Item disabled>Home</Breadcrumbs.Item>
+          <Breadcrumbs.Item disabled>Products</Breadcrumbs.Item>
+          <Breadcrumbs.Item disabled>Electronics</Breadcrumbs.Item>
+          <Breadcrumbs.Item disabled>Laptop</Breadcrumbs.Item>
+        </Breadcrumbs>
+        <div className="specimen__label">Disabled</div>
+      </section>
+      <section className="specimen">
+        {/* The trail takes a class like any other element; here it just opens the gaps up. */}
+        <Breadcrumbs className="breadcrumbs-roomy">
+          <Breadcrumbs.Item href="#home">Home</Breadcrumbs.Item>
+          <Breadcrumbs.Item current>Current</Breadcrumbs.Item>
+        </Breadcrumbs>
+        <div className="specimen__label">Styled</div>
+      </section>
     </div>
   );
 }
 
-export function PaginationPreview(): ReactElement {
+export function PaginationPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
+  const icon = createPreviewIconElements(icons);
+  /* The reference leads each worded arrow with a chevron; the numbers stay bare. */
+  const previous = (
+    <Pagination.Link disabled nav>
+      <span aria-hidden className="pagination__chevron pagination__chevron--previous" />
+      Previous
+    </Pagination.Link>
+  );
+  const next = (
+    <Pagination.Link nav>
+      Next
+      <span aria-hidden className="pagination__chevron pagination__chevron--next" />
+    </Pagination.Link>
+  );
   const pages = (
     <>
-      <Pagination.Link nav>Previous</Pagination.Link>
+      {previous}
       <Pagination.Link>1</Pagination.Link>
       <Pagination.Link current>2</Pagination.Link>
       <Pagination.Link>3</Pagination.Link>
-      <Pagination.Link nav>Next</Pagination.Link>
+      {next}
     </>
   );
 
   return (
     <div className="specimens">
       <section className="specimen specimen--stack">
-        <Pagination summary="1 to 5 of 50 invoices">{pages}</Pagination>
+        <Pagination>{pages}</Pagination>
         <div className="specimen__label">Default</div>
       </section>
       <section className="specimen specimen--stack">
-        <Pagination size="sm">{pages}</Pagination>
-        <Pagination>{pages}</Pagination>
-        <Pagination size="lg">{pages}</Pagination>
+        {/* Labelled per row, since the three sizes are otherwise hard to tell apart. */}
+        <div className="pagination-sizes">
+          <span className="pagination-sizes__label">Sm</span>
+          <Pagination size="sm">{pages}</Pagination>
+          <span className="pagination-sizes__label">Md</span>
+          <Pagination>{pages}</Pagination>
+          <span className="pagination-sizes__label">Lg</span>
+          <Pagination size="lg">{pages}</Pagination>
+        </div>
         <div className="specimen__label">Sizes</div>
       </section>
       <section className="specimen specimen--stack">
         <Pagination>
-          <Pagination.Link nav>Previous</Pagination.Link>
+          {previous}
           <Pagination.Link>1</Pagination.Link>
           <Pagination.Link current>2</Pagination.Link>
           <Pagination.Ellipsis />
-          <Pagination.Link>10</Pagination.Link>
-          <Pagination.Link nav>Next</Pagination.Link>
+          <Pagination.Link>12</Pagination.Link>
+          {next}
         </Pagination>
         <div className="specimen__label">With ellipsis</div>
       </section>
       <section className="specimen specimen--stack">
-        <Pagination>
-          <Pagination.Link nav>Previous</Pagination.Link>
+        <Pagination summary="1 to 5 of 50 invoices">
+          <Pagination.Link disabled nav>
+            Prev
+          </Pagination.Link>
           <Pagination.Link nav>Next</Pagination.Link>
         </Pagination>
         <div className="specimen__label">Previous and next only</div>
@@ -195,11 +312,31 @@ export function PaginationPreview(): ReactElement {
       <section className="specimen specimen--stack">
         <Pagination>
           <Pagination.Link disabled nav>
+            {icon.close}
+            Back
+          </Pagination.Link>
+          <Pagination.Link>1</Pagination.Link>
+          <Pagination.Link current>2</Pagination.Link>
+          <Pagination.Link>3</Pagination.Link>
+          <Pagination.Link nav>
+            Forward
+            {icon.add}
+          </Pagination.Link>
+        </Pagination>
+        <div className="specimen__label">Custom icons</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Pagination>
+          <Pagination.Link disabled nav>
+            <span aria-hidden className="pagination__chevron pagination__chevron--previous" />
             Previous
           </Pagination.Link>
-          <Pagination.Link current>1</Pagination.Link>
+          <Pagination.Link disabled>1</Pagination.Link>
+          <Pagination.Link disabled>2</Pagination.Link>
+          <Pagination.Link disabled>3</Pagination.Link>
           <Pagination.Link disabled nav>
             Next
+            <span aria-hidden className="pagination__chevron pagination__chevron--next" />
           </Pagination.Link>
         </Pagination>
         <div className="specimen__label">Disabled</div>
@@ -323,21 +460,42 @@ export function AlertDialogPreview(): ReactElement {
         <div className="specimen__label">Danger confirm</div>
       </section>
       <section className="specimen">
+        {ALERT_TONES.map((tone) => (
+          <AlertDialog key={tone.label}>
+            <AlertDialog.Trigger render={<Button variant={tone.variant}>{tone.label}</Button>} />
+            <AlertDialog.Content
+              container={surface}
+              actions={
+                <>
+                  <AlertDialog.Close render={<Button variant="outline">Cancel</Button>} />
+                  <AlertDialog.Close
+                    render={<Button variant={tone.variant}>{tone.confirm}</Button>}
+                  />
+                </>
+              }
+              description={tone.description}
+              title={tone.title}
+            />
+          </AlertDialog>
+        ))}
+        <div className="specimen__label">Status tones</div>
+      </section>
+      <section className="specimen">
         <AlertDialog>
-          <AlertDialog.Trigger render={<Button variant="secondary">Leave page</Button>} />
+          <AlertDialog.Trigger render={<Button variant="secondary">Center placement</Button>} />
           <AlertDialog.Content
             container={surface}
             actions={
               <>
-                <AlertDialog.Close render={<Button variant="outline">Stay</Button>} />
-                <AlertDialog.Close render={<Button>Discard</Button>} />
+                <AlertDialog.Close render={<Button variant="outline">Cancel</Button>} />
+                <AlertDialog.Close render={<Button>Confirm</Button>} />
               </>
             }
-            description="Your edits have not been saved."
-            title="Discard unsaved changes?"
+            description="The dialog sits in the middle of the viewport whatever opened it."
+            title="Centered dialog"
           />
         </AlertDialog>
-        <div className="specimen__label">Status tones</div>
+        <div className="specimen__label">Placement</div>
       </section>
     </div>
   );
@@ -452,23 +610,29 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
   );
 }
 
+/*
+ * The reference's third specimen puts the message under a TagGroup, which has no Base UI
+ * primitive and is out of scope; the anatomy example covers the same pairing with a field.
+ */
 export function ErrorMessagePreview(): ReactElement {
   return (
     <div className="specimens">
       <section className="specimen specimen--stack">
-        <ErrorMessage>Please select at least one category.</ErrorMessage>
+        <Field name="tags-with-error">
+          <Field.Label>Label</Field.Label>
+          <div className="error-message-tags">
+            <Chip>Tag A</Chip>
+            <Chip>Tag B</Chip>
+          </div>
+          <Field.Description>Helper description</Field.Description>
+          <ErrorMessage>Example error</ErrorMessage>
+        </Field>
         <div className="specimen__label">Anatomy</div>
       </section>
       <section className="specimen specimen--stack">
-        {/*
-         * The standalone message, for an error that belongs to the form rather than to one
-         * control — Field.Error is what ties a message to a single input.
-         */}
-        <Field name="email-with-error">
-          <Field.Label>Email</Field.Label>
-          <ErrorMessage>That address is already in use.</ErrorMessage>
-        </Field>
-        <div className="specimen__label">Beside a field</div>
+        {/* The message takes a class like anything else, so callers can restyle it. */}
+        <ErrorMessage className="error-message-loud">Custom styled error message</ErrorMessage>
+        <div className="specimen__label">Custom classes</div>
       </section>
     </div>
   );

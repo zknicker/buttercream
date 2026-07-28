@@ -334,6 +334,37 @@
   height: 12rem;
 }
 
+/* Stands in for the reference's own restyled trail: proof the trail takes a class. */
+.breadcrumbs-roomy {
+  gap: 0.5rem;
+}
+
+/* Size specimens read as one block, so each row gets a label in the margin. */
+.pagination-sizes {
+  display: grid;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  grid-template-columns: auto 1fr;
+}
+
+.pagination-sizes__label {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+/* Stands in for the reference's TagGroup, which has no Base UI primitive. */
+.error-message-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+/* The reference's own restyled message: larger and bolder, colour left alone. */
+.error-message-loud {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
 @container (max-width: 800px) {
   .specimens,
   .guide-grid {
