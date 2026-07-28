@@ -8,6 +8,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import SidebarRight01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarRight01Icon";
 import { useMemo, useState } from "react";
+import type { ShellTheme } from "../shell-theme.ts";
 import { Button, classes, Segmented } from "../ui/index.ts";
 import { CodeDialog } from "./code-dialog.tsx";
 import { ImportDialog } from "./import-dialog.tsx";
@@ -44,6 +45,8 @@ interface ThemeEditorPanelProps {
   open: boolean;
   saveState: SaveState;
   showSaveState: boolean;
+  /** Which theme the shell is painting; the Variables tab inspects that one. */
+  theme: ShellTheme;
 }
 
 export function ThemeEditorPanel({
@@ -55,6 +58,7 @@ export function ThemeEditorPanel({
   open,
   saveState,
   showSaveState,
+  theme,
 }: ThemeEditorPanelProps) {
   const [tab, setTab] = useState<Tab>("Style");
 
@@ -95,7 +99,7 @@ export function ThemeEditorPanel({
           />
         ) : null}
         {tab === "Variables" ? (
-          <VariablesPanel designSystem={designSystem} onUpdate={onUpdate} />
+          <VariablesPanel designSystem={designSystem} onUpdate={onUpdate} theme={theme} />
         ) : null}
         {/* The Agent tab has no panel yet; the Segmented option is a placeholder. */}
       </div>

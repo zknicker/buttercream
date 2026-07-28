@@ -13,12 +13,16 @@
  * The themed subtree. Theme tokens arrive as inline custom properties on this element
  * (see PreviewSurface), and data-theme selects the design system's light or dark block
  * in @buttercream/styles for everything the inline map does not cover (derived
- * values). It replaces the old iframe document's body, so it owns the canvas, padding,
- * and scrolling the iframe used to.
+ * values). It replaces the old iframe document's body, so it owns the canvas and padding the
+ * iframe used to. Scrolling belongs to the column outside it.
  */
 .preview-surface {
-  height: 100%;
-  overflow: auto;
+  /*
+   * Grows with its content instead of scrolling inside itself. Scrolling here meant the artifact
+   * was clipped by the frame's bottom edge while the page still had room below it, so a page ended
+   * mid-component with a strip of chrome underneath. The column scrolls now; this just gets tall.
+   */
+  min-height: 100%;
   /*
    * Matched to the reference. It runs 20px from the edge of its preview column to the content;
    * ours was 44px once the wrapper's own 12px is counted, which left forty fewer pixels of

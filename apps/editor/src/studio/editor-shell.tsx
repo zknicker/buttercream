@@ -307,14 +307,25 @@ export function EditorShell({
          * area, so anything drawn here would show as a seam around the artifact being
          * previewed. The reference frames its preview the same way — a radius and nothing else.
          */}
-        <div className="h-full w-full overflow-hidden rounded-(--radius-shell-frame)">
-          <PreviewSurface
-            customCss={designSystem.rules.customCss}
-            style={themeVariables}
-            theme={theme}
-          >
-            {renderPreviewSection(section, designSystem.icons)}
-          </PreviewSurface>
+        {/*
+         * The scroll lives here rather than on the preview inside it, and rather than on the column
+         * outside it. Inside, the artifact was clipped by the frame's bottom edge while the page
+         * still had room, so a page ended mid-component with a strip of chrome beneath it. Outside,
+         * the gutter that clears the floating topbar scrolled away with everything else and the
+         * preview slid under the header.
+         *
+         * Between the two, the gutters stay put and the frame grows with its content.
+         */}
+        <div className="h-full overflow-y-auto scrollbar-none">
+          <div className="min-h-full w-full overflow-hidden rounded-(--radius-shell-frame)">
+            <PreviewSurface
+              customCss={designSystem.rules.customCss}
+              style={themeVariables}
+              theme={theme}
+            >
+              {renderPreviewSection(section, designSystem.icons)}
+            </PreviewSurface>
+          </div>
         </div>
       </main>
 
@@ -430,6 +441,7 @@ export function EditorShell({
         open={controlsOpen}
         saveState={saveState}
         showSaveState={Boolean(onSave)}
+        theme={theme}
       />
       <SaveConflictDialog
         onOverwrite={overwriteConflict}

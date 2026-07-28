@@ -9,7 +9,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import Search01Icon from "@hugeicons-pro/core-stroke-rounded/Search01Icon";
 import type { CSSProperties, ReactElement } from "react";
 import { useMemo, useState } from "react";
-import { classes, Segmented } from "../ui/index.ts";
+import type { ShellTheme } from "../shell-theme.ts";
+import { classes } from "../ui/index.ts";
 import { ROW_FLEX, ROW_LABEL } from "./control-row.ts";
 import {
   ColorTokenRow,
@@ -28,9 +29,6 @@ import { type ColorToken, collectColorTokens, colorTokenCategories } from "./var
  * its contents were never captured, so it is deliberately absent rather than invented.
  */
 
-const THEMES = ["Light", "Dark"] as const;
-type ThemeName = (typeof THEMES)[number];
-
 const SHADOW_LEVELS = [
   { label: "None", value: "none" },
   { label: "Subtle", value: "subtle" },
@@ -47,19 +45,26 @@ const SKELETON_STYLES = [
 export function VariablesPanel({
   designSystem,
   onUpdate,
+  theme: themeKey,
 }: {
   designSystem: DesignSystem;
   onUpdate: (mutate: (designSystem: DesignSystem) => void) => void;
+  /*
+   * Which theme this panel inspects, handed down rather than resolved here. The rail used to carry
+   * its own light/dark switch, so it could be showing the dark theme while the preview beside it
+   * rendered light — two controls for one idea, and the quieter of them decided what you edited.
+   * useShellTheme keeps state per caller, so a second call here would have gone deaf to the
+   * header's toggle rather than following it.
+   */
+  theme: ShellTheme;
 }): ReactElement {
   /*
    * Tokens are inspected one theme at a time — unlike the Style tab's brand controls,
    * pinning a neutral or picking a shadow level is a per-theme decision (the defaults
    * already differ: dark ships overlay shadows at "none").
    */
-  const [themeName, setThemeName] = useState<ThemeName>("Light");
   const [query, setQuery] = useState("");
 
-  const themeKey = themeName === "Light" ? "light" : "dark";
   const theme = designSystem.theme[themeKey];
 
   const tokens = useMemo(() => collectColorTokens(theme), [theme]);
@@ -111,23 +116,6 @@ export function VariablesPanel({
 
   return (
     <div>
-      {/*
-       * The theme switch is a row like any other. Full-width it read as a second, louder set of
-       * tabs directly under the real ones — two options stretched across the rail make each one
-       * enormous, which is a lot of emphasis for a scope selector.
-       */}
-      <div className={classes(ROW_FLEX, "mt-3")}>
-        <span className={classes(ROW_LABEL, "min-w-0 flex-1")}>Editing</span>
-        <Segmented
-          className="bg-transparent p-0"
-          compact
-          label="Variables theme"
-          onChange={setThemeName}
-          options={THEMES}
-          value={themeName}
-        />
-      </div>
-
       {/*
        * Search first, because the panel's real job is "find one token among ninety". The category
        * chips it replaces wrapped to three lines at this rail width and could only answer "show me
