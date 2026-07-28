@@ -26,6 +26,7 @@ export function SelectPreview(): ReactElement {
       <section className="specimen">
         <div className="input-demo">
           <Select
+            container={surface}
             description="Select your state of residence"
             label="State"
             placeholder="Select one"
@@ -57,6 +58,7 @@ export function SelectPreview(): ReactElement {
            * exercises the Base UI scroll arrows, group labels, and a disabled item.
            */}
           <Select
+            container={surface}
             label="State"
             onValueChange={(value) => setRegion(value)}
             placeholder="Select one"
