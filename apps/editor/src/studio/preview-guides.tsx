@@ -242,8 +242,8 @@ export function GuidesPreview(): ReactElement {
             <div className="nesting__inner">concentric</div>
           </div>
           <p className="nesting__note">
-            outer <code>{value("--radius")}</code> &rarr; inner subtracts its inset, so the curves
-            stay parallel instead of drifting apart.
+            The outer corner is the inner one plus the padding between them, so the two curves stay
+            parallel instead of drifting apart as the radius moves.
           </p>
         </div>
       </section>
@@ -253,8 +253,9 @@ export function GuidesPreview(): ReactElement {
           <h2 className="guides__title">Charts</h2>
           <p className="guides__lede">
             Five steps of one hue rather than five unrelated colours, so a series reads as one
-            measurement split into parts. The middle step is the accent exactly, so a single-series
-            chart needs no special case.
+            measurement split into parts. The ladder is anchored rather than walked outward from the
+            accent, so the steps stay separable whatever the brand colour is. A single-series chart
+            should use <code>--chart-accent</code>, which is the accent itself.
           </p>
         </header>
         <div className="chart-ramp">
