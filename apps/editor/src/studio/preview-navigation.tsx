@@ -28,7 +28,21 @@ const FAQ = [
   },
 ] as const;
 
-const ANIMALS = ["Axolotl", "Capybara", "Otter", "Pangolin", "Quokka"] as const;
+const ANIMALS = ["Aardvark", "Cat", "Dog", "Kangaroo", "Panda", "Snake"];
+
+const COUNTRIES = [
+  { items: ["United States", "Canada", "Mexico"], value: "North America" },
+  { items: ["United Kingdom", "France", "Germany"], value: "Europe" },
+];
+
+/* Its own shorter list, two of them unselectable. */
+const PETS = [
+  { disabled: false, name: "Dog" },
+  { disabled: true, name: "Cat" },
+  { disabled: false, name: "Bird" },
+  { disabled: true, name: "Kangaroo" },
+];
+const PET_NAMES = PETS.map((pet) => pet.name);
 
 export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
   const icon = createPreviewIconElements(icons);
@@ -323,18 +337,25 @@ export function AlertDialogPreview(): ReactElement {
   );
 }
 
-export function ComboboxPreview(): ReactElement {
+/*
+ * Every list here is rendered from a function child rather than a static array. That is what
+ * makes the field filter: Base UI matches the query against `items` and hands the survivors to
+ * the child, so a static list would keep rendering all of them and quietly do nothing.
+ */
+export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
+  const icon = createPreviewIconElements(icons);
+
   return (
     <div className="specimens">
       <section className="specimen specimen--stack">
         <Field name="animal">
           <Field.Label>Favorite animal</Field.Label>
-          <Combobox items={[...ANIMALS]} placeholder="Search animals…">
-            {ANIMALS.map((animal) => (
+          <Combobox items={ANIMALS} placeholder="Search animals…">
+            {(animal: string) => (
               <Combobox.Item key={animal} value={animal}>
                 {animal}
               </Combobox.Item>
-            ))}
+            )}
           </Combobox>
         </Field>
         <div className="specimen__label">Default</div>
@@ -342,29 +363,78 @@ export function ComboboxPreview(): ReactElement {
       <section className="specimen specimen--stack">
         <Field name="animal-described">
           <Field.Label>Favorite animal</Field.Label>
-          <Combobox items={[...ANIMALS]} placeholder="Search animals…">
-            {ANIMALS.map((animal) => (
+          <Combobox items={ANIMALS} placeholder="Search animals…">
+            {(animal: string) => (
               <Combobox.Item key={animal} value={animal}>
                 {animal}
               </Combobox.Item>
-            ))}
+            )}
           </Combobox>
-          <Field.Description>Start typing to filter the list.</Field.Description>
+          <Field.Description>Search and select your favorite animal</Field.Description>
         </Field>
         <div className="specimen__label">With description</div>
       </section>
       <section className="specimen specimen--stack">
-        <Field name="animal-disabled-options">
-          <Field.Label>Favorite animal</Field.Label>
-          <Combobox items={[...ANIMALS]} placeholder="Search animals…">
-            {ANIMALS.map((animal, index) => (
-              <Combobox.Item disabled={index === 1} key={animal} value={animal}>
-                {animal}
+        <Field name="country">
+          <Field.Label>Country</Field.Label>
+          <Combobox items={COUNTRIES} placeholder="Search countries…">
+            {(group: { items: string[]; value: string }) => (
+              <Combobox.Group items={group.items} key={group.value} label={group.value}>
+                <Combobox.Collection>
+                  {(country: string) => (
+                    <Combobox.Item key={country} value={country}>
+                      {country}
+                    </Combobox.Item>
+                  )}
+                </Combobox.Collection>
+              </Combobox.Group>
+            )}
+          </Combobox>
+        </Field>
+        <div className="specimen__label">Sections</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Field name="pet">
+          <Field.Label>Animal</Field.Label>
+          <Combobox items={PET_NAMES} placeholder="Search animals…">
+            {(name: string) => (
+              <Combobox.Item
+                disabled={PETS.some((pet) => pet.name === name && pet.disabled)}
+                key={name}
+                value={name}
+              >
+                {name}
               </Combobox.Item>
-            ))}
+            )}
           </Combobox>
         </Field>
         <div className="specimen__label">Disabled options</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Field name="animal-custom-icon">
+          <Field.Label>Favorite animal</Field.Label>
+          <Combobox icon={icon.search} items={ANIMALS} placeholder="Search animals…">
+            {(animal: string) => (
+              <Combobox.Item key={animal} value={animal}>
+                {animal}
+              </Combobox.Item>
+            )}
+          </Combobox>
+        </Field>
+        <div className="specimen__label">Custom trigger icon</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Field name="animal-disabled">
+          <Field.Label>Favorite animal</Field.Label>
+          <Combobox disabled items={ANIMALS} placeholder="Search animals…">
+            {(animal: string) => (
+              <Combobox.Item key={animal} value={animal}>
+                {animal}
+              </Combobox.Item>
+            )}
+          </Combobox>
+        </Field>
+        <div className="specimen__label">Disabled</div>
       </section>
     </div>
   );

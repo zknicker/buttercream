@@ -142,7 +142,7 @@ export function renderPreviewSection(
     return <BreadcrumbsPreview />;
   }
   if (section === "Combobox") {
-    return <ComboboxPreview />;
+    return <ComboboxPreview icons={iconSettings} />;
   }
   if (section === "Dropdown") {
     return <DropdownPreview icons={iconSettings} />;
