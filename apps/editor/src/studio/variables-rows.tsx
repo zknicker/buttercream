@@ -12,9 +12,16 @@ import { describeTokenValue, formatTokenDisplay } from "./variables-tokens.ts";
  */
 
 const ROW =
-  "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-raised px-3 text-[13px]";
+  "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
 
 const ROW_LABEL = "truncate font-medium text-fg";
+
+/* The flex twin of ROW, for controls whose trigger is the row rather than something inside it. */
+const ROW_FLEX =
+  "flex min-h-9 w-full items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
+
+/** Matches the Style tab: every value in the rail reads the same regardless of its control. */
+const ROW_VALUE = "shrink-0 font-mono text-[11px] tabular-nums text-muted";
 
 const FOCUS_OUTLINE =
   "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg";
@@ -306,13 +313,13 @@ export function RangeRow({
 }): ReactElement {
   return (
     /*
-     * Same stretched-slider row as the Style tab: the control sits behind the whole row
-     * so the row itself reads as one continuous slider.
+     * Same slider row as the Style tab. This panel had kept a butter fill after the Style tab went
+     * neutral, so the two tabs disagreed about what a slider looks like.
      */
     <Slider
       className={classes(
-        ROW,
-        "cursor-ew-resize overflow-hidden",
+        ROW_FLEX,
+        "relative cursor-ew-resize overflow-hidden hover:bg-fg/5",
         "has-focus-visible:outline-[1.5px] has-focus-visible:-outline-offset-1 has-focus-visible:outline-fg",
       )}
       max={max}
@@ -322,18 +329,26 @@ export function RangeRow({
       step={step}
       value={value}
     >
-      <Slider.Control className="absolute inset-0">
-        <Slider.Track className="h-full w-full">
-          <Slider.Indicator className="h-full bg-butter/25 dark:bg-butter/22" />
+      <Slider.Control className="absolute inset-0 items-center px-[3px]">
+        <Slider.Track className="-mx-[3px] h-full w-[calc(100%+6px)]">
+          <Slider.Indicator className="h-full bg-fg/8 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none" />
+          <Slider.Ticks max={max} min={min} step={step} />
         </Slider.Track>
         <Slider.Thumb
-          className="h-full w-0.5 bg-butter outline-none"
+          className={classes(
+            "h-[62%] w-[3px] rounded-[1px] bg-fg/55 outline-none",
+            "transition-[height,left] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "data-dragging:h-full data-[dragging]:duration-100",
+            "motion-reduce:transition-none",
+          )}
           getAriaLabel={() => label}
           index={0}
         />
       </Slider.Control>
-      <Slider.Label className={classes(ROW_LABEL, "pointer-events-none z-1")}>{label}</Slider.Label>
-      <output className="pointer-events-none z-1 shrink-0 font-mono text-[11px] tabular-nums text-muted">
+      <Slider.Label className={classes(ROW_LABEL, "pointer-events-none z-1 min-w-0 flex-1")}>
+        {label}
+      </Slider.Label>
+      <output className={classes(ROW_VALUE, "pointer-events-none z-1")}>
         {format ? format(value) : value.toFixed(step < 1 ? 2 : 0)}
       </output>
     </Slider>

@@ -5,7 +5,7 @@ import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/i
 
 /** Shared shape for every row in the controls rail: label left, value right. */
 const ROW =
-  "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-raised px-3 text-[13px]";
+  "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
 
 /*
  * The same row, laid out with flex instead of grid, for controls whose trigger IS the row. ROW's
@@ -13,7 +13,7 @@ const ROW =
  * line.
  */
 const ROW_FLEX =
-  "flex min-h-9 w-full items-center gap-2 rounded-(--radius-shell) bg-raised px-3 text-[13px]";
+  "flex min-h-9 w-full items-center gap-2 rounded-(--radius-shell) bg-canvas px-3 text-[13px] ring-1 ring-fg/10";
 
 /** Row labels carry the medium weight; at 400 they read unfinished against the values. */
 const ROW_LABEL = "truncate font-medium text-fg";
@@ -148,10 +148,10 @@ export function RangeControl({
 }) {
   return (
     /*
-     * The row is the slider — a drag anywhere across it moves the value — but the track is a
-     * hairline on the bottom edge rather than a fill behind the label. A half-filled row read as a
-     * different kind of component next to the clean colour and select rows; a rule under the row
-     * says the same thing without changing what the row looks like.
+     * The row is the slider: a drag anywhere across it moves the value, and the fill runs the row's
+     * full height behind the label. A hairline version of this read as tidier in isolation and
+     * worse in place — at three pixels the row stopped showing how full it was, which is the one
+     * thing a density value needs to communicate at a glance.
      */
     <Slider
       className={classes(
@@ -167,21 +167,19 @@ export function RangeControl({
       value={value}
     >
       {/*
-       * The control still covers the whole row, so the hit area is the row even though the track it
-       * draws is four pixels tall. items-end drops the track and its handle onto the bottom edge;
-       * the horizontal padding keeps the handle inside the row at both extremes.
+       * Padded by half the handle's width so it stays wholly inside the row at both extremes, with
+       * the track widened back over that padding so the fill still runs edge to edge.
        */}
-      <Slider.Control className="absolute inset-0 flex items-end px-[3px]">
-        <Slider.Track className="-mx-[3px] h-[3px] w-[calc(100%+6px)] bg-fg/8">
-          <Slider.Indicator className="h-full bg-fg/35 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none" />
+      <Slider.Control className="absolute inset-0 items-center px-[3px]">
+        <Slider.Track className="-mx-[3px] h-full w-[calc(100%+6px)]">
+          <Slider.Indicator className="h-full bg-fg/8 transition-[width] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none" />
           <Slider.Ticks max={max} min={min} step={step} />
         </Slider.Track>
-        {/* Straddles the rule so the handle is findable against a three-pixel track. */}
         <Slider.Thumb
           className={classes(
-            "-mb-[2px] h-[7px] w-[3px] rounded-[1px] bg-fg/70 outline-none",
+            "h-[62%] w-[3px] rounded-[1px] bg-fg/55 outline-none",
             "transition-[height,left] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
-            "data-dragging:-mb-[3px] data-dragging:h-[9px] data-[dragging]:duration-100",
+            "data-dragging:h-full data-[dragging]:duration-100",
             "motion-reduce:transition-none",
           )}
           getAriaLabel={() => label}
