@@ -156,20 +156,25 @@ export function ColorControl({
      */
     <div className={classes(rowClass, "relative", onChange ? "" : "ring-fg/6")}>
       {/*
-       * Sits on the row's top-right corner rather than inside it: out of the flow, so it takes no
-       * width from either line — the formula underneath is how you find out where a colour came
-       * from, and it had been truncating to make room.
+       * Fills the row's top-right corner: flush with both edges, sharing the row's own radius
+       * there and rounding only where it cuts into the row. The row's outline runs around it
+       * rather than past it, which is what makes the tag read as part of this row.
        *
-       * It overhangs by four pixels, not by half its height: the rows sit six apart, so a tag
-       * centred on the edge would clip the row above it.
+       * It sat in the gap above the row before, four pixels clear of everything, which put it
+       * closer to the row above than to the one it labels.
        *
-       * It is filled in the grey the row outlines itself in, so it reads as a piece of the row's
-       * own edge rather than a sticker on top of it. Uppercase mono with tracking, which is the
-       * only form uppercase should take. Butter would have been wrong twice over — the loudest
-       * mark in a row whose point is a colour, and it already means "primary action" in this rail.
+       * Out of the flow either way, so it takes no width from either line — the formula
+       * underneath is how you find out where a colour came from, and it had been truncating to
+       * make room. The right side of a derived row is empty, so the corner is free.
        */}
       {onChange === undefined && description !== undefined ? (
-        <Badge className="absolute -top-1 right-2 h-4 px-1 text-[9px]" variant="line">
+        <Badge
+          className={classes(
+            "absolute top-0 right-0 h-4 rounded-none px-1.5 text-[9px]",
+            "rounded-tr-(--radius-shell) rounded-bl-(--radius-shell-sm)",
+          )}
+          variant="line"
+        >
           Derived
         </Badge>
       ) : null}
