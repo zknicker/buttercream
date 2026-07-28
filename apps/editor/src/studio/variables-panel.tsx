@@ -139,6 +139,17 @@ export function VariablesPanel({
           options={THEMES}
           value={themeName}
         />
+        {/*
+         * Accent, Success, Warning, Danger, and Disabled opacity are also curated controls on
+         * the Style tab. Style writes both themes at once because those are brand decisions;
+         * here they are per-theme tokens like any other, so the same slider or swatch means
+         * something different depending which tab moved it. A badge on five rows among ninety
+         * would be noise, so the scope difference gets said once, where the theme switch lives.
+         */}
+        <p className="mt-1.5 px-1 text-[11px] text-pretty text-muted">
+          Accent, Success, Warning, Danger, and Disabled opacity also live on the Style tab, which
+          sets both themes at once — editing them here only changes the {themeName} theme.
+        </p>
       </div>
 
       <VariablesSection count={tokens.length} title="Colors">
