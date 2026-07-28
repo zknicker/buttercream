@@ -2289,8 +2289,12 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
 
     const parsed = useMemo(() => parseColor(currentValue), [currentValue]);
     const swatchColor = parsed ? rgbToHexStr(parsed.r, parsed.g, parsed.b, parsed.a) : currentValue;
+    /*
+     * Keeps the hash. The source strips it because its popup prints "#" as a separate prefix
+     * beside the input, but on the trigger the bare digits stop reading as a colour.
+     */
     const valueLabel = parsed
-      ? rgbToHexStr(parsed.r, parsed.g, parsed.b, 1).replace(/^#/, "").toUpperCase()
+      ? rgbToHexStr(parsed.r, parsed.g, parsed.b, 1).toUpperCase()
       : currentValue;
 
     return (
@@ -2312,11 +2316,20 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
             style={{ fontVariationSettings: fontWeights.medium }}
           >
             {triggerLabel && triggerLabelPosition === "left" && (
-              <span className="text-[13px] text-muted px-1 select-none">{triggerLabel}</span>
+              /*
+               * Grows to fill, so the swatch and value sit at the far edge of whatever the trigger
+               * is stretched across. Without this the label hugs its text and a full-width trigger
+               * leaves the value stranded mid-row.
+               */
+              <span className="min-w-0 flex-1 truncate text-left text-[13px] font-medium text-fg select-none">
+                {triggerLabel}
+              </span>
             )}
             <ColorTile color={swatchColor} size={20} />
             {triggerShowValue && (
-              <span className="text-[13px] text-fg tabular-nums">{valueLabel}</span>
+              <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">
+                {valueLabel}
+              </span>
             )}
             {triggerLabel && triggerLabelPosition === "right" && (
               <span className="text-[13px] text-muted px-1 select-none">{triggerLabel}</span>

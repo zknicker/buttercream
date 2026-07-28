@@ -7,6 +7,14 @@ import { ColorPickerPopover, classes, DitherBand, Select, Slider } from "../ui/i
 const ROW =
   "relative grid min-h-9 grid-cols-[1fr_auto] items-center gap-2 rounded-(--radius-shell) bg-raised px-3 text-[13px]";
 
+/*
+ * The same row, laid out with flex instead of grid, for controls whose trigger IS the row. ROW's
+ * two columns cannot hold a label, a value and a chevron without wrapping the third onto its own
+ * line.
+ */
+const ROW_FLEX =
+  "flex min-h-9 w-full items-center gap-2 rounded-(--radius-shell) bg-raised px-3 text-[13px]";
+
 /** Row labels carry the medium weight; at 400 they read unfinished against the values. */
 const ROW_LABEL = "truncate font-medium text-fg";
 
@@ -96,29 +104,24 @@ export function ColorControl({
   value: string;
 }) {
   return (
-    <div className={ROW}>
-      <span className={ROW_LABEL}>{label}</span>
-      {/*
-       * The picker writes hex back because that is what the design system document stores; it
-       * still shows the other formats, so a value can be read in OkLCH without the document
-       * gaining a second representation of the same colour.
-       */}
-      <span className="flex shrink-0 items-center gap-2 font-mono text-[11px] text-muted">
-        {value.toUpperCase()}
-        {/*
-         * The swatch alone is the trigger. Reading the value is the row's job and it already does
-         * it in mono, so letting the trigger print its own copy gave the row two hex strings in
-         * two typefaces.
-         */}
-        <ColorPickerPopover
-          defaultFormat="hex"
-          onValueChange={(next) => onChange(next)}
-          triggerClassName="h-auto rounded-full p-0.5 ring-0 hover:bg-fg/10"
-          triggerShowValue={false}
-          value={normalizeHex(value)}
-        />
-      </span>
-    </div>
+    /*
+     * The row is the trigger. Previously only the swatch opened the picker, which made a 16px
+     * target out of a 276px row and left the rest of the line inert for no reason the user could
+     * see.
+     *
+     * The picker writes hex back because that is what the design system document stores; it still
+     * shows the other formats, so a value can be read in OkLCH — the space the neutral ladder is
+     * built in — without the document gaining a second representation of the same colour.
+     */
+    <ColorPickerPopover
+      defaultFormat="hex"
+      onValueChange={(next) => onChange(next)}
+      triggerClassName={classes(ROW_FLEX, "hover:bg-fg/5")}
+      triggerLabel={label}
+      triggerLabelPosition="left"
+      triggerShowValue
+      value={normalizeHex(value)}
+    />
   );
 }
 
@@ -280,26 +283,25 @@ export function SelectControl<Value extends string>({
 }) {
   return (
     /*
-     * Not a <label>: it would wrap a custom trigger, and a label swallows the click that should
-     * open the popup. The trigger carries the accessible name instead.
+     * The row is the select, not a label beside one. Anywhere in the row opens it, which is both a
+     * bigger target and an honest signal: this line does one thing.
      */
-    <div className={ROW}>
-      <span className={ROW_LABEL}>{label}</span>
-      <Select
-        aria-label={label}
-        disabled={disabled}
-        items={options as { label: string; value: Value }[]}
-        name={controlName(label)}
-        onValueChange={(next) => onChange(next as Value)}
-        value={value}
-      >
-        {options.map((option) => (
-          <Select.Item key={option.value} value={option.value}>
-            {option.label}
-          </Select.Item>
-        ))}
-      </Select>
-    </div>
+    <Select
+      aria-label={label}
+      className={classes(ROW_FLEX, "text-left hover:bg-fg/5")}
+      disabled={disabled}
+      items={options as { label: string; value: Value }[]}
+      label={label}
+      name={controlName(label)}
+      onValueChange={(next) => onChange(next as Value)}
+      value={value}
+    >
+      {options.map((option) => (
+        <Select.Item key={option.value} value={option.value}>
+          {option.label}
+        </Select.Item>
+      ))}
+    </Select>
   );
 }
 

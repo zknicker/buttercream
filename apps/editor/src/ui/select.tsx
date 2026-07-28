@@ -25,6 +25,12 @@ export interface SelectProps<Value> extends Omit<BaseSelect.Root.Props<Value>, "
   "aria-label"?: string;
   children: ReactNode;
   className?: string;
+  /**
+   * Rendered at the start of the trigger, so the whole row is the control rather than a label
+   * sitting beside one. A row you can only open by hitting the value is a smaller target than it
+   * looks, and it reads as two things when it is one.
+   */
+  label?: ReactNode;
   /** Rendered inside the trigger when nothing is selected. */
   placeholder?: string;
 }
@@ -33,6 +39,7 @@ function SelectRoot<Value>({
   "aria-label": ariaLabel,
   children,
   className,
+  label,
   placeholder,
   ...props
 }: SelectProps<Value>): ReactElement {
@@ -41,8 +48,8 @@ function SelectRoot<Value>({
       <BaseSelect.Trigger
         aria-label={ariaLabel}
         className={classes(
-          "flex h-7 min-w-0 cursor-pointer items-center justify-end gap-1 rounded-(--radius-shell-sm) pr-1 pl-2",
-          "font-mono text-xs text-muted outline-none",
+          "flex min-w-0 cursor-pointer items-center gap-2 outline-none",
+          label === undefined ? "h-7 justify-end rounded-(--radius-shell-sm) pr-1 pl-2" : "",
           "hover:bg-fg/5 data-popup-open:bg-fg/5",
           "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
           "data-disabled:cursor-default data-disabled:opacity-60 data-disabled:hover:bg-transparent",
@@ -50,8 +57,14 @@ function SelectRoot<Value>({
         )}
         data-slot="select-trigger"
       >
-        <BaseSelect.Value className="truncate" placeholder={placeholder} />
-        <BaseSelect.Icon className="shrink-0">
+        {label === undefined ? null : (
+          <span className="min-w-0 flex-1 truncate text-left font-medium text-fg">{label}</span>
+        )}
+        <BaseSelect.Value
+          className="truncate font-mono text-xs text-muted"
+          placeholder={placeholder}
+        />
+        <BaseSelect.Icon className="shrink-0 text-muted">
           <HugeiconsIcon aria-hidden="true" icon={ArrowDown01Icon} size={14} strokeWidth={2} />
         </BaseSelect.Icon>
       </BaseSelect.Trigger>
