@@ -1714,6 +1714,48 @@
   width: 100%;
 }
 
+/* One-line alert, so the mark and the action centre against the text rather than top-align. */
+.overview__alert {
+  align-items: center;
+}
+
+/*
+ * The alert's leading mark. The icon set carries nine semantic names and none of them is an
+ * information glyph, so this is drawn rather than borrowed from an unrelated one.
+ */
+.overview__info {
+  position: relative;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  border: 1.25px solid currentcolor;
+  border-radius: 999px;
+}
+
+.overview__info::before,
+.overview__info::after {
+  position: absolute;
+  left: 50%;
+  background: currentcolor;
+  content: "";
+  translate: -50% 0;
+}
+
+.overview__info::before {
+  top: 3px;
+  width: 1.5px;
+  height: 1.5px;
+  border-radius: 999px;
+}
+
+.overview__info::after {
+  top: 6px;
+  width: 1.5px;
+  height: 5px;
+  border-radius: 1px;
+}
+
 /* Select renders its own label, so the required marker has to travel with the text. */
 .overview__required {
   margin-inline-start: 0.125rem;

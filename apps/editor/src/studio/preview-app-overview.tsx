@@ -175,7 +175,7 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
         </div>
 
         <Card className="overview__profile">
-          <Avatar size="lg">
+          <Avatar shape="circle" size="lg">
             <Avatar.Fallback>BC</Avatar.Fallback>
           </Avatar>
           <span className="overview__profile-name">Buttercream</span>
@@ -189,6 +189,8 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
         </Card>
 
         <Alert
+          className="overview__alert"
+          icon={<span aria-hidden className="overview__info" />}
           action={
             <Button size="sm" variant="secondary">
               Upgrade
@@ -242,7 +244,7 @@ export function OverviewAppPreview({ icons }: { icons: DesignSystem["icons"] }):
               <span className="overview__community-name">{community.name}</span>
               <p className="overview__community-blurb">{community.blurb}</p>
               <span className="overview__community-author">
-                <Avatar size="sm">
+                <Avatar shape="circle" size="sm">
                   <Avatar.Fallback>{community.author[0]}</Avatar.Fallback>
                 </Avatar>
                 By {community.author}
