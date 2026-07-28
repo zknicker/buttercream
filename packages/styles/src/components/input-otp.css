@@ -1,0 +1,85 @@
+@layer components {
+  .input-otp {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    font-family: var(--font-sans);
+  }
+
+  /* Holds a run of slots together with the separator that precedes it. */
+  .input-otp__run {
+    display: flex;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .input-otp__group {
+    display: flex;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .input-otp__slot {
+    width: calc(2.5rem * var(--spacing-scale));
+    height: calc(2.25rem * var(--spacing-scale));
+    border: var(--field-border-width) solid var(--field-border);
+    border-radius: var(--field-radius);
+    outline: none;
+    background: var(--field-background);
+    color: var(--field-foreground);
+    font: inherit;
+    font-size: calc(1.125rem * var(--font-size-scale));
+    letter-spacing: calc(var(--letter-spacing) - 0.017em);
+    text-align: center;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .input-otp__slot:hover:not([data-disabled], :disabled) {
+    border-color: var(--field-border-hover);
+    background: var(--field-background-hover);
+  }
+
+  /*
+   * The focused slot lifts above its neighbours so the focus ring is not clipped by the slot
+   * that comes after it.
+   */
+  .input-otp__slot:focus {
+    z-index: 10;
+    border-color: var(--field-border-focus);
+    background: var(--field-focus);
+    outline: 2px solid var(--focus);
+    outline-offset: -1px;
+  }
+
+  .input-otp__slot:not(:placeholder-shown) {
+    background: var(--field-focus);
+  }
+
+  .input-otp__slot[data-disabled],
+  .input-otp__slot:disabled {
+    cursor: not-allowed;
+    opacity: var(--disabled-opacity);
+  }
+
+  .input-otp[data-invalid] .input-otp__slot {
+    border-color: var(--danger);
+    background: var(--field-focus);
+  }
+
+  /* A dash between runs, sized so it reads as punctuation rather than another slot. */
+  .input-otp__separator {
+    width: calc(0.375rem * var(--spacing-scale));
+    height: 2px;
+    border-radius: var(--radius-xs);
+    background: var(--separator);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input-otp__slot {
+    transition: none;
+  }
+}
