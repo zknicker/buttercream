@@ -19,7 +19,12 @@
 .preview-surface {
   height: 100%;
   overflow: auto;
-  padding: 32px;
+  /*
+   * Matched to the reference. It runs 20px from the edge of its preview column to the content;
+   * ours was 44px once the wrapper's own 12px is counted, which left forty fewer pixels of
+   * usable width and pushed the densest pages down a column for no reason anyone would want.
+   */
+  padding: 12px;
   background: var(--background);
   color: var(--foreground);
   /*
@@ -1681,12 +1686,10 @@
  * distinction the page exists to make.
  */
 /*
- * The reference pins these columns at 16/22.5/21.5rem, which needs 1023px and exactly fills its
- * own content box — a pane a pixel narrower drops it to one column. Ours has a wider preview
- * column but spends more of it on padding, so the same fixed widths would not fit.
- *
- * The columns keep those widths as their ceiling and compress toward a floor instead, so three
- * columns survive down to about 800px rather than falling off a cliff.
+ * The reference's own column widths, which need 1023px and exactly fill its content box — a
+ * pane one pixel narrower drops it to a single column there. Ours now has the same width to
+ * work with, so the widths are the ceiling; they compress toward a floor rather than falling
+ * off that cliff.
  */
 .overview {
   display: grid;
