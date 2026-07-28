@@ -1,5 +1,6 @@
 import type { DesignSystem } from "@buttercream/theme-core";
 import type { CSSProperties, ReactElement } from "react";
+import { DashboardAppPreview } from "./preview-app-dashboard.tsx";
 import { AvatarPreview } from "./preview-avatar.tsx";
 import { ButtonPreview } from "./preview-button.tsx";
 import { CardPreview } from "./preview-card.tsx";
@@ -71,6 +72,7 @@ export type PreviewSection =
   | "Button"
   | "Button Group"
   | "Card"
+  | "App: Dashboard"
   | "Charts"
   | "Checkbox"
   | "Checkbox Group"
@@ -132,6 +134,9 @@ export function renderPreviewSection(
   }
   if (section === "Popover") {
     return <PopoverPreview />;
+  }
+  if (section === "App: Dashboard") {
+    return <DashboardAppPreview icons={iconSettings} />;
   }
   if (section === "Charts") {
     return <ChartsPreview />;
