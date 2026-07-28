@@ -82,7 +82,13 @@ export function ColorControl({
 }) {
   const [draft, setDraft] = useState<string | null>(null);
   const twoLine = description !== undefined;
-  const rowClass = classes(ROW_FLEX, twoLine && "py-1.5");
+  /*
+   * No extra vertical padding on the two-line row. The picker's trigger carries a fixed height, so
+   * it ignored the padding and sat at thirty-six while the read-only rows grew to forty-four —
+   * the same component rendering two row heights depending on which branch a value took. Two lines
+   * of sixteen fit the thirty-six the row already reserves.
+   */
+  const rowClass = ROW_FLEX;
 
   const commit = (next: string) => {
     const trimmed = next.trim();
