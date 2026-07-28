@@ -1,7 +1,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import ArrowDown01Icon from "@hugeicons-pro/core-stroke-rounded/ArrowDown01Icon";
 import type { ReactNode } from "react";
-import { ColorPickerPopover, classes, Slider } from "../ui/index.ts";
+import { ColorPickerPopover, classes, DitherBand, Slider } from "../ui/index.ts";
 
 /** Shared shape for every row in the controls rail: label left, value right. */
 const ROW =
@@ -12,7 +12,17 @@ const ROW_LABEL = "truncate font-medium text-fg";
 
 export function ControlSection({ children, title }: { children: ReactNode; title: string }) {
   return (
-    <section className="mt-7 flex flex-col gap-1">
+    <section className="mt-5 flex flex-col gap-1">
+      {/*
+       * The brand's divider, doing the job a hairline was doing. It is the one place the rail
+       * carries the marketing page's texture, and it earns it by being structural rather than
+       * decorative: the stipple dissolves downward, so it reads as the end of what came before
+       * rather than a lid on what follows.
+       *
+       * Butter at a tenth of the band's height is an accent, not a stripe — the chrome still has
+       * to sit behind whatever theme the preview is wearing.
+       */}
+      <DitherBand aria-hidden className="mb-2 text-butter/60" height={6} pixel={2} />
       {/*
        * Sentence-case sans, not the brand's uppercase mono. Section headers in a dense
        * control rail should recede behind the values they label; the mono eyebrow is an
@@ -71,13 +81,21 @@ export function ColorControl({
        * still shows the other formats, so a value can be read in OkLCH without the document
        * gaining a second representation of the same colour.
        */}
-      <ColorPickerPopover
-        defaultFormat="hex"
-        onValueChange={(next) => onChange(next)}
-        triggerClassName="shrink-0 font-mono text-[11px] text-muted"
-        triggerShowValue
-        value={normalizeHex(value)}
-      />
+      <span className="flex shrink-0 items-center gap-2 font-mono text-[11px] text-muted">
+        {value.toUpperCase()}
+        {/*
+         * The swatch alone is the trigger. Reading the value is the row's job and it already does
+         * it in mono, so letting the trigger print its own copy gave the row two hex strings in
+         * two typefaces.
+         */}
+        <ColorPickerPopover
+          defaultFormat="hex"
+          onValueChange={(next) => onChange(next)}
+          triggerClassName="h-auto rounded-full p-0.5 ring-0 hover:bg-fg/10"
+          triggerShowValue={false}
+          value={normalizeHex(value)}
+        />
+      </span>
     </div>
   );
 }

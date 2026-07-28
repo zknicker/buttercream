@@ -31,8 +31,13 @@ export function Segmented<Value extends string>({
           className={classes(
             "h-7 flex-1 rounded-[calc(var(--radius-shell)-0.125rem)] px-2.5 text-sm whitespace-nowrap",
             "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
+            /*
+             * The selected pill is a surface, not a fill. Butter marks it at the edge rather than
+             * across it: at full strength it would read as the primary action in a rail whose
+             * primary action is already butter, and a tab is a place you are, not a thing you do.
+             */
             option === value
-              ? "bg-raised text-fg shadow-sm dark:shadow-none ring-1 ring-fg/8"
+              ? "bg-raised text-fg shadow-sm ring-1 ring-butter/45 dark:shadow-none"
               : "text-muted hover:text-fg",
           )}
           key={option}
