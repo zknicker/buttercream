@@ -2316,8 +2316,16 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
              * silently beat the one the row asked for — the colour rows sat at 4px while every
              * other row in the rail sat at 8px.
              */
+            /*
+             * No height, no padding, no radius, no fill of its own. Everything this trigger is used
+             * for here is a row, and a row owns its own geometry — every time this component has
+             * fixed one of those, the call site could not take it back, because Tailwind resolves
+             * competing utilities by stylesheet order rather than by class order. That is what made
+             * the colour rows 4px when the rest were 8, and 36px tall when their neighbours grew to
+             * 44. What is left is behaviour: a pointer, a focus ring, a hover.
+             */
             className={classes(
-              "flex h-9 cursor-pointer items-center gap-2 px-2 outline-none transition-colors duration-80",
+              "flex cursor-pointer items-center gap-2 outline-none transition-colors duration-80",
               "hover:bg-fg/5 focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)]",
               triggerClassName,
             )}
