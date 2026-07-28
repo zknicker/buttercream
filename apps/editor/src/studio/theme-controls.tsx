@@ -154,7 +154,7 @@ export function ColorControl({
      * legible rather than being hidden or shrunk; they simply stop looking like something you can
      * act on. The swatch keeps full strength, because the colour is the point.
      */
-    <div className={classes(rowClass, "relative", onChange ? "" : "ring-fg/6")}>
+    <div className={classes(rowClass, "relative overflow-hidden", onChange ? "" : "ring-fg/6")}>
       {/*
        * Fills the row's top-right corner: flush with both edges, sharing the row's own radius
        * there and rounding only where it cuts into the row. The row's outline runs around it
@@ -171,20 +171,19 @@ export function ColorControl({
         /*
          * A square-cornered window at the row's corner, holding a skewed tag.
          *
-         * The window is what clips the lean's overhang on the right, so the tag's outer corner
-         * meets the row's edge square instead of being rounded off by it — letting the row do the
-         * clipping handed the tag the row's own radius, which softened the one corner that should
-         * read as a cut.
+         * The window clips the lean's overhang, so the tag's right edge is a vertical cut rather
+         * than a slant. The row clips too, which is what keeps the tag inside the card: without it
+         * the tag's corner sailed past the card's rounded one and hung over the edge.
          *
-         * Skewed rather than clipped, because a clip path cannot round a corner and the join where
-         * the slant meets the tag's underside wants to be round: square, the two edges read as two
-         * shapes meeting; rounded, as one line changing direction. The lean is positive so the tag
-         * narrows toward its base — a cut widening as it fell would undercut the row rather than
-         * nick its top edge.
+         * Forty-five degrees: the cut leaves the card's edge at the same rate it descends, so it
+         * reads as one clean diagonal rather than a shallow taper. It rounds where it meets the
+         * tag's underside — square, the two edges read as two shapes meeting; rounded, as one line
+         * changing direction. The lean is positive so the tag narrows toward its base; a cut
+         * widening as it fell would undercut the row rather than nick its top edge.
          */
         <span className="pointer-events-none absolute top-0 right-0 flex overflow-hidden">
           <Badge
-            className="-mr-2 skew-x-[18deg] pr-3.5 pl-2.5 tracking-[0.09em]"
+            className="-mr-2 skew-x-[45deg] pr-3.5 pl-4 tracking-[0.09em]"
             size="sm"
             /*
              * Inline, because the kit's badge rounds all four corners in its base class and a
@@ -195,7 +194,7 @@ export function ColorControl({
             variant="line"
           >
             {/* Back upright: the notch leans, the word in it does not. */}
-            <span className="inline-block skew-x-[-18deg]">Derived</span>
+            <span className="inline-block skew-x-[-45deg]">Derived</span>
           </Badge>
         </span>
       ) : null}
