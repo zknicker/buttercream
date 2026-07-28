@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactElement, ReactNode } from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useId, useState } from "react";
 
 const PreviewSurfaceContext = createContext<HTMLElement | null>(null);
 
@@ -33,15 +33,29 @@ export function PreviewSurface({
    * specimens need a re-render once it does so their portals pick up the container.
    */
   const [surface, setSurface] = useState<HTMLElement | null>(null);
+  /*
+   * Per-instance, not `.preview-surface`. A class prelude scopes to every surface in the
+   * document, which is invisible while the studio renders one but cross-styles every card
+   * once a page renders many — one system's custom CSS would repaint its neighbours.
+   * Stripped to alphanumerics because this is interpolated into a selector and CSS.escape
+   * does not exist during SSR; React's ids vary only in that part, so they stay unique.
+   */
+  const scopeId = useId().replace(/[^a-zA-Z0-9]/gu, "");
   const scopedCss = customCss.trim();
 
   return (
-    <div className="preview-surface" data-theme={theme} ref={setSurface} style={style}>
+    <div
+      className="preview-surface"
+      data-surface-scope={scopeId}
+      data-theme={theme}
+      ref={setSurface}
+      style={style}
+    >
       {scopedCss ? (
         <style
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: @scope confines the user's own CSS to the surface; the sandbox iframe it replaces offered the same containment.
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: @scope confines the user's own CSS to this surface; the sandbox iframe it replaces offered the same containment.
           dangerouslySetInnerHTML={{
-            __html: `@scope (.preview-surface) {\n${scopedCss}\n}`,
+            __html: `@scope ([data-surface-scope="${scopeId}"]) {\n${scopedCss}\n}`,
           }}
         />
       ) : null}
