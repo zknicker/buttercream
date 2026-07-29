@@ -59,7 +59,25 @@ function SelectRoot<Value, Multiple extends boolean | undefined = false>({
             placeholder={placeholder}
           />
           <BaseSelect.Icon className="select__icon" data-slot="select-icon">
-            {indicator ?? <span aria-hidden="true" className="select__chevron" />}
+            {indicator ?? (
+              <svg
+                aria-hidden="true"
+                className="select__chevron"
+                data-slot="select-chevron"
+                fill="none"
+                role="presentation"
+                viewBox="0 0 16 16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m4 6 4 4 4-4"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.75"
+                />
+              </svg>
+            )}
           </BaseSelect.Icon>
         </BaseSelect.Trigger>
         {description === undefined ? null : (

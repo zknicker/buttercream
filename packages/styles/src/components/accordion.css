@@ -38,6 +38,8 @@
     flex: 1;
     align-items: center;
     justify-content: space-between;
+    /* Space between a leading icon and the title; the indicator spaces itself with margin auto. */
+    gap: calc(0.75rem * var(--spacing-scale));
     padding-inline: calc(1rem * var(--spacing-scale));
     padding-block: calc(1rem * var(--spacing-scale));
     border: none;

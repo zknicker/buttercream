@@ -3,6 +3,7 @@
     display: inline-flex;
     height: calc(1.5rem * var(--spacing-scale));
     align-items: center;
+    gap: calc(0.125rem * var(--spacing-scale));
     padding-inline: calc(0.5rem * var(--spacing-scale));
     border-radius: var(--radius-lg);
     background: var(--default);
@@ -14,5 +15,14 @@
     white-space: nowrap;
     /* Pulls the glyphs of a chord together so ⌘ K reads as one key, not two words. */
     word-spacing: -0.25rem;
+  }
+
+  /* A `keys` symbol, e.g. ⌘ for "command". Browsers underline <abbr> by default. */
+  .kbd__abbr {
+    text-decoration: none;
+  }
+
+  .kbd--light {
+    background: transparent;
   }
 }

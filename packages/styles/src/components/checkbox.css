@@ -34,6 +34,8 @@
   }
 
   .checkbox__control {
+    --bc-checkbox-scale: 1;
+
     display: inline-flex;
     width: calc(1rem * var(--spacing-scale));
     height: calc(1rem * var(--spacing-scale));
@@ -67,30 +69,31 @@
   .checkbox__indicator {
     position: relative;
     display: flex;
-    width: calc(0.75rem * var(--spacing-scale));
-    height: calc(0.75rem * var(--spacing-scale));
+    width: calc(0.75rem * var(--spacing-scale) * var(--bc-checkbox-scale, 1));
+    height: calc(0.75rem * var(--spacing-scale) * var(--bc-checkbox-scale, 1));
     align-items: center;
   }
 
   .checkbox__indicator::after {
     position: absolute;
-    top: 0.0625rem;
-    left: 0.25rem;
-    width: 0.25rem;
-    height: 0.5rem;
+    top: calc(0.0625rem * var(--bc-checkbox-scale, 1));
+    left: calc(0.25rem * var(--bc-checkbox-scale, 1));
+    width: calc(0.25rem * var(--bc-checkbox-scale, 1));
+    height: calc(0.5rem * var(--bc-checkbox-scale, 1));
     border: solid currentColor;
-    border-width: 0 0.125rem 0.125rem 0;
+    border-width: 0 calc(0.125rem * var(--bc-checkbox-scale, 1))
+      calc(0.125rem * var(--bc-checkbox-scale, 1)) 0;
     content: "";
     rotate: 45deg;
   }
 
   .checkbox__control[data-indeterminate] .checkbox__indicator::after,
   .checkbox__native:indeterminate + .checkbox__control .checkbox__indicator::after {
-    top: 0.3125rem;
-    left: 0.125rem;
-    width: 0.5rem;
+    top: calc(0.3125rem * var(--bc-checkbox-scale, 1));
+    left: calc(0.125rem * var(--bc-checkbox-scale, 1));
+    width: calc(0.5rem * var(--bc-checkbox-scale, 1));
     height: 0;
-    border-width: 0 0 0.125rem;
+    border-width: 0 0 calc(0.125rem * var(--bc-checkbox-scale, 1));
     rotate: 0deg;
   }
 
@@ -130,11 +133,15 @@
   }
 
   .checkbox--sm .checkbox__control {
+    --bc-checkbox-scale: 0.875;
+
     width: calc(0.875rem * var(--spacing-scale));
     height: calc(0.875rem * var(--spacing-scale));
   }
 
   .checkbox--lg .checkbox__control {
+    --bc-checkbox-scale: 1.25;
+
     width: calc(1.25rem * var(--spacing-scale));
     height: calc(1.25rem * var(--spacing-scale));
   }

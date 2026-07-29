@@ -75,17 +75,21 @@
     justify-content: center;
   }
 
-  .select__chevron,
+  .select__chevron {
+    width: calc(0.75rem * var(--spacing-scale));
+    height: calc(0.75rem * var(--spacing-scale));
+  }
+
+  .select__trigger[data-popup-open] .select__chevron {
+    rotate: 180deg;
+  }
+
   .select__scroll-chevron {
     width: 0.5rem;
     height: 0.5rem;
     border-right: 1.5px solid currentColor;
     border-bottom: 1.5px solid currentColor;
     transform: translateY(-0.125rem) rotate(45deg);
-  }
-
-  .select__trigger[data-popup-open] .select__chevron {
-    transform: translateY(0.125rem) rotate(225deg);
   }
 
   .select__description {

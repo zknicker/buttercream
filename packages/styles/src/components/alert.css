@@ -26,8 +26,9 @@
 
   .alert__indicator svg {
     /* content-box so the indicator's padding is not eaten by the icon's own box. */
-    width: calc(1rem * var(--spacing-scale));
-    height: calc(1rem * var(--spacing-scale));
+    /* 1.25rem: the indicator anchors a two-line block, so it reads a step larger than inline icons. */
+    width: calc(1.25rem * var(--spacing-scale));
+    height: calc(1.25rem * var(--spacing-scale));
     box-sizing: content-box;
     flex-shrink: 0;
   }

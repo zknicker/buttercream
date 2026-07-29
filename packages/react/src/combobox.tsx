@@ -87,7 +87,23 @@ function ComboboxRoot<Value, Item = Value>({
             data-slot="combobox-trigger"
           >
             {icon ?? (
-              <BaseCombobox.Icon className="combobox__chevron" data-slot="combobox-chevron" />
+              <BaseCombobox.Icon className="combobox__chevron" data-slot="combobox-chevron">
+                <svg
+                  aria-hidden="true"
+                  fill="none"
+                  role="presentation"
+                  viewBox="0 0 16 16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m4 6 4 4 4-4"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.75"
+                  />
+                </svg>
+              </BaseCombobox.Icon>
             )}
           </BaseCombobox.Trigger>
         </div>

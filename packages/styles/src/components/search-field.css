@@ -1,7 +1,17 @@
 @layer components {
   .search-field {
-    position: relative;
     display: inline-flex;
+  }
+
+  .search-field--full-width {
+    display: flex;
+    width: 100%;
+  }
+
+  .search-field__group {
+    position: relative;
+    display: flex;
+    width: 100%;
     height: calc(2.25rem * var(--spacing-scale));
     align-items: center;
     border: var(--field-border-width) solid var(--field-border);
@@ -17,43 +27,47 @@
       box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
   }
 
-  .search-field:hover:not(:focus-within) {
+  .search-field__group:hover:not(:focus-within) {
     border-color: var(--field-border-hover);
     background: var(--field-background-hover);
   }
 
-  .search-field:focus-within {
+  .search-field__group:focus-within {
     border-color: var(--field-border-focus);
     background: var(--field-focus);
     outline: 2px solid var(--focus);
     outline-offset: -1px;
   }
 
-  .search-field[aria-invalid="true"] {
+  .search-field__group:has(.search-field__input[aria-invalid="true"]) {
     border-color: var(--danger);
     background: var(--field-focus);
   }
 
-  .search-field[aria-invalid="true"]:focus-within {
+  .search-field__group:has(.search-field__input[aria-invalid="true"]):focus-within {
     outline-color: var(--danger);
   }
 
-  .search-field[data-disabled] {
+  .search-field__group:has(.search-field__input:disabled) {
     pointer-events: none;
     opacity: var(--disabled-opacity);
   }
 
-  .search-field--full-width {
-    width: 100%;
-  }
-
   .search-field__icon {
+    display: flex;
     width: calc(1rem * var(--spacing-scale));
     height: calc(1rem * var(--spacing-scale));
     flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
     margin-inline-start: calc(0.75rem * var(--spacing-scale));
     color: var(--field-placeholder);
     pointer-events: none;
+  }
+
+  .search-field__icon svg {
+    width: 100%;
+    height: 100%;
   }
 
   .search-field__input {
@@ -97,14 +111,14 @@
    * Hidden rather than unmounted while the field is empty, so the input does not resize the
    * moment the first character is typed.
    */
-  .search-field[data-empty] .search-field__clear {
+  .search-field__group[data-empty] .search-field__clear {
     pointer-events: none;
     opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .search-field {
+  .search-field__group {
     transition: none;
   }
 }

@@ -1,10 +1,53 @@
 @layer components {
   .autocomplete {
+    /* The field's metrics, so the sizes are stated once and the parts read them. */
+    --bc-autocomplete-height: calc(2.25rem * var(--spacing-scale));
+    --bc-autocomplete-padding-inline: calc(0.75rem * var(--spacing-scale));
+    --bc-autocomplete-font-size: calc(0.875rem * var(--font-size-scale));
+    /* The field's surface, so a variant restates colour in one place rather than per part. */
+    --bc-autocomplete-border: var(--field-border);
+    --bc-autocomplete-border-hover: var(--field-border-hover);
+    --bc-autocomplete-background: var(--field-background);
+    --bc-autocomplete-background-hover: var(--field-background-hover);
+    --bc-autocomplete-shadow: var(--shadow-field);
+    --bc-autocomplete-outline: var(--focus);
+
     display: flex;
     width: min(100%, 16rem);
     flex-direction: column;
     gap: calc(0.25rem * var(--spacing-scale));
     font-family: var(--font-sans);
+  }
+
+  .autocomplete--sm {
+    --bc-autocomplete-height: calc(2rem * var(--spacing-scale));
+    --bc-autocomplete-padding-inline: calc(0.625rem * var(--spacing-scale));
+    --bc-autocomplete-font-size: calc(0.8125rem * var(--font-size-scale));
+  }
+
+  .autocomplete--lg {
+    --bc-autocomplete-height: calc(2.75rem * var(--spacing-scale));
+    --bc-autocomplete-padding-inline: calc(1rem * var(--spacing-scale));
+    --bc-autocomplete-font-size: calc(1rem * var(--font-size-scale));
+  }
+
+  /* Filled rather than outlined, matching .input--secondary. */
+  .autocomplete--secondary {
+    --bc-autocomplete-border: transparent;
+    --bc-autocomplete-border-hover: transparent;
+    --bc-autocomplete-background: var(--default);
+    --bc-autocomplete-background-hover: color-mix(in oklab, var(--default) 92%, var(--foreground));
+    --bc-autocomplete-shadow: none;
+  }
+
+  .autocomplete--invalid {
+    --bc-autocomplete-border: var(--danger);
+    --bc-autocomplete-border-hover: var(--danger);
+    --bc-autocomplete-outline: var(--danger);
+  }
+
+  .autocomplete--full-width {
+    width: 100%;
   }
 
   .autocomplete__label {
@@ -13,42 +56,57 @@
     font-weight: 500;
   }
 
-  .autocomplete__trigger {
+  .autocomplete__control {
+    position: relative;
     display: flex;
     width: 100%;
-    height: calc(2.25rem * var(--spacing-scale));
     align-items: center;
-    justify-content: space-between;
-    gap: calc(0.75rem * var(--spacing-scale));
-    padding-inline: calc(0.75rem * var(--spacing-scale));
-    border: var(--field-border-width) solid var(--field-border);
+  }
+
+  .autocomplete__trigger,
+  .autocomplete__chips {
+    display: flex;
+    width: 100%;
+    min-height: var(--bc-autocomplete-height);
+    align-items: center;
+    padding-inline: var(--bc-autocomplete-padding-inline);
+    border: var(--field-border-width) solid var(--bc-autocomplete-border);
     border-radius: var(--field-radius);
     outline: none;
-    background: var(--field-background);
-    box-shadow: var(--shadow-field);
+    background: var(--bc-autocomplete-background);
+    box-shadow: var(--bc-autocomplete-shadow);
     color: var(--field-foreground);
-    cursor: var(--cursor-interactive);
     font: inherit;
-    font-size: calc(0.875rem * var(--font-size-scale));
+    font-size: var(--bc-autocomplete-font-size);
     text-align: start;
     transition:
       background-color 150ms ease,
       border-color 150ms ease;
   }
 
-  .autocomplete__trigger:hover:not([data-disabled]) {
-    border-color: var(--field-border-hover);
-    background: var(--field-background-hover);
+  .autocomplete__trigger {
+    height: var(--bc-autocomplete-height);
+    justify-content: space-between;
+    gap: calc(0.75rem * var(--spacing-scale));
+    cursor: var(--cursor-interactive);
   }
 
-  .autocomplete__trigger:focus-visible {
+  .autocomplete__trigger:hover:not([data-disabled]),
+  .autocomplete__chips:hover:not(:has(.autocomplete__chips-input:disabled)) {
+    border-color: var(--bc-autocomplete-border-hover);
+    background: var(--bc-autocomplete-background-hover);
+  }
+
+  .autocomplete__trigger:focus-visible,
+  .autocomplete__chips:has(.autocomplete__chips-input:focus-visible) {
     border-color: var(--field-border-focus);
     background: var(--field-focus);
-    outline: 2px solid var(--focus);
+    outline: 2px solid var(--bc-autocomplete-outline);
     outline-offset: -1px;
   }
 
-  .autocomplete__trigger[data-disabled] {
+  .autocomplete__trigger[data-disabled],
+  .autocomplete__chips:has(.autocomplete__chips-input:disabled) {
     opacity: var(--disabled-opacity);
     pointer-events: none;
   }
@@ -77,8 +135,145 @@
     transition: transform 150ms ease;
   }
 
-  .autocomplete__trigger[data-popup-open] .autocomplete__chevron {
+  .autocomplete__trigger[data-popup-open] .autocomplete__chevron,
+  .autocomplete__toggle[data-popup-open] .autocomplete__chevron {
     transform: translateY(0.125rem) rotate(225deg);
+  }
+
+  .autocomplete__spinner {
+    flex: none;
+    color: var(--field-placeholder);
+  }
+
+  .autocomplete__clear,
+  .autocomplete__chip-remove,
+  .autocomplete__toggle {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    outline: none;
+    background: transparent;
+    color: var(--field-placeholder);
+    cursor: var(--cursor-interactive);
+    transition:
+      background-color 100ms ease,
+      color 150ms ease;
+  }
+
+  .autocomplete__clear:focus-visible,
+  .autocomplete__chip-remove:focus-visible,
+  .autocomplete__toggle:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: var(--ring-offset-width);
+  }
+
+  .autocomplete__clear svg,
+  .autocomplete__chip-remove svg {
+    flex: none;
+    pointer-events: none;
+  }
+
+  .autocomplete__clear {
+    width: calc(1.25rem * var(--spacing-scale));
+    height: calc(1.25rem * var(--spacing-scale));
+  }
+
+  .autocomplete__clear:hover {
+    background: var(--default);
+    color: var(--default-foreground);
+  }
+
+  .autocomplete__clear svg {
+    width: calc(0.75rem * var(--spacing-scale));
+    height: calc(0.75rem * var(--spacing-scale));
+  }
+
+  /*
+   * Single select puts the value in a button, which cannot hold another one, so the clear sits
+   * over the trigger instead — in the room the clearable modifier reserves for it. The room is
+   * reserved whether or not there is a value, because the button unmounts when there is not.
+   */
+  .autocomplete__control .autocomplete__clear {
+    position: absolute;
+    inset-inline-end: calc(1.75rem * var(--spacing-scale));
+  }
+
+  .autocomplete__control--clearable .autocomplete__trigger {
+    padding-inline-end: calc(3.25rem * var(--spacing-scale));
+  }
+
+  /* Multiple select types among the chips, so the field wraps instead of holding one line. */
+  .autocomplete__chips {
+    flex-wrap: wrap;
+    padding-block: calc(0.25rem * var(--spacing-scale));
+    gap: calc(0.25rem * var(--spacing-scale));
+    cursor: text;
+  }
+
+  .autocomplete__chip {
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    gap: calc(0.25rem * var(--spacing-scale));
+    padding-inline: calc(0.5rem * var(--spacing-scale)) calc(0.25rem * var(--spacing-scale));
+    padding-block: calc(0.125rem * var(--spacing-scale));
+    border-radius: var(--radius-2xl);
+    outline: none;
+    background: var(--default);
+    color: var(--default-foreground);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+  }
+
+  /* Chips are reached with the arrow keys rather than the tab order, so :focus is the state. */
+  .autocomplete__chip:focus {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+  }
+
+  .autocomplete__chip-remove {
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+    color: inherit;
+  }
+
+  .autocomplete__chip-remove:hover {
+    background: color-mix(in oklab, var(--default) 80%, var(--foreground));
+  }
+
+  .autocomplete__chip-remove svg {
+    width: calc(0.625rem * var(--spacing-scale));
+    height: calc(0.625rem * var(--spacing-scale));
+  }
+
+  .autocomplete__chips-input {
+    min-width: calc(4rem * var(--spacing-scale));
+    height: calc(1.5rem * var(--spacing-scale));
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--bc-autocomplete-font-size);
+  }
+
+  .autocomplete__chips-input::placeholder {
+    color: var(--field-placeholder);
+  }
+
+  /* Once a chip is there the placeholder only repeats what the chips already say. */
+  .autocomplete__chips:has(.autocomplete__chip) .autocomplete__chips-input::placeholder {
+    color: transparent;
+  }
+
+  .autocomplete__toggle {
+    width: calc(1.25rem * var(--spacing-scale));
+    height: calc(1.25rem * var(--spacing-scale));
   }
 
   .autocomplete__description {
@@ -94,6 +289,8 @@
   /* Concentric with the rows it wraps — see dropdown.css for why this is derived. */
   .autocomplete__popup {
     --bc-autocomplete-padding: calc(0.375rem * var(--spacing-scale));
+    --bc-autocomplete-item-height: calc(2.25rem * var(--spacing-scale));
+    --bc-autocomplete-item-font-size: calc(0.875rem * var(--font-size-scale));
     /*
      * Clamped against the row height as well as the 2rem ceiling. A browser silently
      * clamps a radius to half the box, so the row renders tighter than it asks for and a
@@ -102,7 +299,7 @@
      */
     --bc-autocomplete-item-radius: min(
       calc(2rem - var(--bc-autocomplete-padding)),
-      calc(2.25rem * var(--spacing-scale) / 2),
+      calc(var(--bc-autocomplete-item-height) / 2),
       calc(var(--radius) * 2)
     );
 
@@ -116,12 +313,23 @@
     background: var(--overlay);
     box-shadow: var(--shadow-overlay);
     color: var(--overlay-foreground);
-    font-size: calc(0.875rem * var(--font-size-scale));
+    font-size: var(--bc-autocomplete-item-font-size);
     overscroll-behavior: contain;
     transform-origin: var(--transform-origin);
     transition:
       transform 150ms ease,
       opacity 150ms ease;
+  }
+
+  /* The popup is portalled out of the field, so the size travels as a class of its own. */
+  .autocomplete__popup--sm {
+    --bc-autocomplete-item-height: calc(2rem * var(--spacing-scale));
+    --bc-autocomplete-item-font-size: calc(0.8125rem * var(--font-size-scale));
+  }
+
+  .autocomplete__popup--lg {
+    --bc-autocomplete-item-height: calc(2.75rem * var(--spacing-scale));
+    --bc-autocomplete-item-font-size: calc(1rem * var(--font-size-scale));
   }
 
   .autocomplete__popup[data-starting-style] {
@@ -174,7 +382,7 @@
     background: transparent;
     color: inherit;
     font: inherit;
-    font-size: calc(0.875rem * var(--font-size-scale));
+    font-size: var(--bc-autocomplete-item-font-size);
   }
 
   .autocomplete__input::placeholder {
@@ -188,11 +396,28 @@
     overflow-y: auto;
   }
 
+  .autocomplete__group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .autocomplete__group-label {
+    width: 100%;
+    padding-inline: calc(0.5rem * var(--spacing-scale));
+    padding-block-start: calc(0.375rem * var(--spacing-scale));
+    padding-block-end: calc(0.25rem * var(--spacing-scale));
+    color: var(--muted);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: 500;
+    text-align: start;
+  }
+
   .autocomplete__item {
     position: relative;
     display: flex;
     width: 100%;
-    min-height: calc(2.25rem * var(--spacing-scale));
+    min-height: var(--bc-autocomplete-item-height);
     align-items: center;
     gap: calc(0.75rem * var(--spacing-scale));
     padding-inline: calc(0.625rem * var(--spacing-scale));
@@ -240,7 +465,7 @@
     padding-inline: calc(0.625rem * var(--spacing-scale));
     padding-block: calc(0.5rem * var(--spacing-scale));
     color: var(--muted);
-    font-size: calc(0.875rem * var(--font-size-scale));
+    font-size: var(--bc-autocomplete-item-font-size);
   }
 
   .autocomplete__empty:empty {
@@ -250,7 +475,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .autocomplete__chevron,
+  .autocomplete__chips,
+  .autocomplete__clear,
+  .autocomplete__chip-remove,
   .autocomplete__popup,
+  .autocomplete__toggle,
   .autocomplete__trigger {
     transition: none;
   }

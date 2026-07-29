@@ -19,6 +19,29 @@ describe("Alert", () => {
     expect(markup).toContain("Saved");
   });
 
+  test("defaults to a status icon matching each colour", () => {
+    for (const color of ["default", "accent", "success", "warning", "danger"] as const) {
+      const markup = renderToStaticMarkup(<Alert color={color} title="Note" />);
+
+      expect(markup).toContain('data-slot="alert-indicator"');
+      expect(markup).toContain("<svg");
+    }
+  });
+
+  test("icon={null} suppresses the default icon", () => {
+    const markup = renderToStaticMarkup(<Alert icon={null} title="Note" />);
+
+    expect(markup).not.toContain('data-slot="alert-indicator"');
+  });
+
+  test("an explicit icon wins over the default", () => {
+    const markup = renderToStaticMarkup(
+      <Alert color="danger" icon={<svg data-testid="custom-icon" />} title="Failed" />,
+    );
+
+    expect(markup).toContain('data-testid="custom-icon"');
+  });
+
   test("announces only the urgent colours", () => {
     const danger = renderToStaticMarkup(<Alert color="danger" title="Failed" />);
     const warning = renderToStaticMarkup(<Alert color="warning" title="Careful" />);

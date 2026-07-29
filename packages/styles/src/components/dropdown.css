@@ -115,6 +115,74 @@
     color: var(--danger-soft-foreground);
   }
 
+  /* The column a described row splits into: label on top, description under it. */
+  .dropdown__item-text {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: calc(0.125rem * var(--spacing-scale));
+  }
+
+  /* Keeps the item's own gap on the label line, where an inline icon still lives. */
+  .dropdown__item-label {
+    display: flex;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+  }
+
+  /*
+   * Mixed from currentcolor rather than --muted so the line stays a step behind whatever the
+   * row is painted in — resting, highlighted, or danger.
+   */
+  .dropdown__item-description {
+    color: color-mix(in oklab, currentcolor 62%, transparent);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    line-height: 1.35;
+  }
+
+  /*
+   * The shared Kbd, toned down. Its own --default fill is the colour a highlighted row paints,
+   * so at full strength the key would vanish under the cursor. Scoped to the row it sits in:
+   * `.kbd` alone matches just as tightly and would win on source order.
+   */
+  .dropdown__item .dropdown__item-shortcut {
+    height: calc(1.25rem * var(--spacing-scale));
+    flex-shrink: 0;
+    margin-inline-start: auto;
+    padding-inline: calc(0.375rem * var(--spacing-scale));
+    background: color-mix(in oklab, currentcolor 14%, transparent);
+    color: color-mix(in oklab, currentcolor 72%, transparent);
+    font-size: calc(0.75rem * var(--font-size-scale));
+  }
+
+  /* An open submenu keeps its trigger lit, so the trail back to the root menu stays readable. */
+  .dropdown__submenu-trigger[data-popup-open] {
+    background: var(--default);
+    color: var(--default-foreground);
+  }
+
+  .dropdown__submenu-indicator {
+    display: flex;
+    width: calc(1rem * var(--spacing-scale));
+    height: calc(1rem * var(--spacing-scale));
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-inline-start: auto;
+    color: color-mix(in oklab, currentcolor 62%, transparent);
+  }
+
+  .dropdown__submenu-indicator svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* The chevron points the way the submenu flies out, so it turns with the script. */
+  [dir="rtl"] .dropdown__submenu-indicator {
+    rotate: 180deg;
+  }
+
   .dropdown__group-label {
     padding-inline: calc(0.625rem * var(--spacing-scale));
     padding-block: calc(0.375rem * var(--spacing-scale));

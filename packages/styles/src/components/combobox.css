@@ -92,17 +92,19 @@
   }
 
   .combobox__chevron {
-    display: inline-block;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-right: 1.5px solid currentcolor;
-    border-bottom: 1.5px solid currentcolor;
-    transform: translateY(-0.125rem) rotate(45deg);
-    transition: transform 150ms ease;
+    display: inline-flex;
+    width: calc(0.75rem * var(--spacing-scale));
+    height: calc(0.75rem * var(--spacing-scale));
+    transition: rotate 150ms ease;
+  }
+
+  .combobox__chevron svg {
+    width: 100%;
+    height: 100%;
   }
 
   .combobox__trigger[data-popup-open] .combobox__chevron {
-    transform: translateY(0.125rem) rotate(225deg);
+    rotate: 180deg;
   }
 
   .combobox__positioner {

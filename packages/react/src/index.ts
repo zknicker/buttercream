@@ -6,14 +6,12 @@ export {
 } from "./accordion.tsx";
 export { Alert, type AlertColor, type AlertProps } from "./alert.tsx";
 export {
-  AlertDialog,
-  type AlertDialogContentProps,
-  type AlertDialogProps,
-} from "./alert-dialog.tsx";
-export {
   Autocomplete,
+  type AutocompleteGroupProps,
   type AutocompleteItemProps,
   type AutocompleteProps,
+  type AutocompleteSize,
+  type AutocompleteVariant,
 } from "./autocomplete.tsx";
 export {
   AgentAvatar,
@@ -85,6 +83,8 @@ export {
   type DropdownContentProps,
   type DropdownItemProps,
   type DropdownProps,
+  type DropdownSubmenuProps,
+  type DropdownSubmenuTriggerProps,
 } from "./dropdown.tsx";
 export { ErrorMessage, type ErrorMessageProps } from "./error-message.tsx";
 export { Field, type FieldLabelProps, type FieldProps } from "./field.tsx";
@@ -92,7 +92,7 @@ export { Fieldset, type FieldsetProps } from "./fieldset.tsx";
 export { Form, type FormProps } from "./form.tsx";
 export { Input, type InputProps, type InputVariant } from "./input.tsx";
 export { InputOTP, type InputOTPProps } from "./input-otp.tsx";
-export { Kbd, type KbdProps } from "./kbd.tsx";
+export { Kbd, type KbdKey, type KbdProps, type KbdVariant } from "./kbd.tsx";
 export { Link, type LinkProps } from "./link.tsx";
 export { Meter, type MeterColor, type MeterProps, type MeterSize } from "./meter.tsx";
 export {
