@@ -13,6 +13,8 @@ export const Route = createFileRoute("/ds/$id/$section")({
       throw notFound();
     }
   },
+  validateSearch: (search): { preview?: "fullscreen" } =>
+    search.preview === "fullscreen" ? { preview: "fullscreen" } : {},
 });
 
 const designSystemRoute = getRouteApi("/ds/$id");
@@ -21,6 +23,7 @@ function DesignSystemSectionRoute() {
   const { id } = designSystemRoute.useParams();
   const result = designSystemRoute.useLoaderData();
   const { section: sectionSlug } = Route.useParams();
+  const { preview } = Route.useSearch() as { preview?: "fullscreen" };
   const section = previewSectionFromSlug(sectionSlug);
 
   if (!section) {
@@ -50,6 +53,7 @@ function DesignSystemSectionRoute() {
   return (
     <EditorShell
       designSystemId={id}
+      fullscreen={preview === "fullscreen"}
       initialDesignSystem={result.designSystem}
       section={section}
       {...(result.version === null ? {} : { initialVersion: result.version })}

@@ -1,5 +1,6 @@
 import { type DesignSystem, themeCssVariables } from "@buttercream/theme-core";
 import { HugeiconsIcon } from "@hugeicons/react";
+import FullScreenIcon from "@hugeicons-pro/core-stroke-rounded/FullScreenIcon";
 import Moon02Icon from "@hugeicons-pro/core-stroke-rounded/Moon02Icon";
 import Redo02Icon from "@hugeicons-pro/core-stroke-rounded/Redo02Icon";
 import SidebarLeft01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarLeft01Icon";
@@ -10,9 +11,8 @@ import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "../styles/preview.css";
 import { useShellTheme } from "../shell-theme.ts";
-import { Button, CupcakeMark, classes, Segmented } from "../ui/index.ts";
+import { Button, CupcakeMark, classes } from "../ui/index.ts";
 import { DesignSystemFileMenu } from "../workspace/design-system-file-menu.tsx";
-import { PreviewCodePane } from "./preview-code-pane.tsx";
 import {
   type PreviewSection,
   previewSectionGroups,
@@ -24,14 +24,12 @@ import {
   sectionOwnsSurface,
 } from "./preview-sections.tsx";
 import { previewSectionSource } from "./preview-source.ts";
+import { Specimen } from "./preview-specimen.tsx";
 import { PreviewSurface } from "./preview-surface.tsx";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { DESIGN_SYSTEM_NAME_FIELD_ID, ThemeEditorPanel } from "./theme-editor-panel.tsx";
 import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
 import { useHistoryShortcuts } from "./use-history-shortcuts.ts";
-
-const ARTIFACT_VIEWS = ["Preview", "Code"] as const;
-type ArtifactView = (typeof ARTIFACT_VIEWS)[number];
 
 const PREVIEW_SECTIONS = previewSectionGroups.flatMap((group) => group.items);
 
@@ -39,10 +37,12 @@ export function EditorShell({
   initialDesignSystem,
   initialVersion,
   designSystemId,
+  fullscreen,
   onSave,
   section,
 }: {
   designSystemId: string;
+  fullscreen: boolean;
   initialDesignSystem: DesignSystem;
   initialVersion?: number;
   onSave?: SaveDesignSystem;
@@ -52,16 +52,6 @@ export function EditorShell({
   const [navOpen, setNavOpen] = useState(false);
   const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
   const navMenuRef = useRef<HTMLDivElement>(null);
-  /*
-   * Preview or its source. Per section rather than sticky: Code answers "how is this page
-   * built", and carrying it to a page the reader has not seen yet answers nothing.
-   */
-  const [artifact, setArtifact] = useState<{ section: PreviewSection; view: ArtifactView }>({
-    section,
-    view: "Preview",
-  });
-  const artifactView = artifact.section === section ? artifact.view : "Preview";
-  const setArtifactView = (view: ArtifactView) => setArtifact({ section, view });
   /*
    * One switch moves the chrome and the preview together, but through two separate
    * token sets: the shell's own dark palette, and the design system's dark theme.
@@ -85,14 +75,6 @@ export function EditorShell({
   });
 
   useHistoryShortcuts({ redo, undo });
-
-  useEffect(() => {
-    setArtifact((current) =>
-      current.section === section && current.view === "Preview"
-        ? current
-        : { section, view: "Preview" },
-    );
-  }, [section]);
 
   useEffect(() => {
     const compactViewport = window.matchMedia("(max-width: 720px)");
@@ -121,6 +103,7 @@ export function EditorShell({
     ...(onSave ? { onUpdate: updateDesignSystem } : {}),
   });
   const sectionSource = previewSectionSource(section);
+  const fullscreenPreview = fullscreen && !sectionOwnsSurface(section);
 
   /*
    * Rename has one home — the Name field in the controls panel. The topbar entry opens the
@@ -180,24 +163,27 @@ export function EditorShell({
     <div
       className={classes(
         "isolate grid h-dvh min-w-0 overflow-hidden bg-sunken transition-[grid-template-columns] duration-150 ease-out",
-        "max-[720px]:grid-cols-[minmax(0,1fr)] max-[720px]:grid-rows-[minmax(0,1fr)_52px]",
-        "min-[721px]:grid-rows-[minmax(0,1fr)]",
+        fullscreenPreview
+          ? "grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)]"
+          : "max-[720px]:grid-cols-[minmax(0,1fr)] max-[720px]:grid-rows-[minmax(0,1fr)_52px] min-[721px]:grid-rows-[minmax(0,1fr)]",
         /* Preview first, then the section rail, then the controls. The rail sits between the
            artifact and the panel that edits it, so both things that act on the preview are on
            the same side of it and the eye travels one way. */
-        controlsOpen
-          ? "min-[721px]:grid-cols-[minmax(0,1fr)_3rem_17.25rem]"
-          : "min-[721px]:grid-cols-[minmax(0,1fr)_3rem_0rem]",
+        !fullscreenPreview &&
+          (controlsOpen
+            ? "min-[721px]:grid-cols-[minmax(0,1fr)_3rem_17.25rem]"
+            : "min-[721px]:grid-cols-[minmax(0,1fr)_3rem_0rem]"),
       )}
     >
       <header
         className={classes(
           /* Inset horizontally by the frame gutter (px-3), so the wordmark's edge sits on the
-             frame's edge line and the corner curve starts where the pill starts. */
+               frame's edge line and the corner curve starts where the pill starts. */
           "pointer-events-none fixed top-2 left-3 z-4 grid h-9 grid-cols-[1fr_auto_1fr] items-center transition-[right] duration-150 ease-out",
           "*:pointer-events-auto",
           controlsOpen ? "right-3 min-[721px]:right-[17.25rem]" : "right-3",
         )}
+        hidden={fullscreenPreview}
       >
         {/*
          * Owners get the file menu; the public preview has no workspace to open, so its
@@ -226,24 +212,7 @@ export function EditorShell({
           </a>
         )}
 
-        {/*
-         * Matches the wordmark's size and weight so the bar reads as three deliberate
-         * parts. As tracked uppercase mono it looked like a stray token rather than a
-         * "you are here". Pages built from a single preview file also offer their source,
-         * and the toggle sits with the name because it changes what that name shows.
-         */}
-        <div className="flex min-w-0 items-center gap-2.5">
-          <strong className="truncate text-sm font-medium text-fg">{section}</strong>
-          {sectionSource ? (
-            <Segmented
-              compact
-              label="Artifact view"
-              onChange={setArtifactView}
-              options={ARTIFACT_VIEWS}
-              value={artifactView}
-            />
-          ) : null}
-        </div>
+        <strong className="truncate text-sm font-medium text-fg">{section}</strong>
 
         <div className="flex items-center justify-end gap-1">
           <Button
@@ -281,6 +250,24 @@ export function EditorShell({
               strokeWidth={2}
             />
           </Button>
+          {!sectionOwnsSurface(section) ? (
+            <Button
+              aria-label="Open fullscreen preview"
+              iconOnly
+              nativeButton={false}
+              render={
+                <Link
+                  params={{ id: designSystemId, section: previewSectionSlug(section) }}
+                  search={{ preview: "fullscreen" }}
+                  to="/ds/$id/$section"
+                />
+              }
+              size="md"
+              variant="ghost"
+            >
+              <HugeiconsIcon aria-hidden="true" icon={FullScreenIcon} size={16} strokeWidth={2} />
+            </Button>
+          ) : null}
           {controlsOpen ? null : (
             <Button
               aria-label="Open theme controls"
@@ -306,7 +293,12 @@ export function EditorShell({
        * preview as the artifact inside it; without them the two fight for the same
        * plane. The top gutter clears the floating topbar.
        */}
-      <main className="min-h-0 min-w-0 bg-sunken px-3 pt-12 pb-3">
+      <main
+        className={classes(
+          "min-h-0 min-w-0 bg-sunken",
+          fullscreenPreview ? "p-0" : "px-3 pt-12 pb-3",
+        )}
+      >
         {/*
          * No ring and no background of its own: the themed surface inside paints the whole
          * area, so anything drawn here would show as a seam around the artifact being
@@ -328,22 +320,32 @@ export function EditorShell({
            */}
           <div
             className={classes(
-              "w-full overflow-hidden rounded-(--radius-shell-frame)",
-              sectionFillsSurface(section) && artifactView === "Preview" ? "h-full" : "min-h-full",
+              "w-full overflow-hidden",
+              fullscreenPreview ? "rounded-none" : "rounded-(--radius-shell-frame)",
+              sectionFillsSurface(section) ? "h-full" : "min-h-full",
             )}
           >
-            {sectionSource && artifactView === "Code" ? (
-              <PreviewCodePane source={sectionSource} />
-            ) : sectionOwnsSurface(section) ? (
+            {sectionOwnsSurface(section) ? (
               sectionContent
             ) : (
               <PreviewSurface
                 customCss={designSystem.rules.customCss}
                 fill={sectionFillsSurface(section)}
+                fullscreen={fullscreenPreview}
                 style={themeVariables}
                 theme={theme}
               >
-                {sectionContent}
+                {!fullscreenPreview && sectionSource && sectionFillsSurface(section) ? (
+                  <Specimen
+                    className="specimen--application"
+                    label="Application"
+                    source={sectionSource}
+                  >
+                    {sectionContent}
+                  </Specimen>
+                ) : (
+                  sectionContent
+                )}
               </PreviewSurface>
             )}
           </div>
@@ -363,6 +365,7 @@ export function EditorShell({
           "max-[720px]:order-last max-[720px]:border-t max-[720px]:border-fg/10 max-[720px]:bg-sunken",
         )}
         data-open={navOpen}
+        hidden={fullscreenPreview}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) {
             setNavOpen(false);
@@ -478,6 +481,7 @@ export function EditorShell({
       <ThemeEditorPanel
         designSystem={designSystem}
         designSystemId={designSystemId}
+        hidden={fullscreenPreview}
         onClose={() => setControlsOpen(false)}
         onImport={replaceDesignSystem}
         onUpdate={updateDesignSystem}

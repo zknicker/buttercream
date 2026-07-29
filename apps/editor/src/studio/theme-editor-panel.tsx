@@ -49,6 +49,7 @@ export const DESIGN_SYSTEM_NAME_FIELD_ID = "design-system-name";
 interface ThemeEditorPanelProps {
   designSystem: DesignSystem;
   designSystemId: string;
+  hidden?: boolean;
   onClose: () => void;
   onImport: (designSystem: DesignSystem) => void;
   onUpdate: UpdateDesignSystem;
@@ -62,6 +63,7 @@ interface ThemeEditorPanelProps {
 export function ThemeEditorPanel({
   designSystem,
   designSystemId,
+  hidden = false,
   onClose,
   onImport,
   onUpdate,
@@ -80,6 +82,7 @@ export function ThemeEditorPanel({
         "max-[720px]:fixed max-[720px]:inset-y-0 max-[720px]:right-0 max-[720px]:w-[min(17.25rem,calc(100vw-1.5rem))] max-[720px]:shadow-2xl max-[720px]:shadow-ink/15 dark:max-[720px]:shadow-none",
         open ? "translate-x-0" : "translate-x-full",
       )}
+      hidden={hidden}
     >
       <header className="flex h-13 flex-none items-center justify-between gap-2 px-3">
         <Button

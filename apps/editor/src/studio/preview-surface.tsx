@@ -19,6 +19,8 @@ interface PreviewSurfaceProps {
   customCss: string;
   /** Take the frame's exact height and let content scroll inside, instead of growing with it. */
   fill?: boolean;
+  /** Let an app preview paint edge-to-edge instead of presenting it as a framed artifact. */
+  fullscreen?: boolean;
   /** Theme tokens as custom properties, inline so control drags repaint without a stylesheet re-parse. */
   style: CSSProperties;
   theme: "light" | "dark";
@@ -28,6 +30,7 @@ export function PreviewSurface({
   children,
   customCss,
   fill = false,
+  fullscreen = false,
   style,
   theme,
 }: PreviewSurfaceProps): ReactElement {
@@ -48,7 +51,9 @@ export function PreviewSurface({
 
   return (
     <div
-      className={fill ? "preview-surface preview-surface--fill" : "preview-surface"}
+      className={`preview-surface${fill ? " preview-surface--fill" : ""}${
+        fullscreen ? " preview-surface--fullscreen" : ""
+      }`}
       data-surface-scope={scopeId}
       data-theme={theme}
       ref={setSurface}

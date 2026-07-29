@@ -184,6 +184,35 @@
   white-space: pre;
 }
 
+/*
+ * Application previews use the same authored specimen contract as component demos, but occupy
+ * the available surface height so their own layout and scroll regions remain representative.
+ */
+.specimen--application {
+  --bc-specimen-inset: clamp(1rem, 2vw, 1.5rem);
+
+  height: 100%;
+  min-height: 34rem;
+  flex-wrap: nowrap;
+  align-content: stretch;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: var(--bc-specimen-inset);
+}
+
+.specimen--application .specimen__preview:not([hidden]) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+}
+
+.specimen--application > .specimen__code {
+  height: 100%;
+  max-height: none;
+  border-radius: var(--radius-lg);
+}
+
 .preview-icon {
   flex: none;
 }
@@ -932,6 +961,10 @@
   grid-template-columns: 15rem minmax(0, 1fr);
 }
 
+.specimen--application .app {
+  border-radius: var(--radius-lg);
+}
+
 /*
  * On a filled surface the app takes the frame's exact height and reads as the product it
  * depicts: sidebar fixed, content scrolling inside. The main pane scrolls whole; a page with a
@@ -939,10 +972,28 @@
  */
 .preview-surface--fill {
   height: 100%;
+  /*
+   * One page-sized specimen needs more canvas than a grid of component specimens. Keep the
+   * compact inset on narrow previews, then open it up to a full spacing step on desktop.
+   */
+  padding: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 .preview-surface--fill .app {
   height: 100%;
+}
+
+/*
+ * Fullscreen is the product page, not a specimen of that page. Remove both layers that make an
+ * app read as an artifact inside the editor: the surface inset and the app's themed frame.
+ */
+.preview-surface--fullscreen {
+  padding: 0;
+}
+
+.preview-surface--fullscreen .app {
+  border-radius: 0;
+  box-shadow: none;
 }
 
 /*

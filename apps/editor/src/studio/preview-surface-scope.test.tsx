@@ -61,4 +61,14 @@ describe("PreviewSurface custom CSS", () => {
 
     expect(markup).not.toContain("<style");
   });
+
+  test("marks a fullscreen surface as edge-to-edge", () => {
+    const markup = renderToStaticMarkup(
+      <PreviewSurface fullscreen customCss="" style={{}} theme="light">
+        <p>app preview</p>
+      </PreviewSurface>,
+    );
+
+    expect(markup).toContain("preview-surface--fullscreen");
+  });
 });

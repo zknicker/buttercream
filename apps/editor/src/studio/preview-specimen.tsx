@@ -26,15 +26,23 @@ export function SpecimenSources({
 
 export interface SpecimenProps extends HTMLAttributes<HTMLElement> {
   label: string;
+  source?: string;
 }
 
 /**
  * One component specimen and its authored source. The preview remains mounted while its code is
  * visible, preserving controlled values and other demo state when the reader switches back.
  */
-export function Specimen({ children, className, label, ...props }: SpecimenProps): ReactElement {
+export function Specimen({
+  children,
+  className,
+  label,
+  source: providedSource,
+  ...props
+}: SpecimenProps): ReactElement {
   const [view, setView] = useState<SpecimenView>("Preview");
-  const source = useContext(SpecimenSourcesContext)[label];
+  const contextualSources = useContext(SpecimenSourcesContext);
+  const source = providedSource ?? contextualSources[label];
   const id = useId();
   const previewPanelId = `${id}-preview`;
   const codePanelId = `${id}-code`;
