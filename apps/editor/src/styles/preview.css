@@ -217,6 +217,12 @@
   flex: none;
 }
 
+/* A badge is a compact indicator, so an icon inside one shrinks below the global icon size. */
+.badge .preview-icon {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
 .preview-card {
   width: min(100%, 23.375rem);
 }

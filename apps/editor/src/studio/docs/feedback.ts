@@ -59,7 +59,7 @@ export const alertDoc: ComponentDoc = {
 
 export const badgeDoc: ComponentDoc = {
   usage:
-    'Use Badge for a small count or status marker, either inline (<Badge color="danger">3</Badge>) or hung off a corner of another element via Badge.Anchor badge={<Badge placement="top-right" />}. Choose variant="primary" (the default) for a solid-filled badge or variant="soft" for a muted tint, and pick color to convey default/accent/success/warning/danger semantics. Render a Badge with no children — typically size="sm" and anchored — as a plain status dot. It\'s purely presentational, no Base UI primitive involved, so children, size, and placement are the only behavioural knobs.',
+    'Use Badge for a small count or status marker hung off a corner of the thing it describes — an avatar, a button — via Badge.Anchor badge={<Badge placement="top-right">3</Badge>}. Choose variant="primary" (the default) for a solid-filled badge or variant="soft" for a muted tint, and pick color to convey default/accent/success/warning/danger semantics. Render a Badge with no children — typically size="sm" and anchored — as a plain status dot. Plain string or number children are wrapped in Badge.Label automatically; when mixing an icon with text, compose Badge.Label explicitly so the text keeps its padding while the icon sits beside it as its own flex item. For a standalone label pill, reach for Chip instead — Badge is sized and padded as an indicator that hangs off something else. It\'s purely presentational, no Base UI primitive involved, so children, size, and placement are the only behavioural knobs.',
   example:
     '<Badge.Anchor badge={<Badge color="danger" placement="top-right" size="sm" />}>\n  <Button variant="secondary">Inbox</Button>\n</Badge.Anchor>',
   api: [
@@ -97,6 +97,17 @@ export const badgeDoc: ComponentDoc = {
       ],
     },
     {
+      component: "Badge.Label",
+      props: [
+        {
+          name: "...props",
+          type: "ComponentPropsWithoutRef<'span'>",
+          description:
+            "Native span attributes pass through. Wraps string children automatically; compose it explicitly alongside an icon.",
+        },
+      ],
+    },
+    {
       component: "Badge.Anchor",
       props: [
         {
@@ -114,7 +125,10 @@ export const badgeDoc: ComponentDoc = {
   ],
   classes: [
     { name: ".badge", description: "The root element, inline or anchored." },
-    { name: ".badge__label", description: "Inner span wrapping the badge's children." },
+    {
+      name: ".badge__label",
+      description: "The Badge.Label span — automatic around plain text, explicit beside an icon.",
+    },
     { name: ".badge--sm / .badge--lg", description: "Non-default sizes." },
     {
       name: ".badge--default … .badge--danger",

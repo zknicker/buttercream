@@ -1,5 +1,7 @@
 import {
   Alert,
+  Avatar,
+  type AvatarRootProps,
   Badge,
   Button,
   Chip,
@@ -13,6 +15,25 @@ import type { PreviewIconElements } from "./preview-icons.ts";
 import { Specimen } from "./preview-specimen.tsx";
 
 const ROLES = ["accent", "success", "warning", "danger"] as const;
+
+const AVATAR_NAMES = ["Bea Cole", "Ade Sow", "Mia Ito", "Ola Nag"] as const;
+
+function BadgeAvatar({
+  name,
+  ...props
+}: Omit<AvatarRootProps, "children"> & { name: string }): ReactElement {
+  return (
+    <Avatar aria-label={name} {...props}>
+      <Avatar.Fallback>
+        {name
+          .split(/\s+/u)
+          .slice(0, 2)
+          .map((part) => part[0]?.toUpperCase())
+          .join("")}
+      </Avatar.Fallback>
+    </Avatar>
+  );
+}
 
 export function AlertPreview(): ReactElement {
   return (
@@ -85,23 +106,62 @@ function DismissibleAlertSpecimen(): ReactElement {
 export function BadgePreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
+      {/* A badge always marks something, so every specimen anchors one to an avatar or button. */}
       <Specimen label="Sizes">
-        <Badge>5</Badge>
-        <Badge size="sm">2</Badge>
-        <Badge size="lg">12</Badge>
+        <Badge.Anchor
+          badge={
+            <Badge color="danger" placement="top-right" size="sm">
+              5
+            </Badge>
+          }
+        >
+          <BadgeAvatar name="Bea Cole" size="sm" />
+        </Badge.Anchor>
+        <Badge.Anchor
+          badge={
+            <Badge color="danger" placement="top-right">
+              5
+            </Badge>
+          }
+        >
+          <BadgeAvatar name="Bea Cole" />
+        </Badge.Anchor>
+        <Badge.Anchor
+          badge={
+            <Badge color="danger" placement="top-right" size="lg">
+              5
+            </Badge>
+          }
+        >
+          <BadgeAvatar name="Bea Cole" size="lg" />
+        </Badge.Anchor>
       </Specimen>
       <Specimen label="Colours">
-        {ROLES.map((role) => (
-          <Badge color={role} key={role}>
-            8
-          </Badge>
+        {ROLES.map((role, index) => (
+          <Badge.Anchor
+            badge={
+              <Badge color={role} placement="top-right" size="sm">
+                8
+              </Badge>
+            }
+            key={role}
+          >
+            <BadgeAvatar name={AVATAR_NAMES[index] ?? "Bea Cole"} />
+          </Badge.Anchor>
         ))}
       </Specimen>
       <Specimen label="Soft">
-        {ROLES.map((role) => (
-          <Badge color={role} key={role} variant="soft">
-            8
-          </Badge>
+        {ROLES.map((role, index) => (
+          <Badge.Anchor
+            badge={
+              <Badge color={role} placement="top-right" size="sm" variant="soft">
+                8
+              </Badge>
+            }
+            key={role}
+          >
+            <BadgeAvatar name={AVATAR_NAMES[index] ?? "Bea Cole"} />
+          </Badge.Anchor>
         ))}
       </Specimen>
       <Specimen label="Anchored">
@@ -118,16 +178,61 @@ export function BadgePreview({ icons }: { icons: PreviewIconElements }): ReactEl
           <Button variant="secondary">Pending</Button>
         </Badge.Anchor>
       </Specimen>
+      {/* Content rides an anchored badge; standalone label pills are Chip's job. */}
       <Specimen label="With content">
-        <Badge color="accent">{icons.mail} New</Badge>
-        <Badge color="success" variant="soft">
-          Verified
-        </Badge>
+        <Badge.Anchor
+          badge={
+            <Badge color="danger" placement="top-right" size="sm">
+              5
+            </Badge>
+          }
+        >
+          <BadgeAvatar name="Bea Cole" />
+        </Badge.Anchor>
+        <Badge.Anchor
+          badge={
+            <Badge color="accent" placement="top-right" size="sm">
+              New
+            </Badge>
+          }
+        >
+          <BadgeAvatar name="Ade Sow" />
+        </Badge.Anchor>
+        <Badge.Anchor
+          badge={
+            <Badge color="danger" placement="top-right" size="sm">
+              99+
+            </Badge>
+          }
+        >
+          <BadgeAvatar name="Mia Ito" />
+        </Badge.Anchor>
+        <Badge.Anchor
+          badge={
+            <Badge aria-label="Notifications" color="accent" placement="top-right" size="sm">
+              {icons.notification}
+            </Badge>
+          }
+        >
+          <BadgeAvatar name="Ola Nag" />
+        </Badge.Anchor>
       </Specimen>
       <Specimen label="Dot">
-        <Badge aria-label="Online" color="success" size="sm" />
-        <Badge aria-label="Away" color="warning" size="sm" />
-        <Badge aria-label="Offline" color="danger" size="sm" />
+        <Badge.Anchor
+          badge={<Badge aria-label="Online" color="success" placement="bottom-right" size="sm" />}
+        >
+          <BadgeAvatar name="Bea Cole" />
+        </Badge.Anchor>
+        <Badge.Anchor
+          badge={<Badge aria-label="Away" color="warning" placement="bottom-right" size="sm" />}
+        >
+          <BadgeAvatar name="Ade Sow" />
+        </Badge.Anchor>
+        <Badge.Anchor
+          badge={<Badge aria-label="Offline" color="danger" placement="bottom-right" size="sm" />}
+        >
+          <BadgeAvatar name="Mia Ito" />
+        </Badge.Anchor>
       </Specimen>
     </div>
   );
