@@ -176,7 +176,13 @@ export function MailAppPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
       <div className="mail">
         <section className="mail__pane">
           <div className="mail__search">
-            <SearchField aria-label="Search mail" fullWidth placeholder="Search mail" />
+            <SearchField fullWidth>
+              <SearchField.Group>
+                <SearchField.SearchIcon />
+                <SearchField.Input aria-label="Search mail" placeholder="Search mail" />
+                <SearchField.ClearButton />
+              </SearchField.Group>
+            </SearchField>
           </div>
           <div className="mail__messages">
             {MESSAGES.map((message) => (

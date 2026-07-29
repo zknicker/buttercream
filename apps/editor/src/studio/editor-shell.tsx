@@ -35,7 +35,6 @@ const sections = [
   "Finances",
   "Accordion",
   "Alert",
-  "Alert Dialog",
   "Autocomplete",
   "Avatar",
   "Badge",
@@ -101,7 +100,6 @@ const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
     items: [
       "Accordion",
       "Alert",
-      "Alert Dialog",
       "Autocomplete",
       "Avatar",
       "Badge",

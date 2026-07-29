@@ -1,5 +1,5 @@
-import { Button, Popover, type PopoverContentProps } from "@buttercream/react";
-import type { ReactElement, ReactNode } from "react";
+import { Avatar, Button, Popover, type PopoverContentProps } from "@buttercream/react";
+import { type ReactElement, type ReactNode, useState } from "react";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const SIDES = ["top", "bottom", "left", "right"] as const;
@@ -57,7 +57,76 @@ export function PopoverPreview(): ReactElement {
         </PopoverSpecimen>
         <div className="specimen__label">Trigger states</div>
       </section>
+      <section className="specimen">
+        <PopoverSpecimen label="View profile" side="right">
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <Avatar>
+              <Avatar.Fallback>JD</Avatar.Fallback>
+            </Avatar>
+            <div>
+              <Popover.Title>Jamie Diaz</Popover.Title>
+              <Popover.Description>Product design, joined 2023.</Popover.Description>
+            </div>
+          </div>
+          <FollowButton />
+        </PopoverSpecimen>
+        <div className="specimen__label">Interactive content (composed, not just text)</div>
+      </section>
+      <section className="specimen">
+        <CustomRenderSpecimen />
+        <div className="specimen__label">Custom render (Base UI render prop)</div>
+      </section>
     </div>
+  );
+}
+
+/* Composing content inside Popup is plain React — no popover-specific plumbing needed. */
+function FollowButton(): ReactElement {
+  const [following, setFollowing] = useState(false);
+  return (
+    <Button
+      onClick={() => setFollowing((value) => !value)}
+      variant={following ? "outline" : "primary"}
+    >
+      {following ? "Following" : "Follow"}
+    </Button>
+  );
+}
+
+/*
+ * The render prop on Trigger/Popup/Arrow accepts a function of (props, state), not just a
+ * static element — this swaps the popup's root tag and tags it with its own placement.
+ */
+function CustomRenderSpecimen(): ReactElement {
+  const surface = usePreviewSurface();
+
+  return (
+    <Popover>
+      <Popover.Trigger
+        render={({ className, ...props }, state) => (
+          <Button
+            {...props}
+            {...(className === undefined ? {} : { className })}
+            data-open={state.open}
+            variant="ghost"
+          >
+            Custom render
+          </Button>
+        )}
+      />
+      <Popover.Portal container={surface}>
+        <Popover.Positioner side="bottom" sideOffset={8}>
+          <Popover.Popup render={(props, state) => <section {...props} data-tone={state.side} />}>
+            <Popover.Arrow />
+            <Popover.Title>Render prop</Popover.Title>
+            <Popover.Description>
+              Trigger and Popup both take a function-form render prop; this popup's root element is
+              a plain &lt;section&gt; tagged with its own placement as a data attribute.
+            </Popover.Description>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover>
   );
 }
 

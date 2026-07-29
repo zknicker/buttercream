@@ -85,6 +85,15 @@ export function CheckboxGroupPreview(): ReactElement {
         </CheckboxGroup>
         <div className="specimen__label">Disabled</div>
       </section>
+      <section className="specimen specimen--stack">
+        {/* render swaps the group's own <div> for a semantic <fieldset>; children are unaffected. */}
+        <CheckboxGroup label="Notify me by" render={<fieldset />}>
+          <Checkbox value="email">Email</Checkbox>
+          <Checkbox value="sms">SMS</Checkbox>
+          <Checkbox value="push">Push</Checkbox>
+        </CheckboxGroup>
+        <div className="specimen__label">Custom render</div>
+      </section>
     </div>
   );
 }
@@ -93,6 +102,11 @@ export function AutocompletePreview(): ReactElement {
   const surface = usePreviewSurface();
   const pets = (pet: string) => (
     <Autocomplete.Item key={pet} value={pet}>
+      {pet}
+    </Autocomplete.Item>
+  );
+  const petsWithDisabled = (pet: string) => (
+    <Autocomplete.Item disabled={pet === "Hamster"} key={pet} value={pet}>
       {pet}
     </Autocomplete.Item>
   );
@@ -137,6 +151,45 @@ export function AutocompletePreview(): ReactElement {
         </Autocomplete>
         <div className="specimen__label">Disabled</div>
       </section>
+      <section className="specimen specimen--stack">
+        <Autocomplete
+          clearable
+          container={surface}
+          defaultValue="Cat"
+          items={PETS}
+          label="Favorite animal"
+          placeholder="Select one"
+        >
+          {pets}
+        </Autocomplete>
+        <div className="specimen__label">Clearable</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Autocomplete
+          clearable
+          container={surface}
+          defaultValue={["Cat", "Dog"]}
+          items={PETS}
+          label="Favorite animals"
+          multiple
+          placeholder="Select one or more"
+        >
+          {pets}
+        </Autocomplete>
+        <div className="specimen__label">Multiple selection</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Autocomplete
+          container={surface}
+          defaultValue="Cat"
+          items={PETS}
+          label="Favorite animal"
+          placeholder="Select one"
+        >
+          {petsWithDisabled}
+        </Autocomplete>
+        <div className="specimen__label">Disabled option</div>
+      </section>
     </div>
   );
 }
@@ -144,6 +197,7 @@ export function AutocompletePreview(): ReactElement {
 export function InputOTPPreview(): ReactElement {
   const [code, setCode] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [completedCode, setCompletedCode] = useState<string | null>(null);
   const invalid = submitted && code !== "123456";
 
   return (
@@ -204,6 +258,25 @@ export function InputOTPPreview(): ReactElement {
           <div className="otp-demo__hint">Code verification is currently disabled</div>
         </div>
         <div className="specimen__label">Disabled</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <div className="otp-demo">
+          <div className="otp-demo__title">Enter code</div>
+          <InputOTP groupSize={3} length={6} onValueComplete={setCompletedCode} />
+          <div className="otp-demo__hint">
+            {completedCode === null ? "Fill all six digits" : `Completed: ${completedCode}`}
+          </div>
+        </div>
+        <div className="specimen__label">On complete</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <div className="preview-block">
+          <div className="otp-demo">
+            <div className="otp-demo__title">Verify account</div>
+            <InputOTP groupSize={3} length={6} />
+          </div>
+        </div>
+        <div className="specimen__label">In surface</div>
       </section>
     </div>
   );

@@ -1,9 +1,8 @@
 import {
   Accordion,
-  AlertDialog,
   Breadcrumbs,
   Button,
-  type ButtonVariant,
+  ButtonGroup,
   Chip,
   Combobox,
   Dropdown,
@@ -14,7 +13,7 @@ import {
   Toolbar,
 } from "@buttercream/react";
 import type { DesignSystem } from "@buttercream/theme-core";
-import type { ReactElement } from "react";
+import { Fragment, type ReactElement, useState } from "react";
 import { createPreviewIconElements } from "./preview-icons.ts";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
@@ -23,30 +22,36 @@ const FAQ = [
   {
     answer:
       "Browse our products, add items to your cart, and proceed to checkout. You'll need to provide shipping and payment information to complete your purchase.",
+    icon: "cart" as const,
     question: "How do I place an order?",
   },
   {
     answer:
       "Yes, you can modify or cancel your order before it's shipped. Once your order is processed, you can't make changes.",
+    icon: "receipt" as const,
     question: "Can I modify or cancel my order?",
   },
   {
     answer: "We accept all major credit cards, including Visa, Mastercard, and American Express.",
+    icon: "card" as const,
     question: "What payment methods do you accept?",
   },
   {
     answer:
       "Shipping costs vary based on your location and the size of your order. We offer free shipping for orders over $50.",
+    icon: "box" as const,
     question: "How much does shipping cost?",
   },
   {
     answer:
       "Yes, we ship to most countries. Please check our shipping rates and policies for more information.",
+    icon: "globe" as const,
     question: "Do you ship internationally?",
   },
   {
     answer:
       "If you're not satisfied with your purchase, you can request a refund within 30 days of purchase. Please contact our customer support team for assistance.",
+    icon: "refund" as const,
     question: "How do I request a refund?",
   },
 ];
@@ -86,40 +91,35 @@ const PETS = [
 ];
 const PET_NAMES = PETS.map((pet) => pet.name);
 
-/*
- * One trigger per tone, the way the reference shows them side by side. The reference gives its
- * triggers matching button variants; ours has no success or warning variant, so the tone reads
- * from the dialog's own copy and the trigger falls back to the nearest variant we do have.
- */
-const ALERT_TONES: {
-  confirm: string;
-  description: string;
-  label: string;
-  title: string;
-  variant: ButtonVariant;
-}[] = [
-  {
-    confirm: "Publish",
-    description: "The project becomes visible to everyone with the link.",
-    label: "Accent",
-    title: "Publish this project?",
-    variant: "primary",
-  },
-  {
-    confirm: "Approve",
-    description: "The change is applied as soon as you approve it.",
-    label: "Success",
-    title: "Approve this change?",
-    variant: "secondary",
-  },
-  {
-    confirm: "Continue",
-    description: "Your edits have not been saved.",
-    label: "Warning",
-    title: "Leave without saving?",
-    variant: "secondary",
-  },
-];
+/* value/onValueChange already pass through the root; two buttons drive it externally. */
+function ControlledAccordionDemo(): ReactElement {
+  const [value, setValue] = useState<string[]>(["Getting Started"]);
+
+  return (
+    <>
+      <div style={{ display: "flex", gap: "0.5rem" }}>
+        <Button
+          onClick={() => setValue(DOCS.map((entry) => entry.question))}
+          size="sm"
+          variant="secondary"
+        >
+          Expand all
+        </Button>
+        <Button onClick={() => setValue([])} size="sm" variant="ghost">
+          Collapse all
+        </Button>
+      </div>
+      <Accordion className="preview-block" multiple onValueChange={setValue} value={value}>
+        {DOCS.map((entry) => (
+          <Accordion.Item key={entry.question} value={entry.question}>
+            <Accordion.Trigger>{entry.question}</Accordion.Trigger>
+            <Accordion.Panel>{entry.answer}</Accordion.Panel>
+          </Accordion.Item>
+        ))}
+      </Accordion>
+    </>
+  );
+}
 
 export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
   const icon = createPreviewIconElements(icons);
@@ -131,7 +131,7 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
           {FAQ.map((entry) => (
             <Accordion.Item key={entry.question} value={entry.question}>
               <Accordion.Trigger>
-                {icon.more}
+                {icon[entry.icon]}
                 {entry.question}
               </Accordion.Trigger>
               <Accordion.Panel>{entry.answer}</Accordion.Panel>
@@ -145,7 +145,7 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
           {FAQ.map((entry) => (
             <Accordion.Item key={entry.question} value={entry.question}>
               <Accordion.Trigger>
-                {icon.more}
+                {icon[entry.icon]}
                 {entry.question}
               </Accordion.Trigger>
               <Accordion.Panel>{entry.answer}</Accordion.Panel>
@@ -176,6 +176,54 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
           ))}
         </Accordion>
         <div className="specimen__label">Disabled</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <ControlledAccordionDemo />
+        <div className="specimen__label">Controlled</div>
+      </section>
+      <section className="specimen specimen--stack">
+        {/* The chevron is only the default; `indicator` on Trigger swaps it for anything. */}
+        <Accordion className="preview-block">
+          {FAQ.slice(0, 3).map((entry) => (
+            <Accordion.Item key={entry.question} value={entry.question}>
+              <Accordion.Trigger indicator={icon.add}>{entry.question}</Accordion.Trigger>
+              <Accordion.Panel>{entry.answer}</Accordion.Panel>
+            </Accordion.Item>
+          ))}
+        </Accordion>
+        <div className="specimen__label">Custom indicator</div>
+      </section>
+      <section className="specimen specimen--stack">
+        {/* Two independent accordions under their own headings, a common FAQ page shape. */}
+        <div style={{ display: "grid", gap: "1rem", width: "100%" }}>
+          <div>
+            <p style={{ fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Ordering
+            </p>
+            <Accordion className="preview-block">
+              {FAQ.slice(0, 2).map((entry) => (
+                <Accordion.Item key={entry.question} value={entry.question}>
+                  <Accordion.Trigger>{entry.question}</Accordion.Trigger>
+                  <Accordion.Panel>{entry.answer}</Accordion.Panel>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+          </div>
+          <div>
+            <p style={{ fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Shipping
+            </p>
+            <Accordion className="preview-block">
+              {FAQ.slice(3, 5).map((entry) => (
+                <Accordion.Item key={entry.question} value={entry.question}>
+                  <Accordion.Trigger>{entry.question}</Accordion.Trigger>
+                  <Accordion.Panel>{entry.answer}</Accordion.Panel>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+        <div className="specimen__label">Grouped FAQ</div>
       </section>
     </div>
   );
@@ -243,6 +291,49 @@ export function BreadcrumbsPreview(): ReactElement {
         <div className="specimen__label">Styled</div>
       </section>
     </div>
+  );
+}
+
+const PAGINATION_TOTAL_PAGES = 20;
+
+/*
+ * A page window (first, last, current, and its neighbours) computed from plain `page` state,
+ * with Pagination.Ellipsis dropped in wherever the window skips a run of pages.
+ */
+function ControlledPaginationDemo(): ReactElement {
+  const [page, setPage] = useState(1);
+  const pageWindow = [...new Set([1, page - 1, page, page + 1, PAGINATION_TOTAL_PAGES])]
+    .filter((value) => value >= 1 && value <= PAGINATION_TOTAL_PAGES)
+    .sort((a, b) => a - b);
+
+  return (
+    <Pagination summary={`Page ${page} of ${PAGINATION_TOTAL_PAGES}`}>
+      <Pagination.Link
+        disabled={page === 1}
+        nav
+        onClick={() => setPage((current) => Math.max(1, current - 1))}
+      >
+        Previous
+      </Pagination.Link>
+      {pageWindow.map((value, index) => {
+        const previous = pageWindow[index - 1];
+        return (
+          <Fragment key={value}>
+            {previous !== undefined && value - previous > 1 ? <Pagination.Ellipsis /> : null}
+            <Pagination.Link current={value === page} onClick={() => setPage(value)}>
+              {value}
+            </Pagination.Link>
+          </Fragment>
+        );
+      })}
+      <Pagination.Link
+        disabled={page === PAGINATION_TOTAL_PAGES}
+        nav
+        onClick={() => setPage((current) => Math.min(PAGINATION_TOTAL_PAGES, current + 1))}
+      >
+        Next
+      </Pagination.Link>
+    </Pagination>
   );
 }
 
@@ -341,6 +432,10 @@ export function PaginationPreview({ icons }: { icons: DesignSystem["icons"] }): 
         </Pagination>
         <div className="specimen__label">Disabled</div>
       </section>
+      <section className="specimen specimen--stack">
+        <ControlledPaginationDemo />
+        <div className="specimen__label">Controlled</div>
+      </section>
     </div>
   );
 }
@@ -388,7 +483,46 @@ export function ToolbarPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
         </Toolbar>
         <div className="specimen__label">Attached</div>
       </section>
+      <section className="specimen">
+        {/* A ButtonGroup and a ToggleButton.Group side by side, sharing one toolbar's focus ring. */}
+        <Toolbar aria-label="Document tools">
+          <ButtonGroup>
+            <Button variant="tertiary">{icon.cut}Cut</Button>
+            <Button variant="tertiary">{icon.copy}Copy</Button>
+            <Button variant="tertiary">{icon.paste}Paste</Button>
+          </ButtonGroup>
+          <Toolbar.Separator />
+          {formatting}
+        </Toolbar>
+        <div className="specimen__label">With button group</div>
+      </section>
     </div>
+  );
+}
+
+/* open/onOpenChange pass through Base UI's Menu.Root, so the menu can be driven from outside too. */
+function ControlledDropdownDemo({
+  icon,
+  surface,
+}: {
+  icon: ReturnType<typeof createPreviewIconElements>;
+  surface: HTMLElement | null;
+}): ReactElement {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)} variant="secondary">
+        Open from outside
+      </Button>
+      <Dropdown onOpenChange={setOpen} open={open}>
+        <Dropdown.Trigger render={<Button variant="secondary">Actions</Button>} />
+        <Dropdown.Content container={surface}>
+          <Dropdown.Item>{icon.add}Add member</Dropdown.Item>
+          <Dropdown.Item>{icon.mail}Send invite</Dropdown.Item>
+        </Dropdown.Content>
+      </Dropdown>
+    </>
   );
 }
 
@@ -433,71 +567,146 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
         </Dropdown>
         <div className="specimen__label">Disabled item</div>
       </section>
+      <section className="specimen">
+        <Dropdown>
+          <Dropdown.Trigger render={<Button variant="secondary">Notifications</Button>} />
+          <Dropdown.Content container={surface}>
+            <Dropdown.Item description="Mentions, replies, and direct messages">
+              {icon.mail}All activity
+            </Dropdown.Item>
+            <Dropdown.Item description="Nothing, until you turn this back on">
+              {icon.notificationOff}Mute
+            </Dropdown.Item>
+          </Dropdown.Content>
+        </Dropdown>
+        <div className="specimen__label">Descriptions</div>
+      </section>
+      <section className="specimen">
+        <Dropdown>
+          <Dropdown.Trigger render={<Button variant="secondary">Edit</Button>} />
+          <Dropdown.Content container={surface}>
+            <Dropdown.Item shortcut="⌘Z">Undo</Dropdown.Item>
+            <Dropdown.Item shortcut="⌘⇧Z">Redo</Dropdown.Item>
+            <Dropdown.Separator />
+            <Dropdown.Item shortcut="⌘X">Cut</Dropdown.Item>
+            <Dropdown.Item shortcut="⌘C">Copy</Dropdown.Item>
+            <Dropdown.Item shortcut="⌘V">Paste</Dropdown.Item>
+          </Dropdown.Content>
+        </Dropdown>
+        <div className="specimen__label">Shortcuts</div>
+      </section>
+      <section className="specimen">
+        <Dropdown>
+          <Dropdown.Trigger render={<Button variant="secondary">Share</Button>} />
+          <Dropdown.Content container={surface}>
+            <Dropdown.Item>{icon.mail}Send via email</Dropdown.Item>
+            <Dropdown.Submenu>
+              <Dropdown.SubmenuTrigger>{icon.upload}Export</Dropdown.SubmenuTrigger>
+              <Dropdown.Content container={surface}>
+                <Dropdown.Item>PDF</Dropdown.Item>
+                <Dropdown.Item>CSV</Dropdown.Item>
+                <Dropdown.Item>PNG</Dropdown.Item>
+              </Dropdown.Content>
+            </Dropdown.Submenu>
+          </Dropdown.Content>
+        </Dropdown>
+        <div className="specimen__label">Submenu</div>
+      </section>
+      <section className="specimen">
+        <ControlledDropdownDemo icon={icon} surface={surface} />
+        <div className="specimen__label">Controlled</div>
+      </section>
+      <section className="specimen">
+        <Dropdown>
+          <Dropdown.Trigger
+            render={
+              <button
+                aria-label="Account menu"
+                style={{
+                  alignItems: "center",
+                  background: "var(--default)",
+                  borderRadius: "999px",
+                  display: "inline-flex",
+                  height: "2.25rem",
+                  justifyContent: "center",
+                  width: "2.25rem",
+                }}
+                type="button"
+              >
+                {icon.users}
+              </button>
+            }
+          />
+          <Dropdown.Content container={surface}>
+            <Dropdown.Item>{icon.settings}Account settings</Dropdown.Item>
+            <Dropdown.Item danger>{icon.logout}Sign out</Dropdown.Item>
+          </Dropdown.Content>
+        </Dropdown>
+        <div className="specimen__label">Custom trigger</div>
+      </section>
     </div>
   );
 }
 
-export function AlertDialogPreview(): ReactElement {
+/* value/onValueChange pass straight through Root.Props, same as any controlled Base UI field. */
+function ControlledComboboxDemo(): ReactElement {
   const surface = usePreviewSurface();
+  const [value, setValue] = useState<string | null>("Cat");
 
   return (
-    <div className="specimens">
-      <section className="specimen">
-        <AlertDialog>
-          <AlertDialog.Trigger render={<Button variant="danger">Delete project</Button>} />
-          <AlertDialog.Content
-            container={surface}
-            actions={
-              <>
-                <AlertDialog.Close render={<Button variant="outline">Cancel</Button>} />
-                <AlertDialog.Close render={<Button variant="danger">Delete</Button>} />
-              </>
-            }
-            description="This removes the project and everything in it. This cannot be undone."
-            title="Delete this project?"
-          />
-        </AlertDialog>
-        <div className="specimen__label">Danger confirm</div>
-      </section>
-      <section className="specimen">
-        {ALERT_TONES.map((tone) => (
-          <AlertDialog key={tone.label}>
-            <AlertDialog.Trigger render={<Button variant={tone.variant}>{tone.label}</Button>} />
-            <AlertDialog.Content
-              container={surface}
-              actions={
-                <>
-                  <AlertDialog.Close render={<Button variant="outline">Cancel</Button>} />
-                  <AlertDialog.Close
-                    render={<Button variant={tone.variant}>{tone.confirm}</Button>}
-                  />
-                </>
-              }
-              description={tone.description}
-              title={tone.title}
-            />
-          </AlertDialog>
-        ))}
-        <div className="specimen__label">Status tones</div>
-      </section>
-      <section className="specimen">
-        <AlertDialog>
-          <AlertDialog.Trigger render={<Button variant="secondary">Center placement</Button>} />
-          <AlertDialog.Content
-            container={surface}
-            actions={
-              <>
-                <AlertDialog.Close render={<Button variant="outline">Cancel</Button>} />
-                <AlertDialog.Close render={<Button>Confirm</Button>} />
-              </>
-            }
-            description="The dialog sits in the middle of the viewport whatever opened it."
-            title="Centered dialog"
-          />
-        </AlertDialog>
-        <div className="specimen__label">Placement</div>
-      </section>
-    </div>
+    <>
+      <Field name="animal-controlled">
+        <Field.Label>Favorite animal</Field.Label>
+        <Combobox
+          container={surface}
+          items={ANIMALS}
+          onValueChange={setValue}
+          placeholder="Search animals…"
+          value={value}
+        >
+          {(animal: string) => (
+            <Combobox.Item key={animal} value={animal}>
+              {animal}
+            </Combobox.Item>
+          )}
+        </Combobox>
+      </Field>
+      <p style={{ color: "var(--muted)", fontSize: "0.8125rem" }}>Selected: {value ?? "none"}</p>
+    </>
+  );
+}
+
+/* items is deliberately empty until the popup first opens, so the list is sourced asynchronously. */
+function AsyncComboboxDemo(): ReactElement {
+  const surface = usePreviewSurface();
+  const [items, setItems] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <Field name="animal-async">
+      <Field.Label>Favorite animal</Field.Label>
+      <Combobox
+        container={surface}
+        emptyMessage={loading ? "Loading…" : "No results"}
+        items={items}
+        onOpenChange={(open) => {
+          if (open && items.length === 0 && !loading) {
+            setLoading(true);
+            window.setTimeout(() => {
+              setItems(ANIMALS);
+              setLoading(false);
+            }, 600);
+          }
+        }}
+        placeholder="Search animals…"
+      >
+        {(animal: string) => (
+          <Combobox.Item key={animal} value={animal}>
+            {animal}
+          </Combobox.Item>
+        )}
+      </Combobox>
+    </Field>
   );
 }
 
@@ -605,6 +814,27 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
           </Combobox>
         </Field>
         <div className="specimen__label">Disabled</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <Field name="animal-required">
+          <Field.Label required>Favorite animal</Field.Label>
+          <Combobox container={surface} items={ANIMALS} placeholder="Search animals…" required>
+            {(animal: string) => (
+              <Combobox.Item key={animal} value={animal}>
+                {animal}
+              </Combobox.Item>
+            )}
+          </Combobox>
+        </Field>
+        <div className="specimen__label">Required</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <ControlledComboboxDemo />
+        <div className="specimen__label">Controlled</div>
+      </section>
+      <section className="specimen specimen--stack">
+        <AsyncComboboxDemo />
+        <div className="specimen__label">Async loading</div>
       </section>
     </div>
   );

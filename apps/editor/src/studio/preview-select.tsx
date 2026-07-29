@@ -1,9 +1,52 @@
-import { Select } from "@buttercream/react";
+import { Button, Select } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const stateNames = ["Florida", "Georgia", "Delaware", "Vermont", "Ohio", "Nevada"];
+
+/* Controlled multi-select: value/onValueChange with the Multiple generic. */
+function ControlledMultipleSelect(): ReactElement {
+  const [regions, setRegions] = useState<string[]>(["Florida", "Ohio"]);
+  const surface = usePreviewSurface();
+
+  return (
+    <Select
+      container={surface}
+      label="States (controlled)"
+      multiple
+      onValueChange={(value) => setRegions(value)}
+      placeholder="Select states"
+      value={regions}
+    >
+      <StateItems />
+    </Select>
+  );
+}
+
+/* open/onOpenChange are Base UI Select.Root props that pass straight through — this proves
+ * the popup can be driven from outside the trigger, not only by clicking it. */
+function OpenStateSelect(): ReactElement {
+  const [open, setOpen] = useState(false);
+  const surface = usePreviewSurface();
+
+  return (
+    <>
+      <Select
+        container={surface}
+        label="State"
+        onOpenChange={setOpen}
+        open={open}
+        placeholder="Select one"
+      >
+        <StateItems />
+      </Select>
+      <Button onClick={() => setOpen((value) => !value)} variant="outline">
+        {open ? "Close" : "Open"} externally
+      </Button>
+    </>
+  );
+}
 
 export function SelectPreview(): ReactElement {
   // Controlled so picking from the grouped listbox visibly updates the trigger.
@@ -35,6 +78,20 @@ export function SelectPreview(): ReactElement {
           </Select>
         </div>
         <div className="specimen__label">Description</div>
+      </section>
+      <section className="specimen">
+        <div className="input-demo">
+          <Select
+            container={surface}
+            description="A selection is required to continue"
+            label="State"
+            placeholder="Select one"
+            required
+          >
+            <StateItems />
+          </Select>
+        </div>
+        <div className="specimen__label">Required</div>
       </section>
       <section className="specimen">
         <div className="input-demo">
@@ -101,6 +158,76 @@ export function SelectPreview(): ReactElement {
           </Select>
         </div>
         <div className="specimen__label">Listbox</div>
+      </section>
+      <section className="specimen">
+        <div className="input-demo">
+          <Select
+            container={surface}
+            defaultValue={["Florida", "Georgia"]}
+            label="States"
+            multiple
+            placeholder="Select states"
+          >
+            <StateItems />
+          </Select>
+          <ControlledMultipleSelect />
+        </div>
+        <div className="specimen__label">Multiple</div>
+      </section>
+      <section className="specimen">
+        <div className="input-demo">
+          {/* indicator overrides the trigger chevron; each Select.Item can override its own
+           * checkmark independently. */}
+          <Select
+            container={surface}
+            defaultValue="Florida"
+            indicator={<span aria-hidden="true">▾</span>}
+            label="Custom indicator"
+            placeholder="Select one"
+          >
+            <Select.Item indicator={<span aria-hidden="true">★</span>} value="Florida">
+              Florida
+            </Select.Item>
+            <Select.Item indicator={<span aria-hidden="true">★</span>} value="Georgia">
+              Georgia
+            </Select.Item>
+            <Select.Item indicator={<span aria-hidden="true">★</span>} value="Delaware">
+              Delaware
+            </Select.Item>
+          </Select>
+        </div>
+        <div className="specimen__label">Custom indicator</div>
+      </section>
+      <section className="specimen">
+        <div className="input-demo">
+          <OpenStateSelect />
+        </div>
+        <div className="specimen__label">Controlled open state</div>
+      </section>
+      <section className="specimen">
+        <div className="input-demo">
+          {/* render is Base UI's escape hatch for augmenting an item's rendered element from
+           * its own state — here it bolds whichever item is currently selected. */}
+          <Select
+            container={surface}
+            defaultValue="Florida"
+            label="Bold selected item"
+            placeholder="Select one"
+          >
+            {stateNames.map((name) => (
+              <Select.Item
+                key={name}
+                render={(itemProps, state) => (
+                  <div {...itemProps} style={state.selected ? { fontWeight: 700 } : undefined} />
+                )}
+                value={name}
+              >
+                {name}
+              </Select.Item>
+            ))}
+          </Select>
+        </div>
+        <div className="specimen__label">Custom render function</div>
       </section>
     </div>
   );

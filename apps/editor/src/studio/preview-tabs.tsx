@@ -41,7 +41,39 @@ function TabsSpecimens({ iconTabs }: { iconTabs: readonly SpecimenTab[] }): Reac
         <TabsSpecimen disabledTab="Videos" />
         <div className="specimen__label">Disabled tab</div>
       </section>
+      <section className="specimen">
+        <TabsSpecimen orientation="vertical" variant="secondary" />
+        <div className="specimen__label">Secondary vertical</div>
+      </section>
+      <section className="specimen">
+        <AnchorTabsSpecimen />
+        <div className="specimen__label">Rendered as links</div>
+      </section>
     </div>
+  );
+}
+
+/* Tabs.Tab forwards Base UI's render prop, so a tab can navigate instead of just switching panels. */
+function AnchorTabsSpecimen(): ReactElement {
+  return (
+    <Tabs defaultValue={MEDIA_TABS[0]?.label}>
+      <Tabs.List>
+        {MEDIA_TABS.map((item) => (
+          <Tabs.Tab
+            key={item.label}
+            render={<a href={`#${item.label.toLowerCase()}`} />}
+            value={item.label}
+          >
+            {item.label}
+          </Tabs.Tab>
+        ))}
+      </Tabs.List>
+      {MEDIA_TABS.map((item) => (
+        <Tabs.Panel key={item.label} value={item.label}>
+          Content for the {item.label} tab.
+        </Tabs.Panel>
+      ))}
+    </Tabs>
   );
 }
 

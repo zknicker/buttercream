@@ -1,6 +1,7 @@
 import { Segment, Separator, Spinner, ToggleButton } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
+import type { PreviewIconElements } from "./preview-icons.ts";
 
 /* .specimen is already a wrapping flex row, so a row of specimens needs no wrapper. */
 
@@ -12,6 +13,10 @@ const TOGGLE_SIZES = ["sm", "md", "lg"] as const;
 export function SpinnerPreview(): ReactElement {
   return (
     <div className="specimens">
+      <section className="specimen">
+        <Spinner />
+        <div className="specimen__label">Default</div>
+      </section>
       <section className="specimen">
         {SPINNER_SIZES.map((size) => (
           <Spinner key={size} size={size} />
@@ -28,7 +33,7 @@ export function SpinnerPreview(): ReactElement {
   );
 }
 
-export function SeparatorPreview(): ReactElement {
+export function SeparatorPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
       <section className="specimen specimen--stack">
@@ -42,6 +47,9 @@ export function SeparatorPreview(): ReactElement {
       <section className="specimen specimen--stack">
         <div className="separator-demo">
           <Separator>or</Separator>
+        </div>
+        <div className="separator-demo">
+          <Separator>{icons.mail} New messages</Separator>
         </div>
         <div className="specimen__label">With a label</div>
       </section>
@@ -59,7 +67,7 @@ export function SeparatorPreview(): ReactElement {
   );
 }
 
-export function SegmentPreview(): ReactElement {
+export function SegmentPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   /* Controlled so the pill visibly follows a click rather than only rendering its initial state. */
   const [view, setView] = useState("grid");
 
@@ -72,6 +80,14 @@ export function SegmentPreview(): ReactElement {
           <Segment.Item value="board">Board</Segment.Item>
         </Segment>
         <div className="specimen__label">Default</div>
+      </section>
+      <section className="specimen">
+        <Segment defaultValue="mail">
+          <Segment.Item value="mail">{icons.mail} Mail</Segment.Item>
+          <Segment.Item value="users">{icons.users} People</Segment.Item>
+          <Segment.Item value="settings">{icons.settings} Settings</Segment.Item>
+        </Segment>
+        <div className="specimen__label">With icons</div>
       </section>
       <section className="specimen">
         <div className="control-stack">
@@ -105,7 +121,17 @@ export function SegmentPreview(): ReactElement {
   );
 }
 
-export function ToggleButtonPreview(): ReactElement {
+/* Controlled so the pressed pill visibly follows a click rather than only rendering its initial state. */
+function ControlledToggleDemo(): ReactElement {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <ToggleButton onPressedChange={setPressed} pressed={pressed}>
+      {pressed ? "Following" : "Follow"}
+    </ToggleButton>
+  );
+}
+
+export function ToggleButtonPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
       <section className="specimen">
@@ -129,12 +155,28 @@ export function ToggleButtonPreview(): ReactElement {
         <div className="specimen__label">Sizes</div>
       </section>
       <section className="specimen">
+        <ToggleButton aria-label="Notifications" iconOnly>
+          {icons.notification}
+        </ToggleButton>
+        <ToggleButton aria-label="Settings" defaultPressed iconOnly>
+          {icons.settings}
+        </ToggleButton>
+        <ToggleButton aria-label="More options" iconOnly variant="ghost">
+          {icons.more}
+        </ToggleButton>
+        <div className="specimen__label">Icon only</div>
+      </section>
+      <section className="specimen">
         <ToggleButton.Group defaultValue={["bold"]} multiple>
           <ToggleButton value="bold">Bold</ToggleButton>
           <ToggleButton value="italic">Italic</ToggleButton>
           <ToggleButton value="underline">Underline</ToggleButton>
         </ToggleButton.Group>
         <div className="specimen__label">Group</div>
+      </section>
+      <section className="specimen">
+        <ControlledToggleDemo />
+        <div className="specimen__label">Controlled</div>
       </section>
       <section className="specimen">
         <ToggleButton disabled>Unavailable</ToggleButton>

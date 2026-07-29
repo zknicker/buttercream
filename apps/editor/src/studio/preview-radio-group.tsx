@@ -1,7 +1,19 @@
-import { RadioGroup } from "@buttercream/react";
-import type { ReactElement } from "react";
+import { Field, RadioGroup, Surface } from "@buttercream/react";
+import { type ReactElement, useState } from "react";
 
 const RADIO_SIZES = ["sm", "md", "lg"] as const;
+
+/* Controlled so the selection visibly follows value/onValueChange rather than only its initial state. */
+function ControlledDemo(): ReactElement {
+  const [value, setValue] = useState("email");
+  return (
+    <RadioGroup label="Contact method" name="contact-method" onValueChange={setValue} value={value}>
+      <RadioGroup.Item value="email">Email</RadioGroup.Item>
+      <RadioGroup.Item value="sms">SMS</RadioGroup.Item>
+      <RadioGroup.Item value="phone">Phone call</RadioGroup.Item>
+    </RadioGroup>
+  );
+}
 
 export function RadioGroupPreview(): ReactElement {
   return (
@@ -89,6 +101,42 @@ export function RadioGroupPreview(): ReactElement {
           </RadioGroup.Item>
         </RadioGroup>
         <div className="specimen__label">Item descriptions</div>
+      </section>
+      <section className="specimen">
+        <ControlledDemo />
+        <div className="specimen__label">Controlled</div>
+      </section>
+      <section className="specimen">
+        <Field invalid>
+          <RadioGroup label="Notification channel" name="validation-channel" required>
+            <RadioGroup.Item value="email">Email</RadioGroup.Item>
+            <RadioGroup.Item value="sms">SMS</RadioGroup.Item>
+          </RadioGroup>
+          <Field.Error match>Choose a notification channel to continue.</Field.Error>
+        </Field>
+        <div className="specimen__label">Validation</div>
+      </section>
+      <section className="specimen">
+        <Surface variant="secondary">
+          <RadioGroup
+            defaultValue="surface-pro"
+            label="Plan"
+            name="surface-plan"
+            orientation="horizontal"
+            size="sm"
+          >
+            <RadioGroup.Item value="surface-starter">Starter</RadioGroup.Item>
+            <RadioGroup.Item value="surface-pro">Pro</RadioGroup.Item>
+          </RadioGroup>
+        </Surface>
+        <div className="specimen__label">In Surface</div>
+      </section>
+      <section className="specimen">
+        <RadioGroup defaultValue="render-pro" label="Plan" name="render-plan" render={<fieldset />}>
+          <RadioGroup.Item value="render-starter">Starter</RadioGroup.Item>
+          <RadioGroup.Item value="render-pro">Pro</RadioGroup.Item>
+        </RadioGroup>
+        <div className="specimen__label">Render prop</div>
       </section>
       <section className="specimen">
         <RadioGroup

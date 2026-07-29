@@ -1,10 +1,11 @@
 import { Button, Tooltip, type TooltipContentProps } from "@buttercream/react";
 import type { ReactElement, ReactNode } from "react";
+import type { PreviewIconElements } from "./preview-icons.ts";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const SIDES = ["top", "bottom", "left", "right"] as const;
 
-export function TooltipPreview(): ReactElement {
+export function TooltipPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     /* A short delay so hovering specimens feels immediate in the preview. */
     <Tooltip.Provider delay={300}>
@@ -36,6 +37,15 @@ export function TooltipPreview(): ReactElement {
             <span className="placement-cross__center">Hover</span>
           </div>
           <div className="specimen__label">Placements</div>
+        </section>
+        <section className="specimen">
+          <IconTriggerTooltipSpecimen aria-label="Settings" tooltip="Settings">
+            {icons.settings}
+          </IconTriggerTooltipSpecimen>
+          <IconTriggerTooltipSpecimen aria-label="Team members" tooltip="Team members">
+            {icons.users}
+          </IconTriggerTooltipSpecimen>
+          <div className="specimen__label">Custom trigger (icon button)</div>
         </section>
       </div>
     </Tooltip.Provider>
@@ -70,6 +80,35 @@ function TooltipSpecimen({
             {showArrow ? <Tooltip.Arrow /> : null}
             {children}
           </Tooltip.Popup>
+        </Tooltip.Positioner>
+      </Tooltip.Portal>
+    </Tooltip>
+  );
+}
+
+interface IconTriggerTooltipSpecimenProps {
+  "aria-label": string;
+  children: ReactNode;
+  tooltip: string;
+}
+
+/* Tooltip.Trigger's render prop swaps the rendered <button> for our own, so an icon-only
+ * Button — no visible label — can still carry an accessible name via the tooltip trigger. */
+function IconTriggerTooltipSpecimen({
+  "aria-label": ariaLabel,
+  children,
+  tooltip,
+}: IconTriggerTooltipSpecimenProps): ReactElement {
+  const surface = usePreviewSurface();
+
+  return (
+    <Tooltip>
+      <Tooltip.Trigger aria-label={ariaLabel} render={<Button iconOnly variant="ghost" />}>
+        {children}
+      </Tooltip.Trigger>
+      <Tooltip.Portal container={surface}>
+        <Tooltip.Positioner side="top" sideOffset={3}>
+          <Tooltip.Popup>{tooltip}</Tooltip.Popup>
         </Tooltip.Positioner>
       </Tooltip.Portal>
     </Tooltip>

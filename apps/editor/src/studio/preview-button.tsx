@@ -1,5 +1,5 @@
 import { Button, type ButtonSize, type ButtonVariant } from "@buttercream/react";
-import type { ReactElement } from "react";
+import { type ReactElement, useState } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
 
 const VARIANTS: readonly ButtonVariant[] = [
@@ -18,6 +18,23 @@ const SIZE_LABELS: Record<ButtonSize, string> = {
   md: "Medium",
   sm: "Small",
 };
+
+/* Loading is a prop the caller flips, so one specimen proves it round-trips: click, wait, settle. */
+function SubmitDemoButton(): ReactElement {
+  const [loading, setLoading] = useState(false);
+  return (
+    <Button
+      loading={loading}
+      onClick={() => {
+        setLoading(true);
+        window.setTimeout(() => setLoading(false), 2500);
+      }}
+      variant="outline"
+    >
+      Click to submit
+    </Button>
+  );
+}
 
 function label(value: string): string {
   const spaced = value.replace("-", " ");
@@ -67,6 +84,7 @@ export function ButtonPreview({ icons }: { icons: PreviewIconElements }): ReactE
         <Button loading variant="secondary">
           Uploading
         </Button>
+        <SubmitDemoButton />
         <div className="specimen__label">Loading</div>
       </section>
       <section className="specimen">

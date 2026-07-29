@@ -54,6 +54,23 @@ export function SliderPreview(): ReactElement {
         </div>
         <div className="specimen__label">Disabled</div>
       </section>
+      <section className="specimen">
+        <div className="slider-demo">
+          <Slider defaultValue={45}>
+            <div className="slider__header">
+              <Slider.Label>Storage used</Slider.Label>
+            </div>
+            <Slider.Control>
+              <Slider.Track>
+                <Slider.Indicator />
+              </Slider.Track>
+              <Slider.Thumb getAriaLabel={() => "Storage used"} index={0} />
+            </Slider.Control>
+            <Slider.Value>{(formattedValues) => `${formattedValues[0]} GB free`}</Slider.Value>
+          </Slider>
+        </div>
+        <div className="specimen__label">Custom output</div>
+      </section>
     </div>
   );
 }

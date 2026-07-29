@@ -3,15 +3,33 @@ import {
   Drawer,
   type DrawerBackdropVariant,
   type DrawerPlacement,
+  Field,
+  Input,
 } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
+import type { PreviewIconElements } from "./preview-icons.ts";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const placements: DrawerPlacement[] = ["top", "right", "bottom", "left"];
 const backdrops: DrawerBackdropVariant[] = ["opaque", "blur", "transparent"];
 
-export function DrawerPreview(): ReactElement {
+interface NavItem {
+  icon: keyof PreviewIconElements;
+  label: string;
+}
+
+/* Mirrors HeroUI's own nav-drawer demo items, each with a leading icon from the vocabulary. */
+const navItems: NavItem[] = [
+  { icon: "home", label: "Overview" },
+  { icon: "search", label: "Search" },
+  { icon: "notification", label: "Notifications" },
+  { icon: "mail", label: "Mail" },
+  { icon: "users", label: "Team" },
+  { icon: "settings", label: "Settings" },
+];
+
+export function DrawerPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
       <section className="specimen">
@@ -40,7 +58,16 @@ export function DrawerPreview(): ReactElement {
       </section>
       <section className="specimen">
         <DrawerSpecimen hideCloseButton label="No close button" />
+        <DrawerSpecimen label="Non-dismissable" nonDismissable />
         <div className="specimen__label">States</div>
+      </section>
+      <section className="specimen">
+        <FormDrawerSpecimen />
+        <div className="specimen__label">With form</div>
+      </section>
+      <section className="specimen">
+        <NavigationDrawerSpecimen icons={icons} />
+        <div className="specimen__label">Navigation drawer</div>
       </section>
     </div>
   );
@@ -51,6 +78,7 @@ interface DrawerSpecimenProps {
   hideCloseButton?: boolean;
   label: string;
   longBody?: boolean;
+  nonDismissable?: boolean;
   placement?: DrawerPlacement;
   withHandle?: boolean;
 }
@@ -60,6 +88,7 @@ function DrawerSpecimen({
   hideCloseButton = false,
   label,
   longBody = false,
+  nonDismissable = false,
   placement = "right",
   withHandle = false,
 }: DrawerSpecimenProps): ReactElement {
@@ -68,7 +97,18 @@ function DrawerSpecimen({
   const [open, setOpen] = useState(false);
 
   return (
-    <Drawer onOpenChange={setOpen} open={open}>
+    <Drawer
+      disablePointerDismissal={nonDismissable}
+      onOpenChange={(next, eventDetails) => {
+        /* Non-dismissable: swallow escape-key closes too, leaving the footer buttons as the only exit. */
+        if (nonDismissable && !next && eventDetails.reason === "escape-key") {
+          eventDetails.cancel();
+          return;
+        }
+        setOpen(next);
+      }}
+      open={open}
+    >
       <Drawer.Trigger render={<Button />}>{label}</Drawer.Trigger>
       <Drawer.Portal container={surface}>
         <Drawer.Backdrop variant={backdrop} />
@@ -80,7 +120,11 @@ function DrawerSpecimen({
               {hideCloseButton ? null : <Drawer.CloseTrigger />}
             </Drawer.Header>
             <Drawer.Body>
-              <Drawer.Description>Review recent activity and mentions.</Drawer.Description>
+              <Drawer.Description>
+                {nonDismissable
+                  ? "Outside clicks and Escape are blocked; only the buttons below close this."
+                  : "Review recent activity and mentions."}
+              </Drawer.Description>
               {Array.from({ length: longBody ? 20 : 0 }, (_, index) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: static filler copy that never reorders.
                 <p key={index}>Review recent activity and mentions.</p>
@@ -92,6 +136,81 @@ function DrawerSpecimen({
               </Button>
               <Button onClick={() => setOpen(false)}>Save</Button>
             </Drawer.Footer>
+          </Drawer.Dialog>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer>
+  );
+}
+
+/* Trivial to slot form controls into the body — no new Drawer props needed. */
+function FormDrawerSpecimen(): ReactElement {
+  const surface = usePreviewSurface();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Drawer onOpenChange={setOpen} open={open}>
+      <Drawer.Trigger render={<Button variant="secondary" />}>Edit profile</Drawer.Trigger>
+      <Drawer.Portal container={surface}>
+        <Drawer.Backdrop />
+        <Drawer.Content>
+          <Drawer.Dialog>
+            <Drawer.Header>
+              <Drawer.Heading>Edit profile</Drawer.Heading>
+              <Drawer.CloseTrigger />
+            </Drawer.Header>
+            <Drawer.Body style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              <Field name="name">
+                <Field.Label>Name</Field.Label>
+                <Input defaultValue="Jane Doe" />
+              </Field>
+              <Field name="email">
+                <Field.Label>Email</Field.Label>
+                <Input defaultValue="jane@example.com" />
+              </Field>
+            </Drawer.Body>
+            <Drawer.Footer>
+              <Button onClick={() => setOpen(false)} variant="tertiary">
+                Cancel
+              </Button>
+              <Button onClick={() => setOpen(false)}>Save</Button>
+            </Drawer.Footer>
+          </Drawer.Dialog>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer>
+  );
+}
+
+/* Left placement plus an icon-led item list reads as a navigation drawer with no new API surface. */
+function NavigationDrawerSpecimen({ icons }: { icons: PreviewIconElements }): ReactElement {
+  const surface = usePreviewSurface();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Drawer onOpenChange={setOpen} open={open}>
+      <Drawer.Trigger render={<Button variant="secondary" />}>Menu</Drawer.Trigger>
+      <Drawer.Portal container={surface}>
+        <Drawer.Backdrop />
+        <Drawer.Content placement="left">
+          <Drawer.Dialog>
+            <Drawer.Header>
+              <Drawer.Heading>Menu</Drawer.Heading>
+              <Drawer.CloseTrigger />
+            </Drawer.Header>
+            <Drawer.Body style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+              {navItems.map((item) => (
+                <Button
+                  key={item.label}
+                  onClick={() => setOpen(false)}
+                  style={{ justifyContent: "flex-start" }}
+                  variant="ghost"
+                >
+                  {icons[item.icon]}
+                  {item.label}
+                </Button>
+              ))}
+            </Drawer.Body>
           </Drawer.Dialog>
         </Drawer.Content>
       </Drawer.Portal>

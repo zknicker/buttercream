@@ -1,4 +1,4 @@
-import { Button, Input } from "@buttercream/react";
+import { Button, Input, Surface } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
 
@@ -54,6 +54,12 @@ export function InputPreview(): ReactElement {
           <Input aria-label="Disabled" defaultValue="Read only" disabled />
         </div>
         <div className="specimen__label">Required and disabled</div>
+      </section>
+      <section className="specimen">
+        <Surface>
+          <Input aria-label="Name" placeholder="Name" variant="secondary" />
+        </Surface>
+        <div className="specimen__label">On surface</div>
       </section>
     </div>
   );

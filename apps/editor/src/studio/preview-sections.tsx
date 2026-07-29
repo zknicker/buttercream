@@ -2,6 +2,8 @@ import type { DesignSystem } from "@buttercream/theme-core";
 import type { CSSProperties, ReactElement } from "react";
 import type { ShellTheme } from "../shell-theme.ts";
 import { BrandPage } from "./brand-page.tsx";
+import { ComponentDocsPanel } from "./component-docs.tsx";
+import { COMPONENT_DOCS } from "./docs/index.ts";
 import { ChatAppPreview } from "./preview-app-chat.tsx";
 import { DashboardAppPreview } from "./preview-app-dashboard.tsx";
 import { FinancesAppPreview } from "./preview-app-finances.tsx";
@@ -44,7 +46,6 @@ import { createPreviewIconElements } from "./preview-icons.ts";
 import { ModalPreview } from "./preview-modal.tsx";
 import {
   AccordionPreview,
-  AlertDialogPreview,
   BreadcrumbsPreview,
   ComboboxPreview,
   DropdownPreview,
@@ -72,7 +73,6 @@ export type PreviewSection =
   | "Guides"
   | "Accordion"
   | "Alert"
-  | "Alert Dialog"
   | "Autocomplete"
   | "Avatar"
   | "Badge"
@@ -164,6 +164,23 @@ export function sectionFillsSurface(section: PreviewSection): boolean {
 
 export function renderPreviewSection(
   section: PreviewSection,
+  context: PreviewSectionContext,
+): ReactElement {
+  const content = renderSectionContent(section, context);
+  const doc = COMPONENT_DOCS[section];
+  if (!doc) {
+    return content;
+  }
+  return (
+    <>
+      {content}
+      <ComponentDocsPanel doc={doc} />
+    </>
+  );
+}
+
+function renderSectionContent(
+  section: PreviewSection,
   { designSystem, onUpdate, surfaceStyle, theme }: PreviewSectionContext,
 ): ReactElement {
   const iconSettings = designSystem.icons;
@@ -188,10 +205,10 @@ export function renderPreviewSection(
     return <InputPreview />;
   }
   if (section === "Modal") {
-    return <ModalPreview />;
+    return <ModalPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Drawer") {
-    return <DrawerPreview />;
+    return <DrawerPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Popover") {
     return <PopoverPreview />;
@@ -232,9 +249,6 @@ export function renderPreviewSection(
   if (section === "Accordion") {
     return <AccordionPreview icons={iconSettings} />;
   }
-  if (section === "Alert Dialog") {
-    return <AlertDialogPreview />;
-  }
   if (section === "Breadcrumbs") {
     return <BreadcrumbsPreview />;
   }
@@ -257,10 +271,10 @@ export function renderPreviewSection(
     return <AlertPreview />;
   }
   if (section === "Badge") {
-    return <BadgePreview />;
+    return <BadgePreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Chip") {
-    return <ChipPreview />;
+    return <ChipPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Sidebar") {
     return <SidebarPreview icons={createPreviewIconElements(iconSettings)} />;
@@ -308,13 +322,13 @@ export function renderPreviewSection(
     return <TextareaPreview />;
   }
   if (section === "Segment") {
-    return <SegmentPreview />;
+    return <SegmentPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Select") {
     return <SelectPreview />;
   }
   if (section === "Separator") {
-    return <SeparatorPreview />;
+    return <SeparatorPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Slider") {
     return <SliderPreview />;
@@ -335,13 +349,13 @@ export function renderPreviewSection(
     return <TypographyPreview />;
   }
   if (section === "Toggle Button") {
-    return <ToggleButtonPreview />;
+    return <ToggleButtonPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Tooltip") {
-    return <TooltipPreview />;
+    return <TooltipPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Avatar") {
-    return <AvatarPreview />;
+    return <AvatarPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   return <ButtonPreview icons={createPreviewIconElements(iconSettings)} />;
 }

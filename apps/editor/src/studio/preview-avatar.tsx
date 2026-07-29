@@ -7,6 +7,7 @@ import {
   type AvatarSize,
 } from "@buttercream/react";
 import type { ReactElement } from "react";
+import type { PreviewIconElements } from "./preview-icons.ts";
 
 const COLORS: readonly AvatarColor[] = ["default", "accent", "success", "warning", "danger"];
 const SIZES: readonly AvatarSize[] = ["sm", "md", "lg"];
@@ -31,7 +32,7 @@ function SpecimenAvatar({
   );
 }
 
-export function AvatarPreview(): ReactElement {
+export function AvatarPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
       <section className="specimen">
@@ -57,6 +58,19 @@ export function AvatarPreview(): ReactElement {
           <SpecimenAvatar key={shape} name="Bea Cole" shape={shape} />
         ))}
         <div className="specimen__label">Shapes</div>
+      </section>
+      <section className="specimen">
+        <Avatar aria-label="Bea Cole">
+          <Avatar.Fallback>{icons.users}</Avatar.Fallback>
+        </Avatar>
+        <Avatar aria-label="Guest" color="accent" variant="soft">
+          <Avatar.Fallback>{icons.users}</Avatar.Fallback>
+        </Avatar>
+        <Avatar aria-label="Sam Moss">
+          <Avatar.Image alt="" src="https://broken.example/avatar.jpg" />
+          <Avatar.Fallback>SM</Avatar.Fallback>
+        </Avatar>
+        <div className="specimen__label">Fallback content</div>
       </section>
       <section className="specimen">
         <AgentAvatar name="Ada King" status="online" />
