@@ -12,60 +12,54 @@ import {
   Textarea,
 } from "@buttercream/react";
 import { type ReactElement, useState } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 
 export function TextFieldPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Basic">
         <Field name="email">
           <Field.Label>Email</Field.Label>
           <Input placeholder="Enter your email" />
         </Field>
-        <div className="specimen__label">Basic</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Required">
         <Field name="full-name">
           <Field.Label required>Full name</Field.Label>
           <Input placeholder="John Doe" />
           <Field.Description>This field is required</Field.Description>
         </Field>
-        <div className="specimen__label">Required</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Description">
         <Field name="username">
           <Field.Label>Username</Field.Label>
           <Input defaultValue="jane_doe" />
           <Field.Description>Choose a unique username for your profile.</Field.Description>
         </Field>
-        <div className="specimen__label">Description</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Field name="locked">
           <Field.Label>Account ID</Field.Label>
           <Input defaultValue="acct_18fc2" disabled />
         </Field>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Validation">
         <Field invalid name="password">
           <Field.Label required>Password</Field.Label>
           <Input type="password" />
           <Field.Error match>Must be at least 8 characters</Field.Error>
         </Field>
-        <div className="specimen__label">Validation</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <TextFieldControlledDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Full width">
         <Field fullWidth name="full-width-field">
           <Field.Label>Display name</Field.Label>
           <Input fullWidth placeholder="Spans the container" />
         </Field>
-        <div className="specimen__label">Full width</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Input types">
         <Field name="type">
           <Field.Label>Contact email</Field.Label>
           <Input placeholder="you@example.com" type="email" />
@@ -74,17 +68,15 @@ export function TextFieldPreview(): ReactElement {
           <Field.Label>API key</Field.Label>
           <Input placeholder="sk_live_..." type="password" />
         </Field>
-        <div className="specimen__label">Input types</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="In Surface">
         <Surface variant="secondary">
           <Field name="on-surface">
             <Field.Label>Company</Field.Label>
             <Input placeholder="Acme Inc." variant="secondary" />
           </Field>
         </Surface>
-        <div className="specimen__label">In Surface</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -110,46 +102,40 @@ function TextFieldControlledDemo(): ReactElement {
 export function TextareaPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Basic">
         <Field name="bio">
           <Field.Label>Bio</Field.Label>
           <Textarea placeholder="Tell us about yourself..." />
           <Field.Description>Minimum 20 characters.</Field.Description>
         </Field>
-        <div className="specimen__label">Basic</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Secondary">
         <Field name="notes">
           <Field.Label>Notes</Field.Label>
           <Textarea placeholder="Secondary variant" variant="secondary" />
         </Field>
-        <div className="specimen__label">Secondary</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Rows">
         <Field name="tall">
           <Field.Label>Release notes</Field.Label>
           <Textarea rows={6} />
         </Field>
-        <div className="specimen__label">Rows</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Field name="readonly-notes">
           <Field.Label>Archived note</Field.Label>
           <Textarea defaultValue="This note can no longer be edited." disabled />
         </Field>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <TextareaControlledDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Full width">
         <Field fullWidth name="full-width-bio">
           <Field.Label>Summary</Field.Label>
           <Textarea fullWidth placeholder="Spans the container" />
         </Field>
-        <div className="specimen__label">Full width</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -177,33 +163,29 @@ function TextareaControlledDemo(): ReactElement {
 export function NumberFieldPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Basic">
         <Field name="quantity">
           <Field.Label>Quantity</Field.Label>
           <NumberField defaultValue={1} min={0} />
         </Field>
-        <div className="specimen__label">Basic</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Step and bounds">
         <Field name="seats">
           <Field.Label>Seats</Field.Label>
           <NumberField defaultValue={5} max={20} min={1} step={5} />
           <Field.Description>Sold in blocks of five.</Field.Description>
         </Field>
-        <div className="specimen__label">Step and bounds</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Field name="locked-count">
           <Field.Label>Allocated</Field.Label>
           <NumberField defaultValue={12} disabled />
         </Field>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <NumberFieldControlledDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Format options">
         <Field name="price">
           <Field.Label>Price</Field.Label>
           <NumberField
@@ -222,15 +204,13 @@ export function NumberFieldPreview(): ReactElement {
             step={0.01}
           />
         </Field>
-        <div className="specimen__label">Format options</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom icons">
         <Field name="custom-glyphs">
           <Field.Label>Volume</Field.Label>
           <NumberField decrementLabel="◁" defaultValue={50} incrementLabel="▷" max={100} min={0} />
         </Field>
-        <div className="specimen__label">Custom icons</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -250,7 +230,7 @@ function NumberFieldControlledDemo(): ReactElement {
 export function FieldsetPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Grouped fields">
         <Fieldset>
           <Fieldset.Legend>Billing address</Fieldset.Legend>
           <Fieldset.Group>
@@ -264,9 +244,8 @@ export function FieldsetPreview(): ReactElement {
             </Field>
           </Fieldset.Group>
         </Fieldset>
-        <div className="specimen__label">Grouped fields</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="On Surface">
         <Surface variant="secondary">
           <Fieldset>
             <Fieldset.Legend>Shipping address</Fieldset.Legend>
@@ -282,9 +261,8 @@ export function FieldsetPreview(): ReactElement {
             </Fieldset.Group>
           </Fieldset>
         </Surface>
-        <div className="specimen__label">On Surface</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Actions">
         <Fieldset>
           <Fieldset.Legend>Profile</Fieldset.Legend>
           <Fieldset.Group>
@@ -298,8 +276,7 @@ export function FieldsetPreview(): ReactElement {
             <Button>Save</Button>
           </Fieldset.Actions>
         </Fieldset>
-        <div className="specimen__label">Actions</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -307,7 +284,7 @@ export function FieldsetPreview(): ReactElement {
 export function SearchFieldPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Basic">
         <Field name="search">
           <Field.Label>Search</Field.Label>
           <SearchField>
@@ -318,9 +295,8 @@ export function SearchFieldPreview(): ReactElement {
             </SearchField.Group>
           </SearchField>
         </Field>
-        <div className="specimen__label">Basic</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="With a value">
         <Field name="search-products">
           <Field.Label>Search products</Field.Label>
           <SearchField defaultValue="running shoes">
@@ -332,9 +308,8 @@ export function SearchFieldPreview(): ReactElement {
           </SearchField>
           <Field.Description>Enter keywords to search for products</Field.Description>
         </Field>
-        <div className="specimen__label">With a value</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Field name="search-disabled">
           <Field.Label>Search archive</Field.Label>
           <SearchField>
@@ -345,13 +320,11 @@ export function SearchFieldPreview(): ReactElement {
             </SearchField.Group>
           </SearchField>
         </Field>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <SearchFieldControlledDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Full width">
         <Field fullWidth name="search-full-width">
           <Field.Label>Search everything</Field.Label>
           <SearchField fullWidth>
@@ -362,9 +335,8 @@ export function SearchFieldPreview(): ReactElement {
             </SearchField.Group>
           </SearchField>
         </Field>
-        <div className="specimen__label">Full width</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom icon">
         <Field name="search-custom-icon">
           <Field.Label>Filter results</Field.Label>
           <SearchField>
@@ -389,8 +361,7 @@ export function SearchFieldPreview(): ReactElement {
             </SearchField.Group>
           </SearchField>
         </Field>
-        <div className="specimen__label">Custom icon</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -424,15 +395,13 @@ function SearchFieldControlledDemo(): ReactElement {
 export function CloseButtonPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default">
         <CloseButton />
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <CloseButton disabled />
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom icon">
         <CloseButton>
           <svg
             aria-hidden="true"
@@ -449,8 +418,7 @@ export function CloseButtonPreview(): ReactElement {
             />
           </svg>
         </CloseButton>
-        <div className="specimen__label">Custom icon</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -458,35 +426,29 @@ export function CloseButtonPreview(): ReactElement {
 export function ProgressBarPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="With label and value">
         <ProgressBar label="Uploading" showValue value={40} />
-        <div className="specimen__label">With label and value</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Sizes">
         <ProgressBar size="sm" value={30} />
         <ProgressBar value={55} />
         <ProgressBar size="lg" value={80} />
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Colours">
         <ProgressBar color="accent" value={45} />
         <ProgressBar color="success" value={60} />
         <ProgressBar color="warning" value={75} />
         <ProgressBar color="danger" value={90} />
-        <div className="specimen__label">Colours</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Indeterminate">
         <ProgressBar label="Preparing" value={null} />
-        <div className="specimen__label">Indeterminate</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom value scale">
         <ProgressBar label="Steps completed" max={10} min={0} showValue value={3} />
-        <div className="specimen__label">Custom value scale</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Without label">
         <ProgressBar aria-label="Syncing files" value={65} />
-        <div className="specimen__label">Without label</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -494,30 +456,25 @@ export function ProgressBarPreview(): ReactElement {
 export function MeterPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="With label and value">
         <Meter label="Storage" showValue value={62} />
-        <div className="specimen__label">With label and value</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Sizes">
         <Meter size="sm" value={30} />
         <Meter value={55} />
         <Meter size="lg" value={80} />
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Colours">
         <Meter color="success" value={35} />
         <Meter color="warning" value={70} />
         <Meter color="danger" value={95} />
-        <div className="specimen__label">Colours</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom value scale">
         <Meter label="Score" max={10} min={0} showValue value={7} />
-        <div className="specimen__label">Custom value scale</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Without label">
         <Meter aria-label="Battery level" value={45} />
-        <div className="specimen__label">Without label</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

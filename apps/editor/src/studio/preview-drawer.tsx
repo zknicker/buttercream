@@ -9,6 +9,7 @@ import {
 import type { ReactElement } from "react";
 import { useState } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const placements: DrawerPlacement[] = ["top", "right", "bottom", "left"];
@@ -32,43 +33,35 @@ const navItems: NavItem[] = [
 export function DrawerPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default (right)">
         <DrawerSpecimen label="Open drawer" />
-        <div className="specimen__label">Default (right)</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Placements">
         {placements.map((placement) => (
           <DrawerSpecimen key={placement} label={placement} placement={placement} />
         ))}
-        <div className="specimen__label">Placements</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Backdrops">
         {backdrops.map((backdrop) => (
           <DrawerSpecimen backdrop={backdrop} key={backdrop} label={backdrop} />
         ))}
-        <div className="specimen__label">Backdrops</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Handle (bottom placement)">
         <DrawerSpecimen label="With handle" placement="bottom" withHandle />
-        <div className="specimen__label">Handle (bottom placement)</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Scrolling body">
         <DrawerSpecimen label="Long body" longBody />
-        <div className="specimen__label">Scrolling body</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="States">
         <DrawerSpecimen hideCloseButton label="No close button" />
         <DrawerSpecimen label="Non-dismissable" nonDismissable />
-        <div className="specimen__label">States</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="With form">
         <FormDrawerSpecimen />
-        <div className="specimen__label">With form</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Navigation drawer">
         <NavigationDrawerSpecimen icons={icons} />
-        <div className="specimen__label">Navigation drawer</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

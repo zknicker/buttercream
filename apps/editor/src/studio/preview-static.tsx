@@ -2,34 +2,32 @@ import { Button, ButtonGroup, type ButtonSize, ColorSwatch, Kbd, Link } from "@b
 import type { DesignSystem } from "@buttercream/theme-core";
 import type { ReactElement } from "react";
 import { createPreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 
 const SWATCH_SIZES = ["xs", "sm", "md", "lg", "xl"] as const;
 
 export function KbdPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Keys and chords">
         <Kbd>⌘ K</Kbd>
         <Kbd>⇧ ⌘ P</Kbd>
         <Kbd>Esc</Kbd>
-        <div className="specimen__label">Keys and chords</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Inline with text">
         <span>
           Press <Kbd>⌘ K</Kbd> to search.
         </span>
-        <div className="specimen__label">Inline with text</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Named keys and light variant">
         <Kbd keys="command">K</Kbd>
         <Kbd keys={["shift", "command"]}>P</Kbd>
         <Kbd keys="escape" />
         <Kbd keys="command" variant="light">
           K
         </Kbd>
-        <div className="specimen__label">Named keys and light variant</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Navigation and special keys">
         <Kbd keys="up" />
         <Kbd keys="down" />
         <Kbd keys="left" />
@@ -39,9 +37,8 @@ export function KbdPreview(): ReactElement {
         <Kbd keys="enter" />
         <Kbd keys="tab" />
         <Kbd keys="space" />
-        <div className="specimen__label">Navigation and special keys</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Instructional list">
         <div>
           <Kbd keys={["command", "shift"]}>N</Kbd> New window
         </div>
@@ -51,8 +48,7 @@ export function KbdPreview(): ReactElement {
         <div>
           <Kbd keys="escape" /> Close dialog
         </div>
-        <div className="specimen__label">Instructional list</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -71,41 +67,35 @@ function StarGlyph(): ReactElement {
 export function LinkPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default">
         <Link href="#docs">Read the documentation</Link>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="External">
         <Link href="https://example.com" icon target="_blank">
           Opens in a new tab
         </Link>
-        <div className="specimen__label">External</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Inline">
         <span>
           Built on <Link href="#base-ui">Base UI</Link> and styled with tokens.
         </span>
-        <div className="specimen__label">Inline</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <Link aria-disabled="true" href="#none">
           Unavailable
         </Link>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom icon">
         <Link href="#favorites" icon={<StarGlyph />}>
           Add to favorites
         </Link>
-        <div className="specimen__label">Custom icon</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom styling via style">
         {/* style passes through like any other native anchor attribute, so a caller can override the resting underline. */}
         <Link href="#terms" style={{ textDecorationLine: "underline" }}>
           Terms of service
         </Link>
-        <div className="specimen__label">Custom styling via style</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -113,35 +103,31 @@ export function LinkPreview(): ReactElement {
 export function ColorSwatchPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Sizes">
         {SWATCH_SIZES.map((size) => (
           <ColorSwatch color="var(--accent)" key={size} label={`Accent ${size}`} size={size} />
         ))}
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Circle">
         <ColorSwatch color="var(--accent)" label="Accent" shape="circle" />
         <ColorSwatch color="var(--success)" label="Success" shape="circle" />
         <ColorSwatch color="var(--warning)" label="Warning" shape="circle" />
         <ColorSwatch color="var(--danger)" label="Danger" shape="circle" />
-        <div className="specimen__label">Circle</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Translucent">
         {/* The checkerboard is what makes a translucent value readable as translucent. */}
         <ColorSwatch color="rgb(4 133 247 / 0.25)" label="Accent at 25%" />
         <ColorSwatch color="rgb(4 133 247 / 0.5)" label="Accent at 50%" />
         <ColorSwatch color="transparent" label="Transparent" />
-        <div className="specimen__label">Translucent</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom style via style">
         {/* className and style both pass through, so a caller can layer its own treatment on top. */}
         <ColorSwatch
           color="var(--accent)"
           label="Accent, heavier ring"
           style={{ boxShadow: "inset 0 0 0 2px var(--accent)" }}
         />
-        <div className="specimen__label">Custom style via style</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -155,23 +141,21 @@ export function ButtonGroupPreview({ icons }: { icons: DesignSystem["icons"] }):
 
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Split button">
         <ButtonGroup>
           <Button>Merge pull request</Button>
           <Button aria-label="More merge options" iconOnly>
             {icon.chevronDown}
           </Button>
         </ButtonGroup>
-        <div className="specimen__label">Split button</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Paged">
         <ButtonGroup>
           <Button variant="tertiary">Previous</Button>
           <Button variant="tertiary">Next</Button>
         </ButtonGroup>
-        <div className="specimen__label">Paged</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Variants">
         {GROUP_VARIANTS.map((variant) => (
           <ButtonGroup key={variant}>
             <Button variant={variant}>First</Button>
@@ -179,9 +163,8 @@ export function ButtonGroupPreview({ icons }: { icons: DesignSystem["icons"] }):
             <Button variant={variant}>Third</Button>
           </ButtonGroup>
         ))}
-        <div className="specimen__label">Variants</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Vertical, icon-only">
         {/*
          * Icon-only, as the reference shows it. A vertical stack of text labels reads as a
          * tall slab rather than one control, which is why that is not a shape it offers.
@@ -197,24 +180,21 @@ export function ButtonGroupPreview({ icons }: { icons: DesignSystem["icons"] }):
             {icon.settings}
           </Button>
         </ButtonGroup>
-        <div className="specimen__label">Vertical, icon-only</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Single button keeps all corners">
         <ButtonGroup>
           <Button>Only child</Button>
         </ButtonGroup>
-        <div className="specimen__label">Single button keeps all corners</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Cascading variant and size">
         {/* variant/size/disabled set once on the group cascade to every child; a Button's own prop still wins. */}
         <ButtonGroup size="lg" variant="secondary">
           <Button>Default</Button>
           <Button>Cascaded</Button>
           <Button variant="danger">Overridden</Button>
         </ButtonGroup>
-        <div className="specimen__label">Cascading variant and size</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Sizes">
         {GROUP_SIZES.map((size) => (
           <ButtonGroup key={size} size={size} variant="outline">
             <Button>First</Button>
@@ -222,24 +202,21 @@ export function ButtonGroupPreview({ icons }: { icons: DesignSystem["icons"] }):
             <Button>Third</Button>
           </ButtonGroup>
         ))}
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Full width">
         <ButtonGroup fullWidth>
           <Button>Left</Button>
           <Button>Middle</Button>
           <Button>Right</Button>
         </ButtonGroup>
-        <div className="specimen__label">Full width</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <ButtonGroup disabled variant="secondary">
           <Button>First</Button>
           <Button>Second</Button>
           <Button>Third</Button>
         </ButtonGroup>
-        <div className="specimen__label">Disabled</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

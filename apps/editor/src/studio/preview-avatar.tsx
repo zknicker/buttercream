@@ -8,6 +8,7 @@ import {
 } from "@buttercream/react";
 import type { ReactElement } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 
 const COLORS: readonly AvatarColor[] = ["default", "accent", "success", "warning", "danger"];
 const SIZES: readonly AvatarSize[] = ["sm", "md", "lg"];
@@ -35,31 +36,27 @@ function SpecimenAvatar({
 export function AvatarPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Colors">
         {COLORS.map((color) => (
           <SpecimenAvatar color={color} key={color} name="Ada King" />
         ))}
-        <div className="specimen__label">Colors</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Soft variant">
         {COLORS.map((color) => (
           <SpecimenAvatar color={color} key={color} name="Ada King" variant="soft" />
         ))}
-        <div className="specimen__label">Soft variant</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         {SIZES.map((size) => (
           <SpecimenAvatar key={size} name="Sam Moss" size={size} />
         ))}
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Shapes">
         {SHAPES.map((shape) => (
           <SpecimenAvatar key={shape} name="Bea Cole" shape={shape} />
         ))}
-        <div className="specimen__label">Shapes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Fallback content">
         <Avatar aria-label="Bea Cole">
           <Avatar.Fallback>{icons.users}</Avatar.Fallback>
         </Avatar>
@@ -70,14 +67,12 @@ export function AvatarPreview({ icons }: { icons: PreviewIconElements }): ReactE
           <Avatar.Image alt="" src="https://broken.example/avatar.jpg" />
           <Avatar.Fallback>SM</Avatar.Fallback>
         </Avatar>
-        <div className="specimen__label">Fallback content</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Agent status">
         <AgentAvatar name="Ada King" status="online" />
         <AgentAvatar color="accent" name="Max North" status="busy" />
         <AgentAvatar name="Jo Lane" status="offline" variant="soft" />
-        <div className="specimen__label">Agent status</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

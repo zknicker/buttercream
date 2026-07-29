@@ -1,6 +1,7 @@
 import { Button, Checkbox, Switch } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 
 const CHOICE_SIZES = ["sm", "md", "lg"] as const;
 
@@ -57,16 +58,15 @@ export function CheckboxPreview(): ReactElement {
 
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default and selected">
         <div className="control-stack">
           <Checkbox name="terms">Accept terms and conditions</Checkbox>
           <Checkbox defaultChecked name="notifications">
             Enable email notifications
           </Checkbox>
         </div>
-        <div className="specimen__label">Default and selected</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Variants">
         <div className="control-stack">
           <Checkbox defaultChecked name="variant-primary">
             Primary
@@ -75,9 +75,8 @@ export function CheckboxPreview(): ReactElement {
             Secondary
           </Checkbox>
         </div>
-        <div className="specimen__label">Variants</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         <div className="control-stack">
           {CHOICE_SIZES.map((size) => (
             <Checkbox defaultChecked key={size} name={`size-${size}`} size={size}>
@@ -85,21 +84,18 @@ export function CheckboxPreview(): ReactElement {
             </Checkbox>
           ))}
         </div>
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Rounded">
         <Checkbox defaultChecked name="rounded" rounded>
           Rounded control
         </Checkbox>
-        <div className="specimen__label">Rounded</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Description">
         <Checkbox defaultChecked description="We only send a digest once a week." name="described">
           Weekly digest
         </Checkbox>
-        <div className="specimen__label">Description</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Indeterminate">
         <Checkbox
           indeterminate={indeterminate}
           name="indeterminate"
@@ -107,9 +103,8 @@ export function CheckboxPreview(): ReactElement {
         >
           Select all
         </Checkbox>
-        <div className="specimen__label">Indeterminate</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <div className="control-stack">
           <Checkbox disabled name="disabled-off">
             Premium feature
@@ -118,16 +113,14 @@ export function CheckboxPreview(): ReactElement {
             Included feature
           </Checkbox>
         </div>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="External label">
         <span style={{ alignItems: "center", display: "flex", gap: "0.5rem" }}>
           <Checkbox id="external-label-row" name="external-label" />
           <label htmlFor="external-label-row">Acme Corp</label>
         </span>
-        <div className="specimen__label">External label</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Invalid">
         <div className="control-stack">
           <Checkbox aria-invalid="true" name="invalid" required>
             I agree to the terms
@@ -141,9 +134,8 @@ export function CheckboxPreview(): ReactElement {
             Legacy plan
           </Checkbox>
         </div>
-        <div className="specimen__label">Invalid</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom render function">
         <Checkbox
           name="custom-render"
           render={(props, state) => (
@@ -159,12 +151,10 @@ export function CheckboxPreview(): ReactElement {
         >
           Custom render function
         </Checkbox>
-        <div className="specimen__label">Custom render function</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Form integration">
         <CheckboxFormDemo />
-        <div className="specimen__label">Form integration</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -172,16 +162,15 @@ export function CheckboxPreview(): ReactElement {
 export function SwitchPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default and selected">
         <div className="control-stack">
           <Switch name="default">Enable notifications</Switch>
           <Switch defaultChecked name="selected">
             Enable notifications
           </Switch>
         </div>
-        <div className="specimen__label">Default and selected</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         <div className="control-stack">
           {CHOICE_SIZES.map((size) => (
             <Switch defaultChecked key={size} name={`size-${size}`} size={size}>
@@ -189,9 +178,8 @@ export function SwitchPreview(): ReactElement {
             </Switch>
           ))}
         </div>
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Description">
         <Switch
           defaultChecked
           description="Automatically match the system appearance."
@@ -199,9 +187,8 @@ export function SwitchPreview(): ReactElement {
         >
           Dark mode
         </Switch>
-        <div className="specimen__label">Description</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <div className="control-stack">
           <Switch disabled name="disabled-off">
             Notifications unavailable
@@ -210,14 +197,12 @@ export function SwitchPreview(): ReactElement {
             Locked on
           </Switch>
         </div>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Without label">
         <Switch aria-label="Wi-Fi" defaultChecked name="no-label-wifi" />
         <Switch aria-label="Airplane mode" name="no-label-airplane" />
-        <div className="specimen__label">Without label</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Group (horizontal)">
         <Switch defaultChecked name="group-wifi">
           Wi-Fi
         </Switch>
@@ -225,9 +210,8 @@ export function SwitchPreview(): ReactElement {
         <Switch defaultChecked name="group-airplane">
           Airplane mode
         </Switch>
-        <div className="specimen__label">Group (horizontal)</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Render props">
         <Switch
           name="custom-render"
           render={(props, state) => (
@@ -243,12 +227,10 @@ export function SwitchPreview(): ReactElement {
         >
           Custom render function
         </Switch>
-        <div className="specimen__label">Render props</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Form integration">
         <SwitchFormDemo />
-        <div className="specimen__label">Form integration</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

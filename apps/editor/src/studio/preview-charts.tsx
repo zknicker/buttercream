@@ -11,6 +11,7 @@ import {
   XAxis,
 } from "@buttercream/react/charts";
 import type { ReactElement } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 
 /*
  * Chart specimens. Every series here paints from --chart-* tokens, so the point of the page is
@@ -34,34 +35,33 @@ const SERIES = MONTHS.map((month, index) => ({
   revenue: REVENUE[index],
 }));
 
-function Specimen({
-  caption,
+function ChartSpecimen({
   children,
+  label,
 }: {
-  caption: string;
   children: ReactElement;
+  label: string;
 }): ReactElement {
   return (
-    <section className="specimen specimen--stack">
+    <Specimen className="specimen--stack" label={label}>
       <div className="chart-demo">{children}</div>
-      <div className="specimen__label">{caption}</div>
-    </section>
+    </Specimen>
   );
 }
 
 export function ChartsPreview(): ReactElement {
   return (
     <div className="specimens">
-      <Specimen caption="Line">
+      <ChartSpecimen label="Line">
         <LineChart data={SERIES}>
           <Grid horizontal />
           <XAxis />
           <Line dataKey="revenue" />
           <ChartTooltip />
         </LineChart>
-      </Specimen>
+      </ChartSpecimen>
 
-      <Specimen caption="Two series">
+      <ChartSpecimen label="Two series">
         {/*
          * Adjacent steps of the ramp rather than two unrelated hues, so the pair reads as one
          * measurement split in two.
@@ -73,27 +73,27 @@ export function ChartsPreview(): ReactElement {
           <Line dataKey="expenses" stroke="var(--chart-4)" />
           <ChartTooltip />
         </LineChart>
-      </Specimen>
+      </ChartSpecimen>
 
-      <Specimen caption="Area">
+      <ChartSpecimen label="Area">
         <AreaChart data={SERIES}>
           <Grid horizontal />
           <XAxis />
           <Area dataKey="revenue" />
           <ChartTooltip />
         </AreaChart>
-      </Specimen>
+      </ChartSpecimen>
 
-      <Specimen caption="Bar">
+      <ChartSpecimen label="Bar">
         <BarChart data={SERIES}>
           <Grid horizontal />
           <BarXAxis />
           <Bar dataKey="revenue" />
           <ChartTooltip />
         </BarChart>
-      </Specimen>
+      </ChartSpecimen>
 
-      <Specimen caption="Stacked bars">
+      <ChartSpecimen label="Stacked bars">
         <BarChart data={SERIES} stacked>
           <Grid horizontal />
           <BarXAxis />
@@ -101,24 +101,24 @@ export function ChartsPreview(): ReactElement {
           <Bar dataKey="revenue" fill="var(--chart-2)" />
           <ChartTooltip />
         </BarChart>
-      </Specimen>
+      </ChartSpecimen>
 
-      <Specimen caption="Horizontal bars">
+      <ChartSpecimen label="Horizontal bars">
         <BarChart data={SERIES.slice(0, 6)} orientation="horizontal">
           <Grid vertical />
           <Bar dataKey="revenue" />
           <ChartTooltip />
         </BarChart>
-      </Specimen>
+      </ChartSpecimen>
 
-      <Specimen caption="Loading">
+      <ChartSpecimen label="Loading">
         {/* The shimmer reads --chart-foreground-muted, so it tracks the theme too. */}
         <LineChart data={SERIES} loadingLabel="Loading revenue…" status="loading">
           <Grid horizontal />
           <XAxis />
           <Line dataKey="revenue" />
         </LineChart>
-      </Specimen>
+      </ChartSpecimen>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Autocomplete, Button, Checkbox, CheckboxGroup, InputOTP } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 /* The reference's own copy, so the two pages can be read side by side. */
@@ -19,7 +20,7 @@ export function CheckboxGroupPreview(): ReactElement {
 
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Default">
         <CheckboxGroup description="Choose all that apply" label="Select your interests">
           {INTERESTS.map((interest) => (
             <Checkbox
@@ -31,9 +32,8 @@ export function CheckboxGroupPreview(): ReactElement {
             </Checkbox>
           ))}
         </CheckboxGroup>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="In surface">
         <div className="preview-block">
           <CheckboxGroup description="Choose all that apply" label="Select your interests">
             {INTERESTS.map((interest) => (
@@ -47,9 +47,8 @@ export function CheckboxGroupPreview(): ReactElement {
             ))}
           </CheckboxGroup>
         </div>
-        <div className="specimen__label">In surface</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Indeterminate">
         {/*
          * The parent is indeterminate whenever the set is partly checked, which is the state a
          * plain boolean cannot express — neither on nor off, but "some of these".
@@ -68,9 +67,8 @@ export function CheckboxGroupPreview(): ReactElement {
             </Checkbox>
           ))}
         </CheckboxGroup>
-        <div className="specimen__label">Indeterminate</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <CheckboxGroup
           description="Feature selection is temporarily disabled"
           disabled
@@ -83,17 +81,15 @@ export function CheckboxGroupPreview(): ReactElement {
             Feature 2
           </Checkbox>
         </CheckboxGroup>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom render">
         {/* render swaps the group's own <div> for a semantic <fieldset>; children are unaffected. */}
         <CheckboxGroup label="Notify me by" render={<fieldset />}>
           <Checkbox value="email">Email</Checkbox>
           <Checkbox value="sms">SMS</Checkbox>
           <Checkbox value="push">Push</Checkbox>
         </CheckboxGroup>
-        <div className="specimen__label">Custom render</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -113,7 +109,7 @@ export function AutocompletePreview(): ReactElement {
 
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Default">
         <Autocomplete
           container={surface}
           defaultValue="Cat"
@@ -123,9 +119,8 @@ export function AutocompletePreview(): ReactElement {
         >
           {pets}
         </Autocomplete>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="With description">
         <Autocomplete
           container={surface}
           defaultValue="Cat"
@@ -136,9 +131,8 @@ export function AutocompletePreview(): ReactElement {
         >
           {pets}
         </Autocomplete>
-        <div className="specimen__label">With description</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Autocomplete
           container={surface}
           defaultValue="Cat"
@@ -149,9 +143,8 @@ export function AutocompletePreview(): ReactElement {
         >
           {pets}
         </Autocomplete>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Clearable">
         <Autocomplete
           clearable
           container={surface}
@@ -162,9 +155,8 @@ export function AutocompletePreview(): ReactElement {
         >
           {pets}
         </Autocomplete>
-        <div className="specimen__label">Clearable</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Multiple selection">
         <Autocomplete
           clearable
           container={surface}
@@ -176,9 +168,8 @@ export function AutocompletePreview(): ReactElement {
         >
           {pets}
         </Autocomplete>
-        <div className="specimen__label">Multiple selection</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled option">
         <Autocomplete
           container={surface}
           defaultValue="Cat"
@@ -188,8 +179,7 @@ export function AutocompletePreview(): ReactElement {
         >
           {petsWithDisabled}
         </Autocomplete>
-        <div className="specimen__label">Disabled option</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -202,7 +192,7 @@ export function InputOTPPreview(): ReactElement {
 
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Default">
         <div className="otp-demo">
           <div className="otp-demo__title">Verify account</div>
           <div className="otp-demo__hint">We&rsquo;ve sent a code to a****@gmail.com</div>
@@ -214,32 +204,28 @@ export function InputOTPPreview(): ReactElement {
             </Button>
           </div>
         </div>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Four digits">
         <div className="otp-demo">
           <div className="otp-demo__title">Enter PIN</div>
           <InputOTP length={4} />
         </div>
-        <div className="specimen__label">Four digits</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Letters only">
         <div className="otp-demo">
           <div className="otp-demo__title">Enter code (letters only)</div>
           <InputOTP length={6} validationType="alpha" />
           <div className="otp-demo__hint">Only alphabetic characters are allowed</div>
         </div>
-        <div className="specimen__label">Letters only</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <div className="otp-demo">
           <div className="otp-demo__title">Verify account</div>
           <InputOTP groupSize={3} length={6} onValueChange={setCode} value={code} />
           <div className="otp-demo__hint">Enter a 6-digit code</div>
         </div>
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Validation">
         <div className="otp-demo">
           <div className="otp-demo__title">Verify account</div>
           <InputOTP groupSize={3} length={6} onValueChange={setCode} value={code} />
@@ -249,17 +235,15 @@ export function InputOTPPreview(): ReactElement {
             Submit
           </Button>
         </div>
-        <div className="specimen__label">Validation</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <div className="otp-demo">
           <div className="otp-demo__title">Verify account</div>
           <InputOTP disabled groupSize={3} length={6} />
           <div className="otp-demo__hint">Code verification is currently disabled</div>
         </div>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="On complete">
         <div className="otp-demo">
           <div className="otp-demo__title">Enter code</div>
           <InputOTP groupSize={3} length={6} onValueComplete={setCompletedCode} />
@@ -267,17 +251,15 @@ export function InputOTPPreview(): ReactElement {
             {completedCode === null ? "Fill all six digits" : `Completed: ${completedCode}`}
           </div>
         </div>
-        <div className="specimen__label">On complete</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="In surface">
         <div className="preview-block">
           <div className="otp-demo">
             <div className="otp-demo__title">Verify account</div>
             <InputOTP groupSize={3} length={6} />
           </div>
         </div>
-        <div className="specimen__label">In surface</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

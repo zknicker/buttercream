@@ -1,6 +1,7 @@
 import { Avatar, Dropdown, Sidebar } from "@buttercream/react";
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 /*
@@ -15,7 +16,10 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
 
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen
+        className="specimen--stack"
+        label="Header, groups, badge, sub-menu, skeleton, footer"
+      >
         <div className="sidebar-demo">
           <Sidebar.Provider className="sidebar-demo__provider">
             <Sidebar collapsible="none">
@@ -93,10 +97,9 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
             </Sidebar>
           </Sidebar.Provider>
         </div>
-        <div className="specimen__label">Header, groups, badge, sub-menu, skeleton, footer</div>
-      </section>
+      </Specimen>
 
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="States, truncation, and doc-style groups">
         <div className="sidebar-demo">
           <Sidebar.Provider className="sidebar-demo__provider">
             <Sidebar collapsible="none">
@@ -172,29 +175,28 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
             </Sidebar>
           </Sidebar.Provider>
         </div>
-        <div className="specimen__label">States, truncation, and doc-style groups</div>
-      </section>
+      </Specimen>
 
-      <MachineDemo
+      <MachineSpecimen
         collapsible="icon"
         icons={icons}
         label="Collapsible icon rail — toggle with the button or the edge rail"
         surface={surface}
       />
-      <MachineDemo
+      <MachineSpecimen
         collapsible="offcanvas"
         icons={icons}
         label="Offcanvas — collapses fully away"
         surface={surface}
       />
-      <MachineDemo
+      <MachineSpecimen
         collapsible="icon"
         icons={icons}
         label="Floating variant"
         surface={surface}
         variant="floating"
       />
-      <MachineDemo
+      <MachineSpecimen
         collapsible="icon"
         icons={icons}
         label="Inset variant"
@@ -202,7 +204,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
         variant="inset"
       />
 
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Footer user menu">
         <div className="sidebar-demo">
           <Sidebar.Provider className="sidebar-demo__provider">
             <Sidebar collapsible="none">
@@ -251,8 +253,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
             </Sidebar>
           </Sidebar.Provider>
         </div>
-        <div className="specimen__label">Footer user menu</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -261,7 +262,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
  * The real collapsing panel in a frame. The trigger, the rail, and mod+B all drive it; the
  * tooltip on each row appears only from the collapsed icon rail.
  */
-function MachineDemo({
+function MachineSpecimen({
   collapsible,
   icons,
   label,
@@ -270,12 +271,12 @@ function MachineDemo({
 }: {
   collapsible: "icon" | "offcanvas";
   icons: PreviewIconElements;
-  label: ReactNode;
+  label: string;
   surface: HTMLElement | null;
   variant?: "floating" | "inset";
 }): ReactElement {
   return (
-    <section className="specimen specimen--stack">
+    <Specimen className="specimen--stack" label={label}>
       <div className="sidebar-demo sidebar-demo--app">
         <Sidebar.Provider className="sidebar-demo__provider">
           <Sidebar
@@ -327,7 +328,6 @@ function MachineDemo({
           </Sidebar.Inset>
         </Sidebar.Provider>
       </div>
-      <div className="specimen__label">{label}</div>
-    </section>
+    </Specimen>
   );
 }

@@ -10,6 +10,7 @@ import {
 import type { ReactElement } from "react";
 import { useState } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const placements: ModalPlacement[] = ["auto", "top", "center", "bottom"];
@@ -18,11 +19,10 @@ const backdrops: ModalBackdropVariant[] = ["opaque", "blur", "transparent"];
 export function ModalPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default">
         <ModalSpecimen icon={icons.help} label="Open modal" />
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Placements">
         {placements.map((placement) => (
           <ModalSpecimen
             icon={icons.help}
@@ -31,43 +31,34 @@ export function ModalPreview({ icons }: { icons: PreviewIconElements }): ReactEl
             placement={placement}
           />
         ))}
-        <div className="specimen__label">Placements</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Backdrops">
         {backdrops.map((backdrop) => (
           <ModalSpecimen backdrop={backdrop} icon={icons.help} key={backdrop} label={backdrop} />
         ))}
-        <div className="specimen__label">Backdrops</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Scrolling body">
         <ModalSpecimen icon={icons.help} label="Long body" longBody />
-        <div className="specimen__label">Scrolling body</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="States">
         <ModalSpecimen hideCloseButton icon={icons.help} label="No close button" />
-        <div className="specimen__label">States</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom backdrop">
         <CustomBackdropSpecimen />
-        <div className="specimen__label">Custom backdrop</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Dismiss behavior">
         <DismissBehaviorSpecimen dismissible label="Dismissible" />
         <DismissBehaviorSpecimen dismissible={false} label="Not dismissible" />
-        <div className="specimen__label">Dismiss behavior</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Close methods">
         <CloseMethodsSpecimen />
-        <div className="specimen__label">Close methods</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom trigger">
         <CustomTriggerSpecimen />
-        <div className="specimen__label">Custom trigger</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="With form">
         <WithFormSpecimen />
-        <div className="specimen__label">With form</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

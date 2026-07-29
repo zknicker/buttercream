@@ -59,6 +59,8 @@ import type { PreviewSection } from "./preview-section-navigation.ts";
 import { SelectPreview } from "./preview-select.tsx";
 import { SidebarPreview } from "./preview-sidebar.tsx";
 import { SliderPreview } from "./preview-slider.tsx";
+import { previewSpecimenSources } from "./preview-source.ts";
+import { SpecimenSources } from "./preview-specimen.tsx";
 import {
   ButtonGroupPreview,
   ColorSwatchPreview,
@@ -109,13 +111,16 @@ export function renderPreviewSection(
   context: PreviewSectionContext,
 ): ReactElement {
   const content = renderSectionContent(section, context);
+  const preview = (
+    <SpecimenSources sources={previewSpecimenSources(section)}>{content}</SpecimenSources>
+  );
   const doc = COMPONENT_DOCS[section];
   if (!doc) {
-    return content;
+    return preview;
   }
   return (
     <>
-      {content}
+      {preview}
       <ComponentDocsPanel doc={doc} />
     </>
   );

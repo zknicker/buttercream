@@ -1,5 +1,6 @@
 import { Avatar, Button, Chip, Table, Typography } from "@buttercream/react";
 import type { ReactElement } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 
 /* The reference's own sample rows, so the two pages can be compared side by side. */
 const TEAM = [
@@ -108,22 +109,18 @@ function EmptyTeamTable(): ReactElement {
 export function TablePreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Default">
         <TeamTable />
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Secondary variant">
         <TeamTable variant="secondary" />
-        <div className="specimen__label">Secondary variant</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom cells">
         <CustomCellsTable />
-        <div className="specimen__label">Custom cells</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Empty state">
         <EmptyTeamTable />
-        <div className="specimen__label">Empty state</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -156,7 +153,7 @@ const SCALE = [
 export function TypographyPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Scale">
         <div className="type-scale">
           {SCALE.map((row) => (
             <div className="type-scale__row" key={row.variant}>
@@ -178,9 +175,8 @@ export function TypographyPreview(): ReactElement {
             </div>
           ))}
         </div>
-        <div className="specimen__label">Scale</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom element">
         {/* as retargets the element while variant keeps the style, so document order and visual weight can disagree on purpose. */}
         <Typography as="h3" variant="h1">
           Styled like an h1, kept at heading level 3
@@ -188,8 +184,7 @@ export function TypographyPreview(): ReactElement {
         <Typography as="label" variant="body-sm">
           Styled like body copy, kept as a label
         </Typography>
-        <div className="specimen__label">Custom element</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

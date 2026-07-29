@@ -54,6 +54,8 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
+  /* Clears the first row's border-mounted controls inside the shell's clipped frame. */
+  padding-block-start: 4px;
   counter-reset: specimen;
 }
 
@@ -106,6 +108,80 @@
 /* Lab-notebook numbering, free via CSS counters; restarts in each specimen grid. */
 .specimen__label::before {
   content: counter(specimen, decimal-leading-zero) " · ";
+}
+
+.specimen__view-toggle {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  z-index: 1;
+  display: flex;
+  transform: translateY(-50%);
+  gap: 1px;
+  padding: 1px;
+  border-radius: var(--radius-md);
+  background: var(--background);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.specimen__view-toggle button {
+  height: 20px;
+  padding-inline: 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.specimen__view-toggle button:hover {
+  color: var(--foreground);
+}
+
+.specimen__view-toggle button[aria-selected="true"] {
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: var(--shadow-field);
+}
+
+.specimen__view-toggle button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+/*
+ * display: contents preserves every specimen's existing flex layout. `hidden` still removes the
+ * preview from layout while keeping its component state mounted for a return from Code.
+ */
+.specimen__preview:not([hidden]) {
+  display: contents;
+}
+
+.specimen__preview[hidden] {
+  display: none;
+}
+
+.specimen__code {
+  align-self: stretch;
+  width: 100%;
+  max-height: 22rem;
+  overflow: auto;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  text-align: left;
+  white-space: pre;
 }
 
 .preview-icon {

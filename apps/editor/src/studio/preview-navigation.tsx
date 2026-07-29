@@ -15,6 +15,7 @@ import {
 import type { DesignSystem } from "@buttercream/theme-core";
 import { Fragment, type ReactElement, useState } from "react";
 import { createPreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 /* The reference's own copy, so the two pages can be read side by side. */
@@ -126,7 +127,7 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
 
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Default">
         <Accordion className="preview-block">
           {FAQ.map((entry) => (
             <Accordion.Item key={entry.question} value={entry.question}>
@@ -138,9 +139,8 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
             </Accordion.Item>
           ))}
         </Accordion>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Surface">
         <Accordion className="preview-block" variant="surface">
           {FAQ.map((entry) => (
             <Accordion.Item key={entry.question} value={entry.question}>
@@ -152,9 +152,8 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
             </Accordion.Item>
           ))}
         </Accordion>
-        <div className="specimen__label">Surface</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Multiple expanded">
         {/* `multiple` lets more than one panel stay open at a time. */}
         <Accordion className="preview-block" defaultValue={["Getting Started"]} multiple>
           {DOCS.map((entry) => (
@@ -164,9 +163,8 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
             </Accordion.Item>
           ))}
         </Accordion>
-        <div className="specimen__label">Multiple expanded</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Accordion className="preview-block">
           {["Disabled Item 1", "Disabled Item 2"].map((label) => (
             <Accordion.Item disabled key={label} value={label}>
@@ -175,13 +173,11 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
             </Accordion.Item>
           ))}
         </Accordion>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <ControlledAccordionDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom indicator">
         {/* The chevron is only the default; `indicator` on Trigger swaps it for anything. */}
         <Accordion className="preview-block">
           {FAQ.slice(0, 3).map((entry) => (
@@ -191,9 +187,8 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
             </Accordion.Item>
           ))}
         </Accordion>
-        <div className="specimen__label">Custom indicator</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Grouped FAQ">
         {/* Two independent accordions under their own headings, a common FAQ page shape. */}
         <div style={{ display: "grid", gap: "1rem", width: "100%" }}>
           <div>
@@ -223,8 +218,7 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
             </Accordion>
           </div>
         </div>
-        <div className="specimen__label">Grouped FAQ</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -232,7 +226,7 @@ export function AccordionPreview({ icons }: { icons: DesignSystem["icons"] }): R
 export function BreadcrumbsPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default">
         <Breadcrumbs>
           <Breadcrumbs.Item href="#home">Home</Breadcrumbs.Item>
           <Breadcrumbs.Item href="#products">Products</Breadcrumbs.Item>
@@ -241,18 +235,16 @@ export function BreadcrumbsPreview(): ReactElement {
             Laptop
           </Breadcrumbs.Item>
         </Breadcrumbs>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Two levels">
         <Breadcrumbs>
           <Breadcrumbs.Item href="#home">Home</Breadcrumbs.Item>
           <Breadcrumbs.Item current href="#current">
             Current Page
           </Breadcrumbs.Item>
         </Breadcrumbs>
-        <div className="specimen__label">Two levels</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Three levels">
         <Breadcrumbs>
           <Breadcrumbs.Item href="#home">Home</Breadcrumbs.Item>
           <Breadcrumbs.Item href="#category">Category</Breadcrumbs.Item>
@@ -260,9 +252,8 @@ export function BreadcrumbsPreview(): ReactElement {
             Current Page
           </Breadcrumbs.Item>
         </Breadcrumbs>
-        <div className="specimen__label">Three levels</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom separator">
         <Breadcrumbs separator={<span className="breadcrumbs__separator">/</span>}>
           <Breadcrumbs.Item href="#home">Home</Breadcrumbs.Item>
           <Breadcrumbs.Item href="#products">Products</Breadcrumbs.Item>
@@ -271,25 +262,22 @@ export function BreadcrumbsPreview(): ReactElement {
             Laptop
           </Breadcrumbs.Item>
         </Breadcrumbs>
-        <div className="specimen__label">Custom separator</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <Breadcrumbs>
           <Breadcrumbs.Item disabled>Home</Breadcrumbs.Item>
           <Breadcrumbs.Item disabled>Products</Breadcrumbs.Item>
           <Breadcrumbs.Item disabled>Electronics</Breadcrumbs.Item>
           <Breadcrumbs.Item disabled>Laptop</Breadcrumbs.Item>
         </Breadcrumbs>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Styled">
         {/* The trail takes a class like any other element; here it just opens the gaps up. */}
         <Breadcrumbs className="breadcrumbs-roomy">
           <Breadcrumbs.Item href="#home">Home</Breadcrumbs.Item>
           <Breadcrumbs.Item current>Current</Breadcrumbs.Item>
         </Breadcrumbs>
-        <div className="specimen__label">Styled</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -364,11 +352,10 @@ export function PaginationPreview({ icons }: { icons: DesignSystem["icons"] }): 
 
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Default">
         <Pagination>{pages}</Pagination>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Sizes">
         {/* Labelled per row, since the three sizes are otherwise hard to tell apart. */}
         <div className="pagination-sizes">
           <span className="pagination-sizes__label">Sm</span>
@@ -378,9 +365,8 @@ export function PaginationPreview({ icons }: { icons: DesignSystem["icons"] }): 
           <span className="pagination-sizes__label">Lg</span>
           <Pagination size="lg">{pages}</Pagination>
         </div>
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="With ellipsis">
         <Pagination>
           {previous}
           <Pagination.Link>1</Pagination.Link>
@@ -389,18 +375,16 @@ export function PaginationPreview({ icons }: { icons: DesignSystem["icons"] }): 
           <Pagination.Link>12</Pagination.Link>
           {next}
         </Pagination>
-        <div className="specimen__label">With ellipsis</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Previous and next only">
         <Pagination summary="1 to 5 of 50 invoices">
           <Pagination.Link disabled nav>
             Prev
           </Pagination.Link>
           <Pagination.Link nav>Next</Pagination.Link>
         </Pagination>
-        <div className="specimen__label">Previous and next only</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom icons">
         <Pagination>
           <Pagination.Link disabled nav>
             {icon.close}
@@ -414,9 +398,8 @@ export function PaginationPreview({ icons }: { icons: DesignSystem["icons"] }): 
             {icon.add}
           </Pagination.Link>
         </Pagination>
-        <div className="specimen__label">Custom icons</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Pagination>
           <Pagination.Link disabled nav>
             <span aria-hidden className="pagination__chevron pagination__chevron--previous" />
@@ -430,12 +413,10 @@ export function PaginationPreview({ icons }: { icons: DesignSystem["icons"] }): 
             <span aria-hidden className="pagination__chevron pagination__chevron--next" />
           </Pagination.Link>
         </Pagination>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <ControlledPaginationDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -461,11 +442,10 @@ export function ToolbarPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
 
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Formatting">
         <Toolbar aria-label="Text formatting">{formatting}</Toolbar>
-        <div className="specimen__label">Formatting</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Vertical">
         <Toolbar aria-label="Vertical tools" orientation="vertical">
           <Button aria-label="Add" iconOnly variant="ghost">
             {icon.add}
@@ -475,15 +455,13 @@ export function ToolbarPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
             {icon.delete}
           </Button>
         </Toolbar>
-        <div className="specimen__label">Vertical</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Attached">
         <Toolbar aria-label="Attached tools" variant="attached">
           {formatting}
         </Toolbar>
-        <div className="specimen__label">Attached</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="With button group">
         {/* A ButtonGroup and a ToggleButton.Group side by side, sharing one toolbar's focus ring. */}
         <Toolbar aria-label="Document tools">
           <ButtonGroup>
@@ -494,8 +472,7 @@ export function ToolbarPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
           <Toolbar.Separator />
           {formatting}
         </Toolbar>
-        <div className="specimen__label">With button group</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -532,7 +509,7 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
 
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Actions">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">Actions</Button>} />
           <Dropdown.Content container={surface}>
@@ -542,9 +519,8 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             <Dropdown.Item danger>{icon.delete}Delete project</Dropdown.Item>
           </Dropdown.Content>
         </Dropdown>
-        <div className="specimen__label">Actions</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Single selection">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">Grouped</Button>} />
           <Dropdown.Content container={surface}>
@@ -555,9 +531,8 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             </Dropdown.Group>
           </Dropdown.Content>
         </Dropdown>
-        <div className="specimen__label">Single selection</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled item">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">With disabled</Button>} />
           <Dropdown.Content container={surface}>
@@ -565,9 +540,8 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             <Dropdown.Item disabled>Unavailable</Dropdown.Item>
           </Dropdown.Content>
         </Dropdown>
-        <div className="specimen__label">Disabled item</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Descriptions">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">Notifications</Button>} />
           <Dropdown.Content container={surface}>
@@ -579,9 +553,8 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             </Dropdown.Item>
           </Dropdown.Content>
         </Dropdown>
-        <div className="specimen__label">Descriptions</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Shortcuts">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">Edit</Button>} />
           <Dropdown.Content container={surface}>
@@ -593,9 +566,8 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             <Dropdown.Item shortcut="⌘V">Paste</Dropdown.Item>
           </Dropdown.Content>
         </Dropdown>
-        <div className="specimen__label">Shortcuts</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Submenu">
         <Dropdown>
           <Dropdown.Trigger render={<Button variant="secondary">Share</Button>} />
           <Dropdown.Content container={surface}>
@@ -610,13 +582,11 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             </Dropdown.Submenu>
           </Dropdown.Content>
         </Dropdown>
-        <div className="specimen__label">Submenu</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Controlled">
         <ControlledDropdownDemo icon={icon} surface={surface} />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom trigger">
         <Dropdown>
           <Dropdown.Trigger
             render={
@@ -642,8 +612,7 @@ export function DropdownPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             <Dropdown.Item danger>{icon.logout}Sign out</Dropdown.Item>
           </Dropdown.Content>
         </Dropdown>
-        <div className="specimen__label">Custom trigger</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -721,7 +690,7 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
 
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Default">
         <Field name="animal">
           <Field.Label>Favorite animal</Field.Label>
           <Combobox container={surface} items={ANIMALS} placeholder="Search animals…">
@@ -732,9 +701,8 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             )}
           </Combobox>
         </Field>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="With description">
         <Field name="animal-described">
           <Field.Label>Favorite animal</Field.Label>
           <Combobox container={surface} items={ANIMALS} placeholder="Search animals…">
@@ -746,9 +714,8 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
           </Combobox>
           <Field.Description>Search and select your favorite animal</Field.Description>
         </Field>
-        <div className="specimen__label">With description</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Sections">
         <Field name="country">
           <Field.Label>Country</Field.Label>
           <Combobox container={surface} items={COUNTRIES} placeholder="Search countries…">
@@ -765,9 +732,8 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             )}
           </Combobox>
         </Field>
-        <div className="specimen__label">Sections</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled options">
         <Field name="pet">
           <Field.Label>Animal</Field.Label>
           <Combobox container={surface} items={PET_NAMES} placeholder="Search animals…">
@@ -782,9 +748,8 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             )}
           </Combobox>
         </Field>
-        <div className="specimen__label">Disabled options</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom trigger icon">
         <Field name="animal-custom-icon">
           <Field.Label>Favorite animal</Field.Label>
           <Combobox
@@ -800,9 +765,8 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             )}
           </Combobox>
         </Field>
-        <div className="specimen__label">Custom trigger icon</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Disabled">
         <Field name="animal-disabled">
           <Field.Label>Favorite animal</Field.Label>
           <Combobox container={surface} disabled items={ANIMALS} placeholder="Search animals…">
@@ -813,9 +777,8 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             )}
           </Combobox>
         </Field>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Required">
         <Field name="animal-required">
           <Field.Label required>Favorite animal</Field.Label>
           <Combobox container={surface} items={ANIMALS} placeholder="Search animals…" required>
@@ -826,16 +789,13 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
             )}
           </Combobox>
         </Field>
-        <div className="specimen__label">Required</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Controlled">
         <ControlledComboboxDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Async loading">
         <AsyncComboboxDemo />
-        <div className="specimen__label">Async loading</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -847,7 +807,7 @@ export function ComboboxPreview({ icons }: { icons: DesignSystem["icons"] }): Re
 export function ErrorMessagePreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Anatomy">
         <Field name="tags-with-error">
           <Field.Label>Label</Field.Label>
           <div className="error-message-tags">
@@ -857,13 +817,11 @@ export function ErrorMessagePreview(): ReactElement {
           <Field.Description>Helper description</Field.Description>
           <ErrorMessage>Example error</ErrorMessage>
         </Field>
-        <div className="specimen__label">Anatomy</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Custom classes">
         {/* The message takes a class like anything else, so callers can restyle it. */}
         <ErrorMessage className="error-message-loud">Custom styled error message</ErrorMessage>
-        <div className="specimen__label">Custom classes</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

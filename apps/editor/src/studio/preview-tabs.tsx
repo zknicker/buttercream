@@ -2,6 +2,7 @@ import { Tabs, type TabsProps } from "@buttercream/react";
 import type { DesignSystem } from "@buttercream/theme-core";
 import type { ReactElement, ReactNode } from "react";
 import { createPreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 
 export function TabsPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
   const iconElements = createPreviewIconElements(icons);
@@ -17,38 +18,30 @@ export function TabsPreview({ icons }: { icons: DesignSystem["icons"] }): ReactE
 function TabsSpecimens({ iconTabs }: { iconTabs: readonly SpecimenTab[] }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Primary">
         <TabsSpecimen />
-        <div className="specimen__label">Primary</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Secondary">
         <TabsSpecimen variant="secondary" />
-        <div className="specimen__label">Secondary</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Separated list">
         <TabsSpecimen separated />
-        <div className="specimen__label">Separated list</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Vertical">
         <TabsSpecimen orientation="vertical" />
-        <div className="specimen__label">Vertical</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="With icons">
         <TabsSpecimen items={iconTabs} />
-        <div className="specimen__label">With icons</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled tab">
         <TabsSpecimen disabledTab="Videos" />
-        <div className="specimen__label">Disabled tab</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Secondary vertical">
         <TabsSpecimen orientation="vertical" variant="secondary" />
-        <div className="specimen__label">Secondary vertical</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Rendered as links">
         <AnchorTabsSpecimen />
-        <div className="specimen__label">Rendered as links</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

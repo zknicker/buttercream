@@ -1,6 +1,7 @@
 import { Button, Tooltip, type TooltipContentProps } from "@buttercream/react";
 import type { ReactElement, ReactNode } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const SIDES = ["top", "bottom", "left", "right"] as const;
@@ -10,22 +11,20 @@ export function TooltipPreview({ icons }: { icons: PreviewIconElements }): React
     /* A short delay so hovering specimens feels immediate in the preview. */
     <Tooltip.Provider delay={300}>
       <div className="specimens">
-        <section className="specimen">
+        <Specimen label="Default (hover / focus)">
           <TooltipSpecimen label="Hover">Helpful context</TooltipSpecimen>
           <TooltipSpecimen label="Arrow" showArrow>
             With an arrow
           </TooltipSpecimen>
-          <div className="specimen__label">Default (hover / focus)</div>
-        </section>
-        <section className="specimen">
+        </Specimen>
+        <Specimen label="Arrow sides">
           {SIDES.map((side) => (
             <TooltipSpecimen key={side} label={side} showArrow side={side}>
               {side}
             </TooltipSpecimen>
           ))}
-          <div className="specimen__label">Arrow sides</div>
-        </section>
-        <section className="specimen">
+        </Specimen>
+        <Specimen label="Placements">
           <div className="placement-cross">
             {SIDES.map((side) => (
               <div className={`placement-cross__${side}`} key={side}>
@@ -36,17 +35,15 @@ export function TooltipPreview({ icons }: { icons: PreviewIconElements }): React
             ))}
             <span className="placement-cross__center">Hover</span>
           </div>
-          <div className="specimen__label">Placements</div>
-        </section>
-        <section className="specimen">
+        </Specimen>
+        <Specimen label="Custom trigger (icon button)">
           <IconTriggerTooltipSpecimen aria-label="Settings" tooltip="Settings">
             {icons.settings}
           </IconTriggerTooltipSpecimen>
           <IconTriggerTooltipSpecimen aria-label="Team members" tooltip="Team members">
             {icons.users}
           </IconTriggerTooltipSpecimen>
-          <div className="specimen__label">Custom trigger (icon button)</div>
-        </section>
+        </Specimen>
       </div>
     </Tooltip.Provider>
   );

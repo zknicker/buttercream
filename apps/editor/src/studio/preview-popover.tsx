@@ -1,5 +1,6 @@
 import { Avatar, Button, Popover, type PopoverContentProps } from "@buttercream/react";
 import { type ReactElement, type ReactNode, useState } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const SIDES = ["top", "bottom", "left", "right"] as const;
@@ -7,7 +8,7 @@ const SIDES = ["top", "bottom", "left", "right"] as const;
 export function PopoverPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Basic (click / focus)">
         <PopoverSpecimen label="Open" side="bottom">
           <Popover.Title>Shortcuts</Popover.Title>
           <Popover.Description>Use the command palette to jump anywhere.</Popover.Description>
@@ -16,17 +17,15 @@ export function PopoverPreview(): ReactElement {
           <Popover.Title>With arrow</Popover.Title>
           <Popover.Description>Anchored to its trigger.</Popover.Description>
         </PopoverSpecimen>
-        <div className="specimen__label">Basic (click / focus)</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Close button">
         <PopoverSpecimen label="Dismissable" side="bottom">
           <Popover.Title>Session</Popover.Title>
           <Popover.Description>You are signed in as jane@example.com.</Popover.Description>
           <Popover.Close />
         </PopoverSpecimen>
-        <div className="specimen__label">Close button</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Placements">
         <div className="placement-cross">
           {SIDES.map((side) => (
             <div className={`placement-cross__${side}`} key={side}>
@@ -38,16 +37,14 @@ export function PopoverPreview(): ReactElement {
           ))}
           <span className="placement-cross__center">Click</span>
         </div>
-        <div className="specimen__label">Placements</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Backdrop">
         <PopoverSpecimen label="Backdrop" withBackdrop>
           <Popover.Title>Focused</Popover.Title>
           <Popover.Description>A backdrop dims everything behind the popup.</Popover.Description>
         </PopoverSpecimen>
-        <div className="specimen__label">Backdrop</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Trigger states">
         <PopoverSpecimen label="Open trigger">
           <Popover.Title>Trigger state</Popover.Title>
           <Popover.Description>The trigger reflects the open state.</Popover.Description>
@@ -55,9 +52,8 @@ export function PopoverPreview(): ReactElement {
         <PopoverSpecimen label="Disabled trigger" triggerDisabled>
           <Popover.Title>Unreachable</Popover.Title>
         </PopoverSpecimen>
-        <div className="specimen__label">Trigger states</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Interactive content (composed, not just text)">
         <PopoverSpecimen label="View profile" side="right">
           <div style={{ display: "flex", gap: "0.75rem" }}>
             <Avatar>
@@ -70,12 +66,10 @@ export function PopoverPreview(): ReactElement {
           </div>
           <FollowButton />
         </PopoverSpecimen>
-        <div className="specimen__label">Interactive content (composed, not just text)</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom render (Base UI render prop)">
         <CustomRenderSpecimen />
-        <div className="specimen__label">Custom render (Base UI render prop)</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

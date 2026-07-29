@@ -1,6 +1,7 @@
 import { Button, Select } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 import { usePreviewSurface } from "./preview-surface.tsx";
 
 const stateNames = ["Florida", "Georgia", "Delaware", "Vermont", "Ohio", "Nevada"];
@@ -55,7 +56,7 @@ export function SelectPreview(): ReactElement {
 
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Basic">
         <div className="input-demo">
           <Select container={surface} label="State" placeholder="Select one">
             <StateItems />
@@ -64,9 +65,8 @@ export function SelectPreview(): ReactElement {
             <StateItems />
           </Select>
         </div>
-        <div className="specimen__label">Basic</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Description">
         <div className="input-demo">
           <Select
             container={surface}
@@ -77,9 +77,8 @@ export function SelectPreview(): ReactElement {
             <StateItems />
           </Select>
         </div>
-        <div className="specimen__label">Description</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Required">
         <div className="input-demo">
           <Select
             container={surface}
@@ -91,9 +90,8 @@ export function SelectPreview(): ReactElement {
             <StateItems />
           </Select>
         </div>
-        <div className="specimen__label">Required</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <div className="input-demo">
           <Select container={surface} defaultValue="Florida" disabled label="Disabled">
             <StateItems />
@@ -106,9 +104,8 @@ export function SelectPreview(): ReactElement {
             <Select.Item value="Ohio">Ohio</Select.Item>
           </Select>
         </div>
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Listbox">
         <div className="input-demo">
           {/*
            * A long grouped list: it overflows the popup's max-height, so opening it also
@@ -157,9 +154,8 @@ export function SelectPreview(): ReactElement {
             </Select.Group>
           </Select>
         </div>
-        <div className="specimen__label">Listbox</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Multiple">
         <div className="input-demo">
           <Select
             container={surface}
@@ -172,9 +168,8 @@ export function SelectPreview(): ReactElement {
           </Select>
           <ControlledMultipleSelect />
         </div>
-        <div className="specimen__label">Multiple</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom indicator">
         <div className="input-demo">
           {/* indicator overrides the trigger chevron; each Select.Item can override its own
            * checkmark independently. */}
@@ -196,15 +191,13 @@ export function SelectPreview(): ReactElement {
             </Select.Item>
           </Select>
         </div>
-        <div className="specimen__label">Custom indicator</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Controlled open state">
         <div className="input-demo">
           <OpenStateSelect />
         </div>
-        <div className="specimen__label">Controlled open state</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Custom render function">
         <div className="input-demo">
           {/* render is Base UI's escape hatch for augmenting an item's rendered element from
            * its own state — here it bolds whichever item is currently selected. */}
@@ -227,8 +220,7 @@ export function SelectPreview(): ReactElement {
             ))}
           </Select>
         </div>
-        <div className="specimen__label">Custom render function</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { Field, RadioGroup, Surface } from "@buttercream/react";
 import { type ReactElement, useState } from "react";
+import { Specimen } from "./preview-specimen.tsx";
 
 const RADIO_SIZES = ["sm", "md", "lg"] as const;
 
@@ -18,7 +19,7 @@ function ControlledDemo(): ReactElement {
 export function RadioGroupPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default">
         <RadioGroup
           defaultValue="premium"
           description="Choose the plan that suits you best"
@@ -29,9 +30,8 @@ export function RadioGroupPreview(): ReactElement {
           <RadioGroup.Item value="premium">Premium Plan</RadioGroup.Item>
           <RadioGroup.Item value="business">Business Plan</RadioGroup.Item>
         </RadioGroup>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Horizontal">
         <RadioGroup
           defaultValue="pro"
           label="Subscription plan"
@@ -42,9 +42,8 @@ export function RadioGroupPreview(): ReactElement {
           <RadioGroup.Item value="pro">Pro</RadioGroup.Item>
           <RadioGroup.Item value="teams">Teams</RadioGroup.Item>
         </RadioGroup>
-        <div className="specimen__label">Horizontal</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Variants">
         <div className="control-stack">
           <RadioGroup
             defaultValue="primary-one"
@@ -66,9 +65,8 @@ export function RadioGroupPreview(): ReactElement {
             <RadioGroup.Item value="secondary-two">Alternative</RadioGroup.Item>
           </RadioGroup>
         </div>
-        <div className="specimen__label">Variants</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         <div className="control-stack">
           {RADIO_SIZES.map((size) => (
             <RadioGroup
@@ -83,9 +81,8 @@ export function RadioGroupPreview(): ReactElement {
             </RadioGroup>
           ))}
         </div>
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Item descriptions">
         <RadioGroup defaultValue="described-pro" label="Plan selection" name="described-plan">
           <RadioGroup.Item description="For side projects" value="described-starter">
             Starter
@@ -100,13 +97,11 @@ export function RadioGroupPreview(): ReactElement {
             Teams
           </RadioGroup.Item>
         </RadioGroup>
-        <div className="specimen__label">Item descriptions</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Controlled">
         <ControlledDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Validation">
         <Field invalid>
           <RadioGroup label="Notification channel" name="validation-channel" required>
             <RadioGroup.Item value="email">Email</RadioGroup.Item>
@@ -114,9 +109,8 @@ export function RadioGroupPreview(): ReactElement {
           </RadioGroup>
           <Field.Error match>Choose a notification channel to continue.</Field.Error>
         </Field>
-        <div className="specimen__label">Validation</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="In Surface">
         <Surface variant="secondary">
           <RadioGroup
             defaultValue="surface-pro"
@@ -129,16 +123,14 @@ export function RadioGroupPreview(): ReactElement {
             <RadioGroup.Item value="surface-pro">Pro</RadioGroup.Item>
           </RadioGroup>
         </Surface>
-        <div className="specimen__label">In Surface</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Render prop">
         <RadioGroup defaultValue="render-pro" label="Plan" name="render-plan" render={<fieldset />}>
           <RadioGroup.Item value="render-starter">Starter</RadioGroup.Item>
           <RadioGroup.Item value="render-pro">Pro</RadioGroup.Item>
         </RadioGroup>
-        <div className="specimen__label">Render prop</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Required">
         <RadioGroup
           defaultValue="required-basic"
           description="A selection is required to continue"
@@ -149,9 +141,8 @@ export function RadioGroupPreview(): ReactElement {
           <RadioGroup.Item value="required-basic">Basic Plan</RadioGroup.Item>
           <RadioGroup.Item value="required-premium">Premium Plan</RadioGroup.Item>
         </RadioGroup>
-        <div className="specimen__label">Required</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <RadioGroup
           defaultValue="disabled-pro"
           description="Plan changes are temporarily paused while we roll out updates."
@@ -162,8 +153,7 @@ export function RadioGroupPreview(): ReactElement {
           <RadioGroup.Item value="disabled-starter">Starter</RadioGroup.Item>
           <RadioGroup.Item value="disabled-pro">Pro</RadioGroup.Item>
         </RadioGroup>
-        <div className="specimen__label">Disabled</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Button, type ButtonSize, type ButtonVariant } from "@buttercream/react";
 import { type ReactElement, useState } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 
 const VARIANTS: readonly ButtonVariant[] = [
   "primary",
@@ -44,30 +45,27 @@ function label(value: string): string {
 export function ButtonPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Variants">
         {VARIANTS.map((variant) => (
           <Button key={variant} variant={variant}>
             {label(variant)}
           </Button>
         ))}
-        <div className="specimen__label">Variants</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         {SIZES.map((size) => (
           <Button key={size} size={size}>
             {SIZE_LABELS[size]}
           </Button>
         ))}
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="With icons">
         <Button>{icons.search} Search</Button>
         <Button variant="secondary">{icons.add} Add member</Button>
         <Button variant="tertiary">Email {icons.mail}</Button>
         <Button variant="danger-soft">{icons.delete} Delete</Button>
-        <div className="specimen__label">With icons</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Icon only">
         <Button aria-label="More options" iconOnly variant="ghost">
           {icons.more}
         </Button>
@@ -77,31 +75,27 @@ export function ButtonPreview({ icons }: { icons: PreviewIconElements }): ReactE
         <Button aria-label="Delete" iconOnly variant="danger">
           {icons.delete}
         </Button>
-        <div className="specimen__label">Icon only</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Loading">
         <Button loading>Loading</Button>
         <Button loading variant="secondary">
           Uploading
         </Button>
         <SubmitDemoButton />
-        <div className="specimen__label">Loading</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         {VARIANTS.map((variant) => (
           <Button disabled key={variant} variant={variant}>
             {label(variant)}
           </Button>
         ))}
-        <div className="specimen__label">Disabled</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="Full width">
         <Button fullWidth>Full width button</Button>
         <Button fullWidth variant="secondary">
           {icons.add} With icon
         </Button>
-        <div className="specimen__label">Full width</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { Segment, Separator, Spinner, ToggleButton } from "@buttercream/react";
 import type { ReactElement } from "react";
 import { useState } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 
 /* .specimen is already a wrapping flex row, so a row of specimens needs no wrapper. */
 
@@ -13,22 +14,19 @@ const TOGGLE_SIZES = ["sm", "md", "lg"] as const;
 export function SpinnerPreview(): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default">
         <Spinner />
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         {SPINNER_SIZES.map((size) => (
           <Spinner key={size} size={size} />
         ))}
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Colours">
         {SPINNER_COLORS.map((color) => (
           <Spinner color={color} key={color} />
         ))}
-        <div className="specimen__label">Colours</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -36,24 +34,22 @@ export function SpinnerPreview(): ReactElement {
 export function SeparatorPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen specimen--stack">
+      <Specimen className="specimen--stack" label="Variants">
         <div className="separator-demo">
           <Separator />
           <Separator variant="secondary" />
           <Separator variant="tertiary" />
         </div>
-        <div className="specimen__label">Variants</div>
-      </section>
-      <section className="specimen specimen--stack">
+      </Specimen>
+      <Specimen className="specimen--stack" label="With a label">
         <div className="separator-demo">
           <Separator>or</Separator>
         </div>
         <div className="separator-demo">
           <Separator>{icons.mail} New messages</Separator>
         </div>
-        <div className="specimen__label">With a label</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Vertical">
         <div className="separator-row">
           <span>Draft</span>
           <Separator orientation="vertical" />
@@ -61,8 +57,7 @@ export function SeparatorPreview({ icons }: { icons: PreviewIconElements }): Rea
           <Separator orientation="vertical" />
           <span>Archived</span>
         </div>
-        <div className="specimen__label">Vertical</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -73,23 +68,21 @@ export function SegmentPreview({ icons }: { icons: PreviewIconElements }): React
 
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default">
         <Segment onValueChange={setView} value={view}>
           <Segment.Item value="grid">Grid</Segment.Item>
           <Segment.Item value="list">List</Segment.Item>
           <Segment.Item value="board">Board</Segment.Item>
         </Segment>
-        <div className="specimen__label">Default</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="With icons">
         <Segment defaultValue="mail">
           <Segment.Item value="mail">{icons.mail} Mail</Segment.Item>
           <Segment.Item value="users">{icons.users} People</Segment.Item>
           <Segment.Item value="settings">{icons.settings} Settings</Segment.Item>
         </Segment>
-        <div className="specimen__label">With icons</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         <div className="control-stack">
           {SEGMENT_SIZES.map((size) => (
             <Segment defaultValue="day" key={size} size={size}>
@@ -99,24 +92,21 @@ export function SegmentPreview({ icons }: { icons: PreviewIconElements }): React
             </Segment>
           ))}
         </div>
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Ghost">
         <Segment defaultValue="all" variant="ghost">
           <Segment.Item value="all">All</Segment.Item>
           <Segment.Item value="unread">Unread</Segment.Item>
         </Segment>
-        <div className="specimen__label">Ghost</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled item">
         <Segment defaultValue="live">
           <Segment.Item value="live">Live</Segment.Item>
           <Segment.Item disabled value="paused">
             Paused
           </Segment.Item>
         </Segment>
-        <div className="specimen__label">Disabled item</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
@@ -134,27 +124,24 @@ function ControlledToggleDemo(): ReactElement {
 export function ToggleButtonPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Default and pressed">
         <ToggleButton>Off</ToggleButton>
         <ToggleButton defaultPressed>On</ToggleButton>
-        <div className="specimen__label">Default and pressed</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Ghost">
         <ToggleButton variant="ghost">Ghost</ToggleButton>
         <ToggleButton defaultPressed variant="ghost">
           Ghost pressed
         </ToggleButton>
-        <div className="specimen__label">Ghost</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Sizes">
         {TOGGLE_SIZES.map((size) => (
           <ToggleButton defaultPressed key={size} size={size}>
             {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
           </ToggleButton>
         ))}
-        <div className="specimen__label">Sizes</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Icon only">
         <ToggleButton aria-label="Notifications" iconOnly>
           {icons.notification}
         </ToggleButton>
@@ -164,27 +151,23 @@ export function ToggleButtonPreview({ icons }: { icons: PreviewIconElements }): 
         <ToggleButton aria-label="More options" iconOnly variant="ghost">
           {icons.more}
         </ToggleButton>
-        <div className="specimen__label">Icon only</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Group">
         <ToggleButton.Group defaultValue={["bold"]} multiple>
           <ToggleButton value="bold">Bold</ToggleButton>
           <ToggleButton value="italic">Italic</ToggleButton>
           <ToggleButton value="underline">Underline</ToggleButton>
         </ToggleButton.Group>
-        <div className="specimen__label">Group</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Controlled">
         <ControlledToggleDemo />
-        <div className="specimen__label">Controlled</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Disabled">
         <ToggleButton disabled>Unavailable</ToggleButton>
         <ToggleButton defaultPressed disabled>
           Locked on
         </ToggleButton>
-        <div className="specimen__label">Disabled</div>
-      </section>
+      </Specimen>
     </div>
   );
 }

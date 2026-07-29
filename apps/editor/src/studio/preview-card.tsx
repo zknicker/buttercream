@@ -9,13 +9,14 @@ import {
 } from "@buttercream/react";
 import type { ReactElement } from "react";
 import type { PreviewIconElements } from "./preview-icons.ts";
+import { Specimen } from "./preview-specimen.tsx";
 
 const VARIANTS: readonly CardVariant[] = ["default", "secondary", "tertiary", "transparent"];
 
 export function CardPreview({ icons }: { icons: PreviewIconElements }): ReactElement {
   return (
     <div className="specimens">
-      <section className="specimen">
+      <Specimen label="Header, content, and footer">
         <Card className="preview-card">
           <Card.Header>
             {icons.users}&nbsp;<strong>Become an Acme Creator!</strong>
@@ -26,9 +27,8 @@ export function CardPreview({ icons }: { icons: PreviewIconElements }): ReactEle
           </Card.Content>
           <Card.Footer>Submissions end Oct 10.</Card.Footer>
         </Card>
-        <div className="specimen__label">Header, content, and footer</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Variants">
         <div className="preview-card-grid">
           {VARIANTS.map((variant) => (
             <SpecimenCard
@@ -39,9 +39,8 @@ export function CardPreview({ icons }: { icons: PreviewIconElements }): ReactEle
             />
           ))}
         </div>
-        <div className="specimen__label">Variants</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Title, description, and action">
         <Card className="preview-card">
           <Card.Header>
             <div>
@@ -58,9 +57,8 @@ export function CardPreview({ icons }: { icons: PreviewIconElements }): ReactEle
             Title, description, and action slots compose inside the header.
           </Card.Content>
         </Card>
-        <div className="specimen__label">Title, description, and action</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="Horizontal layout">
         <Card
           className="preview-card"
           style={{ flexDirection: "row", overflow: "hidden", padding: 0 }}
@@ -73,9 +71,8 @@ export function CardPreview({ icons }: { icons: PreviewIconElements }): ReactEle
             </Card.Description>
           </Card.Content>
         </Card>
-        <div className="specimen__label">Horizontal layout</div>
-      </section>
-      <section className="specimen">
+      </Specimen>
+      <Specimen label="With a form">
         <Card className="preview-card">
           <Card.Header>
             <div>
@@ -97,8 +94,7 @@ export function CardPreview({ icons }: { icons: PreviewIconElements }): ReactEle
             <Button fullWidth>Sign in</Button>
           </Card.Footer>
         </Card>
-        <div className="specimen__label">With a form</div>
-      </section>
+      </Specimen>
     </div>
   );
 }
