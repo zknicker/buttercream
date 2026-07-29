@@ -1,14 +1,26 @@
-import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const users = sqliteTable(
-  "users",
+export const users = sqliteTable("users", {
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  id: text("id").primaryKey(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+});
+
+/*
+ * Authentication identities, many per user. Invariant 11 keeps product records on usr_* ids;
+ * this table is the only place a Clerk id appears, so two Clerk instances — production and the
+ * dev stack's — can both resolve to the same Buttercream user.
+ */
+export const userIdentities = sqliteTable(
+  "user_identities",
   {
-    clerkUserId: text("clerk_user_id").notNull(),
+    clerkUserId: text("clerk_user_id").primaryKey(),
     createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-    id: text("id").primaryKey(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
   },
-  (table) => [uniqueIndex("users_clerk_user_id_unique").on(table.clerkUserId)],
+  (table) => [index("user_identities_user_id_idx").on(table.userId)],
 );
 
 export const designSystems = sqliteTable(
