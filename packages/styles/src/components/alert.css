@@ -5,7 +5,7 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: calc(1rem * var(--spacing-scale));
+    gap: calc(0.75rem * var(--spacing-scale));
     padding-inline: calc(1rem * var(--spacing-scale));
     padding-block: calc(0.75rem * var(--spacing-scale));
     /* Capped so a very round theme does not turn a wide alert into a lozenge. */
