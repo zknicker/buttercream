@@ -66,10 +66,7 @@
     height: calc(var(--bc-switch-thumb-height) * var(--spacing-scale));
     border-radius: max(0px, calc(var(--bc-switch-track-radius) - var(--bc-switch-inset)));
     background: var(--foreground);
-    box-shadow:
-      0 0 5px rgba(0, 0, 0, 0.02),
-      0 2px 10px rgba(0, 0, 0, 0.06),
-      0 0 1px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--bc-shadow-switch-thumb);
     transition:
       background-color 200ms ease,
       transform 300ms ease;

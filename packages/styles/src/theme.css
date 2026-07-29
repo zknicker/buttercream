@@ -202,6 +202,9 @@
       0 5px 5px -2.5px rgba(0, 0, 0, 0.03), 0 3px 3px -1.5px rgba(0, 0, 0, 0.03),
       0 2px 2px -1px rgba(0, 0, 0, 0.03), 0 1px 1px -0.5px rgba(0, 0, 0, 0.03),
       0 0.5px 0.5px 0 rgba(0, 0, 0, 0.03);
+    /* The switch thumb: a small moving part, so the softest possible lift plus a hairline. */
+    --bc-shadow-switch-thumb:
+      0 0 5px rgba(0, 0, 0, 0.02), 0 2px 10px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.3);
   }
 
   [data-theme="dark"] {
@@ -262,6 +265,9 @@
       inset 0 8px 24px -4px rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.4),
       0 1px 1px -0.5px rgba(0, 0, 0, 0.3), 0 3px 3px -1.5px rgba(0, 0, 0, 0.3),
       0 6px 6px -3px rgba(0, 0, 0, 0.3), 0 12px 12px -6px rgba(0, 0, 0, 0.3);
+    /* The switch thumb rides a light foreground fill, so its dark-theme shadow can stay soft. */
+    --bc-shadow-switch-thumb:
+      0 0 5px rgba(0, 0, 0, 0.02), 0 2px 10px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.3);
   }
 
   /* Derived tokens. Every declaration below is a fixed projection of the authored tokens above;
