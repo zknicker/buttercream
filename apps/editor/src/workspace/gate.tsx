@@ -17,7 +17,11 @@ export function Gate({
 }): ReactElement {
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-5 px-6 text-center">
-      <a aria-label="Homepage" className="mb-3" href="/">
+      <a
+        aria-label="Homepage"
+        className="mb-3 rounded-(--radius-shell-sm) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg"
+        href="/"
+      >
         <Logo />
       </a>
       <Eyebrow>{eyebrow}</Eyebrow>
