@@ -27,7 +27,7 @@ describe("preview icons", () => {
     });
     const search = renderToStaticMarkup(icons.search);
 
-    expect(Object.keys(icons)).toHaveLength(9);
+    expect(Object.keys(icons)).toHaveLength(19);
     expect(search).toContain('class="lucide lucide-search preview-icon"');
     expect(search).toContain('width="18"');
     expect(search).toContain('stroke-width="1.5"');
@@ -44,7 +44,7 @@ describe("preview icons", () => {
     );
 
     for (const icons of rendered) {
-      expect(Object.keys(icons)).toHaveLength(9);
+      expect(Object.keys(icons)).toHaveLength(19);
       const search = renderToStaticMarkup(icons.search);
       expect(search).toContain('class="preview-icon"');
       expect(search).toContain('width="20"');
