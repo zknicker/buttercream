@@ -51,12 +51,14 @@ function Pricing() {
       <SiteHeader current="pricing" />
 
       <main>
-        <section className="mx-auto w-full max-w-6xl px-6 pt-16 pb-14 lg:px-10">
+        {/* Same hero measurements as the homepage — one type ladder and one top margin, so the
+            two pages start on the same line rather than nearly the same line. */}
+        <section className="mx-auto w-full max-w-6xl px-6 pt-16 pb-14 lg:px-10 lg:pt-24">
           <Eyebrow>Pricing</Eyebrow>
-          <h1 className="mt-5 max-w-[20ch] font-display text-6xl tracking-tight text-balance text-fg lg:text-7xl">
+          <h1 className="mt-5 max-w-[20ch] font-display text-5xl tracking-tight text-balance text-fg sm:text-6xl lg:text-7xl">
             The menu.
           </h1>
-          <p className="mt-6 max-w-[56ch] text-lg text-pretty text-muted sm:text-base">
+          <p className="mt-7 max-w-[56ch] text-lg text-pretty text-muted sm:text-base">
             Simple, transparent pricing for teams of every size. No seat maths, no surprise
             invoices.
           </p>
