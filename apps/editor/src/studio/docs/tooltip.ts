@@ -121,6 +121,12 @@ export const tooltipDoc: ComponentDoc = {
       component: "Tooltip.Arrow",
       props: [
         {
+          name: "children",
+          type: "ReactNode",
+          description:
+            "Custom arrow content; defaults to the built-in SVG notch filled with the overlay colour.",
+        },
+        {
           name: "...props",
           type: "Base UI Arrow props",
           description: "Native div attributes and the render prop pass through.",
@@ -171,7 +177,8 @@ export const tooltipDoc: ComponentDoc = {
     },
     {
       name: ".tooltip__arrow",
-      description: "The triangle rendered by Tooltip.Arrow, pointed at the trigger.",
+      description:
+        "The notch rendered by Tooltip.Arrow — an SVG filled with the overlay colour, pointed at the trigger.",
     },
     {
       name: ".tooltip__viewport",

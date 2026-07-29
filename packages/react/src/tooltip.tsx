@@ -114,6 +114,7 @@ function TooltipPopup({
 }
 
 function TooltipArrow({
+  children,
   className,
   ...props
 }: Omit<BaseTooltip.Arrow.Props, "className"> & { className?: string }): ReactElement {
@@ -122,7 +123,19 @@ function TooltipArrow({
       className={classes("tooltip__arrow", className)}
       data-slot="tooltip-arrow"
       {...props}
-    />
+    >
+      {children ?? (
+        <svg
+          aria-hidden="true"
+          fill="none"
+          role="presentation"
+          viewBox="0 0 12 6"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M0 0C5.48483 8 6.5 8 12 0Z" />
+        </svg>
+      )}
+    </BaseTooltip.Arrow>
   );
 }
 
