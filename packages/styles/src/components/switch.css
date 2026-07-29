@@ -6,6 +6,10 @@
     --bc-switch-thumb-height: 1rem;
 
     display: inline-flex;
+    /* Contains the visually-hidden native input: unpositioned, its containing block is the
+       document, so a 1px absolute box escapes every overflow clip above it and stretches
+       the page whenever the control sits inside an app-shell scroll region. */
+    position: relative;
     min-width: 0;
     align-items: flex-start;
     gap: calc(0.75rem * var(--spacing-scale));
