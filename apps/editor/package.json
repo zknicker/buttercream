@@ -10,6 +10,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply buttercream-production --remote",
     "deploy": "bun run build && wrangler deploy",
     "dev": "vite dev",
+    "dev:prod": "BUTTERCREAM_REMOTE_DB=1 vite dev",
     "preview": "vite preview",
     "test": "bun test",
     "typecheck": "tsc --noEmit"
