@@ -56,6 +56,7 @@
     color: var(--overlay-foreground);
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
     /* Contained so scrolling to the end of a long menu does not start scrolling the page. */
     overflow-y: auto;
     overscroll-behavior: contain;

@@ -143,7 +143,10 @@
     background: var(--overlay);
     box-shadow: var(--shadow-overlay);
     color: var(--overlay-foreground);
+    /* Portalled to the body, so font metrics must be restated rather than inherited. */
+    font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
+    line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);
     overflow-y: auto;
     overscroll-behavior: contain;
     scroll-padding-block: var(--bc-combobox-list-padding);
