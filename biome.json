@@ -9,7 +9,9 @@
       "!**/.wrangler",
       "!**/routeTree.gen.ts",
       "!**/packages/react/src/charts",
-      "!**/packages/styles/src/theme-defaults.css"
+      "!**/packages/styles/src/theme-defaults.css",
+      "!**/.claude/launch.json",
+      "!**/apps/editor/wrangler.remote.jsonc"
     ]
   },
   "css": {
