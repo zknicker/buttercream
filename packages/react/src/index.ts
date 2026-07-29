@@ -153,6 +153,20 @@ export {
   type SeparatorVariant,
 } from "./separator.tsx";
 export {
+  Sidebar,
+  type SidebarCollapsible,
+  type SidebarMenuButtonProps,
+  type SidebarMenuSkeletonProps,
+  type SidebarMenuSubButtonProps,
+  type SidebarProps,
+  type SidebarProviderProps,
+  type SidebarSide,
+  type SidebarState,
+  type SidebarTriggerProps,
+  type SidebarVariant,
+  useSidebar,
+} from "./sidebar.tsx";
+export {
   Skeleton,
   type SkeletonAnimation,
   type SkeletonProps,

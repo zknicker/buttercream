@@ -1,0 +1,513 @@
+@layer components {
+  /*
+   * Sidebar. Structure and behaviour follow shadcn/ui's sidebar; every colour is a theme role
+   * projected through private --bc-sidebar-* variables, so a theme change restyles the shell
+   * like any other component. The desktop sidebar is a fixed panel painting over a same-width
+   * gap element that holds its place in flow; collapsing animates both.
+   */
+  .sidebar-provider {
+    --bc-sidebar-width: 15rem;
+    --bc-sidebar-width-icon: 3rem;
+    --bc-sidebar-bg: var(--background-secondary);
+    --bc-sidebar-fg: var(--foreground);
+    --bc-sidebar-border: var(--border);
+    --bc-sidebar-accent: var(--default);
+
+    display: flex;
+    min-height: 100svh;
+    width: 100%;
+  }
+
+  .sidebar-provider:has(.sidebar[data-variant="inset"]) {
+    background: var(--bc-sidebar-bg);
+  }
+
+  .sidebar {
+    display: none;
+    color: var(--bc-sidebar-fg);
+    font-family: var(--font-sans);
+  }
+
+  /* The JS swaps to a drawer below this width; hiding covers the pre-hydration frame. */
+  @media (min-width: 768px) {
+    .sidebar {
+      display: block;
+    }
+  }
+
+  .sidebar--static {
+    display: flex;
+    height: 100%;
+    width: var(--bc-sidebar-width);
+    flex-direction: column;
+    background: var(--bc-sidebar-bg);
+  }
+
+  .sidebar--mobile {
+    display: flex;
+    width: 18rem;
+    max-width: 85vw;
+    height: 100%;
+    flex-direction: column;
+    padding: 0;
+    background: var(--bc-sidebar-bg);
+    color: var(--bc-sidebar-fg);
+  }
+
+  .sidebar__a11y {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .sidebar__gap {
+    position: relative;
+    width: var(--bc-sidebar-width);
+    transition: width 200ms linear;
+  }
+
+  .sidebar[data-collapsible="offcanvas"] .sidebar__gap {
+    width: 0;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__gap {
+    width: var(--bc-sidebar-width-icon);
+  }
+
+  .sidebar[data-collapsible="icon"][data-variant="floating"] .sidebar__gap,
+  .sidebar[data-collapsible="icon"][data-variant="inset"] .sidebar__gap {
+    width: calc(var(--bc-sidebar-width-icon) + 1rem + (2 * var(--border-width)));
+  }
+
+  .sidebar__container {
+    position: fixed;
+    z-index: 10;
+    inset-block: 0;
+    display: flex;
+    width: var(--bc-sidebar-width);
+    transition:
+      left 200ms linear,
+      right 200ms linear,
+      width 200ms linear;
+  }
+
+  .sidebar[data-side="left"] .sidebar__container {
+    left: 0;
+  }
+
+  .sidebar[data-side="right"] .sidebar__container {
+    right: 0;
+  }
+
+  .sidebar[data-side="left"][data-collapsible="offcanvas"] .sidebar__container {
+    left: calc(var(--bc-sidebar-width) * -1);
+  }
+
+  .sidebar[data-side="right"][data-collapsible="offcanvas"] .sidebar__container {
+    right: calc(var(--bc-sidebar-width) * -1);
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__container {
+    width: var(--bc-sidebar-width-icon);
+  }
+
+  .sidebar[data-variant="floating"] .sidebar__container,
+  .sidebar[data-variant="inset"] .sidebar__container {
+    padding: 0.5rem;
+    border: none;
+  }
+
+  .sidebar[data-collapsible="icon"][data-variant="floating"] .sidebar__container,
+  .sidebar[data-collapsible="icon"][data-variant="inset"] .sidebar__container {
+    width: calc(var(--bc-sidebar-width-icon) + 1rem + (2 * var(--border-width)));
+  }
+
+  .sidebar__inner {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    background: var(--bc-sidebar-bg);
+  }
+
+  .sidebar[data-variant="floating"] .sidebar__inner {
+    border: var(--border-width) solid var(--bc-sidebar-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-surface);
+  }
+
+  .sidebar__trigger {
+    flex: none;
+  }
+
+  /*
+   * A slim grab strip on the sidebar's edge. Invisible until hovered, when its centre line
+   * takes the border colour; out of the tab order because the trigger is the keyboard path.
+   */
+  .sidebar__rail {
+    position: absolute;
+    z-index: 20;
+    inset-block: 0;
+    width: 1rem;
+    border: none;
+    background: transparent;
+    cursor: w-resize;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .sidebar[data-side="left"] .sidebar__rail {
+    right: -1rem;
+    translate: -50% 0;
+  }
+
+  .sidebar[data-side="right"] .sidebar__rail {
+    left: 0;
+    translate: -50% 0;
+    cursor: e-resize;
+  }
+
+  .sidebar[data-side="left"][data-state="collapsed"] .sidebar__rail {
+    cursor: e-resize;
+  }
+
+  .sidebar[data-side="right"][data-state="collapsed"] .sidebar__rail {
+    cursor: w-resize;
+  }
+
+  .sidebar__rail::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+  }
+
+  .sidebar__rail:hover::after {
+    background: var(--bc-sidebar-border);
+  }
+
+  .sidebar__inset {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    background: var(--background);
+  }
+
+  @media (min-width: 768px) {
+    .sidebar-provider:has(.sidebar[data-variant="inset"]) .sidebar__inset {
+      margin: 0.5rem;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-surface);
+    }
+
+    .sidebar-provider:has(.sidebar[data-variant="inset"][data-side="left"]) .sidebar__inset {
+      margin-inline-start: 0;
+    }
+
+    .sidebar-provider:has(.sidebar[data-variant="inset"][data-side="right"]) .sidebar__inset {
+      margin-inline-end: 0;
+    }
+  }
+
+  .sidebar__header,
+  .sidebar__footer {
+    display: flex;
+    flex-direction: column;
+    gap: calc(0.5rem * var(--spacing-scale));
+    padding: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .sidebar__separator {
+    margin-inline: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .sidebar__content {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: calc(0.5rem * var(--spacing-scale));
+    padding: calc(0.5rem * var(--spacing-scale));
+    overflow: auto;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__content {
+    overflow: hidden;
+  }
+
+  .sidebar__group {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    padding: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .sidebar__group-label {
+    display: flex;
+    height: 1.75rem;
+    flex-shrink: 0;
+    align-items: center;
+    padding-inline: calc(0.5rem * var(--spacing-scale));
+    border-radius: var(--radius-xl);
+    color: var(--muted);
+    font-size: calc(0.75rem * var(--font-size-scale));
+    font-weight: var(--font-weight-medium);
+    transition:
+      margin 200ms linear,
+      opacity 200ms linear;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__group-label {
+    margin-top: -1.75rem;
+    opacity: 0;
+  }
+
+  .sidebar__group-action {
+    position: absolute;
+    top: calc(0.875rem * var(--spacing-scale));
+    right: calc(0.75rem * var(--spacing-scale));
+    display: flex;
+    width: 1.25rem;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-xl);
+    background: transparent;
+    color: var(--muted);
+    cursor: var(--cursor-interactive);
+  }
+
+  .sidebar__group-action:hover {
+    background: var(--bc-sidebar-accent);
+    color: var(--bc-sidebar-fg);
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__group-action {
+    display: none;
+  }
+
+  .sidebar__group-content {
+    width: 100%;
+  }
+
+  .sidebar__menu {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: calc(0.125rem * var(--spacing-scale));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sidebar__menu-item {
+    position: relative;
+  }
+
+  .sidebar__menu-button {
+    display: flex;
+    width: 100%;
+    height: calc(2.25rem * var(--spacing-scale));
+    align-items: center;
+    gap: calc(0.75rem * var(--spacing-scale));
+    overflow: hidden;
+    padding: calc(0.5rem * var(--spacing-scale));
+    border: none;
+    border-radius: var(--radius-2xl);
+    background: transparent;
+    color: var(--bc-sidebar-fg);
+    font-family: var(--font-sans);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: var(--font-weight-medium);
+    text-align: start;
+    transition: background-color 100ms ease;
+    text-decoration: none;
+    cursor: var(--cursor-interactive);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .sidebar__menu-button:hover {
+    background: var(--bc-sidebar-accent);
+  }
+
+  .sidebar__menu-button:focus-visible {
+    outline: 1.5px solid var(--focus);
+    outline-offset: calc(var(--ring-offset-width) * -1);
+  }
+
+  .sidebar__menu-button[data-active] {
+    background: var(--bc-sidebar-accent);
+  }
+
+  .sidebar__menu-button:disabled,
+  .sidebar__menu-button[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: var(--disabled-opacity);
+  }
+
+  .sidebar__menu-button > svg {
+    flex-shrink: 0;
+  }
+
+  .sidebar__menu-icon {
+    display: flex;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Grows to push trailing content — the badge — to the row's end, in flow. */
+  .sidebar__menu-label {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__menu-button {
+    width: 2rem;
+    height: 2rem;
+    padding: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__menu-button > :not(svg, .sidebar__menu-icon) {
+    display: none;
+  }
+
+  .sidebar__menu-action {
+    position: absolute;
+    top: calc(0.375rem * var(--spacing-scale));
+    right: calc(0.25rem * var(--spacing-scale));
+    display: flex;
+    width: 1.25rem;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-xl);
+    background: transparent;
+    color: var(--muted);
+    cursor: var(--cursor-interactive);
+  }
+
+  .sidebar__menu-action:hover {
+    background: var(--bc-sidebar-accent);
+    color: var(--bc-sidebar-fg);
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__menu-action {
+    display: none;
+  }
+
+  /* A real chip; this class only seats it in the row. The chip itself owns the look. */
+  .sidebar__menu-badge {
+    min-width: 1.25rem;
+    flex: none;
+    justify-content: center;
+    margin-inline-start: auto;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* The active row already carries the fill; a filled count on top of it reads as two pills.
+     Only the fill changes — the geometry holds, so numerals align down the column. */
+  .sidebar__menu-button[data-active] .sidebar__menu-badge {
+    background: transparent;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__menu-badge {
+    display: none;
+  }
+
+  .sidebar__menu-skeleton {
+    display: flex;
+    height: 2rem;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    padding-inline: calc(0.5rem * var(--spacing-scale));
+    border-radius: var(--radius-xl);
+  }
+
+  .sidebar__menu-skeleton-icon {
+    width: 1rem;
+    height: 1rem;
+    border-radius: var(--radius-xl);
+  }
+
+  .sidebar__menu-skeleton-text {
+    height: 1rem;
+    max-width: var(--bc-sidebar-skeleton-width);
+    flex: 1;
+  }
+
+  .sidebar__menu-sub {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: calc(0.25rem * var(--spacing-scale));
+    margin: 0;
+    margin-inline: calc(0.875rem * var(--spacing-scale));
+    padding: calc(0.125rem * var(--spacing-scale)) 0;
+    padding-inline-start: calc(0.625rem * var(--spacing-scale));
+    border-inline-start: var(--border-width) solid var(--bc-sidebar-border);
+    list-style: none;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__menu-sub {
+    display: none;
+  }
+
+  .sidebar__menu-sub-item {
+    position: relative;
+  }
+
+  .sidebar__menu-sub-button {
+    display: flex;
+    height: calc(1.75rem * var(--spacing-scale));
+    min-width: 0;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
+    overflow: hidden;
+    padding-inline: calc(0.5rem * var(--spacing-scale));
+    border-radius: var(--radius-2xl);
+    color: var(--muted);
+    font-size: calc(0.875rem * var(--font-size-scale));
+    text-decoration: none;
+    cursor: var(--cursor-interactive);
+    transition: background-color 100ms ease;
+  }
+
+  .sidebar__menu-sub-button:hover {
+    background: var(--bc-sidebar-accent);
+    color: var(--bc-sidebar-fg);
+  }
+
+  .sidebar__menu-sub-button:focus-visible {
+    outline: 1.5px solid var(--focus);
+    outline-offset: calc(var(--ring-offset-width) * -1);
+  }
+
+  .sidebar__menu-sub-button[data-active] {
+    background: var(--bc-sidebar-accent);
+    color: var(--bc-sidebar-fg);
+  }
+}

@@ -19,6 +19,7 @@
     "./components/popover": "./src/components/popover.css",
     "./components/radio-group": "./src/components/radio-group.css",
     "./components/select": "./src/components/select.css",
+    "./components/sidebar": "./src/components/sidebar.css",
     "./components/slider": "./src/components/slider.css",
     "./components/surface": "./src/components/surface.css",
     "./components/switch": "./src/components/switch.css",
