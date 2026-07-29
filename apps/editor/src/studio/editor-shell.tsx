@@ -7,7 +7,7 @@ import Sun01Icon from "@hugeicons-pro/core-stroke-rounded/Sun01Icon";
 import Undo02Icon from "@hugeicons-pro/core-stroke-rounded/Undo02Icon";
 import { Link } from "@tanstack/react-router";
 import type { CSSProperties } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "../styles/preview.css";
 import { useShellTheme } from "../shell-theme.ts";
 import { Button, CupcakeMark, classes, Segmented } from "../ui/index.ts";
@@ -33,6 +33,8 @@ import { useHistoryShortcuts } from "./use-history-shortcuts.ts";
 const ARTIFACT_VIEWS = ["Preview", "Code"] as const;
 type ArtifactView = (typeof ARTIFACT_VIEWS)[number];
 
+const PREVIEW_SECTIONS = previewSectionGroups.flatMap((group) => group.items);
+
 export function EditorShell({
   initialDesignSystem,
   initialVersion,
@@ -48,6 +50,8 @@ export function EditorShell({
 }) {
   const [controlsOpen, setControlsOpen] = useState(true);
   const [navOpen, setNavOpen] = useState(false);
+  const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
+  const navMenuRef = useRef<HTMLDivElement>(null);
   /*
    * Preview or its source. Per section rather than sticky: Code answers "how is this page
    * built", and carrying it to a page the reader has not seen yet answers nothing.
@@ -132,6 +136,44 @@ export function EditorShell({
         field.select();
       }
     });
+  };
+
+  const revealPreviewLink = (index: number) => {
+    setNavOpen(true);
+
+    if (hoveredNavIndex === index) {
+      return;
+    }
+
+    setHoveredNavIndex(index);
+
+    const menu = navMenuRef.current;
+    const link = menu?.querySelector<HTMLElement>(`[data-preview-index="${index}"]`);
+    if (!(menu && link)) {
+      return;
+    }
+
+    const menuRect = menu.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    const centeredTop =
+      menu.scrollTop + linkRect.top - menuRect.top - (menu.clientHeight - linkRect.height) / 2;
+
+    menu.scrollTop = centeredTop;
+  };
+
+  const navTickScale = (index: number) => {
+    if (hoveredNavIndex === null) {
+      return PREVIEW_SECTIONS[index] === section ? 1.5 : 1;
+    }
+
+    const distance = Math.abs(index - hoveredNavIndex);
+    if (distance === 0) {
+      return 1.5;
+    }
+    if (distance === 1) {
+      return 1.25;
+    }
+    return distance === 2 ? 1.125 : 1;
   };
 
   return (
@@ -327,7 +369,10 @@ export function EditorShell({
           }
         }}
         onFocusCapture={() => setNavOpen(true)}
-        onPointerLeave={() => setNavOpen(false)}
+        onPointerLeave={() => {
+          setHoveredNavIndex(null);
+          setNavOpen(false);
+        }}
       >
         <button
           aria-expanded={navOpen}
@@ -341,11 +386,18 @@ export function EditorShell({
           className="flex max-h-full w-8 flex-col items-center gap-2 overflow-y-auto px-1 py-3 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg scrollbar-none max-[720px]:flex-row"
           onClick={() => setNavOpen(true)}
           onPointerEnter={() => setNavOpen(true)}
+          onPointerLeave={() => setHoveredNavIndex(null)}
+          onPointerMove={(event) => {
+            const tick = (event.target as HTMLElement).closest<HTMLElement>("[data-preview-index]");
+            if (tick) {
+              revealPreviewLink(Number(tick.dataset.previewIndex));
+            }
+          }}
           type="button"
         >
           {previewSectionGroups.map((group, groupIndex) => (
             <span
-              className="flex items-center gap-2 max-[720px]:flex-row min-[721px]:w-6 min-[721px]:flex-col min-[721px]:items-end"
+              className="flex items-center max-[720px]:flex-row min-[721px]:w-6 min-[721px]:flex-col min-[721px]:items-end"
               key={group.label}
             >
               {/* Gap between tick groups, oriented with the rail. */}
@@ -355,18 +407,27 @@ export function EditorShell({
                   className="shrink-0 max-[720px]:h-6 max-[720px]:w-2 min-[721px]:h-2 min-[721px]:w-6"
                 />
               ) : null}
-              {group.items.map((item) => (
-                <span
-                  aria-hidden
-                  className={classes(
-                    "block shrink-0 rounded-full max-[720px]:w-0.5 min-[721px]:h-0.5",
-                    section === item
-                      ? "bg-butter max-[720px]:h-6 min-[721px]:w-6"
-                      : "bg-fg/20 max-[720px]:h-4 min-[721px]:w-4",
-                  )}
-                  key={item}
-                />
-              ))}
+              {group.items.map((item) => {
+                const itemIndex = PREVIEW_SECTIONS.indexOf(item);
+                return (
+                  <span
+                    aria-hidden
+                    className="flex shrink-0 items-center max-[720px]:h-6 max-[720px]:w-2.5 max-[720px]:justify-center min-[721px]:h-2.5 min-[721px]:w-6 min-[721px]:justify-end"
+                    data-preview-index={itemIndex}
+                    key={item}
+                  >
+                    <span
+                      className={classes(
+                        "block shrink-0 rounded-full transition-transform duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+                        "max-[720px]:h-4 max-[720px]:w-0.5 max-[720px]:[transform:scaleY(var(--bc-nav-tick-scale))]",
+                        "min-[721px]:h-0.5 min-[721px]:w-4 min-[721px]:origin-right min-[721px]:[transform:scaleX(var(--bc-nav-tick-scale))]",
+                        section === item ? "bg-butter" : "bg-fg/20",
+                      )}
+                      style={{ "--bc-nav-tick-scale": navTickScale(itemIndex) } as CSSProperties}
+                    />
+                  </span>
+                );
+              })}
             </span>
           ))}
         </button>
@@ -377,10 +438,11 @@ export function EditorShell({
                made everything past it unreachable. overscroll-contain stops the page from
                scrolling on behind it once the menu hits an end. */
             /* Opens toward the preview, away from the controls panel it sits against. */
-            "absolute top-12 right-12 z-10 w-44 max-h-[80vh] overflow-y-auto overscroll-contain rounded-(--radius-shell) bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity",
+            "absolute top-12 right-12 z-10 w-44 max-h-[80vh] overflow-y-auto overscroll-contain rounded-(--radius-shell) bg-raised p-1.5 shadow-xl shadow-ink/10 dark:shadow-none ring-1 ring-fg/10 transition-opacity scrollbar-none",
             "max-[720px]:top-auto max-[720px]:right-auto max-[720px]:bottom-14 max-[720px]:left-2",
             navOpen ? "visible opacity-100" : "invisible opacity-0",
           )}
+          ref={navMenuRef}
         >
           {previewSectionGroups.map((group, groupIndex) => (
             <div key={group.label}>
@@ -388,22 +450,26 @@ export function EditorShell({
               <p className="px-3 py-1 font-mono text-xs tracking-wide text-muted uppercase">
                 {group.label}
               </p>
-              {group.items.map((item) => (
-                <Link
-                  aria-current={section === item ? "page" : undefined}
-                  className={classes(
-                    "block h-8 w-full rounded-(--radius-shell) px-3 text-left text-sm",
-                    "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
-                    section === item ? "bg-sunken text-fg" : "text-muted hover:bg-fg/5",
-                  )}
-                  key={item}
-                  onClick={() => setNavOpen(false)}
-                  params={{ id: designSystemId, section: previewSectionSlug(item) }}
-                  to="/ds/$id/$section"
-                >
-                  {item}
-                </Link>
-              ))}
+              {group.items.map((item) => {
+                const itemIndex = PREVIEW_SECTIONS.indexOf(item);
+                return (
+                  <Link
+                    aria-current={section === item ? "page" : undefined}
+                    className={classes(
+                      "flex h-8 w-full items-center rounded-(--radius-shell) px-3 text-left text-sm",
+                      "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
+                      section === item ? "bg-sunken text-fg" : "text-muted hover:bg-fg/5",
+                    )}
+                    data-preview-index={itemIndex}
+                    key={item}
+                    onClick={() => setNavOpen(false)}
+                    params={{ id: designSystemId, section: previewSectionSlug(item) }}
+                    to="/ds/$id/$section"
+                  >
+                    {item}
+                  </Link>
+                );
+              })}
             </div>
           ))}
         </div>
