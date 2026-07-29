@@ -13,7 +13,7 @@
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    border-radius: var(--field-radius);
+    border-radius: var(--radius-3xl);
     background: var(--bc-avatar-background);
     color: var(--bc-avatar-foreground);
     font-family: var(--font-heading);
@@ -26,7 +26,7 @@
   .avatar--sm {
     width: calc(2rem * var(--spacing-scale));
     height: calc(2rem * var(--spacing-scale));
-    border-radius: min(var(--field-radius), 0.5rem);
+    border-radius: var(--radius-2xl);
     font-size: calc(0.75rem * var(--font-size-scale));
     line-height: calc(1rem * var(--font-size-scale) * var(--line-height) / 1.4);
   }

@@ -55,7 +55,7 @@
     flex-direction: column;
     overflow: hidden;
     padding: calc(1.5rem * var(--spacing-scale));
-    border-radius: var(--radius);
+    border-radius: min(2rem, var(--radius-3xl));
     outline: none;
     background: var(--overlay);
     color: var(--overlay-foreground);
@@ -95,7 +95,7 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    border-radius: 999px;
+    border-radius: var(--radius-3xl);
     background: var(--default);
     color: var(--default-foreground);
   }
@@ -150,7 +150,7 @@
     justify-content: center;
     padding: 0;
     border: 0;
-    border-radius: 999px;
+    border-radius: var(--radius-xl);
     outline: none;
     background: var(--default);
     color: color-mix(in oklab, var(--default-foreground) 62%, transparent);

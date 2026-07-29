@@ -73,7 +73,7 @@
   .input-otp__separator {
     width: calc(0.375rem * var(--spacing-scale));
     height: 2px;
-    border-radius: var(--radius-xs);
+    border-radius: var(--radius-sm);
     background: var(--separator);
   }
 }
