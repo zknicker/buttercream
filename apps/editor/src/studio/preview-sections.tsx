@@ -55,6 +55,7 @@ import {
 } from "./preview-navigation.tsx";
 import { PopoverPreview } from "./preview-popover.tsx";
 import { RadioGroupPreview } from "./preview-radio-group.tsx";
+import type { PreviewSection } from "./preview-section-navigation.ts";
 import { SelectPreview } from "./preview-select.tsx";
 import { SidebarPreview } from "./preview-sidebar.tsx";
 import { SliderPreview } from "./preview-slider.tsx";
@@ -66,65 +67,6 @@ import {
 } from "./preview-static.tsx";
 import { TabsPreview } from "./preview-tabs.tsx";
 import { TooltipPreview } from "./preview-tooltip.tsx";
-
-/* Alphabetical after Brand and Guides, matching the order the nav lists them in. */
-export type PreviewSection =
-  | "Brand"
-  | "Guides"
-  | "Accordion"
-  | "Alert"
-  | "Autocomplete"
-  | "Avatar"
-  | "Badge"
-  | "Breadcrumbs"
-  | "Button"
-  | "Button Group"
-  | "Card"
-  | "Chat"
-  | "Overview"
-  | "Dashboard"
-  | "Finances"
-  | "Mail"
-  | "Charts"
-  | "Checkbox"
-  | "Checkbox Group"
-  | "Chip"
-  | "Close Button"
-  | "Color Swatch"
-  | "Combobox"
-  | "Drawer"
-  | "Dropdown"
-  | "Error Message"
-  | "Fieldset"
-  | "Input"
-  | "Input OTP"
-  | "Kbd"
-  | "Link"
-  | "Meter"
-  | "Modal"
-  | "Number Field"
-  | "Pagination"
-  | "Popover"
-  | "Progress Bar"
-  | "Progress Circle"
-  | "Radio Group"
-  | "Search Field"
-  | "Segment"
-  | "Select"
-  | "Separator"
-  | "Sidebar"
-  | "Skeleton"
-  | "Slider"
-  | "Spinner"
-  | "Switch"
-  | "Table"
-  | "Tabs"
-  | "Text Field"
-  | "Textarea"
-  | "Toggle Button"
-  | "Toolbar"
-  | "Tooltip"
-  | "Typography";
 
 export interface PreviewSectionContext {
   designSystem: DesignSystem;

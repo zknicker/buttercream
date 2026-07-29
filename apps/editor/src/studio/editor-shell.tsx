@@ -5,6 +5,7 @@ import Redo02Icon from "@hugeicons-pro/core-stroke-rounded/Redo02Icon";
 import SidebarLeft01Icon from "@hugeicons-pro/core-stroke-rounded/SidebarLeft01Icon";
 import Sun01Icon from "@hugeicons-pro/core-stroke-rounded/Sun01Icon";
 import Undo02Icon from "@hugeicons-pro/core-stroke-rounded/Undo02Icon";
+import { Link } from "@tanstack/react-router";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import "../styles/preview.css";
@@ -12,6 +13,11 @@ import { useShellTheme } from "../shell-theme.ts";
 import { Button, CupcakeMark, classes, Segmented } from "../ui/index.ts";
 import { DesignSystemFileMenu } from "../workspace/design-system-file-menu.tsx";
 import { PreviewCodePane } from "./preview-code-pane.tsx";
+import {
+  type PreviewSection,
+  previewSectionGroups,
+  previewSectionSlug,
+} from "./preview-section-navigation.ts";
 import {
   renderPreviewSection,
   sectionFillsSurface,
@@ -24,157 +30,34 @@ import { DESIGN_SYSTEM_NAME_FIELD_ID, ThemeEditorPanel } from "./theme-editor-pa
 import { type SaveDesignSystem, useDesignSystemDraft } from "./use-design-system-draft.ts";
 import { useHistoryShortcuts } from "./use-history-shortcuts.ts";
 
-/* Keep the component names alphabetical — the nav renders them in this order. */
-const sections = [
-  "Brand",
-  "Guides",
-  "Overview",
-  "Dashboard",
-  "Mail",
-  "Chat",
-  "Finances",
-  "Accordion",
-  "Alert",
-  "Autocomplete",
-  "Avatar",
-  "Badge",
-  "Breadcrumbs",
-  "Button",
-  "Button Group",
-  "Card",
-  "Charts",
-  "Checkbox",
-  "Checkbox Group",
-  "Chip",
-  "Close Button",
-  "Color Swatch",
-  "Combobox",
-  "Drawer",
-  "Dropdown",
-  "Error Message",
-  "Fieldset",
-  "Input",
-  "Input OTP",
-  "Kbd",
-  "Link",
-  "Meter",
-  "Modal",
-  "Number Field",
-  "Pagination",
-  "Popover",
-  "Progress Bar",
-  "Progress Circle",
-  "Radio Group",
-  "Search Field",
-  "Segment",
-  "Select",
-  "Separator",
-  "Sidebar",
-  "Skeleton",
-  "Slider",
-  "Spinner",
-  "Switch",
-  "Table",
-  "Tabs",
-  "Text Field",
-  "Textarea",
-  "Toggle Button",
-  "Toolbar",
-  "Tooltip",
-  "Typography",
-] as const;
-type Section = (typeof sections)[number];
-
 const ARTIFACT_VIEWS = ["Preview", "Code"] as const;
 type ArtifactView = (typeof ARTIFACT_VIEWS)[number];
-
-const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
-  {
-    /* Brand leads: it is the document's own description, and everything below it is a view of
-       what that description produced. */
-    label: "Preview",
-    items: ["Brand", "Guides", "Overview", "Dashboard", "Mail", "Chat", "Finances"],
-  },
-  {
-    label: "Components",
-    items: [
-      "Accordion",
-      "Alert",
-      "Autocomplete",
-      "Avatar",
-      "Badge",
-      "Breadcrumbs",
-      "Button",
-      "Button Group",
-      "Card",
-      "Charts",
-      "Checkbox",
-      "Checkbox Group",
-      "Chip",
-      "Close Button",
-      "Color Swatch",
-      "Combobox",
-      "Drawer",
-      "Dropdown",
-      "Error Message",
-      "Fieldset",
-      "Input",
-      "Input OTP",
-      "Kbd",
-      "Link",
-      "Meter",
-      "Modal",
-      "Number Field",
-      "Pagination",
-      "Popover",
-      "Progress Bar",
-      "Progress Circle",
-      "Radio Group",
-      "Search Field",
-      "Segment",
-      "Select",
-      "Separator",
-      "Sidebar",
-      "Skeleton",
-      "Slider",
-      "Spinner",
-      "Switch",
-      "Table",
-      "Tabs",
-      "Text Field",
-      "Textarea",
-      "Toggle Button",
-      "Toolbar",
-      "Tooltip",
-      "Typography",
-    ],
-  },
-];
 
 export function EditorShell({
   initialDesignSystem,
   initialVersion,
   designSystemId,
   onSave,
+  section,
 }: {
   designSystemId: string;
   initialDesignSystem: DesignSystem;
   initialVersion?: number;
   onSave?: SaveDesignSystem;
+  section: PreviewSection;
 }) {
   const [controlsOpen, setControlsOpen] = useState(true);
   const [navOpen, setNavOpen] = useState(false);
-  /* Land on Brand: the system's own overview page, and the place its prose is authored. */
-  const [section, setSection] = useState<Section>("Brand");
   /*
    * Preview or its source. Per section rather than sticky: Code answers "how is this page
    * built", and carrying it to a page the reader has not seen yet answers nothing.
    */
-  const [artifactView, setArtifactView] = useState<ArtifactView>("Preview");
-  const selectSection = (next: Section) => {
-    setSection(next);
-    setArtifactView("Preview");
-  };
+  const [artifact, setArtifact] = useState<{ section: PreviewSection; view: ArtifactView }>({
+    section,
+    view: "Preview",
+  });
+  const artifactView = artifact.section === section ? artifact.view : "Preview";
+  const setArtifactView = (view: ArtifactView) => setArtifact({ section, view });
   /*
    * One switch moves the chrome and the preview together, but through two separate
    * token sets: the shell's own dark palette, and the design system's dark theme.
@@ -198,6 +81,14 @@ export function EditorShell({
   });
 
   useHistoryShortcuts({ redo, undo });
+
+  useEffect(() => {
+    setArtifact((current) =>
+      current.section === section && current.view === "Preview"
+        ? current
+        : { section, view: "Preview" },
+    );
+  }, [section]);
 
   useEffect(() => {
     const compactViewport = window.matchMedia("(max-width: 720px)");
@@ -452,7 +343,7 @@ export function EditorShell({
           onPointerEnter={() => setNavOpen(true)}
           type="button"
         >
-          {sectionGroups.map((group, groupIndex) => (
+          {previewSectionGroups.map((group, groupIndex) => (
             <span
               className="flex items-center gap-2 max-[720px]:flex-row min-[721px]:w-6 min-[721px]:flex-col min-[721px]:items-end"
               key={group.label}
@@ -491,14 +382,14 @@ export function EditorShell({
             navOpen ? "visible opacity-100" : "invisible opacity-0",
           )}
         >
-          {sectionGroups.map((group, groupIndex) => (
+          {previewSectionGroups.map((group, groupIndex) => (
             <div key={group.label}>
               {groupIndex > 0 ? <hr className="my-2 h-px border-0 bg-fg/10" /> : null}
               <p className="px-3 py-1 font-mono text-xs tracking-wide text-muted uppercase">
                 {group.label}
               </p>
               {group.items.map((item) => (
-                <button
+                <Link
                   aria-current={section === item ? "page" : undefined}
                   className={classes(
                     "block h-8 w-full rounded-(--radius-shell) px-3 text-left text-sm",
@@ -506,14 +397,12 @@ export function EditorShell({
                     section === item ? "bg-sunken text-fg" : "text-muted hover:bg-fg/5",
                   )}
                   key={item}
-                  onClick={() => {
-                    selectSection(item);
-                    setNavOpen(false);
-                  }}
-                  type="button"
+                  onClick={() => setNavOpen(false)}
+                  params={{ id: designSystemId, section: previewSectionSlug(item) }}
+                  to="/ds/$id/$section"
                 >
                   {item}
-                </button>
+                </Link>
               ))}
             </div>
           ))}

@@ -1,5 +1,5 @@
 import type { ComponentDoc } from "../component-docs.tsx";
-import type { PreviewSection } from "../preview-sections.tsx";
+import type { PreviewSection } from "../preview-section-navigation.ts";
 import { avatarDoc } from "./avatar.ts";
 import { buttonDoc } from "./button.ts";
 import { cardDoc } from "./card.ts";
