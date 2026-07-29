@@ -240,9 +240,11 @@ export function EditorShell({
     >
       <header
         className={classes(
-          "pointer-events-none fixed top-2 left-2 z-4 grid h-9 grid-cols-[1fr_auto_1fr] items-center transition-[right] duration-150 ease-out",
+          /* Inset horizontally by the frame gutter (px-3), so the wordmark's edge sits on the
+             frame's edge line and the corner curve starts where the pill starts. */
+          "pointer-events-none fixed top-2 left-3 z-4 grid h-9 grid-cols-[1fr_auto_1fr] items-center transition-[right] duration-150 ease-out",
           "*:pointer-events-auto",
-          controlsOpen ? "right-2 min-[721px]:right-[17.25rem]" : "right-2",
+          controlsOpen ? "right-3 min-[721px]:right-[17.25rem]" : "right-3",
         )}
       >
         {/*

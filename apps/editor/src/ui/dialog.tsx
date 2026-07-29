@@ -7,8 +7,12 @@ import { classes } from "./classes.ts";
  * components — call sites keep using the namespace they actually need.
  */
 
+/*
+ * An ink scrim in both themes, not fg: fg flips light in dark mode, and a pale wash plus blur
+ * read as fog rather than depth. Dimming the page is what pushes it back.
+ */
 export const dialogBackdropClass = classes(
-  "fixed inset-0 z-20 bg-fg/35 backdrop-blur-[2px] transition-opacity duration-150",
+  "fixed inset-0 z-20 bg-ink/55 transition-opacity duration-150",
   "data-starting-style:opacity-0 data-ending-style:opacity-0",
 );
 
