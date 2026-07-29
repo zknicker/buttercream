@@ -112,6 +112,71 @@
   gap: 20px;
 }
 
+/*
+ * Sidebar specimens: the static form inside a bounded frame, since a specimen has no viewport
+ * for the fixed collapsing panel. The provider's page-height minimum yields to the frame.
+ */
+.sidebar-demo {
+  display: flex;
+  width: min(100%, 16rem);
+  height: 26rem;
+  overflow: hidden;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.sidebar-demo__provider {
+  min-height: 0;
+  height: 100%;
+}
+
+.sidebar-demo .sidebar--static {
+  width: 100%;
+}
+
+.sidebar-demo__identity {
+  display: grid;
+  gap: 0.125rem;
+  padding: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.sidebar-demo__identity > span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+/*
+ * Machinery demos run the real fixed panel. Size containment makes the frame the containing
+ * block for fixed descendants, so the collapsing container animates inside the box instead of
+ * pinning itself to the viewport.
+ */
+.sidebar-demo--app {
+  position: relative;
+  width: 100%;
+  /* A transformed ancestor is the containing block for fixed descendants in every engine;
+     containment alone was not honoured for fixed here. */
+  transform: translate(0);
+}
+
+.sidebar-demo--app .sidebar-demo__provider {
+  width: 100%;
+}
+
+.sidebar-demo__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.sidebar-demo__body {
+  padding: 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
 /* A separator fills its container, so both demos need one to stretch across rather than hug. */
 .separator-demo {
   display: grid;
@@ -752,8 +817,8 @@
   display: grid;
   overflow: hidden;
   /*
-   * Grows with its content rather than scrolling inside a fixed frame. A preview exists to be
-   * read in one pass; an internal scrollbar hides half of it and clips a table mid-row.
+   * The floor keeps a shallow viewport honest: below it the app cannot depict anything, so the
+   * editor column scrolls the frame instead of the app crushing its own chrome.
    */
   min-height: 34rem;
   border-radius: var(--radius-2xl);
@@ -764,20 +829,39 @@
   grid-template-columns: 15rem minmax(0, 1fr);
 }
 
-.app__sidebar {
-  display: flex;
+/*
+ * On a filled surface the app takes the frame's exact height and reads as the product it
+ * depicts: sidebar fixed, content scrolling inside. The main pane scrolls whole; a page with a
+ * composer pins its chrome instead and hands the scroll to the thread between them.
+ */
+.preview-surface--fill {
+  height: 100%;
+}
+
+.preview-surface--fill .app {
+  height: 100%;
+}
+
+/*
+ * The real Sidebar in its static form, sized by the app grid rather than its own width token.
+ * The provider's full-viewport minimum is for pages; here the app frame owns the height.
+ */
+.app__sidebar-provider {
+  min-width: 0;
   min-height: 0;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 1rem 0.75rem;
-  border-inline-end: var(--border-width) solid var(--border);
+  height: 100%;
+}
+
+.app__sidebar {
+  width: 100%;
+  min-height: 0;
 }
 
 .app__identity {
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  padding: 0.25rem;
+  padding: 0.5rem;
 }
 
 .app__identity-text {
@@ -787,8 +871,8 @@
 
 .app__identity-name {
   overflow: hidden;
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -799,41 +883,6 @@
   font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.app__nav {
-  display: grid;
-  gap: 0.125rem;
-}
-
-.app__nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  padding: 0.5rem 0.625rem;
-  border-radius: var(--radius-xl);
-  color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.app__nav-item[data-current] {
-  background: var(--default);
-  color: var(--foreground);
-}
-
-.app__nav-label {
-  min-width: 0;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.app__nav-badge {
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-variant-numeric: tabular-nums;
 }
 
 .app__sidebar-heading {
@@ -857,6 +906,14 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1.25rem;
+}
+
+.preview-surface--fill .app__main {
+  overflow-y: auto;
+}
+
+.preview-surface--fill .app__main:has(.chat__composer) {
+  overflow: hidden;
 }
 
 .app__header {
@@ -1260,42 +1317,19 @@
 /*
  * Chat application preview. Everything here is scoped to `.chat__*` so the page cannot reach
  * into the shared app chrome, and every colour comes from a theme role — the user bubble is the
- * accent, the assistant is plain text on the page background, and the code block borrows the
- * chart ramp rather than inventing syntax colours of its own.
+ * neutral action, the assistant is plain text on the page background, and the code block borrows
+ * the chart ramp rather than inventing syntax colours of its own.
  */
-.chat__recent {
-  display: grid;
-  gap: 0.375rem;
-}
-
-.chat__recent-list {
-  display: grid;
-  gap: 0.125rem;
-}
-
-.chat__recent-item {
-  overflow: hidden;
-  padding: 0.4375rem 0.625rem;
-  border-radius: var(--radius-xl);
-  color: var(--muted);
-  font-size: 0.8125rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.chat__recent-item[data-current] {
-  background: var(--default);
-  color: var(--foreground);
-  font-weight: 500;
-}
-
 .chat__thread {
   display: flex;
   min-width: 0;
+  min-height: 0;
   flex: 1;
   flex-direction: column;
   gap: 1.25rem;
   padding-block: 0.25rem;
+  /* Scrolls only on a filled surface, where the composer below it holds the floor. */
+  overflow-y: auto;
 }
 
 .chat__turn {
@@ -1309,11 +1343,13 @@
   justify-content: flex-end;
 }
 
+/* Neutral, not accent: the reference keeps the user's own words quiet and spends the accent on
+   actions, so a theme's accent change moves the buttons without repainting half the thread. */
 .chat__bubble {
   padding: 0.625rem 0.875rem;
   border-radius: var(--radius-2xl);
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--default);
+  color: var(--foreground);
   font-size: 0.875rem;
   line-height: 1.55;
 }
@@ -1339,20 +1375,160 @@
   list-style: disc;
 }
 
-.chat__tools {
+/* Reasoning and sources fold the same way: a muted line with a chevron promising more. */
+.chat__disclosure {
   display: inline-flex;
   width: fit-content;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.3125rem 0.625rem;
-  border-radius: var(--radius-xl);
-  background: var(--surface-secondary);
   color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Grouped tool calls, collapsed: a full-width card that reads as one unopened drawer. */
+.chat__group {
+  display: grid;
+  width: 100%;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+}
+
+.chat__group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.chat__group-head .preview-icon {
+  color: var(--muted);
+}
+
+/* A tool that pauses for consent: the warning role draws the ring, real buttons decide. */
+.chat__approval {
+  display: grid;
+  width: 100%;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  border-radius: var(--radius-xl);
+  box-shadow: inset 0 0 0 var(--border-width) color-mix(in oklab, var(--warning) 45%, transparent);
+}
+
+.chat__approval-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+}
+
+.chat__approval-head .preview-icon {
+  color: var(--warning);
+}
+
+.chat__approval-tool {
+  font-family: var(--font-mono);
   font-size: 0.75rem;
 }
 
-.chat__tools-label {
-  font-variant-numeric: tabular-nums;
+.chat__args {
+  overflow-x: auto;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface-secondary);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.chat__approval-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* A reply that has not arrived: the avatar circle and three sweeping measures of it. */
+.chat__skeleton-avatar {
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border-radius: 999px;
+}
+
+.chat__skeleton-lines {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 0.625rem;
+  padding-block-start: 0.25rem;
+}
+
+.chat__skeleton-line {
+  height: 0.875rem;
+  border-radius: var(--radius-lg);
+}
+
+/* Media stand-in painted from the chart ramp, so it restyles with the theme like everything else. */
+.chat__media {
+  width: min(18rem, 100%);
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(
+      120% 90% at 20% 15%,
+      color-mix(in oklab, var(--chart-3) 55%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      110% 100% at 85% 80%,
+      color-mix(in oklab, var(--chart-1) 60%, transparent),
+      transparent 65%
+    ),
+    linear-gradient(160deg, var(--surface), var(--surface-secondary));
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+}
+
+/* A file the user attached: thumbnail and name in one quiet pill above their question. */
+.chat__attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  border-radius: var(--radius-xl);
+  background: var(--default);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+}
+
+.chat__attachment-thumb {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      100% 100% at 30% 20%,
+      color-mix(in oklab, var(--chart-2) 65%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(150deg, var(--surface-secondary), var(--surface));
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+}
+
+/* Markdown's inline code: mono at prose size, on the same quiet surface as the blocks. */
+.chat__inline-code {
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-md);
+  background: var(--surface-secondary);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
 }
 
 .chat__code {
@@ -1391,6 +1567,10 @@
   color: var(--chart-1);
 }
 
+.chat__code-type {
+  color: var(--chart-2);
+}
+
 .chat__code-string {
   color: var(--chart-3);
 }
@@ -1408,6 +1588,33 @@
   gap: 0.375rem;
   color: var(--muted);
   font-size: 0.875rem;
+}
+
+/* The word itself streams: a highlight sweeps the label while the reply is being produced. */
+.chat__shimmer {
+  background:
+    linear-gradient(90deg, var(--muted) 35%, var(--foreground) 50%, var(--muted) 65%) 0 0 / 200%
+    100% text;
+  color: transparent;
+  animation: chat-shimmer 2s linear infinite;
+}
+
+@keyframes chat-shimmer {
+  from {
+    background-position: 175% 0;
+  }
+
+  to {
+    background-position: -25% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat__shimmer {
+    background: none;
+    color: var(--muted);
+    animation: none;
+  }
 }
 
 .chat__dots {
@@ -1489,10 +1696,18 @@
   flex: 1;
 }
 
-.chat__send {
+/* The composer's attach and send are circles regardless of the theme's corners, per the reference. */
+.chat__round {
   width: 2rem;
   height: 2rem;
   border-radius: 999px;
+}
+
+/* The chip's label is the flex row; the icons sit inside it, either side of the model name. */
+.chat__model .chip__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
 }
 
 .chat__disclaimer {

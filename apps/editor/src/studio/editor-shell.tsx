@@ -9,9 +9,15 @@ import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import "../styles/preview.css";
 import { useShellTheme } from "../shell-theme.ts";
-import { Button, CupcakeMark, classes } from "../ui/index.ts";
+import { Button, CupcakeMark, classes, Segmented } from "../ui/index.ts";
 import { DesignSystemFileMenu } from "../workspace/design-system-file-menu.tsx";
-import { renderPreviewSection, sectionOwnsSurface } from "./preview-sections.tsx";
+import { PreviewCodePane } from "./preview-code-pane.tsx";
+import {
+  renderPreviewSection,
+  sectionFillsSurface,
+  sectionOwnsSurface,
+} from "./preview-sections.tsx";
+import { previewSectionSource } from "./preview-source.ts";
 import { PreviewSurface } from "./preview-surface.tsx";
 import { SaveConflictDialog } from "./save-conflict-dialog.tsx";
 import { DESIGN_SYSTEM_NAME_FIELD_ID, ThemeEditorPanel } from "./theme-editor-panel.tsx";
@@ -64,6 +70,7 @@ const sections = [
   "Segment",
   "Select",
   "Separator",
+  "Sidebar",
   "Skeleton",
   "Slider",
   "Spinner",
@@ -78,6 +85,9 @@ const sections = [
   "Typography",
 ] as const;
 type Section = (typeof sections)[number];
+
+const ARTIFACT_VIEWS = ["Preview", "Code"] as const;
+type ArtifactView = (typeof ARTIFACT_VIEWS)[number];
 
 const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
   {
@@ -126,6 +136,7 @@ const sectionGroups: readonly { label: string; items: readonly Section[] }[] = [
       "Segment",
       "Select",
       "Separator",
+      "Sidebar",
       "Skeleton",
       "Slider",
       "Spinner",
@@ -157,6 +168,15 @@ export function EditorShell({
   const [navOpen, setNavOpen] = useState(false);
   /* Land on Brand: the system's own overview page, and the place its prose is authored. */
   const [section, setSection] = useState<Section>("Brand");
+  /*
+   * Preview or its source. Per section rather than sticky: Code answers "how is this page
+   * built", and carrying it to a page the reader has not seen yet answers nothing.
+   */
+  const [artifactView, setArtifactView] = useState<ArtifactView>("Preview");
+  const selectSection = (next: Section) => {
+    setSection(next);
+    setArtifactView("Preview");
+  };
   /*
    * One switch moves the chrome and the preview together, but through two separate
    * token sets: the shell's own dark palette, and the design system's dark theme.
@@ -207,6 +227,7 @@ export function EditorShell({
     theme,
     ...(onSave ? { onUpdate: updateDesignSystem } : {}),
   });
+  const sectionSource = previewSectionSource(section);
 
   /*
    * Rename has one home — the Name field in the controls panel. The topbar entry opens the
@@ -277,9 +298,21 @@ export function EditorShell({
         {/*
          * Matches the wordmark's size and weight so the bar reads as three deliberate
          * parts. As tracked uppercase mono it looked like a stray token rather than a
-         * "you are here".
+         * "you are here". Pages built from a single preview file also offer their source,
+         * and the toggle sits with the name because it changes what that name shows.
          */}
-        <strong className="truncate text-sm font-medium text-fg">{section}</strong>
+        <div className="flex min-w-0 items-center gap-2.5">
+          <strong className="truncate text-sm font-medium text-fg">{section}</strong>
+          {sectionSource ? (
+            <Segmented
+              compact
+              label="Artifact view"
+              onChange={setArtifactView}
+              options={ARTIFACT_VIEWS}
+              value={artifactView}
+            />
+          ) : null}
+        </div>
 
         <div className="flex items-center justify-end gap-1">
           <Button
@@ -358,12 +391,24 @@ export function EditorShell({
          * Between the two, the gutters stay put and the frame grows with its content.
          */}
         <div className="h-full overflow-y-auto scrollbar-none">
-          <div className="min-h-full w-full overflow-hidden rounded-(--radius-shell-frame)">
-            {sectionOwnsSurface(section) ? (
+          {/*
+           * App pages take the frame's exact height so the shell they depict reads as an app
+           * with its own inner scrolling; everything else grows and this column scrolls it.
+           */}
+          <div
+            className={classes(
+              "w-full overflow-hidden rounded-(--radius-shell-frame)",
+              sectionFillsSurface(section) && artifactView === "Preview" ? "h-full" : "min-h-full",
+            )}
+          >
+            {sectionSource && artifactView === "Code" ? (
+              <PreviewCodePane source={sectionSource} />
+            ) : sectionOwnsSurface(section) ? (
               sectionContent
             ) : (
               <PreviewSurface
                 customCss={designSystem.rules.customCss}
+                fill={sectionFillsSurface(section)}
                 style={themeVariables}
                 theme={theme}
               >
@@ -464,7 +509,7 @@ export function EditorShell({
                   )}
                   key={item}
                   onClick={() => {
-                    setSection(item);
+                    selectSection(item);
                     setNavOpen(false);
                   }}
                   type="button"

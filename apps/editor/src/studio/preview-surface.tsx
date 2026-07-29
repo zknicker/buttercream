@@ -17,6 +17,8 @@ interface PreviewSurfaceProps {
   children: ReactNode;
   /** User-authored CSS; scoped so it can restyle specimens but never the editor chrome. */
   customCss: string;
+  /** Take the frame's exact height and let content scroll inside, instead of growing with it. */
+  fill?: boolean;
   /** Theme tokens as custom properties, inline so control drags repaint without a stylesheet re-parse. */
   style: CSSProperties;
   theme: "light" | "dark";
@@ -25,6 +27,7 @@ interface PreviewSurfaceProps {
 export function PreviewSurface({
   children,
   customCss,
+  fill = false,
   style,
   theme,
 }: PreviewSurfaceProps): ReactElement {
@@ -45,7 +48,7 @@ export function PreviewSurface({
 
   return (
     <div
-      className="preview-surface"
+      className={fill ? "preview-surface preview-surface--fill" : "preview-surface"}
       data-surface-scope={scopeId}
       data-theme={theme}
       ref={setSurface}

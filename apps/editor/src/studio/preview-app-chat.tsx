@@ -1,6 +1,6 @@
-import { Avatar, Button, Chip, Textarea } from "@buttercream/react";
+import { Avatar, Button, Chip, Sidebar, Skeleton, Textarea } from "@buttercream/react";
 import type { DesignSystem } from "@buttercream/theme-core";
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { AppFrame, AppHeader, AppIdentity, AppNav, type AppNavItem } from "./preview-app-shell.tsx";
 import { createPreviewIconElements } from "./preview-icons.ts";
 
@@ -8,6 +8,10 @@ import { createPreviewIconElements } from "./preview-icons.ts";
  * An assistant conversation. It earns its place next to the dashboard because it stresses a
  * different half of the system: long-form reading rather than dense figures, so the type scale,
  * the mono face and the soft roles all have to hold up at paragraph length.
+ *
+ * The script walks the anatomy of an AI thread the way the reference does — reasoning, markdown
+ * with highlighted code, grouped tool calls, an approval, a skeleton, media, and sources — each
+ * in the state it would first appear in, so every role the theme defines gets read at least once.
  */
 
 const NAV: AppNavItem[] = [
@@ -33,20 +37,20 @@ export function ChatAppPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
         <>
           <AppIdentity email="darnell@example.com" name="Darnell Howe" />
           <AppNav icons={icons} items={NAV} />
-          <div className="chat__recent">
-            <span className="app__sidebar-heading">Recent</span>
-            <div className="chat__recent-list">
-              {RECENT.map((title, index) => (
-                <span
-                  className="chat__recent-item"
-                  data-current={index === 0 || undefined}
-                  key={title}
-                >
-                  {title}
-                </span>
-              ))}
-            </div>
-          </div>
+          <Sidebar.Group>
+            <Sidebar.GroupLabel>Recent</Sidebar.GroupLabel>
+            <Sidebar.GroupContent>
+              <Sidebar.Menu>
+                {RECENT.map((title, index) => (
+                  <Sidebar.MenuItem key={title}>
+                    <Sidebar.MenuButton isActive={index === 0}>
+                      <Sidebar.MenuLabel>{title}</Sidebar.MenuLabel>
+                    </Sidebar.MenuButton>
+                  </Sidebar.MenuItem>
+                ))}
+              </Sidebar.Menu>
+            </Sidebar.GroupContent>
+          </Sidebar.Group>
           <div className="app__sidebar-spacer" />
           <AppNav icons={icons} items={[{ icon: "settings", label: "Settings" }]} />
         </>
@@ -66,110 +70,176 @@ export function ChatAppPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
       />
 
       <div className="chat__thread">
-        <div className="chat__turn chat__turn--user">
-          <p className="chat__bubble">
-            We are documenting the chat surface. What should a composer own, and what belongs to the
-            thread?
-          </p>
-        </div>
+        <UserTurn>Walk me through the Buttercream chat components.</UserTurn>
 
+        {/* Streaming, before any content: the shimmer is the whole message. No avatar yet. */}
         <div className="chat__turn chat__turn--assistant">
-          <Avatar size="sm">
-            <Avatar.Fallback>AI</Avatar.Fallback>
-          </Avatar>
-          <div className="chat__answer">
-            <p className="chat__text">
-              Keep them separate. The thread owns reading — measure, rhythm, and the quiet
-              affordances under each answer. The composer owns intent: what you are about to send,
-              which model receives it, and what is attached to it.
-            </p>
-          </div>
-        </div>
-
-        <div className="chat__turn chat__turn--user">
-          <p className="chat__bubble">Show me the model chip wired to theme tokens.</p>
-        </div>
-
-        <div className="chat__turn chat__turn--assistant">
-          <Avatar size="sm">
-            <Avatar.Fallback>AI</Avatar.Fallback>
-          </Avatar>
-          <div className="chat__answer">
-            <span className="chat__tools">
-              {icon.more}
-              <span className="chat__tools-label">2 tool calls</span>
-            </span>
-
-            <p className="chat__text">
-              The chip reads its colour from the same <strong>tokens</strong> every other control
-              uses, so the composer restyles with the theme rather than against it.
-            </p>
-
-            <figure className="chat__code">
-              <figcaption className="chat__code-head">
-                <span className="chat__code-lang">TS</span>
-                <Button size="sm" variant="ghost">
-                  Copy
-                </Button>
-              </figcaption>
-              <pre className="chat__code-body">
-                <code>
-                  <span className="chat__code-keyword">import</span>
-                  {" { Chip } "}
-                  <span className="chat__code-keyword">from</span>{" "}
-                  <span className="chat__code-string">"@buttercream/react"</span>
-                  {";\n\n"}
-                  <span className="chat__code-keyword">export const</span>
-                  {" model = {\n  id: "}
-                  <span className="chat__code-string">"gpt-5.4"</span>
-                  {",\n  label: "}
-                  <span className="chat__code-string">"GPT-5.4"</span>
-                  {",\n} "}
-                  <span className="chat__code-keyword">as const</span>
-                  {";"}
-                </code>
-              </pre>
-            </figure>
-
-            <ul className="chat__list">
-              <li>The chip inherits the soft accent role, so it never needs a literal colour.</li>
-              <li>Its radius follows the theme, matching the send button beside it.</li>
-              <li>Swapping the model only changes the label, never the styling.</li>
-            </ul>
-
-            <div className="chat__actions">
-              <Button size="sm" variant="ghost">
-                Copy
-              </Button>
-              <Button size="sm" variant="ghost">
-                Helpful
-              </Button>
-              <Button size="sm" variant="ghost">
-                Not helpful
-              </Button>
-              <Button size="sm" variant="ghost">
-                Retry
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <div className="chat__turn chat__turn--user">
-          <p className="chat__bubble">Great. Now do the same for the dark theme.</p>
-        </div>
-
-        <div className="chat__turn chat__turn--assistant">
-          <Avatar size="sm">
-            <Avatar.Fallback>AI</Avatar.Fallback>
-          </Avatar>
           <p className="chat__thinking">
-            Thinking
+            <span className="chat__shimmer">Thinking...</span>
             <span aria-hidden className="chat__dots">
               <span className="chat__dot" />
               <span className="chat__dot" />
               <span className="chat__dot" />
             </span>
           </p>
+        </div>
+
+        <UserTurn>Show me reasoning, markdown, and code highlighting.</UserTurn>
+
+        <div className="chat__turn chat__turn--assistant">
+          <Avatar size="sm">
+            <Avatar.Fallback>AI</Avatar.Fallback>
+          </Avatar>
+          <div className="chat__answer">
+            <span className="chat__disclosure">
+              Thought for 4 seconds
+              {icon.chevronDown}
+            </span>
+
+            <p className="chat__text">
+              Here is a concise answer with <strong>markdown</strong> support:
+            </p>
+
+            <figure className="chat__code">
+              <figcaption className="chat__code-head">
+                <span className="chat__code-lang">TS</span>
+                <Button aria-label="Copy code" iconOnly size="sm" variant="ghost">
+                  {icon.copy}
+                </Button>
+              </figcaption>
+              <pre className="chat__code-body">
+                <code>
+                  <span className="chat__code-keyword">export type</span>{" "}
+                  <span className="chat__code-type">ChatStatus</span>
+                  {" = "}
+                  <span className="chat__code-string">"ready"</span>
+                  {" | "}
+                  <span className="chat__code-string">"streaming"</span>
+                  {" | "}
+                  <span className="chat__code-string">"submitted"</span>
+                  {";"}
+                </code>
+              </pre>
+            </figure>
+
+            <ul className="chat__list">
+              <li>Presentation-only preview compounds</li>
+              <li>Your app owns the message array and SDK wiring</li>
+              <li>
+                Compose <code className="chat__inline-code">ChatMessage</code>,{" "}
+                <code className="chat__inline-code">Markdown</code>, and{" "}
+                <code className="chat__inline-code">ChainOfThought</code> explicitly
+              </li>
+            </ul>
+
+            <div className="chat__actions">
+              <Button aria-label="Copy" iconOnly size="sm" variant="ghost">
+                {icon.copy}
+              </Button>
+              <Button aria-label="Helpful" iconOnly size="sm" variant="ghost">
+                {icon.thumbUp}
+              </Button>
+              <Button aria-label="Not helpful" iconOnly size="sm" variant="ghost">
+                {icon.thumbDown}
+              </Button>
+              <Button aria-label="Retry" iconOnly size="sm" variant="ghost">
+                {icon.refresh}
+              </Button>
+              <Button aria-label="More" iconOnly size="sm" variant="ghost">
+                {icon.more}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <UserTurn>Show me tool calls — streaming, grouped, and approval.</UserTurn>
+
+        <div className="chat__turn chat__turn--assistant">
+          <div className="chat__group">
+            <span className="chat__group-head">
+              <span>2 tool calls</span>
+              {icon.chevronDown}
+            </span>
+          </div>
+        </div>
+
+        <UserTurn>What if a tool needs approval?</UserTurn>
+
+        <div className="chat__turn chat__turn--assistant">
+          <div className="chat__approval">
+            <span className="chat__approval-head">
+              {icon.warning}
+              <span>
+                Approval needed: <code className="chat__approval-tool">sendEmail</code>
+              </span>
+            </span>
+            <pre className="chat__args">
+              <code>{'{"to":"team@acme.com","subject":"Launch update"}'}</code>
+            </pre>
+            <div className="chat__approval-actions">
+              <Button size="sm" variant="secondary">
+                Reject
+              </Button>
+              <Button size="sm">Approve</Button>
+            </div>
+          </div>
+        </div>
+
+        <UserTurn>What do skeleton loaders look like while a reply is pending?</UserTurn>
+
+        <div className="chat__turn chat__turn--assistant">
+          <Skeleton className="chat__skeleton-avatar" />
+          <div className="chat__skeleton-lines">
+            <Skeleton className="chat__skeleton-line" />
+            <Skeleton className="chat__skeleton-line" style={{ width: "92%" }} />
+            <Skeleton className="chat__skeleton-line" style={{ width: "60%" }} />
+          </div>
+        </div>
+
+        <UserTurn>Show media and compact actions too.</UserTurn>
+
+        <div className="chat__turn chat__turn--assistant">
+          <Avatar size="sm">
+            <Avatar.Fallback>AI</Avatar.Fallback>
+          </Avatar>
+          <div className="chat__answer">
+            <p className="chat__text">
+              Assistant messages can include media and a minimal action set beneath the body.
+            </p>
+            {/* A stand-in image painted from the chart ramp, so media previews follow the theme. */}
+            <div aria-hidden className="chat__media" />
+            <div className="chat__actions">
+              <Button aria-label="Copy" iconOnly size="sm" variant="ghost">
+                {icon.copy}
+              </Button>
+              <Button aria-label="More" iconOnly size="sm" variant="ghost">
+                {icon.more}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <UserTurn>Show sources and file attachments.</UserTurn>
+
+        <div className="chat__turn chat__turn--user">
+          <span className="chat__attachment">
+            <span aria-hidden className="chat__attachment-thumb" />
+            dashboard-wireframe.png
+          </span>
+        </div>
+        <UserTurn>What can you tell me about this wireframe?</UserTurn>
+
+        <div className="chat__turn chat__turn--assistant">
+          <div className="chat__answer">
+            <p className="chat__text">
+              The wireframe follows a familiar dashboard shell with a persistent sidebar, top bar,
+              and a scrollable content region for cards and charts.
+            </p>
+            <span className="chat__disclosure">
+              3 sources
+              {icon.chevronDown}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -181,17 +251,35 @@ export function ChatAppPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
           variant="secondary"
         />
         <div className="chat__composer-row">
-          <Button aria-label="Attach a file" iconOnly size="sm" variant="ghost">
-            {icon.add}
+          <Button
+            aria-label="Attach a file"
+            className="chat__round"
+            iconOnly
+            size="sm"
+            variant="secondary"
+          >
+            {icon.attach}
           </Button>
-          <Chip size="sm">GPT-5.4</Chip>
+          <Chip className="chat__model" size="sm" variant="tertiary">
+            {icon.globe}
+            GPT-5.4
+            {icon.chevronDown}
+          </Chip>
           <span className="chat__composer-spacer" />
-          <Button aria-label="Send message" className="chat__send" iconOnly size="sm">
-            {icon.upload}
+          <Button aria-label="Send message" className="chat__round" iconOnly size="sm">
+            {icon.arrowUp}
           </Button>
         </div>
       </div>
       <p className="chat__disclaimer">AI can make mistakes. Check important info.</p>
     </AppFrame>
+  );
+}
+
+function UserTurn({ children }: { children: ReactNode }): ReactElement {
+  return (
+    <div className="chat__turn chat__turn--user">
+      <p className="chat__bubble">{children}</p>
+    </div>
   );
 }

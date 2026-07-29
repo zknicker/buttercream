@@ -55,6 +55,7 @@ import {
 import { PopoverPreview } from "./preview-popover.tsx";
 import { RadioGroupPreview } from "./preview-radio-group.tsx";
 import { SelectPreview } from "./preview-select.tsx";
+import { SidebarPreview } from "./preview-sidebar.tsx";
 import { SliderPreview } from "./preview-slider.tsx";
 import {
   ButtonGroupPreview,
@@ -111,6 +112,7 @@ export type PreviewSection =
   | "Segment"
   | "Select"
   | "Separator"
+  | "Sidebar"
   | "Skeleton"
   | "Slider"
   | "Spinner"
@@ -143,6 +145,21 @@ export interface PreviewSectionContext {
  */
 export function sectionOwnsSurface(section: PreviewSection): boolean {
   return section === "Brand";
+}
+
+/*
+ * The application pages read as apps, not documents: the shell takes the frame's full height
+ * and its content scrolls inside, the way the product they depict would. Specimen grids and
+ * guides stay documents — they grow, and the editor column scrolls them.
+ */
+export function sectionFillsSurface(section: PreviewSection): boolean {
+  return (
+    section === "Overview" ||
+    section === "Dashboard" ||
+    section === "Mail" ||
+    section === "Chat" ||
+    section === "Finances"
+  );
 }
 
 export function renderPreviewSection(
@@ -244,6 +261,9 @@ export function renderPreviewSection(
   }
   if (section === "Chip") {
     return <ChipPreview />;
+  }
+  if (section === "Sidebar") {
+    return <SidebarPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Skeleton") {
     return <SkeletonPreview />;

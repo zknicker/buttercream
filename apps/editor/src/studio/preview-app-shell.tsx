@@ -1,12 +1,13 @@
-import { Avatar, Card, Typography } from "@buttercream/react";
+import { Avatar, Card, Sidebar, Typography } from "@buttercream/react";
 import type { DesignSystem } from "@buttercream/theme-core";
 import type { ReactElement, ReactNode } from "react";
 import { createPreviewIconElements } from "./preview-icons.ts";
 
 /*
  * The chrome the application previews share. These pages exist to show the system doing a real
- * job rather than one control at a time, so the shell is deliberately plain: it is a frame for
- * the components, and every colour and corner in it comes from the theme.
+ * job rather than one control at a time, so the shell is a frame of real components: the
+ * sidebar is the library's Sidebar in its static form — interactive menu buttons, no collapse
+ * machinery — because a preview inside a frame has no viewport to fix a collapsing panel to.
  */
 
 export interface AppNavItem {
@@ -25,7 +26,11 @@ export function AppFrame({
 }): ReactElement {
   return (
     <div className="app">
-      <aside className="app__sidebar">{sidebar}</aside>
+      <Sidebar.Provider className="app__sidebar-provider">
+        <Sidebar className="app__sidebar" collapsible="none">
+          <Sidebar.Content>{sidebar}</Sidebar.Content>
+        </Sidebar>
+      </Sidebar.Provider>
       <div className="app__main">{children}</div>
     </div>
   );
@@ -60,15 +65,23 @@ export function AppNav({
   const icon = createPreviewIconElements(icons);
 
   return (
-    <nav className="app__nav">
-      {items.map((item) => (
-        <span className="app__nav-item" data-current={item.current || undefined} key={item.label}>
-          {icon[item.icon]}
-          <span className="app__nav-label">{item.label}</span>
-          {item.badge === undefined ? null : <span className="app__nav-badge">{item.badge}</span>}
-        </span>
-      ))}
-    </nav>
+    <Sidebar.Group>
+      <Sidebar.GroupContent>
+        <Sidebar.Menu>
+          {items.map((item) => (
+            <Sidebar.MenuItem key={item.label}>
+              <Sidebar.MenuButton isActive={item.current ?? false}>
+                <Sidebar.MenuIcon>{icon[item.icon]}</Sidebar.MenuIcon>
+                <Sidebar.MenuLabel>{item.label}</Sidebar.MenuLabel>
+                {item.badge === undefined ? null : (
+                  <Sidebar.MenuBadge>{item.badge}</Sidebar.MenuBadge>
+                )}
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+          ))}
+        </Sidebar.Menu>
+      </Sidebar.GroupContent>
+    </Sidebar.Group>
   );
 }
 
