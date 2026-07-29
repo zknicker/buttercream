@@ -89,7 +89,9 @@ if [ -f .env ]; then
 fi
 
 # Per-checkout preview port, so several worktrees can run dev at once without fighting over one.
-if [ ! -f .claude/launch.json ] && command -v dev-port >/dev/null 2>&1; then
+# Rewrite on every bootstrap: Claude may supply DEV_PORT_BASE for a session, and an existing file
+# from another session must not keep sending its preview to a port the dev server will never bind.
+if command -v dev-port >/dev/null 2>&1; then
   mkdir -p .claude
   dev-port --claude-launch buttercream bun run dev >/dev/null 2>&1 \
     && echo "bootstrap: wrote .claude/launch.json on port $(dev-port)"
