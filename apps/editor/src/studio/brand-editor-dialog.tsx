@@ -28,17 +28,7 @@ import {
  * half-typed sentence in the exported `DESIGN.md`. Custom CSS is the exception that proves the
  * rule — it repaints the preview, so it commits on Save and repaints then.
  */
-export function BrandEditorDialog({
-  code = false,
-  description,
-  label,
-  multiline = true,
-  onSave,
-  placeholder,
-  title,
-  triggerLabel,
-  value,
-}: {
+export interface BrandEditorDialogProps {
   /** Monospace field with room for a stylesheet, rather than a paragraph box. */
   code?: boolean;
   description: string;
@@ -47,9 +37,22 @@ export function BrandEditorDialog({
   onSave: (value: string) => void;
   placeholder: string;
   title: string;
-  triggerLabel: string;
+  /** The element that opens the dialog — a whole card on the Brand page, a plain button elsewhere. */
+  trigger: ReactElement;
   value: string;
-}): ReactElement {
+}
+
+export function BrandEditorDialog({
+  code = false,
+  description,
+  label,
+  multiline = true,
+  onSave,
+  placeholder,
+  title,
+  trigger,
+  value,
+}: BrandEditorDialogProps): ReactElement {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(value);
   const fieldId = `brand-field-${title.toLowerCase().replaceAll(/[^a-z0-9]+/gu, "-")}`;
@@ -65,7 +68,7 @@ export function BrandEditorDialog({
       }}
       open={open}
     >
-      <Dialog.Trigger render={<Button size="sm" variant="ghost" />}>{triggerLabel}</Dialog.Trigger>
+      <Dialog.Trigger render={trigger} />
       <Dialog.Portal>
         <Dialog.Backdrop className={dialogBackdropClass} />
         <Dialog.Viewport className={dialogViewportClass}>

@@ -1,8 +1,10 @@
 import type { DesignSystem } from "@buttercream/theme-core";
+import { HugeiconsIcon } from "@hugeicons/react";
+import PencilEdit02Icon from "@hugeicons-pro/core-stroke-rounded/PencilEdit02Icon";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
 import type { ShellTheme } from "../shell-theme.ts";
-import { Card, classes, Eyebrow, SectionHeading, Swirled } from "../ui/index.ts";
-import { BrandEditorDialog } from "./brand-editor-dialog.tsx";
+import { Button, Card, classes, Eyebrow, SectionHeading, Swirled } from "../ui/index.ts";
+import { BrandEditorDialog, type BrandEditorDialogProps } from "./brand-editor-dialog.tsx";
 import { BrandPreview } from "./preview-brand.tsx";
 import { PreviewSurface } from "./preview-surface.tsx";
 
@@ -107,7 +109,11 @@ export function BrandPage({
                   }
                   placeholder="buttercream.studio"
                   title="Website"
-                  triggerLabel={identity.website ? "Edit" : "Add website"}
+                  trigger={
+                    <Button size="sm" variant="ghost">
+                      {identity.website ? "Edit" : "Add website"}
+                    </Button>
+                  }
                   value={identity.website ?? ""}
                 />
               ) : null}
@@ -126,21 +132,17 @@ export function BrandPage({
                   {...(field.wide ? { className: "sm:col-span-2" } : {})}
                   {...(onUpdate
                     ? {
-                        action: (
-                          <BrandEditorDialog
-                            description={field.description}
-                            label={field.title}
-                            onSave={(value) =>
-                              onUpdate((next) => {
-                                next.identity[field.key] = value.trim();
-                              })
-                            }
-                            placeholder={field.placeholder}
-                            title={field.title}
-                            triggerLabel={identity[field.key]?.trim() ? "Edit" : "Add"}
-                            value={identity[field.key] ?? ""}
-                          />
-                        ),
+                        edit: {
+                          description: field.description,
+                          label: field.title,
+                          onSave: (value: string) =>
+                            onUpdate((next) => {
+                              next.identity[field.key] = value.trim();
+                            }),
+                          placeholder: field.placeholder,
+                          title: field.title,
+                          value: identity[field.key] ?? "",
+                        },
                       }
                     : {})}
                 >
@@ -174,23 +176,19 @@ export function BrandPage({
                   title="Design rules for AI"
                   {...(onUpdate
                     ? {
-                        action: (
-                          <BrandEditorDialog
-                            description="Project-specific instructions, exported verbatim into DESIGN.md."
-                            label="Agent rules"
-                            onSave={(value) =>
-                              onUpdate((next) => {
-                                next.rules.agent = value;
-                              })
-                            }
-                            placeholder={
-                              "Prefer Card over a bare panel for grouped content.\nNever nest two accent actions in one row."
-                            }
-                            title="Design rules for AI"
-                            triggerLabel={rules.agent.trim() ? "Edit" : "Add"}
-                            value={rules.agent}
-                          />
-                        ),
+                        edit: {
+                          description:
+                            "Project-specific instructions, exported verbatim into DESIGN.md.",
+                          label: "Agent rules",
+                          onSave: (value: string) =>
+                            onUpdate((next) => {
+                              next.rules.agent = value;
+                            }),
+                          placeholder:
+                            "Prefer Card over a bare panel for grouped content.\nNever nest two accent actions in one row.",
+                          title: "Design rules for AI",
+                          value: rules.agent,
+                        },
                       }
                     : {})}
                 >
@@ -206,26 +204,21 @@ export function BrandPage({
                   title="Custom CSS"
                   {...(onUpdate
                     ? {
-                        action: (
-                          <BrandEditorDialog
-                            code
-                            /* Invariant 3: custom CSS is authored here and never inferred from
-                               an imported stylesheet, which is why this is the only way in. */
-                            description="BEM overrides and utilities, scoped to this system's previews and shipped with its export."
-                            label="Custom CSS"
-                            onSave={(value) =>
-                              onUpdate((next) => {
-                                next.rules.customCss = value;
-                              })
-                            }
-                            placeholder={
-                              ".button--secondary {\n  background: var(--accent-soft);\n}"
-                            }
-                            title="Custom CSS"
-                            triggerLabel={rules.customCss.trim() ? "Edit" : "Add"}
-                            value={rules.customCss}
-                          />
-                        ),
+                        edit: {
+                          code: true,
+                          /* Invariant 3: custom CSS is authored here and never inferred from
+                             an imported stylesheet, which is why this is the only way in. */
+                          description:
+                            "BEM overrides and utilities, scoped to this system's previews and shipped with its export.",
+                          label: "Custom CSS",
+                          onSave: (value: string) =>
+                            onUpdate((next) => {
+                              next.rules.customCss = value;
+                            }),
+                          placeholder: ".button--secondary {\n  background: var(--accent-soft);\n}",
+                          title: "Custom CSS",
+                          value: rules.customCss,
+                        },
                       }
                     : {})}
                 >
@@ -243,24 +236,57 @@ export function BrandPage({
   );
 }
 
+/*
+ * The whole card opens its editor, not a button in its corner — the reference behaves the same
+ * way. The trigger is a stretched overlay rather than the card itself rendered as a <button>,
+ * because the card holds headings and <pre> blocks that are invalid inside one. The pencil is
+ * decorative: it surfaces on hover and focus to say the card is editable, and the overlay
+ * carries the accessible name.
+ */
 function BrandBlock({
-  action,
   children,
   className,
+  edit,
   title,
 }: {
-  action?: ReactNode;
   children: ReactNode;
   className?: string;
+  /** Dialog configuration for an author; absent for a shared visitor, and the card sits inert. */
+  edit?: Omit<BrandEditorDialogProps, "trigger">;
   title: string;
 }): ReactElement {
   return (
-    <Card className={classes("flex flex-col gap-2.5 p-5", className)}>
+    <Card
+      className={classes(
+        "group relative flex flex-col gap-2.5 p-5",
+        edit && "transition-shadow hover:ring-fg/20",
+        className,
+      )}
+    >
       <div className="flex min-h-7 items-start justify-between gap-3">
         <h3 className="text-sm font-medium text-fg">{title}</h3>
-        {action}
+        {edit ? (
+          <span
+            aria-hidden
+            className="flex size-7 shrink-0 items-center justify-center rounded-full bg-fg/8 text-muted opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
+          >
+            <HugeiconsIcon icon={PencilEdit02Icon} size={14} strokeWidth={2} />
+          </span>
+        ) : null}
       </div>
       {children}
+      {edit ? (
+        <BrandEditorDialog
+          {...edit}
+          trigger={
+            <button
+              aria-label={`${edit.value.trim() ? "Edit" : "Add"} ${title.toLowerCase()}`}
+              className="absolute inset-0 cursor-pointer rounded-(--radius-shell) focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg"
+              type="button"
+            />
+          }
+        />
+      ) : null}
     </Card>
   );
 }
@@ -277,8 +303,12 @@ function ProseValue({ hint, value }: { hint: string; value: string }): ReactElem
 function CodeValue({ hint, value }: { hint: string; value: string }): ReactElement {
   const content = value.trim();
   return content ? (
-    /* Capped rather than scrolled: the card reports that rules exist, the dialog reads them. */
-    <pre className="max-h-40 overflow-hidden rounded-(--radius-shell-sm) bg-sunken p-3 font-mono text-xs leading-5 text-muted">
+    /*
+     * Capped rather than scrolled: the card reports that rules exist, the dialog reads them.
+     * Bare mono on the card — a panelled block made a box inside a box — with the last couple
+     * of lines fading out so the cap reads as "there is more", not a clipping bug.
+     */
+    <pre className="max-h-40 overflow-hidden font-mono text-xs leading-5 text-muted [mask-image:linear-gradient(to_bottom,black_calc(100%-2.5rem),transparent)]">
       <code>{content}</code>
     </pre>
   ) : (

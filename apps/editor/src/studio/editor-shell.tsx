@@ -155,7 +155,8 @@ export function EditorShell({
 }) {
   const [controlsOpen, setControlsOpen] = useState(true);
   const [navOpen, setNavOpen] = useState(false);
-  const [section, setSection] = useState<Section>("Button");
+  /* Land on Brand: the system's own overview page, and the place its prose is authored. */
+  const [section, setSection] = useState<Section>("Brand");
   /*
    * One switch moves the chrome and the preview together, but through two separate
    * token sets: the shell's own dark palette, and the design system's dark theme.
