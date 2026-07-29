@@ -24,6 +24,8 @@ export interface BadgeAnchorProps extends ComponentPropsWithoutRef<"span"> {
   badge: ReactNode;
 }
 
+export interface BadgeLabelProps extends ComponentPropsWithoutRef<"span"> {}
+
 /** A count or status marker. Purely presentational, so no Base UI primitive is involved. */
 function BadgeRoot({
   children,
@@ -47,11 +49,21 @@ function BadgeRoot({
       data-slot="badge"
       {...props}
     >
-      <span className="badge__label" data-slot="badge-label">
-        {children}
-      </span>
+      {typeof children === "string" || typeof children === "number" ? (
+        <BadgeLabel>{children}</BadgeLabel>
+      ) : (
+        children
+      )}
     </span>
   );
+}
+
+/**
+ * The text inside a badge. Plain string or number children get wrapped in one automatically;
+ * compose it explicitly when the badge mixes an icon with its label.
+ */
+function BadgeLabel({ className, ...props }: BadgeLabelProps): ReactElement {
+  return <span className={classes("badge__label", className)} data-slot="badge-label" {...props} />;
 }
 
 /**
@@ -69,4 +81,5 @@ function BadgeAnchor({ badge, children, className, ...props }: BadgeAnchorProps)
 
 export const Badge = Object.assign(BadgeRoot, {
   Anchor: BadgeAnchor,
+  Label: BadgeLabel,
 });

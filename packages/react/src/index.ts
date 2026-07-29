@@ -27,6 +27,7 @@ export {
   Badge,
   type BadgeAnchorProps,
   type BadgeColor,
+  type BadgeLabelProps,
   type BadgePlacement,
   type BadgeProps,
   type BadgeSize,
