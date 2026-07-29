@@ -8,46 +8,54 @@ import type { ReactElement, ReactNode } from "react";
 import { Button, classes, dialogBackdropClass, Logo } from "../ui/index.ts";
 import { AccountMenu } from "./account-menu.tsx";
 
-type NavLinkSpec = {
-  label: string;
-  params: Record<string, string>;
-  to: "/ds/$id" | "/pricing" | "/systems";
-};
+type ExternalLinkSpec = { href: string; label: string };
+type InternalLinkSpec = { label: string; to: "/pricing" | "/systems" };
+type NavLinkSpec = ExternalLinkSpec | InternalLinkSpec;
+
+function isExternal(link: NavLinkSpec): link is ExternalLinkSpec {
+  return "href" in link;
+}
 
 /*
  * There is no side rail, so this bar is the whole of the app's navigation — it has to serve a
  * visitor reading marketing and an owner moving between their systems. Rather than two headers,
  * one link list that gains the workspace entry once there is a workspace to enter.
+ *
+ * Everything in the centre group is a text link and everything on the right is a button. That
+ * split is what keeps the hover treatments honest: a link changes colour, a button lights its
+ * shape. Mixing the two — github as a ghost button beside plain nav text — was the reason two
+ * items that read as siblings behaved like strangers under the cursor.
  */
 const PUBLIC_LINKS: readonly NavLinkSpec[] = [
-  { label: "components", params: { id: "preview" }, to: "/ds/$id" },
-  { label: "pricing", params: {}, to: "/pricing" },
+  { label: "pricing", to: "/pricing" },
+  { href: "https://github.com/zknicker/buttercream", label: "github" },
 ];
 
 /* Leads the bar when there is an account behind it: the workspace is the signed-in home. */
-const WORKSPACE_LINK: NavLinkSpec = { label: "designs", params: {}, to: "/systems" };
+const WORKSPACE_LINK: NavLinkSpec = { label: "designs", to: "/systems" };
+
+/*
+ * One height for every surface, declared rather than inherited from whatever the tallest control
+ * happens to be. The bar used to measure its own contents, so it stood at 74px signed out and
+ * 76px signed in — and because Clerk resolves the session after hydration, every cold load
+ * animated through both. A fixed box with centred contents cannot do that.
+ */
+const HEADER_HEIGHT = "h-18";
 
 export function SiteHeader({
   actions,
   current,
-  wide = false,
 }: {
   actions?: ReactNode;
   current?: string | undefined;
-  /**
-   * Drops the marketing measure and lets the bar span the viewport. Work surfaces fill the
-   * screen — a centred column with wide empty margins is a reading layout, and the header has to
-   * follow the content it sits above or the two stop lining up.
-   */
-  wide?: boolean;
 }): ReactElement {
   const clerkEnabled = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 
   return (
     <header
       className={classes(
-        "mx-auto flex w-full items-center gap-4 px-6 py-5 lg:px-10",
-        wide ? "max-w-none" : "max-w-6xl",
+        "mx-auto flex w-full max-w-6xl items-center gap-4 px-6 lg:px-10",
+        HEADER_HEIGHT,
       )}
     >
       <div className="flex flex-1 items-center">
@@ -63,25 +71,15 @@ export function SiteHeader({
       <nav aria-label="Main" className="flex items-center gap-7 max-lg:hidden">
         {clerkEnabled ? (
           <Show when="signed-in">
-            <NavLink current={current} {...WORKSPACE_LINK} />
+            <NavLink current={current} link={WORKSPACE_LINK} />
           </Show>
         ) : null}
         {PUBLIC_LINKS.map((link) => (
-          <NavLink current={current} key={link.label} {...link} />
+          <NavLink current={current} key={link.label} link={link} />
         ))}
       </nav>
 
       <div className="flex flex-1 items-center justify-end gap-2">
-        <Button
-          className="font-mono max-sm:hidden"
-          nativeButton={false}
-          render={
-            <a href="https://github.com/zknicker/buttercream" rel="noreferrer" target="_blank">
-              github
-            </a>
-          }
-          variant="ghost"
-        />
         {/* Auth lives here rather than being passed per page, so every marketing
             surface gets the same account controls instead of only the homepage. */}
         {clerkEnabled ? (
@@ -125,35 +123,43 @@ function GetButtercream(): ReactElement {
   );
 }
 
+function navLinkClass(active: boolean): string {
+  return classes(
+    "relative rounded-(--radius-shell-sm) font-mono text-sm lowercase transition-colors duration-150",
+    "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg",
+    active ? "text-fg" : "text-muted hover:text-fg",
+  );
+}
+
 function NavLink({
   current,
-  label,
-  params,
-  to,
+  link,
 }: {
   current?: string | undefined;
-  label: string;
-  params: Record<string, string>;
-  to: NavLinkSpec["to"];
+  link: NavLinkSpec;
 }): ReactElement {
-  const active = current === label;
+  const active = current === link.label;
+  /* The one mark of "you are here", so it has to survive whichever element carries the label. */
+  const marker = active ? (
+    <span
+      aria-hidden="true"
+      className="absolute -bottom-2 left-1/2 size-1 -translate-x-1/2 bg-butter"
+    />
+  ) : null;
+
+  if (isExternal(link)) {
+    return (
+      <a className={navLinkClass(active)} href={link.href} rel="noreferrer" target="_blank">
+        {link.label}
+        {marker}
+      </a>
+    );
+  }
+
   return (
-    <Link
-      className={classes(
-        "relative font-mono text-sm lowercase",
-        "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg",
-        active ? "text-fg" : "text-muted hover:text-fg",
-      )}
-      params={params as never}
-      to={to}
-    >
-      {label}
-      {active ? (
-        <span
-          aria-hidden="true"
-          className="absolute -bottom-2 left-1/2 size-1 -translate-x-1/2 bg-butter"
-        />
-      ) : null}
+    <Link className={navLinkClass(active)} to={link.to}>
+      {link.label}
+      {marker}
     </Link>
   );
 }
@@ -165,7 +171,7 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
     <Dialog.Root>
       <Dialog.Trigger
         aria-label="Open menu"
-        className="relative inline-flex size-8.5 shrink-0 items-center justify-center rounded-(--radius-shell) text-fg hover:bg-fg/6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg lg:hidden"
+        className="relative inline-flex size-8.5 shrink-0 items-center justify-center rounded-(--radius-shell) text-fg transition-colors duration-150 hover:bg-fg/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg lg:hidden"
         render={<button type="button" />}
       >
         <HugeiconsIcon aria-hidden="true" icon={Menu01Icon} size={16} strokeWidth={2} />
@@ -177,7 +183,7 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
             <Logo />
             <Dialog.Close
               aria-label="Close menu"
-              className="inline-flex size-8.5 items-center justify-center rounded-(--radius-shell) text-muted hover:bg-fg/6"
+              className="inline-flex size-8.5 items-center justify-center rounded-(--radius-shell) text-muted transition-colors duration-150 hover:bg-fg/8 hover:text-fg"
             >
               <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
             </Dialog.Close>
@@ -192,9 +198,34 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
               <MobileNavLink current={current} key={link.label} link={link} />
             ))}
           </nav>
+          {/*
+           * Sign in is `max-sm:hidden` in the bar, so on a phone this menu is the only place a
+           * returning visitor can find it.
+           */}
+          {clerkEnabled ? (
+            <Show when="signed-out">
+              <Dialog.Close
+                nativeButton={false}
+                render={
+                  <SignInButton>
+                    <Button className="w-full sm:hidden" size="lg" variant="outline">
+                      Sign in
+                    </Button>
+                  </SignInButton>
+                }
+              />
+            </Show>
+          ) : null}
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+}
+
+function mobileNavLinkClass(active: boolean): string {
+  return classes(
+    "rounded-(--radius-shell) px-3 py-2.5 font-mono text-base lowercase transition-colors duration-150",
+    active ? "bg-sunken text-fg" : "text-muted hover:bg-fg/6 hover:text-fg",
   );
 }
 
@@ -205,20 +236,26 @@ function MobileNavLink({
   current?: string | undefined;
   link: NavLinkSpec;
 }): ReactElement {
+  const active = current === link.label;
+
   return (
     <Dialog.Close
       nativeButton={false}
       render={
-        <Link
-          className={classes(
-            "rounded-(--radius-shell) px-3 py-2.5 font-mono text-base lowercase",
-            current === link.label ? "bg-sunken text-fg" : "text-muted",
-          )}
-          params={link.params as never}
-          to={link.to}
-        >
-          {link.label}
-        </Link>
+        isExternal(link) ? (
+          <a
+            className={mobileNavLinkClass(active)}
+            href={link.href}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {link.label}
+          </a>
+        ) : (
+          <Link className={mobileNavLinkClass(active)} to={link.to}>
+            {link.label}
+          </Link>
+        )
       }
     />
   );

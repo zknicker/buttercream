@@ -18,6 +18,12 @@ import { DesignSystemCard } from "./design-system-card.tsx";
  * here for the same reason the studio chrome is quiet (ADR 0009): the user is looking at their own
  * design systems, and the page around them should not compete. What is left is a heading and a
  * grid, and the heading is the same pixel-mono-plus-dither-rule the controls rail uses.
+ *
+ * It holds the site measure all the same. Quiet is a matter of type and colour; width is a matter
+ * of where the logo sits, and this page used to span the viewport while every other page was a
+ * centred column — so arriving here from the homepage slid the wordmark forty pixels left and
+ * threw the whole grid outward. The studio is the one surface that earns full bleed, because it is
+ * the one surface whose content is the whole screen.
  */
 
 export function DesignSystemsPage({
@@ -50,9 +56,9 @@ export function DesignSystemsPage({
 
   return (
     <div className="isolate flex min-h-dvh flex-col">
-      <SiteHeader current="designs" wide />
+      <SiteHeader current="designs" />
 
-      <main className="w-full flex-1 px-6 pt-3 pb-10 lg:px-10">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 pt-6 pb-20 lg:px-10">
         <SectionHeading
           className="pb-1"
           level={1}

@@ -50,7 +50,9 @@ export function AccountMenu(): ReactElement | null {
     <Menu>
       <Menu.Trigger
         aria-label={`Account menu for ${displayName}`}
-        className="group flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-raised py-0.5 pr-0.5 pl-2 ring-1 ring-line ring-inset hover:bg-sunken focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+        /* h-8.5 is the shell's md button height: the pill has to line up with whatever page
+           action sits beside it, and it is the tallest thing in the topbar either way. */
+        className="group flex h-8.5 shrink-0 items-center gap-1.5 rounded-full bg-raised py-0.5 pr-0.5 pl-2 ring-1 ring-line ring-inset transition-colors duration-150 hover:bg-sunken focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
       >
         <HugeiconsIcon
           aria-hidden="true"
