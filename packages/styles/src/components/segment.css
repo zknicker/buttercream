@@ -161,6 +161,11 @@
     display: none;
   }
 
+  /* Ghost has no track for the hairlines to divide — the reference draws none either. */
+  .segment--ghost .segment__separator {
+    display: none;
+  }
+
   .segment__item[data-pressed] .segment__separator,
   .segment__item[data-pressed] + .segment__item .segment__separator {
     opacity: 0;
