@@ -2,12 +2,53 @@
 
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import type { ReactElement, ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { classes } from "./classes.ts";
 
 export type TooltipProps<Payload = unknown> = BaseTooltip.Root.Props<Payload>;
 
-function TooltipRoot<Payload = unknown>(props: TooltipProps<Payload>): ReactElement {
-  return <BaseTooltip.Root {...props} />;
+/*
+ * A tooltip names what the pointer is on. Once anything scrolls, the pointer is no longer on
+ * it — so the tooltip closes instead of chasing its anchor across the screen, the way native
+ * titles behave. The next row the pointer lands on opens its own.
+ */
+function TooltipRoot<Payload = unknown>({
+  actionsRef,
+  onOpenChange,
+  onOpenChangeComplete,
+  ...props
+}: TooltipProps<Payload>): ReactElement {
+  const internalActionsRef = useRef<BaseTooltip.Root.Actions | null>(null);
+  const actions = actionsRef ?? internalActionsRef;
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const close = () => actions.current?.close();
+    window.addEventListener("scroll", close, { capture: true, passive: true });
+    return () => window.removeEventListener("scroll", close, { capture: true });
+  }, [open, actions]);
+
+  return (
+    <BaseTooltip.Root
+      actionsRef={actions}
+      onOpenChange={(next, details) => {
+        onOpenChange?.(next, details);
+        setOpen(next);
+      }}
+      onOpenChangeComplete={(next) => {
+        onOpenChangeComplete?.(next);
+        /* Supplying actionsRef puts Base UI in manual-unmount mode. When the ref is ours, the
+           contract stays automatic: unmount as soon as the exit transition finishes. */
+        if (!next && actionsRef === undefined) {
+          internalActionsRef.current?.unmount();
+        }
+      }}
+      {...props}
+    />
+  );
 }
 
 export type TooltipProviderProps = BaseTooltip.Provider.Props;
