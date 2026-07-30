@@ -18,8 +18,8 @@
       "binding": "DB",
       "database_name": "buttercream-production",
       "database_id": "ebd145ed-ce4d-46f9-99e8-9e7b3baeb035",
-      // Local dev uses miniflare's own D1; run `bun run db:migrate:local` to create the copy.
-      // Never set "remote" here — `bun run dev:prod` generates a gitignored
+      // `bun run dev:local` uses Miniflare's own D1; run `bun run db:migrate:local` first.
+      // Never set "remote" here — plain `bun run dev` generates a gitignored
       // wrangler.remote.jsonc with it applied (see vite.config.ts); the plugin only honours
       // per-binding "remote" read from the config file, not values layered on afterwards.
       // Deploys are unaffected and always use the real database.

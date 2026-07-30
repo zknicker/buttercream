@@ -9,4 +9,5 @@
 - Keep `@buttercream/react`, `@buttercream/styles`, and `@buttercream/cli` on one version.
 - Do not add Tailwind plugins or `tailwind.config.js`; Buttercream is Tailwind v4 CSS-first.
 - Never make the CLI write into a consuming repository. Export to stdout and let the caller decide where output goes.
+- Use `bun run dev`; it binds the hosted production D1. Use `bun run dev:local` only when the task explicitly needs isolated local data, and migrate that database first.
 - Run `bun run check` before committing.

@@ -203,3 +203,11 @@ Development uses the hosted D1 database configured in `apps/editor/wrangler.json
 ```bash
 bun run dev
 ```
+
+Use the isolated Miniflare database only when the task explicitly needs it. Each checkout owns its
+local state and must migrate it before first use.
+
+```bash
+bun run --filter @buttercream/editor db:migrate:local
+bun run dev:local
+```

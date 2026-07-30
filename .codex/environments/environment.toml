@@ -8,9 +8,4 @@ script = "bun install"
 [[actions]]
 name = "Dev"
 icon = "run"
-command = 'bun run dev -- --port "$(dev-port)"'
-
-[[actions]]
-name = "Dev (production data)"
-icon = "run"
-command = 'bun --cwd apps/editor run dev:prod -- --port "$(dev-port)"'
+command = "bun run dev"

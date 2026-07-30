@@ -12,9 +12,9 @@ identity is re-read, and a user row orphaned by losing that race is deleted. Not
 two identities belong to one person; linking a second identity to an existing user is a deliberate
 insert into `user_identities`.
 
-Local development runs against miniflare's local database. `bun run dev:prod` deliberately points
-a dev session at the production database (reads and writes) by flipping the D1 binding to remote
-in vite.config.ts; the wrangler config itself never sets `remote`.
+Development runs against the hosted production database (reads and writes) by default. `bun run
+dev:local` deliberately opts into Miniflare's isolated local database. Vite flips the D1 binding to
+remote for ordinary development; the Wrangler config itself never sets `remote`.
 
 Local development may automatically sign in a configured development user with a short-lived Clerk
 ticket. The ticket endpoint is disabled in production, accepts only localhost requests, and requires

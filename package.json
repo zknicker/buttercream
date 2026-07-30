@@ -12,6 +12,7 @@
     "changeset": "changeset",
     "check": "bun run lint && bun run build:packages && bun run typecheck && bun run test && bun run build",
     "dev": "./scripts/bootstrap-checkout.sh && bun run --filter @buttercream/react build && bun --cwd apps/editor dev --port \"$(dev-port)\"",
+    "dev:local": "./scripts/bootstrap-checkout.sh && bun run --filter @buttercream/react build && bun --cwd apps/editor dev:local --port \"$(dev-port)\"",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "bun run --filter '*' test",
