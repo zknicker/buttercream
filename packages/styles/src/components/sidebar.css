@@ -12,6 +12,8 @@
     --bc-sidebar-fg: var(--foreground);
     --bc-sidebar-border: var(--border);
     --bc-sidebar-accent: var(--default);
+    /* One step above the row fill, so an action's own hover reads on an already-lit row. */
+    --bc-sidebar-accent-hover: var(--default-hover);
 
     display: flex;
     min-height: 100svh;
@@ -98,6 +100,12 @@
 
   .sidebar[data-side="left"] .sidebar__container {
     left: 0;
+  }
+
+  /* A right-hand sidebar's gap must also sit at the row's end, or the space it holds opens
+     on the wrong side of the content. */
+  .sidebar[data-side="right"] {
+    order: 1;
   }
 
   .sidebar[data-side="right"] .sidebar__container {
@@ -217,12 +225,34 @@
     }
   }
 
+  /* The shell breathes more than the rows: the header sits clear of the frame's top corner and
+     the footer clear of the bottom, as the reference's do, while row insets stay at 0.5rem. */
   .sidebar__header,
   .sidebar__footer {
     display: flex;
     flex-direction: column;
     gap: calc(0.5rem * var(--spacing-scale));
-    padding: calc(0.5rem * var(--spacing-scale));
+  }
+
+  .sidebar__footer {
+    gap: calc(0.25rem * var(--spacing-scale));
+  }
+
+  .sidebar__header {
+    padding: calc(1rem * var(--spacing-scale)) calc(1rem * var(--spacing-scale))
+      calc(0.5rem * var(--spacing-scale));
+  }
+
+  .sidebar__footer {
+    padding: calc(0.5rem * var(--spacing-scale)) calc(0.75rem * var(--spacing-scale))
+      calc(1rem * var(--spacing-scale));
+  }
+
+  /* The icon rail is --bc-sidebar-width-icon wide; wide shell insets would squeeze the 2rem
+     buttons out of it, so the collapsed rail returns to the row inset. */
+  .sidebar[data-collapsible="icon"] .sidebar__header,
+  .sidebar[data-collapsible="icon"] .sidebar__footer {
+    padding-inline: calc(0.375rem * var(--spacing-scale));
   }
 
   .sidebar__separator {
@@ -234,12 +264,13 @@
     min-height: 0;
     flex: 1;
     flex-direction: column;
-    gap: calc(0.5rem * var(--spacing-scale));
-    padding: calc(0.5rem * var(--spacing-scale));
+    gap: calc(0.25rem * var(--spacing-scale));
+    padding: 0 calc(0.75rem * var(--spacing-scale));
     overflow: auto;
   }
 
   .sidebar[data-collapsible="icon"] .sidebar__content {
+    padding-inline: calc(0.375rem * var(--spacing-scale));
     overflow: hidden;
   }
 
@@ -249,7 +280,11 @@
     width: 100%;
     min-width: 0;
     flex-direction: column;
-    padding: calc(0.5rem * var(--spacing-scale));
+  }
+
+  /* Adjacent groups breathe; a separator between them carries its own margins instead. */
+  .sidebar__group + .sidebar__group {
+    margin-block-start: calc(0.5rem * var(--spacing-scale));
   }
 
   .sidebar__group-label {
@@ -274,8 +309,9 @@
 
   .sidebar__group-action {
     position: absolute;
-    top: calc(0.875rem * var(--spacing-scale));
-    right: calc(0.75rem * var(--spacing-scale));
+    /* Half the label's leftover height: centred on the label line. */
+    top: 0.25rem;
+    right: calc(0.5rem * var(--spacing-scale));
     display: flex;
     width: 1.25rem;
     aspect-ratio: 1;
@@ -287,6 +323,11 @@
     background: transparent;
     color: var(--muted);
     cursor: var(--cursor-interactive);
+  }
+
+  .sidebar__group-action svg {
+    width: 0.875rem;
+    height: 0.875rem;
   }
 
   .sidebar__group-action:hover {
@@ -320,20 +361,27 @@
   .sidebar__menu-button {
     display: flex;
     width: 100%;
-    height: calc(2.25rem * var(--spacing-scale));
+    /* A minimum, not a fixture: ordinary rows all land on it, while a footer profile row
+       carrying an avatar grows to fit instead of clipping it — the reference's min-h-9. */
+    min-height: calc(2.25rem * var(--spacing-scale));
     align-items: center;
     gap: calc(0.75rem * var(--spacing-scale));
     overflow: hidden;
-    padding: calc(0.5rem * var(--spacing-scale));
+    /* Block padding leaves room for a kbd chord inside the minimum row height, so a row
+       carrying one stands level with its plain-text neighbours. */
+    padding: calc(0.375rem * var(--spacing-scale)) calc(0.5rem * var(--spacing-scale));
     border: none;
     border-radius: var(--radius-2xl);
     background: transparent;
     color: var(--bc-sidebar-fg);
     font-family: var(--font-sans);
     font-size: calc(0.875rem * var(--font-size-scale));
-    font-weight: var(--font-weight-medium);
+    /* Regular at rest; only the current row carries medium, as the reference's labels do. */
+    font-weight: var(--font-weight-normal);
     text-align: start;
-    transition: background-color 100ms ease;
+    /* The hover fill is instant — a lagging swatch reads as sluggishness when the pointer
+       sweeps a column of rows. Only the make-room padding animates. */
+    transition: padding 100ms ease;
     text-decoration: none;
     cursor: var(--cursor-interactive);
     -webkit-tap-highlight-color: transparent;
@@ -350,6 +398,7 @@
 
   .sidebar__menu-button[data-active] {
     background: var(--bc-sidebar-accent);
+    font-weight: var(--font-weight-medium);
   }
 
   .sidebar__menu-button:disabled,
@@ -381,36 +430,78 @@
     white-space: nowrap;
   }
 
+  /* A square, centred cell: the rail reads as a column of even glyphs, and the active pill
+     wraps its icon concentrically instead of stretching into a lozenge. */
   .sidebar[data-collapsible="icon"] .sidebar__menu-button {
-    width: 2rem;
-    height: 2rem;
-    padding: calc(0.5rem * var(--spacing-scale));
+    width: 2.25rem;
+    height: 2.25rem;
+    min-height: 2.25rem;
+    justify-content: center;
+    padding: 0;
   }
 
-  .sidebar[data-collapsible="icon"] .sidebar__menu-button > :not(svg, .sidebar__menu-icon) {
+  /* The avatar survives the collapse as the row's icon; everything textual folds away. */
+  .sidebar[data-collapsible="icon"]
+    .sidebar__menu-button
+    > :not(svg, .sidebar__menu-icon, .avatar) {
     display: none;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__menu-button:has(> .avatar) {
+    justify-content: center;
+    padding: 0;
   }
 
   .sidebar__menu-action {
     position: absolute;
-    top: calc(0.375rem * var(--spacing-scale));
-    right: calc(0.25rem * var(--spacing-scale));
+    /* Centred on the row whatever its height, so the icon sits on the same line as the label
+       and any trailing timestamp — a taller profile row centres its action too. */
+    top: 50%;
+    translate: 0 -50%;
+    right: calc(0.5rem * var(--spacing-scale));
     display: flex;
-    width: 1.25rem;
+    /* Button and inset sum to the 2rem the row reserves when making room for the action. */
+    width: 1.5rem;
     aspect-ratio: 1;
     align-items: center;
     justify-content: center;
     padding: 0;
     border: none;
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     background: transparent;
     color: var(--muted);
     cursor: var(--cursor-interactive);
   }
 
-  .sidebar__menu-action:hover {
-    background: var(--bc-sidebar-accent);
+  /* Row furniture, not a row: the icon steps down from the project size so the action reads
+     as subordinate to the label beside it, as the reference's do. */
+  .sidebar__menu-action svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* The action's fill sits a step above the row's, or it would vanish into the fill the row
+     already carries under the same pointer. It holds while the action's popup is open, as the
+     reference's does — the pointer is in the menu, but the trigger stays lit. */
+  .sidebar__menu-action:hover,
+  .sidebar__menu-action[data-popup-open] {
+    background: var(--bc-sidebar-accent-hover);
     color: var(--bc-sidebar-fg);
+  }
+
+  /* The action belongs to its row: pointing at it keeps the row lit rather than dropping the
+     fill the moment the pointer leaves the button underneath. A popup opened from the row or
+     its action holds the fill for as long as it is up. Nested rows carry actions too. */
+  .sidebar__menu-button[data-popup-open],
+  .sidebar__menu-item:has(> .sidebar__menu-action:hover) > .sidebar__menu-button,
+  .sidebar__menu-item:has(> .sidebar__menu-action[data-popup-open]) > .sidebar__menu-button {
+    background: var(--bc-sidebar-accent);
+  }
+
+  /* A second action stacks inboard of the first; the row button also counts as a button,
+     so from the end the pair sits at nth-last 1 and 2. */
+  .sidebar__menu-action:nth-last-of-type(2) {
+    right: calc(2rem * var(--spacing-scale));
   }
 
   .sidebar[data-collapsible="icon"] .sidebar__menu-action {
@@ -459,15 +550,52 @@
     flex: 1;
   }
 
+  /* Branch chevron: lies along the row when the branch is shut, points down when open. */
+  .sidebar__menu-chevron {
+    display: flex;
+    flex: none;
+    color: var(--muted);
+    transition: rotate 200ms ease;
+  }
+
+  .sidebar__menu-chevron svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .sidebar__menu-button:not([data-panel-open]) .sidebar__menu-chevron {
+    rotate: -90deg;
+  }
+
+  /* Base UI measures the panel into the custom property; height animates between it and 0. */
+  .sidebar__menu-collapsible-panel {
+    height: var(--collapsible-panel-height);
+    overflow: hidden;
+    transition: height 200ms ease;
+  }
+
+  .sidebar__menu-collapsible-panel[data-starting-style],
+  .sidebar__menu-collapsible-panel[data-ending-style] {
+    height: 0;
+  }
+
+  /* reduceMotion on the provider: nested menus snap open and shut, chevrons included. */
+  .sidebar-provider[data-reduce-motion] .sidebar__menu-collapsible-panel,
+  .sidebar-provider[data-reduce-motion] .sidebar__menu-chevron {
+    transition: none;
+  }
+
   .sidebar__menu-sub {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: calc(0.25rem * var(--spacing-scale));
+    gap: calc(0.125rem * var(--spacing-scale));
     margin: 0;
-    margin-inline: calc(0.875rem * var(--spacing-scale));
+    /* The guide-line indent is start-side only; nested rows share the parent's end edge, so
+       their trailing actions line up under the parent row's own furniture. */
+    margin-inline-start: calc(0.4375rem * var(--spacing-scale));
     padding: calc(0.125rem * var(--spacing-scale)) 0;
-    padding-inline-start: calc(0.625rem * var(--spacing-scale));
+    padding-inline-start: calc(0.5rem * var(--spacing-scale));
     border-inline-start: var(--border-width) solid var(--bc-sidebar-border);
     list-style: none;
   }
@@ -480,25 +608,36 @@
     position: relative;
   }
 
+  /* Same row height and type as the top level — nesting is shown by the indent and the guide
+     line, never by shrinking the row, which reads as a second, mismatched component. */
   .sidebar__menu-sub-button {
     display: flex;
-    height: calc(1.75rem * var(--spacing-scale));
+    height: calc(2.25rem * var(--spacing-scale));
     min-width: 0;
     align-items: center;
     gap: calc(0.5rem * var(--spacing-scale));
     overflow: hidden;
     padding-inline: calc(0.5rem * var(--spacing-scale));
     border-radius: var(--radius-2xl);
-    color: var(--muted);
+    color: var(--bc-sidebar-fg);
     font-size: calc(0.875rem * var(--font-size-scale));
+    font-weight: var(--font-weight-normal);
     text-decoration: none;
     cursor: var(--cursor-interactive);
-    transition: background-color 100ms ease;
+  }
+
+  /* Long titles truncate; a nested row never wraps to a second line. */
+  .sidebar__menu-sub-button > span {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .sidebar__menu-sub-button:hover {
     background: var(--bc-sidebar-accent);
-    color: var(--bc-sidebar-fg);
   }
 
   .sidebar__menu-sub-button:focus-visible {
@@ -509,5 +648,72 @@
   .sidebar__menu-sub-button[data-active] {
     background: var(--bc-sidebar-accent);
     color: var(--bc-sidebar-fg);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* Nested rows hold their fill while their own action is hovered or its popup is open. */
+  .sidebar__menu-sub-item:has(> .sidebar__menu-action:hover) > .sidebar__menu-sub-button,
+  .sidebar__menu-sub-item:has(> .sidebar__menu-action[data-popup-open])
+    > .sidebar__menu-sub-button {
+    background: var(--bc-sidebar-accent);
+  }
+
+  /*
+   * Opt-in quiet mode: the row, not the pointer, reveals the action — keyboard focus and the
+   * active row surface it too. Scoped to hover-capable devices; on touch it stays visible,
+   * since there is no hover to reveal it with. While revealed, the row button yields end
+   * padding so in-flow furniture — badges, timestamps — slides aside instead of being
+   * painted over.
+   */
+  @media (hover: hover) {
+    .sidebar__menu-action[data-show-on-hover] {
+      opacity: 0;
+      transition: opacity 100ms ease;
+    }
+
+    /*
+     * A row reveals its own action, never an ancestor's: a collapsible trigger and its nested
+     * rows share one .sidebar__menu-item, so descendant matching would light the trigger's
+     * furniture (and shove its chevron aside) whenever the pointer crossed the panel. Every
+     * selector binds the action to its sibling row with child combinators instead.
+     */
+    .sidebar__menu-item:has(
+        > :is(.sidebar__menu-button, .sidebar__menu-action):is(:hover, :focus-visible)
+      ) > .sidebar__menu-action[data-show-on-hover],
+    .sidebar__menu-item:has(> .sidebar__menu-button[data-active])
+      > .sidebar__menu-action[data-show-on-hover],
+    .sidebar__menu-sub-item:has(
+        > :is(.sidebar__menu-sub-button, .sidebar__menu-action):is(:hover, :focus-visible)
+      )
+      > .sidebar__menu-action[data-show-on-hover],
+    .sidebar__menu-sub-item:has(> .sidebar__menu-sub-button[data-active])
+      > .sidebar__menu-action[data-show-on-hover],
+    .sidebar__menu-action[data-show-on-hover][data-popup-open] {
+      opacity: 1;
+    }
+
+    .sidebar__menu-item:has(> .sidebar__menu-action[data-show-on-hover]):has(
+        > :is(.sidebar__menu-button, .sidebar__menu-action):is(:hover, :focus-visible)
+      )
+      > .sidebar__menu-button,
+    .sidebar__menu-item:has(> .sidebar__menu-action[data-show-on-hover][data-popup-open])
+      > .sidebar__menu-button,
+    .sidebar__menu-sub-item:has(> .sidebar__menu-action[data-show-on-hover]):has(
+        > :is(.sidebar__menu-sub-button, .sidebar__menu-action):is(:hover, :focus-visible)
+      )
+      > .sidebar__menu-sub-button,
+    .sidebar__menu-sub-item:has(> .sidebar__menu-action[data-show-on-hover][data-popup-open])
+      > .sidebar__menu-sub-button,
+    .sidebar__menu-sub-item:has(> .sidebar__menu-sub-button[data-active])
+      > .sidebar__menu-sub-button {
+      padding-inline-end: calc(2rem * var(--spacing-scale));
+    }
+
+    .sidebar__menu-item:has(> .sidebar__menu-action[data-show-on-hover]:nth-last-of-type(2)):has(
+        > :is(.sidebar__menu-button, .sidebar__menu-action):is(:hover, :focus-visible)
+      )
+      > .sidebar__menu-button {
+      padding-inline-end: calc(3.5rem * var(--spacing-scale));
+    }
   }
 }
