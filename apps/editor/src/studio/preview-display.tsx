@@ -99,6 +99,28 @@ export function SegmentPreview({ icons }: { icons: PreviewIconElements }): React
           <Segment.Item value="unread">Unread</Segment.Item>
         </Segment>
       </Specimen>
+      <Specimen label="Icon expand — only the selected view spends width on its label">
+        <div className="segment-expand-frame">
+          <Segment className="segment-expand-demo" defaultValue="grid" size="sm" variant="ghost">
+            <Segment.Item value="grid">
+              {icons.grid}
+              <span>Grid</span>
+            </Segment.Item>
+            <Segment.Item aria-label="List" value="list">
+              {icons.list}
+              <span>List</span>
+            </Segment.Item>
+            <Segment.Item aria-label="Calendar" value="calendar">
+              {icons.calendar}
+              <span>Calendar</span>
+            </Segment.Item>
+            <Segment.Item aria-label="Mail" value="mail">
+              {icons.mail}
+              <span>Mail</span>
+            </Segment.Item>
+          </Segment>
+        </div>
+      </Specimen>
       <Specimen label="Disabled item">
         <Segment defaultValue="live">
           <Segment.Item value="live">Live</Segment.Item>

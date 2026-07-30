@@ -55,6 +55,7 @@ import {
 } from "./preview-navigation.tsx";
 import { PopoverPreview } from "./preview-popover.tsx";
 import { RadioGroupPreview } from "./preview-radio-group.tsx";
+import { ScrollShadowPreview } from "./preview-scroll-shadow.tsx";
 import type { PreviewSection } from "./preview-section-navigation.ts";
 import { SelectPreview } from "./preview-select.tsx";
 import { SidebarPreview } from "./preview-sidebar.tsx";
@@ -222,6 +223,9 @@ function renderSectionContent(
   }
   if (section === "Chip") {
     return <ChipPreview icons={createPreviewIconElements(iconSettings)} />;
+  }
+  if (section === "Scroll Shadow") {
+    return <ScrollShadowPreview icons={createPreviewIconElements(iconSettings)} />;
   }
   if (section === "Sidebar") {
     return <SidebarPreview icons={createPreviewIconElements(iconSettings)} />;

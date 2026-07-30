@@ -33,11 +33,12 @@
   color: var(--foreground);
   /*
    * Every inherited typographic property is restated, not left to flow in from the chrome.
-   * `font-size: medium` resets to the browser default the way the old iframe body did, so
-   * the rail's own type scale cannot reach in here. Note this does NOT insulate `rem`:
-   * that unit is root-relative by definition, so the design system's rem-based tokens still
-   * resolve against <html>. The shell must therefore never set a root font size — see the
-   * guard in preview-surface.test.ts.
+   * `font-size: medium` resets to the browser default exactly as a stock Tailwind body does —
+   * Preflight sets no body size, so bare text is UA-sized and only `text-*` utilities ride the
+   * design system's font-size scale. Demo copy therefore carries explicit text utilities.
+   * Note this does NOT insulate `rem`: that unit is root-relative by definition, so the design
+   * system's rem-based tokens still resolve against <html>. The shell must therefore never set
+   * a root font size — see the guard in preview-surface.test.ts.
    */
   font-family: var(--font-sans);
   font-size: medium;
@@ -83,6 +84,11 @@
 .specimen--stack {
   flex-direction: column;
   flex-wrap: nowrap;
+}
+
+/* Feature demos that need a full app frame span the grid. */
+.specimen--wide {
+  grid-column: 1 / -1;
 }
 
 /*
@@ -251,16 +257,27 @@
 }
 
 /*
- * Sidebar specimens: the static form inside a bounded frame, since a specimen has no viewport
- * for the fixed collapsing panel. The provider's page-height minimum yields to the frame.
+ * Sidebar specimens: every demo is an app frame — sidebar against the left edge, content
+ * surface beside it — inside a bounded box, since a specimen has no viewport for the fixed
+ * collapsing panel and a navigation column centred in a frame reads as a misplaced list.
+ * The provider's page-height minimum yields to the frame.
  */
 .sidebar-demo {
+  position: relative;
   display: flex;
-  width: min(100%, 16rem);
-  height: 26rem;
+  width: 100%;
+  height: 52.5rem;
   overflow: hidden;
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-xl);
+  background: var(--background);
+  /* The frame is the demo's viewport: a transformed ancestor is the containing block for fixed
+     descendants in every engine, so panels and popups portalled into it position, flip, and
+     clip against the frame instead of the page. Containment alone was not honoured for fixed. */
+  transform: translate(0);
+  /* The demos share this document; layout containment keeps one frame's animations —
+     a sliding segment pill, a collapsing panel — from re-laying-out its neighbours. */
+  contain: layout;
 }
 
 .sidebar-demo__provider {
@@ -268,51 +285,104 @@
   height: 100%;
 }
 
-.sidebar-demo .sidebar--static {
-  width: 100%;
-}
-
-.sidebar-demo__identity {
-  display: grid;
-  gap: 0.125rem;
-  padding: 0.5rem;
-  font-size: 0.8125rem;
-}
-
-.sidebar-demo__identity > span {
-  color: var(--muted);
-  font-size: 0.75rem;
-}
-
 /*
  * Machinery demos run the real fixed panel. Size containment makes the frame the containing
  * block for fixed descendants, so the collapsing container animates inside the box instead of
  * pinning itself to the viewport.
  */
-.sidebar-demo--app {
-  position: relative;
-  width: 100%;
-  /* A transformed ancestor is the containing block for fixed descendants in every engine;
-     containment alone was not honoured for fixed here. */
-  transform: translate(0);
-}
-
 .sidebar-demo--app .sidebar-demo__provider {
   width: 100%;
 }
 
-.sidebar-demo__bar {
+/* Scroll-shadow specimens: frames deliberately smaller than their lists, so the fades engage.
+   No border on the scroller itself — the mask would fade it along with the content. */
+.scroll-demo {
   display: flex;
+  width: min(100%, 16rem);
+  height: 16rem;
+  flex: none;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scroll-demo--row {
+  width: 100%;
+  height: auto;
+  flex-direction: row;
+  gap: 12px;
+  padding-block: 4px;
+}
+
+.scroll-demo__row {
+  display: flex;
+  flex: none;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
+  gap: 12px;
+  padding: 6px 8px;
   font-size: 0.875rem;
 }
 
-.sidebar-demo__body {
-  padding: 0 0.75rem;
-  color: var(--muted);
-  font-size: 0.875rem;
+.scroll-demo__card {
+  display: flex;
+  width: 9rem;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  font-size: 0.8125rem;
+}
+
+/* The reference's icon-expand segment: labels live in the markup, but only the selected
+   view spends the width to show one. data-pressed is the component's own selection signal.
+   Items size to their content and pack to the start, as the reference's do — an equal-width
+   distribution would recentre every icon whenever the selected item changes width. */
+/* Anchors the expanding segment: its total width changes with the selection, so without a
+   fixed start-aligned frame the centred specimen would re-centre the whole row on each click. */
+.segment-expand-frame {
+  display: flex;
+  width: min(100%, 16rem);
+  justify-content: flex-start;
+}
+
+.segment-expand-demo {
+  gap: 0.25rem;
+}
+
+.segment-expand-demo .segment__item {
+  width: auto;
+  flex: none;
+}
+
+/* Labels take their space in one step, as the reference's do — the row settles instantly and
+   the pill glides over stable layout. Animating the width here would re-lay-out the frame on
+   every frame and leave the pill chasing a moving target. */
+.segment-expand-demo .segment__item > span:last-child {
+  display: none;
+}
+
+/* The label wipes open left-to-right on the pill's own clock — same duration, same curve —
+   so the reveal and the glide read as one gesture, the way the reference's grid-column
+   reveal does. clip-path keeps the reveal off the layout, so the glide's measurements
+   stay exact; while the row is still travelling the text is barely revealed, never a
+   fully-drawn streak. */
+.segment-expand-demo .segment__item[data-pressed] > span:last-child {
+  display: inline;
+  animation: segment-expand-label-in 250ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes segment-expand-label-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
 }
 
 /* A separator fills its container, so both demos need one to stretch across rather than hug. */
@@ -385,9 +455,6 @@
   grid-area: bottom;
 }
 
-.profile-trigger > span:last-child,
-.profile-trigger strong,
-.profile-trigger small,
 /*
  * The guides page. It is the one page whose job is to be looked at rather than clicked, so it
  * gets more air than the specimen grids and leans on the tokens it is describing.

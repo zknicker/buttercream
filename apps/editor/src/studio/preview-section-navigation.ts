@@ -40,6 +40,7 @@ export const previewSectionGroups = [
       "Progress Bar",
       "Progress Circle",
       "Radio Group",
+      "Scroll Shadow",
       "Search Field",
       "Segment",
       "Select",

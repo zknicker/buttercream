@@ -19,6 +19,7 @@ import modalSource from "./preview-modal.tsx?raw";
 import navigationSource from "./preview-navigation.tsx?raw";
 import popoverSource from "./preview-popover.tsx?raw";
 import radioGroupSource from "./preview-radio-group.tsx?raw";
+import scrollShadowSource from "./preview-scroll-shadow.tsx?raw";
 import selectSource from "./preview-select.tsx?raw";
 import sidebarSource from "./preview-sidebar.tsx?raw";
 import sliderSource from "./preview-slider.tsx?raw";
@@ -49,6 +50,7 @@ const previewModules: Record<string, string> = {
   "./preview-navigation.tsx": navigationSource,
   "./preview-popover.tsx": popoverSource,
   "./preview-radio-group.tsx": radioGroupSource,
+  "./preview-scroll-shadow.tsx": scrollShadowSource,
   "./preview-select.tsx": selectSource,
   "./preview-sidebar.tsx": sidebarSource,
   "./preview-slider.tsx": sliderSource,
