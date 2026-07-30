@@ -1,13 +1,24 @@
 "use client";
 
+import { Collapsible } from "@base-ui/react/collapsible";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import type { ComponentPropsWithoutRef, CSSProperties, ReactElement, ReactNode } from "react";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  Children,
+  createContext,
+  isValidElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Button } from "./button.tsx";
-import { Chip } from "./chip.tsx";
+import { Chip, type ChipColor } from "./chip.tsx";
 import { classes } from "./classes.ts";
 import { Drawer } from "./drawer.tsx";
+import { ScrollShadow, type ScrollShadowProps } from "./scroll-shadow.tsx";
 import { Separator, type SeparatorProps } from "./separator.tsx";
 import { Skeleton } from "./skeleton.tsx";
 import { Tooltip, type TooltipContentProps } from "./tooltip.tsx";
@@ -68,6 +79,8 @@ export interface SidebarProviderProps extends ComponentPropsWithoutRef<"div"> {
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
+  /** Open and close nested menus instantly instead of animating their height. */
+  reduceMotion?: boolean;
 }
 
 function SidebarProvider({
@@ -76,6 +89,7 @@ function SidebarProvider({
   defaultOpen = true,
   onOpenChange,
   open: openProp,
+  reduceMotion = false,
   ...props
 }: SidebarProviderProps): ReactElement {
   const isMobile = useIsMobile();
@@ -127,6 +141,7 @@ function SidebarProvider({
     <SidebarContext.Provider value={value}>
       <div
         className={classes("sidebar-provider", className)}
+        data-reduce-motion={reduceMotion || undefined}
         data-slot="sidebar-provider"
         {...props}
       >
@@ -147,6 +162,21 @@ export interface SidebarProps extends ComponentPropsWithoutRef<"div"> {
   variant?: SidebarVariant;
 }
 
+/*
+ * What the rows need to know about the panel they sit in: where popups portal to and which
+ * edge the sidebar hangs from, so a collapsed rail's tooltips open away from it without every
+ * row being told twice.
+ */
+interface SidebarSurfaceContextValue {
+  portalContainer: HTMLElement | null;
+  side: SidebarSide;
+}
+
+const SidebarSurfaceContext = createContext<SidebarSurfaceContextValue>({
+  portalContainer: null,
+  side: "left",
+});
+
 function SidebarRoot({
   children,
   className,
@@ -157,17 +187,20 @@ function SidebarRoot({
   ...props
 }: SidebarProps): ReactElement {
   const { isMobile, openMobile, setOpenMobile, state } = useSidebar();
+  const surface = useMemo<SidebarSurfaceContextValue>(
+    () => ({ portalContainer: portalContainer ?? null, side }),
+    [portalContainer, side],
+  );
 
+  let sidebar: ReactElement;
   if (collapsible === "none") {
-    return (
+    sidebar = (
       <div className={classes("sidebar sidebar--static", className)} data-slot="sidebar" {...props}>
         {children}
       </div>
     );
-  }
-
-  if (isMobile) {
-    return (
+  } else if (isMobile) {
+    sidebar = (
       <Drawer onOpenChange={setOpenMobile} open={openMobile}>
         <Drawer.Portal container={portalContainer}>
           <Drawer.Backdrop />
@@ -187,30 +220,32 @@ function SidebarRoot({
         </Drawer.Portal>
       </Drawer>
     );
-  }
-
-  return (
-    <div
-      className="sidebar"
-      data-collapsible={state === "collapsed" ? collapsible : undefined}
-      data-side={side}
-      data-slot="sidebar"
-      data-state={state}
-      data-variant={variant}
-    >
-      {/* Holds the sidebar's place in flow; the fixed container below paints over it. */}
-      <div aria-hidden className="sidebar__gap" data-slot="sidebar-gap" />
+  } else {
+    sidebar = (
       <div
-        className={classes("sidebar__container", className)}
-        data-slot="sidebar-container"
-        {...props}
+        className="sidebar"
+        data-collapsible={state === "collapsed" ? collapsible : undefined}
+        data-side={side}
+        data-slot="sidebar"
+        data-state={state}
+        data-variant={variant}
       >
-        <div className="sidebar__inner" data-slot="sidebar-inner">
-          {children}
+        {/* Holds the sidebar's place in flow; the fixed container below paints over it. */}
+        <div aria-hidden className="sidebar__gap" data-slot="sidebar-gap" />
+        <div
+          className={classes("sidebar__container", className)}
+          data-slot="sidebar-container"
+          {...props}
+        >
+          <div className="sidebar__inner" data-slot="sidebar-inner">
+            {children}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <SidebarSurfaceContext.Provider value={surface}>{sidebar}</SidebarSurfaceContext.Provider>;
 }
 
 export interface SidebarTriggerProps extends ComponentPropsWithoutRef<"button"> {
@@ -346,8 +381,26 @@ function SidebarMenuItem({ className, ...props }: ComponentPropsWithoutRef<"li">
 
 export interface SidebarMenuButtonProps extends RenderableButtonProps {
   isActive?: boolean;
-  /** Shown from the collapsed icon rail, where the label itself is hidden. */
-  tooltip?: string | (Omit<TooltipContentProps, "children"> & { children: ReactNode });
+  /**
+   * Shown from the collapsed icon rail, where the label itself is hidden. Defaults to the
+   * row's own `Sidebar.MenuLabel` text, opening on the sidebar's outward side and portalled
+   * into the sidebar's `portalContainer` — so a plain row needs no tooltip wiring at all.
+   * Pass a string to override the text, an object for full control, or `false` to disable.
+   */
+  tooltip?: string | false | (Omit<TooltipContentProps, "children"> & { children?: ReactNode });
+}
+
+/* The row's label, recovered for the collapsed rail's automatic tooltip. */
+function menuLabelText(children: ReactNode): string | undefined {
+  for (const child of Children.toArray(children)) {
+    if (isValidElement(child) && child.type === SidebarMenuLabel) {
+      const label = (child.props as { children?: ReactNode }).children;
+      if (typeof label === "string") {
+        return label;
+      }
+    }
+  }
+  return undefined;
 }
 
 /* One row height, deliberately: a navigation column that mixes row sizes reads as unfinished. */
@@ -359,8 +412,14 @@ function SidebarMenuButton({
   ...props
 }: SidebarMenuButtonProps): ReactElement {
   const { isMobile, state } = useSidebar();
+  const surface = useContext(SidebarSurfaceContext);
+
+  const explicit = typeof tooltip === "object" ? tooltip : undefined;
+  const content =
+    explicit?.children ?? (typeof tooltip === "string" ? tooltip : menuLabelText(props.children));
   /* Trigger and root mount together or not at all: a trigger outside a root is a Base UI error. */
-  const withTooltip = tooltip !== undefined && state === "collapsed" && !isMobile;
+  const withTooltip =
+    tooltip !== false && content !== undefined && state === "collapsed" && !isMobile;
 
   const button = useRender({
     defaultTagName: "button",
@@ -372,28 +431,47 @@ function SidebarMenuButton({
       } as RenderableButtonProps,
       props,
     ),
-    render: withTooltip ? <Tooltip.Trigger render={render} /> : render,
+    /* Instant: a collapsed rail is pure icons, so the label must not lag the pointer. */
+    render: withTooltip ? <Tooltip.Trigger delay={0} render={render} /> : render,
   });
 
   if (!withTooltip) {
     return button;
   }
 
-  const content = typeof tooltip === "string" ? { children: tooltip } : tooltip;
+  const { children: _explicitChildren, ...contentProps } = explicit ?? {};
   return (
     <Tooltip>
       {button}
-      <Tooltip.Content align="center" side="right" {...content} />
+      <Tooltip.Content
+        align="center"
+        container={surface.portalContainer ?? undefined}
+        side={surface.side === "right" ? "left" : "right"}
+        {...contentProps}
+      >
+        {content}
+      </Tooltip.Content>
     </Tooltip>
   );
 }
 
-function SidebarMenuAction({ className, render, ...props }: RenderableButtonProps): ReactElement {
+export interface SidebarMenuActionProps extends RenderableButtonProps {
+  /** Keep the action hidden until its row is hovered, focused, or active. */
+  showOnHover?: boolean;
+}
+
+function SidebarMenuAction({
+  className,
+  render,
+  showOnHover = false,
+  ...props
+}: SidebarMenuActionProps): ReactElement {
   return useRender({
     defaultTagName: "button",
     props: mergeProps<"button">(
       {
         className: classes("sidebar__menu-action", className),
+        "data-show-on-hover": showOnHover || undefined,
         "data-slot": "sidebar-menu-action",
         type: "button",
       } as RenderableButtonProps,
@@ -432,7 +510,7 @@ function SidebarMenuLabel({ className, ...props }: ComponentPropsWithoutRef<"spa
 function SidebarMenuBadge({
   className,
   ...props
-}: Omit<ComponentPropsWithoutRef<"span">, "color">): ReactElement {
+}: Omit<ComponentPropsWithoutRef<"span">, "color"> & { color?: ChipColor }): ReactElement {
   return (
     <Chip
       className={classes("sidebar__menu-badge", className)}
@@ -467,6 +545,73 @@ function SidebarMenuSkeleton({
         style={{ "--bc-sidebar-skeleton-width": width } as CSSProperties}
       />
     </div>
+  );
+}
+
+/*
+ * A tree branch, on Base UI Collapsible: the trigger row toggles its nested menu and the panel
+ * animates between zero and its measured height. Composition mirrors the flat anatomy —
+ * MenuCollapsible replaces MenuItem, the trigger is a MenuButton, and the sub-menu goes
+ * inside the content.
+ */
+export interface SidebarMenuCollapsibleProps extends ComponentPropsWithoutRef<"li"> {
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
+}
+
+function SidebarMenuCollapsible({
+  className,
+  defaultOpen = false,
+  onOpenChange,
+  open,
+  ...props
+}: SidebarMenuCollapsibleProps): ReactElement {
+  return (
+    <Collapsible.Root
+      defaultOpen={defaultOpen}
+      {...(open === undefined ? {} : { open })}
+      {...(onOpenChange === undefined ? {} : { onOpenChange })}
+      render={
+        <li
+          className={classes("sidebar__menu-item", className)}
+          data-slot="sidebar-menu-collapsible"
+          {...props}
+        />
+      }
+    />
+  );
+}
+
+function SidebarMenuCollapsibleTrigger(props: SidebarMenuButtonProps): ReactElement {
+  return <Collapsible.Trigger render={<SidebarMenuButton {...props} />} />;
+}
+
+function SidebarMenuCollapsibleContent({
+  className,
+  ...props
+}: Omit<Collapsible.Panel.Props, "className"> & { className?: string }): ReactElement {
+  return (
+    <Collapsible.Panel
+      className={classes("sidebar__menu-collapsible-panel", className)}
+      data-slot="sidebar-menu-collapsible-content"
+      {...props}
+    />
+  );
+}
+
+/* Seats the branch chevron; the icon rotates shut when the trigger's panel is closed. */
+function SidebarMenuChevron({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"span">): ReactElement {
+  return (
+    <span
+      aria-hidden="true"
+      className={classes("sidebar__menu-chevron", className)}
+      data-slot="sidebar-menu-chevron"
+      {...props}
+    />
   );
 }
 
@@ -514,8 +659,26 @@ function SidebarMenuSubButton({
   });
 }
 
+/*
+ * The scrollable middle. Built on ScrollShadow with the scrollbar hidden, as the reference's
+ * is: content fades toward whichever edge still has rows past it instead of showing a bar.
+ */
+function SidebarContent({
+  className,
+  ...props
+}: Omit<ScrollShadowProps, "orientation">): ReactElement {
+  return (
+    <ScrollShadow
+      className={classes("sidebar__content", className)}
+      data-slot="sidebar-content"
+      hideScrollBar
+      {...props}
+    />
+  );
+}
+
 export const Sidebar = Object.assign(SidebarRoot, {
-  Content: part("sidebar__content", "sidebar-content"),
+  Content: SidebarContent,
   Footer: part("sidebar__footer", "sidebar-footer"),
   Group: part("sidebar__group", "sidebar-group"),
   GroupAction: SidebarGroupAction,
@@ -527,6 +690,10 @@ export const Sidebar = Object.assign(SidebarRoot, {
   MenuAction: SidebarMenuAction,
   MenuBadge: SidebarMenuBadge,
   MenuButton: SidebarMenuButton,
+  MenuChevron: SidebarMenuChevron,
+  MenuCollapsible: SidebarMenuCollapsible,
+  MenuCollapsibleContent: SidebarMenuCollapsibleContent,
+  MenuCollapsibleTrigger: SidebarMenuCollapsibleTrigger,
   MenuIcon: SidebarMenuIcon,
   MenuItem: SidebarMenuItem,
   MenuLabel: SidebarMenuLabel,
