@@ -51,4 +51,13 @@ describe("preview isolation", () => {
       expect(surface).toContain(`${property}:`);
     }
   });
+
+  test("annotates application specimens without drawing a second ring around the app", () => {
+    const css = withoutComments(previewCss);
+    const specimen = css.match(/\.specimen\s*\{([^}]*)\}/u)?.[1] ?? "";
+    const app = css.match(/\.app\s*\{([^}]*)\}/u)?.[1] ?? "";
+
+    expect(specimen).toContain("border: 1px dashed var(--border)");
+    expect(app).not.toContain("box-shadow:");
+  });
 });

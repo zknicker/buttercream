@@ -20,13 +20,15 @@ export interface AppNavItem {
 export function AppFrame({
   children,
   sidebar,
+  sidebarOpen = true,
 }: {
   children: ReactNode;
   sidebar: ReactNode;
+  sidebarOpen?: boolean;
 }): ReactElement {
   return (
-    <div className="app">
-      <Sidebar.Provider className="app__sidebar-provider">
+    <div className="app" data-sidebar-open={sidebarOpen}>
+      <Sidebar.Provider className="app__sidebar-provider" hidden={!sidebarOpen}>
         <Sidebar className="app__sidebar" collapsible="none">
           <Sidebar.Content>{sidebar}</Sidebar.Content>
         </Sidebar>
@@ -87,22 +89,29 @@ export function AppNav({
 
 export function AppHeader({
   actions,
+  leading,
   subtitle,
   title,
 }: {
   actions?: ReactNode;
+  leading?: ReactNode;
   subtitle?: ReactNode;
   title: ReactNode;
 }): ReactElement {
   return (
     <header className="app__header">
-      <div className="app__header-text">
-        <Typography variant="h5">{title}</Typography>
-        {subtitle === undefined ? null : (
-          <Typography className="app__subtitle" variant="body-sm">
-            {subtitle}
+      <div className="app__header-leading">
+        {leading}
+        <div className="app__header-text">
+          <Typography as="h1" variant="h6">
+            {title}
           </Typography>
-        )}
+          {subtitle === undefined ? null : (
+            <Typography className="app__subtitle" variant="body-sm">
+              {subtitle}
+            </Typography>
+          )}
+        </div>
       </div>
       {actions === undefined ? null : <div className="app__header-actions">{actions}</div>}
     </header>

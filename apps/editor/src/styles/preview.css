@@ -961,10 +961,14 @@
   min-height: 34rem;
   border-radius: var(--radius-2xl);
   background: var(--background);
-  box-shadow: inset 0 0 0 var(--border-width) var(--border);
   color: var(--foreground);
   font-family: var(--font-sans);
   grid-template-columns: 15rem minmax(0, 1fr);
+  transition: grid-template-columns 150ms ease-out;
+}
+
+.app[data-sidebar-open="false"] {
+  grid-template-columns: 0 minmax(0, 1fr);
 }
 
 .specimen--application .app {
@@ -990,8 +994,8 @@
 }
 
 /*
- * Fullscreen is the product page, not a specimen of that page. Remove both layers that make an
- * app read as an artifact inside the editor: the surface inset and the app's themed frame.
+ * Fullscreen is the product page, not a specimen of that page. Remove the surface inset and the
+ * crop radius that make the embedded preview read as an artifact inside the editor.
  */
 .preview-surface--fullscreen {
   padding: 0;
@@ -999,7 +1003,6 @@
 
 .preview-surface--fullscreen .app {
   border-radius: 0;
-  box-shadow: none;
 }
 
 /*
@@ -1074,6 +1077,8 @@
 
 .preview-surface--fill .app__main:has(.chat__composer) {
   overflow: hidden;
+  gap: 0;
+  padding: 0;
 }
 
 .app__header {
@@ -1081,6 +1086,22 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.app__header-leading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app__header-text {
+  min-width: 0;
+}
+
+.app__main:has(.chat__composer) .app__header {
+  min-height: 4rem;
+  padding-inline: 1.5rem;
 }
 
 .app__subtitle {
@@ -1481,24 +1502,32 @@
  * the chart ramp rather than inventing syntax colours of its own.
  */
 .chat__thread {
-  display: flex;
   min-width: 0;
   min-height: 0;
   flex: 1;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding-block: 0.25rem;
   /* Scrolls only on a filled surface, where the composer below it holds the floor. */
   overflow-y: auto;
 }
 
+.chat__content {
+  display: flex;
+  width: min(100%, 44.625rem);
+  min-width: 0;
+  margin-inline: auto;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2.5rem 1rem 1.5rem;
+}
+
 .chat__turn {
   display: flex;
-  max-width: 44rem;
+  width: 100%;
   gap: 0.625rem;
 }
 
 .chat__turn--user {
+  width: fit-content;
+  max-width: 80%;
   align-self: flex-end;
   justify-content: flex-end;
 }
@@ -1508,21 +1537,18 @@
 .chat__bubble {
   padding: 0.625rem 0.875rem;
   border-radius: var(--radius-2xl);
-  background: var(--default);
-  color: var(--foreground);
-  font-size: 0.875rem;
-  line-height: 1.55;
+  box-shadow: none;
 }
 
 .chat__answer {
   display: grid;
   min-width: 0;
+  flex: 1;
   gap: 0.75rem;
 }
 
 .chat__text {
-  font-size: 0.875rem;
-  line-height: 1.6;
+  color: var(--foreground);
 }
 
 .chat__list {
@@ -1535,22 +1561,50 @@
   list-style: disc;
 }
 
-/* Reasoning and sources fold the same way: a muted line with a chevron promising more. */
+/* Reasoning and sources are real Accordions restyled as quiet disclosure lines. */
 .chat__disclosure {
-  display: inline-flex;
   width: fit-content;
-  align-items: center;
+  color: var(--muted);
+  contain: none;
+}
+
+.chat__disclosure .accordion__item::after,
+.chat__group .accordion__item::after,
+.chat__approval .accordion__item::after {
+  content: none;
+}
+
+.chat__disclosure .accordion__trigger {
   gap: 0.375rem;
+  padding: 0;
   color: var(--muted);
   font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.chat__disclosure .accordion__trigger:hover:not([data-panel-open]) {
+  background: transparent;
+  color: var(--foreground);
+}
+
+.chat__disclosure .accordion__indicator {
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-inline-start: 0;
+}
+
+.chat__disclosure .accordion__body {
+  max-width: 34rem;
+  padding: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 /* Grouped tool calls, collapsed: a full-width card that reads as one unopened drawer. */
 .chat__group {
-  display: grid;
   width: 100%;
+  contain: none;
   border-radius: var(--radius-xl);
-  background: var(--surface);
   box-shadow: inset 0 0 0 var(--border-width) var(--border);
 }
 
@@ -1562,7 +1616,17 @@
   padding: 0.625rem 0.875rem;
   color: var(--foreground);
   font-size: 0.8125rem;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
+}
+
+.chat__group .accordion__trigger:hover:not([data-panel-open]) {
+  border-radius: var(--radius-xl);
+  background: var(--default);
+}
+
+.chat__group .accordion__body {
+  padding: 0 0.875rem 0.75rem;
 }
 
 .chat__group-head .preview-icon {
@@ -1571,10 +1635,8 @@
 
 /* A tool that pauses for consent: the warning role draws the ring, real buttons decide. */
 .chat__approval {
-  display: grid;
   width: 100%;
-  gap: 0.75rem;
-  padding: 0.875rem;
+  contain: none;
   border-radius: var(--radius-xl);
   box-shadow: inset 0 0 0 var(--border-width) color-mix(in oklab, var(--warning) 45%, transparent);
 }
@@ -1583,12 +1645,24 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.875rem;
   color: var(--foreground);
   font-size: 0.8125rem;
+  font-weight: 400;
 }
 
 .chat__approval-head .preview-icon {
   color: var(--warning);
+}
+
+.chat__approval-head .accordion__indicator .preview-icon {
+  color: var(--muted);
+}
+
+.chat__approval .accordion__body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0 0.875rem 0.875rem;
 }
 
 .chat__approval-tool {
@@ -1611,6 +1685,14 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+}
+
+.chat__tool-list,
+.chat__sources {
+  display: grid;
+  gap: 0.25rem;
+  padding-inline-start: 1rem;
+  list-style: disc;
 }
 
 /* A reply that has not arrived: the avatar circle and three sweeping measures of it. */
@@ -1636,7 +1718,7 @@
 
 /* Media stand-in painted from the chart ramp, so it restyles with the theme like everything else. */
 .chat__media {
-  width: min(18rem, 100%);
+  width: min(22rem, 100%);
   aspect-ratio: 1 / 1;
   border-radius: var(--radius-xl);
   background:
@@ -1661,8 +1743,7 @@
   gap: 0.5rem;
   padding: 0.25rem 0.75rem 0.25rem 0.25rem;
   border-radius: var(--radius-xl);
-  background: var(--default);
-  color: var(--foreground);
+  box-shadow: none;
   font-size: 0.8125rem;
 }
 
@@ -1819,19 +1900,25 @@
   }
 }
 
-.chat__composer {
+.chat__composer-dock {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.chat__composer.surface {
   display: grid;
+  width: min(100%, 44.625rem);
+  margin-inline: auto;
+  align-items: initial;
   gap: 0.375rem;
   padding: 0.5rem;
-  border: var(--field-border-width) solid var(--field-border);
   border-radius: var(--radius-2xl);
-  background: var(--field-background);
-  box-shadow: var(--shadow-field);
+  box-shadow: none;
 }
 
 /* The composer box already draws the field, so the textarea inside it is only the text. */
 .chat__input {
-  min-height: 3rem;
+  min-height: 3.5rem;
   padding: 0.25rem 0.375rem;
   border: none;
   background: transparent;
@@ -1864,21 +1951,57 @@
 }
 
 /* The chip's label is the flex row; the icons sit inside it, either side of the model name. */
-.chat__model .chip__label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
+.chat__model {
+  position: relative;
+  display: block;
+  width: 7.25rem;
+}
+
+.chat__model .select__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.chat__model .select__trigger {
+  height: 2rem;
+  padding: 0.375rem 1.75rem 0.375rem 2rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--default);
+  box-shadow: none;
+  font-size: 0.8125rem;
+}
+
+.chat__model .select__icon {
+  inset-inline: 0.625rem;
+  justify-content: space-between;
+}
+
+.chat__model .select__icon .preview-icon {
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 .chat__disclaimer {
+  width: min(100%, 44.625rem);
+  margin: 0.375rem auto 0;
   color: var(--muted);
-  font-size: 0.75rem;
   text-align: center;
 }
 
 @container (max-width: 900px) {
-  .chat__turn {
-    max-width: 100%;
+  .app__main:has(.chat__composer) .app__header {
+    padding-inline: 1rem;
+  }
+
+  .chat__content {
+    gap: 1.5rem;
+    padding-block-start: 1.5rem;
   }
 }
 

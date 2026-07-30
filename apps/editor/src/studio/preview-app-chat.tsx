@@ -1,8 +1,19 @@
-import { Avatar, Button, Chip, Sidebar, Skeleton, Textarea } from "@buttercream/react";
+import {
+  Accordion,
+  Avatar,
+  Button,
+  Select,
+  Sidebar,
+  Skeleton,
+  Surface,
+  Textarea,
+  Typography,
+} from "@buttercream/react";
 import type { DesignSystem } from "@buttercream/theme-core";
-import type { ReactElement, ReactNode } from "react";
+import { type FormEvent, type ReactElement, type ReactNode, useState } from "react";
 import { AppFrame, AppHeader, AppIdentity, AppNav, type AppNavItem } from "./preview-app-shell.tsx";
 import { createPreviewIconElements } from "./preview-icons.ts";
+import { usePreviewSurface } from "./preview-surface.tsx";
 
 /*
  * An assistant conversation. It earns its place next to the dashboard because it stresses a
@@ -30,13 +41,22 @@ const RECENT = [
 
 export function ChatAppPreview({ icons }: { icons: DesignSystem["icons"] }): ReactElement {
   const icon = createPreviewIconElements(icons);
+  const surface = usePreviewSurface();
+  const [message, setMessage] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const submitMessage = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage("");
+  };
 
   return (
     <AppFrame
       sidebar={
         <>
-          <AppIdentity email="darnell@example.com" name="Darnell Howe" />
+          <AppIdentity email="darnell@email.com" name="Darnell Howe" />
           <AppNav icons={icons} items={NAV} />
+          <Sidebar.Separator />
           <Sidebar.Group>
             <Sidebar.GroupLabel>Recent</Sidebar.GroupLabel>
             <Sidebar.GroupContent>
@@ -44,6 +64,7 @@ export function ChatAppPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
                 {RECENT.map((title, index) => (
                   <Sidebar.MenuItem key={title}>
                     <Sidebar.MenuButton isActive={index === 0}>
+                      <Sidebar.MenuIcon>{icon.message}</Sidebar.MenuIcon>
                       <Sidebar.MenuLabel>{title}</Sidebar.MenuLabel>
                     </Sidebar.MenuButton>
                   </Sidebar.MenuItem>
@@ -51,227 +72,302 @@ export function ChatAppPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
               </Sidebar.Menu>
             </Sidebar.GroupContent>
           </Sidebar.Group>
-          <div className="app__sidebar-spacer" />
-          <AppNav icons={icons} items={[{ icon: "settings", label: "Settings" }]} />
         </>
       }
+      sidebarOpen={sidebarOpen}
     >
       <AppHeader
         actions={
           <>
-            <Button size="sm" variant="secondary">
+            <Button aria-label="Search chats" size="sm" variant="secondary">
               {icon.search}Search
             </Button>
             <Button size="sm">{icon.upload}Share</Button>
           </>
         }
+        leading={
+          <Button
+            aria-label="Toggle sidebar"
+            iconOnly
+            onClick={() => setSidebarOpen((open) => !open)}
+            size="sm"
+            variant="ghost"
+          >
+            {icon.sidebar}
+          </Button>
+        }
         subtitle="Updated just now"
         title="Pro AI components showcase"
       />
 
-      <div className="chat__thread">
-        <UserTurn>Walk me through the Buttercream chat components.</UserTurn>
+      <div aria-label="Conversation" className="chat__thread" role="log">
+        <div className="chat__content">
+          <UserTurn>Walk me through the Buttercream chat components.</UserTurn>
 
-        {/* Streaming, before any content: the shimmer is the whole message. No avatar yet. */}
-        <div className="chat__turn chat__turn--assistant">
-          <p className="chat__thinking">
-            <span className="chat__shimmer">Thinking...</span>
-            <span aria-hidden className="chat__dots">
-              <span className="chat__dot" />
-              <span className="chat__dot" />
-              <span className="chat__dot" />
-            </span>
-          </p>
-        </div>
-
-        <UserTurn>Show me reasoning, markdown, and code highlighting.</UserTurn>
-
-        <div className="chat__turn chat__turn--assistant">
-          <Avatar size="sm">
-            <Avatar.Fallback>AI</Avatar.Fallback>
-          </Avatar>
-          <div className="chat__answer">
-            <span className="chat__disclosure">
-              Thought for 4 seconds
-              {icon.chevronDown}
-            </span>
-
-            <p className="chat__text">
-              Here is a concise answer with <strong>markdown</strong> support:
+          {/* Streaming, before any content: the shimmer is the whole message. No avatar yet. */}
+          <div className="chat__turn chat__turn--assistant">
+            <p className="chat__thinking">
+              <span className="chat__shimmer">Thinking...</span>
+              <span aria-hidden className="chat__dots">
+                <span className="chat__dot" />
+                <span className="chat__dot" />
+                <span className="chat__dot" />
+              </span>
             </p>
+          </div>
 
-            <figure className="chat__code">
-              <figcaption className="chat__code-head">
-                <span className="chat__code-lang">TS</span>
-                <Button aria-label="Copy code" iconOnly size="sm" variant="ghost">
+          <UserTurn>Show me reasoning, markdown, and code highlighting.</UserTurn>
+
+          <div className="chat__turn chat__turn--assistant">
+            <Avatar aria-label="AI assistant" size="sm">
+              <Avatar.Fallback>AI</Avatar.Fallback>
+            </Avatar>
+            <div className="chat__answer">
+              <Accordion className="chat__disclosure">
+                <Accordion.Item value="reasoning">
+                  <Accordion.Trigger indicator={icon.chevronDown}>
+                    Thought for 4 seconds
+                  </Accordion.Trigger>
+                  <Accordion.Panel>
+                    Compared the requested states with the component APIs and theme roles.
+                  </Accordion.Panel>
+                </Accordion.Item>
+              </Accordion>
+
+              <Typography className="chat__text" variant="body-sm">
+                Here is a concise answer with <strong>markdown</strong> support:
+              </Typography>
+
+              <figure className="chat__code">
+                <figcaption className="chat__code-head">
+                  <span className="chat__code-lang">TS</span>
+                  <Button aria-label="Copy code" iconOnly size="sm" variant="ghost">
+                    {icon.copy}
+                  </Button>
+                </figcaption>
+                <pre className="chat__code-body">
+                  <code>
+                    <span className="chat__code-keyword">export type</span>{" "}
+                    <span className="chat__code-type">ChatStatus</span>
+                    {" = "}
+                    <span className="chat__code-string">"ready"</span>
+                    {" | "}
+                    <span className="chat__code-string">"streaming"</span>
+                    {" | "}
+                    <span className="chat__code-string">"submitted"</span>
+                    {";"}
+                  </code>
+                </pre>
+              </figure>
+
+              <ul className="chat__list">
+                <li>Presentation-only preview compounds</li>
+                <li>Your app owns the message array and SDK wiring</li>
+                <li>
+                  Compose <code className="chat__inline-code">ChatMessage</code>,{" "}
+                  <code className="chat__inline-code">Markdown</code>, and{" "}
+                  <code className="chat__inline-code">ChainOfThought</code> explicitly
+                </li>
+              </ul>
+
+              <div className="chat__actions">
+                <Button aria-label="Copy" iconOnly size="sm" variant="ghost">
                   {icon.copy}
                 </Button>
-              </figcaption>
-              <pre className="chat__code-body">
-                <code>
-                  <span className="chat__code-keyword">export type</span>{" "}
-                  <span className="chat__code-type">ChatStatus</span>
-                  {" = "}
-                  <span className="chat__code-string">"ready"</span>
-                  {" | "}
-                  <span className="chat__code-string">"streaming"</span>
-                  {" | "}
-                  <span className="chat__code-string">"submitted"</span>
-                  {";"}
-                </code>
-              </pre>
-            </figure>
-
-            <ul className="chat__list">
-              <li>Presentation-only preview compounds</li>
-              <li>Your app owns the message array and SDK wiring</li>
-              <li>
-                Compose <code className="chat__inline-code">ChatMessage</code>,{" "}
-                <code className="chat__inline-code">Markdown</code>, and{" "}
-                <code className="chat__inline-code">ChainOfThought</code> explicitly
-              </li>
-            </ul>
-
-            <div className="chat__actions">
-              <Button aria-label="Copy" iconOnly size="sm" variant="ghost">
-                {icon.copy}
-              </Button>
-              <Button aria-label="Helpful" iconOnly size="sm" variant="ghost">
-                {icon.thumbUp}
-              </Button>
-              <Button aria-label="Not helpful" iconOnly size="sm" variant="ghost">
-                {icon.thumbDown}
-              </Button>
-              <Button aria-label="Retry" iconOnly size="sm" variant="ghost">
-                {icon.refresh}
-              </Button>
-              <Button aria-label="More" iconOnly size="sm" variant="ghost">
-                {icon.more}
-              </Button>
+                <Button aria-label="Good response" iconOnly size="sm" variant="ghost">
+                  {icon.thumbUp}
+                </Button>
+                <Button aria-label="Bad response" iconOnly size="sm" variant="ghost">
+                  {icon.thumbDown}
+                </Button>
+                <Button aria-label="Regenerate" iconOnly size="sm" variant="ghost">
+                  {icon.refresh}
+                </Button>
+                <Button aria-label="More actions" iconOnly size="sm" variant="ghost">
+                  {icon.more}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <UserTurn>Show me tool calls — streaming, grouped, and approval.</UserTurn>
+          <UserTurn>Show me tool calls — streaming, grouped, and approval.</UserTurn>
 
-        <div className="chat__turn chat__turn--assistant">
-          <div className="chat__group">
-            <span className="chat__group-head">
-              <span>2 tool calls</span>
-              {icon.chevronDown}
-            </span>
+          <div className="chat__turn chat__turn--assistant">
+            <Accordion className="chat__group" variant="surface">
+              <Accordion.Item value="tool-calls">
+                <Accordion.Trigger className="chat__group-head" indicator={icon.chevronDown}>
+                  2 tool calls
+                </Accordion.Trigger>
+                <Accordion.Panel>
+                  <ul className="chat__tool-list">
+                    <li>Read component APIs</li>
+                    <li>Compare theme roles</li>
+                  </ul>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
           </div>
-        </div>
 
-        <UserTurn>What if a tool needs approval?</UserTurn>
+          <UserTurn>What if a tool needs approval?</UserTurn>
 
-        <div className="chat__turn chat__turn--assistant">
-          <div className="chat__approval">
-            <span className="chat__approval-head">
-              {icon.warning}
-              <span>
-                Approval needed: <code className="chat__approval-tool">sendEmail</code>
-              </span>
-            </span>
-            <pre className="chat__args">
-              <code>{'{"to":"team@acme.com","subject":"Launch update"}'}</code>
-            </pre>
-            <div className="chat__approval-actions">
-              <Button size="sm" variant="secondary">
-                Reject
-              </Button>
-              <Button size="sm">Approve</Button>
-            </div>
+          <div className="chat__turn chat__turn--assistant">
+            <Accordion className="chat__approval" defaultValue={["approval"]}>
+              <Accordion.Item value="approval">
+                <Accordion.Trigger className="chat__approval-head" indicator={icon.chevronDown}>
+                  {icon.warning}
+                  <span>
+                    Approval needed: <code className="chat__approval-tool">sendEmail</code>
+                  </span>
+                </Accordion.Trigger>
+                <Accordion.Panel>
+                  <pre className="chat__args">
+                    <code>{'{"to":"team@acme.com","subject":"Launch update"}'}</code>
+                  </pre>
+                  <div className="chat__approval-actions">
+                    <Button size="sm" variant="secondary">
+                      Reject
+                    </Button>
+                    <Button size="sm">Approve</Button>
+                  </div>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
           </div>
-        </div>
 
-        <UserTurn>What do skeleton loaders look like while a reply is pending?</UserTurn>
+          <UserTurn>What do skeleton loaders look like while a reply is pending?</UserTurn>
 
-        <div className="chat__turn chat__turn--assistant">
-          <Skeleton className="chat__skeleton-avatar" />
-          <div className="chat__skeleton-lines">
-            <Skeleton className="chat__skeleton-line" />
-            <Skeleton className="chat__skeleton-line" style={{ width: "92%" }} />
-            <Skeleton className="chat__skeleton-line" style={{ width: "60%" }} />
-          </div>
-        </div>
-
-        <UserTurn>Show media and compact actions too.</UserTurn>
-
-        <div className="chat__turn chat__turn--assistant">
-          <Avatar size="sm">
-            <Avatar.Fallback>AI</Avatar.Fallback>
-          </Avatar>
-          <div className="chat__answer">
-            <p className="chat__text">
-              Assistant messages can include media and a minimal action set beneath the body.
-            </p>
-            {/* A stand-in image painted from the chart ramp, so media previews follow the theme. */}
-            <div aria-hidden className="chat__media" />
-            <div className="chat__actions">
-              <Button aria-label="Copy" iconOnly size="sm" variant="ghost">
-                {icon.copy}
-              </Button>
-              <Button aria-label="More" iconOnly size="sm" variant="ghost">
-                {icon.more}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <UserTurn>Show sources and file attachments.</UserTurn>
-
-        <div className="chat__turn chat__turn--user">
-          <span className="chat__attachment">
-            <span aria-hidden className="chat__attachment-thumb" />
-            dashboard-wireframe.png
-          </span>
-        </div>
-        <UserTurn>What can you tell me about this wireframe?</UserTurn>
-
-        <div className="chat__turn chat__turn--assistant">
-          <div className="chat__answer">
-            <p className="chat__text">
-              The wireframe follows a familiar dashboard shell with a persistent sidebar, top bar,
-              and a scrollable content region for cards and charts.
-            </p>
-            <span className="chat__disclosure">
-              3 sources
-              {icon.chevronDown}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="chat__composer">
-        <Textarea
-          className="chat__input"
-          placeholder="What do you want to know?"
-          rows={2}
-          variant="secondary"
-        />
-        <div className="chat__composer-row">
-          <Button
-            aria-label="Attach a file"
-            className="chat__round"
-            iconOnly
-            size="sm"
-            variant="secondary"
+          <div
+            aria-label="Loading response"
+            className="chat__turn chat__turn--assistant"
+            role="status"
           >
-            {icon.attach}
-          </Button>
-          <Chip className="chat__model" size="sm" variant="tertiary">
-            {icon.globe}
-            GPT-5.4
-            {icon.chevronDown}
-          </Chip>
-          <span className="chat__composer-spacer" />
-          <Button aria-label="Send message" className="chat__round" iconOnly size="sm">
-            {icon.arrowUp}
-          </Button>
+            <Skeleton className="chat__skeleton-avatar" />
+            <div className="chat__skeleton-lines">
+              <Skeleton className="chat__skeleton-line" />
+              <Skeleton className="chat__skeleton-line" style={{ width: "92%" }} />
+              <Skeleton className="chat__skeleton-line" style={{ width: "60%" }} />
+            </div>
+          </div>
+
+          <UserTurn>Show media and compact actions too.</UserTurn>
+
+          <div className="chat__turn chat__turn--assistant">
+            <Avatar aria-label="AI assistant" size="sm">
+              <Avatar.Fallback>AI</Avatar.Fallback>
+            </Avatar>
+            <div className="chat__answer">
+              <Typography className="chat__text" variant="body-sm">
+                Assistant messages can include media and a minimal action set beneath the body.
+              </Typography>
+              {/* A stand-in image painted from the chart ramp, so media previews follow the theme. */}
+              <div
+                aria-label="Component architecture diagram placeholder"
+                className="chat__media"
+                role="img"
+              />
+              <div className="chat__actions">
+                <Button aria-label="Copy" iconOnly size="sm" variant="ghost">
+                  {icon.copy}
+                </Button>
+                <Button aria-label="More actions" iconOnly size="sm" variant="ghost">
+                  {icon.more}
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <UserTurn>Show sources and file attachments.</UserTurn>
+
+          <div className="chat__turn chat__turn--user">
+            <Surface className="chat__attachment" render={<span />} variant="secondary">
+              <span aria-hidden className="chat__attachment-thumb" />
+              dashboard-wireframe.png
+            </Surface>
+          </div>
+          <UserTurn>What can you tell me about this wireframe?</UserTurn>
+
+          <div className="chat__turn chat__turn--assistant">
+            <div className="chat__answer">
+              <Typography className="chat__text" variant="body-sm">
+                The wireframe follows a familiar dashboard shell with a persistent sidebar, top bar,
+                and a scrollable content region for cards and charts.
+              </Typography>
+              <Accordion className="chat__disclosure">
+                <Accordion.Item value="sources">
+                  <Accordion.Trigger indicator={icon.chevronDown}>3 sources</Accordion.Trigger>
+                  <Accordion.Panel>
+                    <ul className="chat__sources">
+                      <li>Dashboard shell patterns</li>
+                      <li>Responsive card layouts</li>
+                      <li>Chart composition guidance</li>
+                    </ul>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              </Accordion>
+            </div>
+          </div>
         </div>
       </div>
-      <p className="chat__disclaimer">AI can make mistakes. Check important info.</p>
+
+      <div className="chat__composer-dock">
+        <Surface
+          className="chat__composer"
+          render={<form onSubmit={submitMessage} />}
+          variant="default"
+        >
+          <Textarea
+            aria-label="Message input"
+            className="chat__input"
+            onChange={(event) => setMessage(event.target.value)}
+            placeholder="What do you want to know?"
+            rows={2}
+            value={message}
+            variant="secondary"
+          />
+          <div className="chat__composer-row">
+            <Button
+              aria-label="Attach file"
+              className="chat__round"
+              iconOnly
+              size="sm"
+              type="button"
+              variant="secondary"
+            >
+              {icon.attach}
+            </Button>
+            <Select
+              className="chat__model"
+              container={surface}
+              defaultValue="GPT-5.4"
+              indicator={
+                <>
+                  {icon.globe}
+                  {icon.chevronDown}
+                </>
+              }
+              label="Model"
+            >
+              <Select.Item value="GPT-5.4">GPT-5.4</Select.Item>
+              <Select.Item value="GPT-5.3">GPT-5.3</Select.Item>
+              <Select.Item value="GPT-5 mini">GPT-5 mini</Select.Item>
+            </Select>
+            <span className="chat__composer-spacer" />
+            <Button
+              aria-label="Send message"
+              className="chat__round"
+              disabled={message.trim().length === 0}
+              iconOnly
+              size="sm"
+              type="submit"
+            >
+              {icon.arrowUp}
+            </Button>
+          </div>
+        </Surface>
+        <Typography className="chat__disclaimer" variant="body-xs">
+          AI can make mistakes. Check important info.
+        </Typography>
+      </div>
     </AppFrame>
   );
 }
@@ -279,7 +375,13 @@ export function ChatAppPreview({ icons }: { icons: DesignSystem["icons"] }): Rea
 function UserTurn({ children }: { children: ReactNode }): ReactElement {
   return (
     <div className="chat__turn chat__turn--user">
-      <p className="chat__bubble">{children}</p>
+      <Surface
+        className="chat__bubble"
+        render={<Typography as="p" variant="body-sm" />}
+        variant="secondary"
+      >
+        {children}
+      </Surface>
     </div>
   );
 }
