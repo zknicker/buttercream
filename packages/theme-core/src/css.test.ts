@@ -28,7 +28,6 @@ describe("theme CSS", () => {
     expect(css).toContain("--shadow-field: var(--bc-shadow-field-medium);");
     expect(css).toContain("--shadow-surface: var(--bc-shadow-surface-medium);");
     expect(css).toContain("--shadow-overlay: var(--bc-shadow-overlay-medium);");
-    expect(css).toContain("--shadow-overlay: none;");
     expect(css).toContain("--cursor-interactive: pointer;");
     expect(css).toContain("--skeleton-animation: shimmer;");
     expect(css).toContain("--border-width: 1px;");
@@ -63,7 +62,7 @@ describe("theme CSS", () => {
     expect(imported.theme.light.effects.skeleton).toBe("pulse");
     expect(imported.theme.light.effects.shadowSurface).toBe("strong");
     expect(imported.theme.light.effects.shadowField).toBe("none");
-    expect(imported.theme.dark.effects.shadowOverlay).toBe("none");
+    expect(imported.theme.dark.effects.shadowOverlay).toBe("medium");
   });
 
   test("imports recognized values and resets omitted values", () => {

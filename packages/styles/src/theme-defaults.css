@@ -68,7 +68,7 @@
     --border: color-mix(in oklab, var(--foreground) 14%, transparent);
     --danger: #ff5d7d;
     --danger-foreground: #1c1917;
-    --default: oklch(from var(--accent) calc(var(--neutral-base) - 0.18) var(--bc-neutral-chroma) h);
+    --default: oklch(from var(--accent) calc(var(--neutral-base) - 0.22) var(--bc-neutral-chroma) h);
     --default-foreground: var(--foreground);
     --focus: var(--accent);
     --foreground: oklch(from var(--accent) calc(var(--neutral-base) + 0.49) var(--bc-neutral-chroma) h);
@@ -102,7 +102,7 @@
     --field-border-width: 0px;
     --ring-offset-width: 2px;
     --shadow-field: var(--bc-shadow-field-medium);
-    --shadow-overlay: none;
+    --shadow-overlay: var(--bc-shadow-overlay-medium);
     --shadow-surface: var(--bc-shadow-surface-medium);
     --skeleton-animation: shimmer;
     --font-heading: ui-rounded, system-ui, sans-serif;
