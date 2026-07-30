@@ -1,0 +1,64 @@
+@layer components {
+  /*
+   * Scroll shadow. The component sets data-shadow to the edges with more content past them;
+   * a mask fades those edges out. Mask colours are alpha stencils, not theme colours — only
+   * transparency matters, so the keywords are deliberate.
+   */
+  .scroll-shadow {
+    --bc-scroll-shadow-size: 2.5rem;
+
+    overflow: auto;
+  }
+
+  .scroll-shadow--hide-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .scroll-shadow--hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-shadow[data-shadow="start"] {
+    mask-image: linear-gradient(to bottom, transparent, black var(--bc-scroll-shadow-size));
+  }
+
+  .scroll-shadow[data-shadow="end"] {
+    mask-image: linear-gradient(
+      to bottom,
+      black calc(100% - var(--bc-scroll-shadow-size)),
+      transparent
+    );
+  }
+
+  .scroll-shadow[data-shadow="both"] {
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black var(--bc-scroll-shadow-size),
+      black calc(100% - var(--bc-scroll-shadow-size)),
+      transparent
+    );
+  }
+
+  .scroll-shadow--horizontal[data-shadow="start"] {
+    mask-image: linear-gradient(to right, transparent, black var(--bc-scroll-shadow-size));
+  }
+
+  .scroll-shadow--horizontal[data-shadow="end"] {
+    mask-image: linear-gradient(
+      to right,
+      black calc(100% - var(--bc-scroll-shadow-size)),
+      transparent
+    );
+  }
+
+  .scroll-shadow--horizontal[data-shadow="both"] {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--bc-scroll-shadow-size),
+      black calc(100% - var(--bc-scroll-shadow-size)),
+      transparent
+    );
+  }
+}

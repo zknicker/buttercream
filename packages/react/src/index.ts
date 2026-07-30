@@ -138,6 +138,11 @@ export {
   type RadioGroupSize,
   type RadioGroupVariant,
 } from "./radio-group.tsx";
+export {
+  ScrollShadow,
+  type ScrollShadowOrientation,
+  type ScrollShadowProps,
+} from "./scroll-shadow.tsx";
 export { SearchField, type SearchFieldProps } from "./search-field.tsx";
 export {
   Segment,
@@ -156,7 +161,9 @@ export {
 export {
   Sidebar,
   type SidebarCollapsible,
+  type SidebarMenuActionProps,
   type SidebarMenuButtonProps,
+  type SidebarMenuCollapsibleProps,
   type SidebarMenuSkeletonProps,
   type SidebarMenuSubButtonProps,
   type SidebarProps,
