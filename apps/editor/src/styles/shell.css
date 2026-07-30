@@ -1,4 +1,11 @@
 @import "tailwindcss";
+/*
+ * The design system's @theme mapping, so utilities written in preview specimens compile
+ * against design-system tokens (bg-accent, text-muted, border-border) exactly as they do in
+ * a consuming app. The shell's own @theme below wins any name it declares itself, and shell
+ * chrome never uses the design-system names — its muted maps to text-shell-muted.
+ */
+@import "@buttercream/styles/theme";
 
 @source "../";
 
@@ -57,7 +64,7 @@
   --color-raised: var(--shell-raised);
   --color-sunken: var(--shell-sunken);
   --color-fg: var(--shell-fg);
-  --color-muted: var(--shell-muted);
+  --color-shell-muted: var(--shell-muted);
   --color-line: var(--shell-line);
 
   /* Accents. Tuned per theme so they keep their contrast on either canvas. */

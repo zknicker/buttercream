@@ -127,7 +127,7 @@ function navLinkClass(active: boolean): string {
   return classes(
     "relative rounded-(--radius-shell-sm) font-mono text-sm lowercase transition-colors duration-150",
     "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg",
-    active ? "text-fg" : "text-muted hover:text-fg",
+    active ? "text-fg" : "text-shell-muted hover:text-fg",
   );
 }
 
@@ -183,7 +183,7 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
             <Logo />
             <Dialog.Close
               aria-label="Close menu"
-              className="inline-flex size-8.5 items-center justify-center rounded-(--radius-shell) text-muted transition-colors duration-150 hover:bg-fg/8 hover:text-fg"
+              className="inline-flex size-8.5 items-center justify-center rounded-(--radius-shell) text-shell-muted transition-colors duration-150 hover:bg-fg/8 hover:text-fg"
             >
               <HugeiconsIcon aria-hidden="true" icon={Cancel01Icon} size={16} strokeWidth={2} />
             </Dialog.Close>
@@ -225,7 +225,7 @@ function MobileMenu({ current }: { current?: string | undefined }): ReactElement
 function mobileNavLinkClass(active: boolean): string {
   return classes(
     "rounded-(--radius-shell) px-3 py-2.5 font-mono text-base lowercase transition-colors duration-150",
-    active ? "bg-sunken text-fg" : "text-muted hover:bg-fg/6 hover:text-fg",
+    active ? "bg-sunken text-fg" : "text-shell-muted hover:bg-fg/6 hover:text-fg",
   );
 }
 

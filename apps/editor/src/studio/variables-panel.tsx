@@ -128,7 +128,7 @@ export function VariablesPanel({
       <label className="relative mt-6 block">
         <HugeiconsIcon
           aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-muted"
+          className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-shell-muted"
           icon={Search01Icon}
           size={14}
           strokeWidth={2}
@@ -137,7 +137,7 @@ export function VariablesPanel({
           aria-label="Search colour tokens"
           className={classes(
             "h-8 w-full rounded-(--radius-shell) bg-canvas pr-2 pl-8 ring-1 ring-fg/10",
-            "font-mono text-xs text-fg placeholder:text-muted",
+            "font-mono text-xs text-fg placeholder:text-shell-muted",
             "outline-0 focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
           )}
           name="variables-search"
@@ -149,7 +149,7 @@ export function VariablesPanel({
       </label>
 
       {groups.length === 0 ? (
-        <p className="px-1 py-6 text-center text-xs text-muted">
+        <p className="px-1 py-6 text-center text-xs text-shell-muted">
           No token matches &ldquo;{query}&rdquo;.
         </p>
       ) : (

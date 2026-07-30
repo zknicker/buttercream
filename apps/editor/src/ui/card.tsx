@@ -52,7 +52,7 @@ function part(baseClass: string, dataSlot: string) {
 export const Card = Object.assign(CardRoot, {
   Action: part("shrink-0", "card-action"),
   Content: part("px-5 pb-5", "card-content"),
-  Description: part("mt-1 text-base text-pretty text-muted sm:text-sm", "card-description"),
+  Description: part("mt-1 text-base text-pretty text-shell-muted sm:text-sm", "card-description"),
   Footer: part("flex items-center gap-3 border-t border-fg/8 px-5 py-4", "card-footer"),
   Header: part("flex items-start justify-between gap-4 p-5", "card-header"),
   Title: part("font-display text-lg text-fg", "card-title"),

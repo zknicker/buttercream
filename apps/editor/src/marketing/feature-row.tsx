@@ -96,7 +96,7 @@ export function FeatureRow({
         <li key={feature.title}>
           <PixelGlyph name={feature.glyph} />
           <h3 className="mt-4 font-display text-xl text-fg">{feature.title}</h3>
-          <p className="mt-2 max-w-[48ch] text-base text-pretty text-muted sm:text-sm">
+          <p className="mt-2 max-w-[48ch] text-base text-pretty text-shell-muted sm:text-sm">
             {feature.body}
           </p>
         </li>

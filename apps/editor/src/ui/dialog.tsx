@@ -26,7 +26,7 @@ export const dialogPanelClass = classes(
 );
 
 export const dialogTitleClass = "font-display text-xl text-fg";
-export const dialogDescriptionClass = "mt-1.5 text-base text-pretty text-muted sm:text-sm";
+export const dialogDescriptionClass = "mt-1.5 text-base text-pretty text-shell-muted sm:text-sm";
 
 export function DialogHeader({
   children,

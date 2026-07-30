@@ -143,7 +143,7 @@ function CreateCard({
       </span>
       <span className="flex flex-col gap-1">
         <span className="text-base font-medium text-fg sm:text-sm">New design system</span>
-        <span className="max-w-[32ch] text-base text-pretty text-muted sm:text-sm">
+        <span className="max-w-[32ch] text-base text-pretty text-shell-muted sm:text-sm">
           Start from the Buttercream defaults and make it yours.
         </span>
       </span>

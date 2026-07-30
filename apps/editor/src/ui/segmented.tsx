@@ -42,7 +42,7 @@ export function Segmented<Value extends string>({
              */
             option === value
               ? "bg-raised text-fg shadow-sm ring-1 ring-butter/45 dark:shadow-none"
-              : "text-muted hover:text-fg",
+              : "text-shell-muted hover:text-fg",
           )}
           key={option}
           onClick={() => onChange(option)}

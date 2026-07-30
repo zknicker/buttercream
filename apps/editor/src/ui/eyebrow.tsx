@@ -12,7 +12,7 @@ export function Eyebrow({ className, render, ...props }: PProps): ReactElement {
     props: mergeProps<"p">(
       {
         className: classes(
-          "font-mono text-sm tracking-wide text-muted uppercase sm:text-xs",
+          "font-mono text-sm tracking-wide text-shell-muted uppercase sm:text-xs",
           className,
         ),
         "data-slot": "eyebrow",

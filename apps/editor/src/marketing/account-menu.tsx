@@ -56,7 +56,7 @@ export function AccountMenu(): ReactElement | null {
       >
         <HugeiconsIcon
           aria-hidden="true"
-          className="size-4 shrink-0 text-muted transition-transform duration-150 group-data-popup-open:rotate-180"
+          className="size-4 shrink-0 text-shell-muted transition-transform duration-150 group-data-popup-open:rotate-180"
           icon={ArrowDown01Icon}
           size={16}
           strokeWidth={2}
@@ -83,7 +83,7 @@ export function AccountMenu(): ReactElement | null {
           />
           <div className="min-w-0">
             <p className="truncate text-sm font-medium text-fg">{displayName}</p>
-            <p className="truncate text-sm text-muted">{email}</p>
+            <p className="truncate text-sm text-shell-muted">{email}</p>
           </div>
         </div>
 

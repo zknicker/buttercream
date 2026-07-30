@@ -24,7 +24,7 @@ export const ROW_LABEL = "truncate font-medium text-fg";
  * Every row's right-hand side reads the same: mono, small, muted, and never wrapping. The rows
  * differ in what they do, and they should not also differ in how their value looks.
  */
-export const ROW_VALUE = "shrink-0 font-mono text-[11px] tabular-nums text-muted";
+export const ROW_VALUE = "shrink-0 font-mono text-[11px] tabular-nums text-shell-muted";
 
 export const FOCUS_OUTLINE =
   "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg";

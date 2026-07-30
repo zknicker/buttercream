@@ -73,13 +73,13 @@ function TierCard({ period, tier }: { period: BillingPeriod; tier: Tier }): Reac
             <h3 className="font-display text-2xl text-fg">{tier.name}</h3>
             {tier.featured ? <Badge variant="accent">Most ordered</Badge> : null}
           </div>
-          <p className="mt-2 max-w-[48ch] text-base text-pretty text-muted sm:text-sm">
+          <p className="mt-2 max-w-[48ch] text-base text-pretty text-shell-muted sm:text-sm">
             {tier.description}
           </p>
 
           <p className="mt-6 flex items-baseline gap-1.5">
             <span className="font-mono text-5xl tabular-nums text-fg">${tier.price[period]}</span>
-            <span className="font-mono text-sm text-muted">/mo</span>
+            <span className="font-mono text-sm text-shell-muted">/mo</span>
           </p>
 
           <ul className="mt-6 flex flex-col gap-2.5 text-base sm:text-sm" role="list">

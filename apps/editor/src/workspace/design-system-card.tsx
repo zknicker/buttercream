@@ -155,7 +155,7 @@ export function DesignSystemCard({
         </Link>
         {/* Relative to the reader's clock, so the server's render is necessarily stale. */}
         <time
-          className="shrink-0 font-mono text-sm text-muted tabular-nums sm:text-xs"
+          className="shrink-0 font-mono text-sm text-shell-muted tabular-nums sm:text-xs"
           dateTime={new Date(designSystem.updatedAt).toISOString()}
           suppressHydrationWarning
           title={`Updated ${formatUpdated(designSystem.updatedAt, "long")}`}

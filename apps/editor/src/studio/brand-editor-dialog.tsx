@@ -95,7 +95,9 @@ export function BrandEditorDialog({
             </DialogHeader>
 
             <label className="flex min-h-0 flex-1 flex-col gap-2" htmlFor={fieldId}>
-              <span className="font-mono text-xs tracking-wide text-muted uppercase">{label}</span>
+              <span className="font-mono text-xs tracking-wide text-shell-muted uppercase">
+                {label}
+              </span>
               {multiline ? (
                 <Textarea
                   className={code ? "min-h-80" : "min-h-45"}

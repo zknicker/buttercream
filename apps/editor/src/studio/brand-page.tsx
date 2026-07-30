@@ -268,7 +268,7 @@ function BrandBlock({
         {edit ? (
           <span
             aria-hidden
-            className="flex size-7 shrink-0 items-center justify-center rounded-full bg-fg/8 text-muted opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
+            className="flex size-7 shrink-0 items-center justify-center rounded-full bg-fg/8 text-shell-muted opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
           >
             <HugeiconsIcon icon={PencilEdit02Icon} size={14} strokeWidth={2} />
           </span>
@@ -294,9 +294,9 @@ function BrandBlock({
 function ProseValue({ hint, value }: { hint: string; value: string }): ReactElement {
   const content = value.trim();
   return content ? (
-    <p className="text-sm whitespace-pre-wrap text-pretty text-muted">{content}</p>
+    <p className="text-sm whitespace-pre-wrap text-pretty text-shell-muted">{content}</p>
   ) : (
-    <p className="text-sm text-muted/60">{hint}</p>
+    <p className="text-sm text-shell-muted/60">{hint}</p>
   );
 }
 
@@ -308,23 +308,23 @@ function CodeValue({ hint, value }: { hint: string; value: string }): ReactEleme
      * Bare mono on the card — a panelled block made a box inside a box — with the last couple
      * of lines fading out so the cap reads as "there is more", not a clipping bug.
      */
-    <pre className="max-h-40 overflow-hidden font-mono text-xs leading-5 text-muted [mask-image:linear-gradient(to_bottom,black_calc(100%-2.5rem),transparent)]">
+    <pre className="max-h-40 overflow-hidden font-mono text-xs leading-5 text-shell-muted [mask-image:linear-gradient(to_bottom,black_calc(100%-2.5rem),transparent)]">
       <code>{content}</code>
     </pre>
   ) : (
-    <p className="text-sm text-muted/60">{hint}</p>
+    <p className="text-sm text-shell-muted/60">{hint}</p>
   );
 }
 
 function WebsiteValue({ value }: { value: string }): ReactElement {
   const href = websiteHref(value);
   if (!value.trim()) {
-    return <span className="text-sm text-muted/60">No website yet</span>;
+    return <span className="text-sm text-shell-muted/60">No website yet</span>;
   }
 
   return href ? (
     <a
-      className="rounded-(--radius-shell-sm) text-sm text-muted underline decoration-fg/25 underline-offset-3 hover:text-fg focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg"
+      className="rounded-(--radius-shell-sm) text-sm text-shell-muted underline decoration-fg/25 underline-offset-3 hover:text-fg focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-fg"
       href={href}
       rel="noreferrer noopener"
       target="_blank"
@@ -332,7 +332,7 @@ function WebsiteValue({ value }: { value: string }): ReactElement {
       {value}
     </a>
   ) : (
-    <span className="text-sm text-muted">{value}</span>
+    <span className="text-sm text-shell-muted">{value}</span>
   );
 }
 

@@ -940,7 +940,7 @@ function FormatItem({
         <span
           className={classes(
             "col-start-1 row-start-1 transition-[color,font-variation-settings] duration-80",
-            isActive || checked ? "text-fg" : "text-muted",
+            isActive || checked ? "text-fg" : "text-shell-muted",
           )}
           style={{
             fontVariationSettings: checked ? fontWeights.semibold : fontWeights.normal,
@@ -1033,7 +1033,7 @@ function FormatDropdown({
       <Menu.Trigger
         className={classes(
           "flex items-center justify-between gap-2 h-9 px-3 text-[13px] bg-transparent hover:bg-fg/5 hover:text-fg transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)] cursor-pointer",
-          open ? "bg-fg/10 text-fg" : "text-muted active:bg-fg/10",
+          open ? "bg-fg/10 text-fg" : "text-shell-muted active:bg-fg/10",
           shape.input,
         )}
         style={{ fontVariationSettings: fontWeights.medium }}
@@ -1044,7 +1044,10 @@ function FormatDropdown({
           icon={ArrowDown01Icon}
           size={14}
           strokeWidth={1.5}
-          className={classes("text-muted transition-transform duration-150", open && "rotate-180")}
+          className={classes(
+            "text-shell-muted transition-transform duration-150",
+            open && "rotate-180",
+          )}
         />
       </Menu.Trigger>
       <Menu.Portal container={portalContainer ?? undefined}>
@@ -1291,7 +1294,7 @@ const TextColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
         )}
         style={{ width }}
       >
-        {prefix && <span className="text-[12px] text-muted mr-1 select-none">{prefix}</span>}
+        {prefix && <span className="text-[12px] text-shell-muted mr-1 select-none">{prefix}</span>}
         <input
           ref={ref}
           value={draft}
@@ -1490,7 +1493,9 @@ const ScrubColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
               <path d="M0.5 7l5-5v3.5h13V2l5 5-5 5V8.5h-13V12l-5-5z" />
             </svg>
           </NumberField.ScrubAreaCursor>
-          {prefix && <span className="text-[12px] text-muted mr-1 select-none">{prefix}</span>}
+          {prefix && (
+            <span className="text-[12px] text-shell-muted mr-1 select-none">{prefix}</span>
+          )}
           <NumberField.Input
             ref={setInputRef}
             aria-label={ariaLabel}
@@ -1589,7 +1594,7 @@ function EyeDropperButton({ onPick }: { onPick: (hex: string) => void }) {
       onClick={handleClick}
       aria-label="Pick color from screen"
       className={classes(
-        "flex items-center justify-center h-9 px-3 text-muted bg-transparent hover:bg-fg/5 hover:text-fg active:bg-fg/10 transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)] cursor-pointer",
+        "flex items-center justify-center h-9 px-3 text-shell-muted bg-transparent hover:bg-fg/5 hover:text-fg active:bg-fg/10 transition-colors duration-80 outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-fg)] cursor-pointer",
         shape.input,
       )}
     >
@@ -2354,7 +2359,7 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
                 )}
                 <ColorTile color={swatchColor} size={20} />
                 {triggerShowValue && (
-                  <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">
+                  <span className="shrink-0 font-mono text-[11px] text-shell-muted tabular-nums">
                     {valueLabel}
                   </span>
                 )}
@@ -2378,7 +2383,7 @@ const ColorPickerPopover = forwardRef<HTMLDivElement, ColorPickerPopoverProps>(
                         onTriggerRemove?.();
                       }
                     }}
-                    className="ml-1 text-muted hover:text-fg cursor-pointer flex items-center"
+                    className="ml-1 text-shell-muted hover:text-fg cursor-pointer flex items-center"
                   >
                     <HugeiconsIcon aria-hidden icon={Cancel01Icon} size={14} strokeWidth={1.5} />
                   </button>

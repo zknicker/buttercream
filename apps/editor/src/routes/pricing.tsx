@@ -58,7 +58,7 @@ function Pricing() {
           <h1 className="mt-5 max-w-[20ch] font-display text-5xl tracking-tight text-balance text-fg sm:text-6xl lg:text-7xl">
             The menu.
           </h1>
-          <p className="mt-7 max-w-[56ch] text-lg text-pretty text-muted sm:text-base">
+          <p className="mt-7 max-w-[56ch] text-lg text-pretty text-shell-muted sm:text-base">
             Simple, transparent pricing for teams of every size. No seat maths, no surprise
             invoices.
           </p>
@@ -94,12 +94,12 @@ function Pricing() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-fg/12">
-                    <th className="pb-3 font-mono text-sm font-normal whitespace-nowrap text-muted sm:text-xs">
+                    <th className="pb-3 font-mono text-sm font-normal whitespace-nowrap text-shell-muted sm:text-xs">
                       Feature
                     </th>
                     {["Sample", "Bakery", "Patisserie"].map((tier) => (
                       <th
-                        className="pb-3 font-mono text-sm font-normal whitespace-nowrap text-muted sm:text-xs"
+                        className="pb-3 font-mono text-sm font-normal whitespace-nowrap text-shell-muted sm:text-xs"
                         key={tier}
                       >
                         {tier}
@@ -137,7 +137,7 @@ function Pricing() {
                       <span className="text-base text-fg sm:text-sm">{item.question}</span>
                       <HugeiconsIcon
                         aria-hidden="true"
-                        className="size-4 shrink-0 text-muted transition-transform group-data-panel-open:rotate-45"
+                        className="size-4 shrink-0 text-shell-muted transition-transform group-data-panel-open:rotate-45"
                         icon={PlusSignIcon}
                         size={16}
                         strokeWidth={2}
@@ -145,7 +145,7 @@ function Pricing() {
                     </Accordion.Trigger>
                   </Accordion.Header>
                   <Accordion.Panel className="h-(--accordion-panel-height) overflow-hidden transition-[height] duration-200 data-ending-style:h-0 data-starting-style:h-0">
-                    <p className="max-w-[56ch] pb-4 text-base text-pretty text-muted sm:text-sm">
+                    <p className="max-w-[56ch] pb-4 text-base text-pretty text-shell-muted sm:text-sm">
                       {item.answer}
                     </p>
                   </Accordion.Panel>
@@ -156,7 +156,7 @@ function Pricing() {
 
           <Surface className="h-fit p-8" variant="secondary">
             <h2 className="font-display text-2xl text-fg">Stay in the loop</h2>
-            <p className="mt-2 max-w-[48ch] text-base text-pretty text-muted sm:text-sm">
+            <p className="mt-2 max-w-[48ch] text-base text-pretty text-shell-muted sm:text-sm">
               New components, recipes, and releases — served fresh.
             </p>
             <form
@@ -164,7 +164,9 @@ function Pricing() {
               onSubmit={(event) => event.preventDefault()}
             >
               <label className="flex flex-col gap-1.5" htmlFor="changelog-email">
-                <span className="font-mono text-sm text-muted uppercase sm:text-xs">Email</span>
+                <span className="font-mono text-sm text-shell-muted uppercase sm:text-xs">
+                  Email
+                </span>
                 <Input
                   autoComplete="email"
                   fullWidth
@@ -174,7 +176,7 @@ function Pricing() {
                   type="email"
                 />
               </label>
-              <p className="text-base text-muted sm:text-sm">No spam. Unsubscribe anytime.</p>
+              <p className="text-base text-shell-muted sm:text-sm">No spam. Unsubscribe anytime.</p>
               <Button className="w-full" size="lg" type="submit">
                 Get the changelog
               </Button>
@@ -191,7 +193,7 @@ function Pricing() {
 function ComparisonCell({ value }: { value: boolean | string }) {
   if (typeof value === "string") {
     return (
-      <td className="py-3.5 font-mono text-sm tabular-nums whitespace-nowrap text-muted sm:text-xs">
+      <td className="py-3.5 font-mono text-sm tabular-nums whitespace-nowrap text-shell-muted sm:text-xs">
         {value}
       </td>
     );

@@ -61,10 +61,10 @@ function SelectRoot<Value>({
           <span className="min-w-0 flex-1 truncate text-left font-medium text-fg">{label}</span>
         )}
         <BaseSelect.Value
-          className="truncate font-mono text-xs text-muted"
+          className="truncate font-mono text-xs text-shell-muted"
           placeholder={placeholder}
         />
-        <BaseSelect.Icon className="shrink-0 text-muted">
+        <BaseSelect.Icon className="shrink-0 text-shell-muted">
           <HugeiconsIcon aria-hidden="true" icon={ArrowDown01Icon} size={14} strokeWidth={2} />
         </BaseSelect.Icon>
       </BaseSelect.Trigger>
@@ -133,7 +133,7 @@ function SelectGroupLabel({
 }: Omit<BaseSelect.GroupLabel.Props, "className"> & { className?: string }): ReactElement {
   return (
     <BaseSelect.GroupLabel
-      className={classes("px-2 pt-2 pb-1 font-mono text-[11px] text-muted", className)}
+      className={classes("px-2 pt-2 pb-1 font-mono text-[11px] text-shell-muted", className)}
       data-slot="select-group-label"
       {...props}
     />

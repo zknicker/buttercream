@@ -22,7 +22,7 @@ export function Textarea({
       className={classes(
         "resize-y rounded-(--radius-shell) bg-raised p-4 text-base text-fg sm:text-sm",
         code ? "font-mono" : "font-sans",
-        "ring-1 ring-fg/12 ring-inset placeholder:text-muted/60",
+        "ring-1 ring-fg/12 ring-inset placeholder:text-shell-muted/60",
         "focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg",
         fullWidth && "w-full",
         className,

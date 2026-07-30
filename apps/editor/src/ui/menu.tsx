@@ -90,7 +90,7 @@ function MenuGroupLabel({
 }: Omit<BaseMenu.GroupLabel.Props, "className"> & { className?: string }): ReactElement {
   return (
     <BaseMenu.GroupLabel
-      className={classes("px-2.5 pt-1.5 pb-0.5 text-xs font-medium text-muted", className)}
+      className={classes("px-2.5 pt-1.5 pb-0.5 text-xs font-medium text-shell-muted", className)}
       {...props}
     />
   );

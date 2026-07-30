@@ -90,7 +90,7 @@ export function LevelRow<Value extends string>({
               FOCUS_OUTLINE,
               option.value === value
                 ? "bg-raised text-fg shadow-sm ring-1 ring-fg/8 dark:shadow-none"
-                : "text-muted hover:text-fg",
+                : "text-shell-muted hover:text-fg",
             )}
             key={option.value}
             onClick={() => onChange(option.value)}

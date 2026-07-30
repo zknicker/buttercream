@@ -28,7 +28,7 @@ export function ProductShot({ className }: { className?: string }): ReactElement
         <span aria-hidden="true" className="size-2.5 rounded-full bg-berry/50" />
         <span aria-hidden="true" className="size-2.5 rounded-full bg-honey" />
         <span aria-hidden="true" className="size-2.5 rounded-full bg-pistachio" />
-        <p className="ml-2 font-mono text-xs text-muted">buttercream / studio</p>
+        <p className="ml-2 font-mono text-xs text-shell-muted">buttercream / studio</p>
       </div>
 
       <div className="grid grid-cols-1 @2xl:grid-cols-[1fr_13rem]">
@@ -44,15 +44,15 @@ export function ProductShot({ className }: { className?: string }): ReactElement
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <p className="font-mono text-xs text-muted uppercase">Label</p>
-            <div className="flex h-8.5 items-center rounded-(--radius-shell) bg-raised px-2.5 text-sm text-muted ring-1 ring-fg/12 ring-inset">
+            <p className="font-mono text-xs text-shell-muted uppercase">Label</p>
+            <div className="flex h-8.5 items-center rounded-(--radius-shell) bg-raised px-2.5 text-sm text-shell-muted ring-1 ring-fg/12 ring-inset">
               Pistachio cream
             </div>
           </div>
 
           <div className="grid gap-3 @md:grid-cols-2">
             <div className="rounded-(--radius-shell) bg-sunken p-4">
-              <p className="font-mono text-xs text-muted uppercase">Orders</p>
+              <p className="font-mono text-xs text-shell-muted uppercase">Orders</p>
               <p className="mt-1 font-display text-2xl tabular-nums text-fg">1,248</p>
               <p className="font-mono text-xs text-crust">+18.6%</p>
             </div>
@@ -87,7 +87,7 @@ export function ProductShot({ className }: { className?: string }): ReactElement
                   />
                   <p className="truncate text-sm text-fg">{item}</p>
                 </div>
-                <p className="shrink-0 font-mono text-xs tabular-nums text-muted">
+                <p className="shrink-0 font-mono text-xs tabular-nums text-shell-muted">
                   {[128, 96, 64][index]}
                 </p>
               </div>
@@ -101,7 +101,7 @@ export function ProductShot({ className }: { className?: string }): ReactElement
               <span
                 className={classes(
                   "flex-1 rounded-[calc(var(--radius-shell)-0.125rem)] py-1 text-center font-mono text-xs",
-                  index === 0 ? "bg-raised text-fg" : "text-muted",
+                  index === 0 ? "bg-raised text-fg" : "text-shell-muted",
                 )}
                 key={tab}
               >
@@ -113,13 +113,13 @@ export function ProductShot({ className }: { className?: string }): ReactElement
           {TOKEN_ROWS.map((row) => (
             <div key={row.label}>
               {row.group ? (
-                <p className="mt-3 mb-1 font-mono text-xs tracking-wide text-muted uppercase">
+                <p className="mt-3 mb-1 font-mono text-xs tracking-wide text-shell-muted uppercase">
                   {row.group}
                 </p>
               ) : null}
               <div className="flex h-8 items-center justify-between gap-2 rounded-(--radius-shell) bg-raised px-2.5">
                 <span className="truncate text-xs text-fg">{row.label}</span>
-                <span className="flex shrink-0 items-center gap-1.5 font-mono text-xs text-muted">
+                <span className="flex shrink-0 items-center gap-1.5 font-mono text-xs text-shell-muted">
                   {row.value}
                   {row.swatch ? (
                     <span
@@ -135,7 +135,7 @@ export function ProductShot({ className }: { className?: string }): ReactElement
 
           <div className="mt-3 rounded-(--radius-shell) bg-raised p-3">
             <Badge variant="accent">Agent</Badge>
-            <p className="mt-2 font-mono text-xs leading-5 text-muted">
+            <p className="mt-2 font-mono text-xs leading-5 text-shell-muted">
               <span className="text-berry">- accent: #1B1B1B</span>
               <br />
               <span className="text-crust">+ accent: #F0B429</span>

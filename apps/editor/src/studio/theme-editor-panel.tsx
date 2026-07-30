@@ -455,7 +455,7 @@ function SaveStatus({ state }: { state: SaveState }) {
     <span
       className={classes(
         "min-w-0 truncate px-1 font-mono text-xs",
-        state === "conflict" || state === "error" ? "text-berry" : "text-muted",
+        state === "conflict" || state === "error" ? "text-berry" : "text-shell-muted",
       )}
       role="status"
     >

@@ -70,7 +70,7 @@ export function ImportDialog({
             </DialogHeader>
 
             <label className="flex flex-col gap-2" htmlFor="import-source">
-              <span className="font-mono text-xs tracking-wide text-muted uppercase">
+              <span className="font-mono text-xs tracking-wide text-shell-muted uppercase">
                 Design-system JSON or global CSS
               </span>
               <Textarea
@@ -85,7 +85,7 @@ export function ImportDialog({
               />
             </label>
 
-            <p className="text-base text-pretty text-muted sm:text-sm">
+            <p className="text-base text-pretty text-shell-muted sm:text-sm">
               JSON replaces the complete document. CSS replaces recognized theme variables and
               resets omitted variables to defaults.
             </p>

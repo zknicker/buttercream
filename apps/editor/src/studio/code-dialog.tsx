@@ -91,7 +91,7 @@ export function CodeDialog({
                     "focus-visible:-outline-offset-1 focus-visible:outline-[1.5px] focus-visible:outline-fg",
                     item.filename === activeExport.filename
                       ? "bg-raised text-fg shadow-sm dark:shadow-none ring-1 ring-fg/8"
-                      : "text-muted hover:text-fg",
+                      : "text-shell-muted hover:text-fg",
                   )}
                   key={item.filename}
                   onClick={() => {
@@ -111,7 +111,7 @@ export function CodeDialog({
             </pre>
 
             <DialogFooter>
-              <span aria-live="polite" className="mr-auto font-mono text-xs text-muted">
+              <span aria-live="polite" className="mr-auto font-mono text-xs text-shell-muted">
                 {copyState === "copied" ? "Copied" : null}
                 {copyState === "error" ? "Copy failed" : null}
               </span>

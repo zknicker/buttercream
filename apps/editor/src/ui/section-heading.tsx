@@ -51,7 +51,7 @@ export function SectionHeading({
        * second. Departure Mono carries the brand at the one point where a label is the only thing
        * on the line.
        */}
-      <Heading className="shrink-0 font-mono text-[13px] tracking-tight text-muted">
+      <Heading className="shrink-0 font-mono text-[13px] tracking-tight text-shell-muted">
         {title}
       </Heading>
       <DitherBand
@@ -62,7 +62,9 @@ export function SectionHeading({
         pixel={3}
       />
       {count === undefined ? null : (
-        <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted">{count}</span>
+        <span className="shrink-0 font-mono text-[11px] tabular-nums text-shell-muted">
+          {count}
+        </span>
       )}
       {children}
     </div>

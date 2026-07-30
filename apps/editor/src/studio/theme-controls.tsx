@@ -295,7 +295,7 @@ function RowText({
   const labelClass = classes(
     ROW_LABEL,
     description !== undefined && "font-mono text-[11px] leading-4",
-    dim && "text-muted",
+    dim && "text-shell-muted",
   );
 
   return (
@@ -306,7 +306,7 @@ function RowText({
       {description === undefined ? null : onEdit ? (
         <button
           className={classes(
-            "truncate rounded-(--radius-shell-sm) text-left font-mono text-[10px] leading-4 text-muted",
+            "truncate rounded-(--radius-shell-sm) text-left font-mono text-[10px] leading-4 text-shell-muted",
             "group-hover/row:text-fg",
             FOCUS_OUTLINE,
           )}
@@ -317,7 +317,10 @@ function RowText({
           {description}
         </button>
       ) : (
-        <span className="truncate font-mono text-[10px] leading-4 text-muted" title={description}>
+        <span
+          className="truncate font-mono text-[10px] leading-4 text-shell-muted"
+          title={description}
+        >
           {description}
         </span>
       )}

@@ -450,7 +450,7 @@ export function EditorShell({
           {previewSectionGroups.map((group, groupIndex) => (
             <div key={group.label}>
               {groupIndex > 0 ? <hr className="my-2 h-px border-0 bg-fg/10" /> : null}
-              <p className="px-3 py-1 font-mono text-xs tracking-wide text-muted uppercase">
+              <p className="px-3 py-1 font-mono text-xs tracking-wide text-shell-muted uppercase">
                 {group.label}
               </p>
               {group.items.map((item) => {
@@ -461,7 +461,7 @@ export function EditorShell({
                     className={classes(
                       "flex h-8 w-full items-center rounded-(--radius-shell) px-3 text-left text-sm",
                       "focus-visible:outline-[1.5px] focus-visible:-outline-offset-1 focus-visible:outline-fg",
-                      section === item ? "bg-sunken text-fg" : "text-muted hover:bg-fg/5",
+                      section === item ? "bg-sunken text-fg" : "text-shell-muted hover:bg-fg/5",
                     )}
                     data-preview-index={itemIndex}
                     key={item}

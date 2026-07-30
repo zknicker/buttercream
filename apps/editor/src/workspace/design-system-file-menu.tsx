@@ -83,7 +83,7 @@ export function DesignSystemFileMenu({
         <span className="truncate text-sm font-medium">{name}</span>
         <HugeiconsIcon
           aria-hidden="true"
-          className="shrink-0 text-muted transition-transform duration-150 group-data-popup-open:rotate-180"
+          className="shrink-0 text-shell-muted transition-transform duration-150 group-data-popup-open:rotate-180"
           icon={ArrowDown01Icon}
           size={14}
           strokeWidth={2}

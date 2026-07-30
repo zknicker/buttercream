@@ -48,7 +48,7 @@ function Home() {
           <h1 className="mt-5 max-w-[24ch] font-display text-5xl tracking-tight text-balance text-fg sm:text-6xl lg:text-7xl">
             Components that <Swirled>taste</Swirled> like your brand.
           </h1>
-          <p className="mt-7 max-w-[56ch] text-lg text-pretty text-muted sm:text-base">
+          <p className="mt-7 max-w-[56ch] text-lg text-pretty text-shell-muted sm:text-base">
             Buttercream is a premium React component library and theme studio for design systems
             that feel unique, consistent, and unmistakably yours.
           </p>
@@ -79,7 +79,7 @@ function Home() {
           className="mx-auto w-full max-w-6xl px-6 pb-8 lg:px-10"
         >
           <h2
-            className="font-mono text-sm tracking-wide text-muted uppercase sm:text-xs"
+            className="font-mono text-sm tracking-wide text-shell-muted uppercase sm:text-xs"
             id="proof-heading"
           >
             Trusted by teams shipping fast
@@ -124,7 +124,7 @@ function InstallChip() {
       {command}
       <HugeiconsIcon
         aria-hidden="true"
-        className="shrink-0 text-muted"
+        className="shrink-0 text-shell-muted"
         icon={copied ? Tick02Icon : Copy01Icon}
         size={16}
         strokeWidth={2}

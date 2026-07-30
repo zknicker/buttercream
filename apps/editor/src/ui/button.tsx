@@ -34,7 +34,7 @@ export interface ButtonProps extends Omit<BaseButton.Props, "className"> {
 const VARIANTS: Record<ButtonVariant, string> = {
   danger: "bg-berry text-parchment hover:bg-berry/90 dark:text-ink",
   "danger-soft": "bg-berry/15 text-berry hover:bg-berry/25",
-  ghost: "text-muted hover:bg-fg/8 hover:text-fg",
+  ghost: "text-shell-muted hover:bg-fg/8 hover:text-fg",
   outline: "bg-raised text-fg ring-1 ring-fg/12 ring-inset hover:bg-sunken",
   primary: "bg-butter text-ink hover:bg-butter/88",
   secondary: "bg-sunken text-fg ring-1 ring-fg/8 ring-inset hover:bg-fg/8",

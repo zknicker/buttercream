@@ -32,10 +32,10 @@ const VARIANTS: Record<BadgeVariant, string> = {
    * Cut from the same grey a surface outlines itself in, for a tag that sits on an edge rather
    * than inside a fill. No ring: it IS the ring, so outlining it would draw the line twice.
    */
-  line: "bg-fg/10 text-muted",
+  line: "bg-fg/10 text-shell-muted",
   // Inverted chip: reads against the canvas it sits on, so both ends must flip.
   ink: "bg-fg text-canvas",
-  muted: "bg-sunken text-muted ring-1 ring-fg/8 ring-inset",
+  muted: "bg-sunken text-shell-muted ring-1 ring-fg/8 ring-inset",
   success: "bg-pistachio/25 text-crust",
 };
 
