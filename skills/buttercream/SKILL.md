@@ -75,6 +75,13 @@ export function Confirmation() {
 - Expect Base UI state attributes such as `data-disabled`.
 - Skip an interactive component when Buttercream does not export it. Do not substitute another
   primitive library without explicit project approval.
+- Lean on built-in derivation before wiring props manually. `Sidebar.MenuButton` derives its
+  collapsed-rail tooltip from the row's `Sidebar.MenuLabel` automatically — opening on the
+  sidebar's outward side and portalling into the sidebar's `portalContainer` — so plain rows
+  need no `tooltip` prop; pass a string to override the text or `false` to disable. Nested
+  rows use the same `Sidebar.MenuLabel` as top-level rows.
+- Slot components are often real primitives underneath and accept their props:
+  `Sidebar.MenuBadge` is a `Chip`, so `color="success"` gives the green "New" treatment.
 - Follow the icon family, treatment, package, and import pattern in the generated `DESIGN.md`.
   Do not mix icon families in one interface unless the guidance explicitly allows it.
 - Keep icon-only controls labeled and mark decorative icons as hidden from assistive technology.
@@ -150,6 +157,11 @@ Use unprefixed public BEM classes:
   letter-spacing: -0.02em;
 }
 ```
+
+Type scaling follows Tailwind's contract: the design system's font-size scale is baked into the
+`--text-*` theme variables, so `text-sm`, `text-base`, and friends move with the document's Font
+Size token — while bare, un-classed text stays at the browser default exactly as stock Tailwind
+leaves it. Size text with utilities; do not resize the root font.
 
 Prefix private implementation variables with `--bc-*`. Keep both light and dark theme sets complete.
 Do not add component-local arbitrary colors when a reusable semantic token is missing; add the token
