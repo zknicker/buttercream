@@ -22,6 +22,13 @@ export interface SegmentProps
   className?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
+  /**
+   * Whether items show their label: `true` always (the default), `false` never, or
+   * `"selected"` so only the chosen item spends the width — icons wait, the active view
+   * expands, and the label sweeps in on the pill's own clock. With `false` or `"selected"`,
+   * give every item an `aria-label`.
+   */
+  showLabels?: boolean | "selected";
   size?: SegmentSize;
   value?: string;
   variant?: SegmentVariant;
@@ -36,6 +43,7 @@ function SegmentRoot({
   className,
   defaultValue,
   onValueChange,
+  showLabels = true,
   size = "md",
   value,
   variant = "default",
@@ -122,6 +130,7 @@ function SegmentRoot({
           variant !== "default" && `segment--${variant}`,
           className,
         )}
+        data-labels={showLabels === true ? undefined : showLabels === false ? "never" : "selected"}
         data-slot="segment"
         onValueChange={(next) => {
           /*

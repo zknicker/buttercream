@@ -170,6 +170,44 @@
   .segment__item[data-pressed] + .segment__item .segment__separator {
     opacity: 0;
   }
+
+  /*
+   * Label-display modes. `data-labels="selected"` is the reference's icon-expand pattern:
+   * items pack to their content, icons wait, and only the chosen item carries its label.
+   * The label takes its space in one step — the row settles instantly and the pill glides
+   * over stable layout — then wipes in on the pill's own clock (same duration, same curve),
+   * so the reveal and the glide read as one gesture. clip-path keeps the reveal off the
+   * layout, so the glide's measurements stay exact.
+   */
+  .segment[data-labels] {
+    gap: calc(0.25rem * var(--spacing-scale));
+  }
+
+  .segment[data-labels] .segment__item {
+    width: auto;
+    flex: none;
+  }
+
+  .segment[data-labels] .segment__item > span:last-child {
+    display: none;
+  }
+
+  .segment[data-labels="selected"] .segment__item[data-pressed] > span:last-child {
+    display: inline;
+    animation: bc-segment-label-in 250ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+}
+
+@keyframes bc-segment-label-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -177,5 +215,9 @@
   .segment__indicator,
   .segment__separator {
     transition: none;
+  }
+
+  .segment[data-labels="selected"] .segment__item[data-pressed] > span:last-child {
+    animation: none;
   }
 }

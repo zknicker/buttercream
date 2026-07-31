@@ -30,6 +30,23 @@ describe("Segment", () => {
     expect([...markup.matchAll(/segment__separator/gu)]).toHaveLength(2);
   });
 
+  test("projects the label-display mode for the styles to read", () => {
+    const markup = renderToStaticMarkup(
+      <Segment defaultValue="home" showLabels="selected">
+        <Segment.Item aria-label="Home" value="home">
+          <svg aria-hidden="true" />
+          <span>Home</span>
+        </Segment.Item>
+        <Segment.Item aria-label="Inbox" value="inbox">
+          <svg aria-hidden="true" />
+          <span>Inbox</span>
+        </Segment.Item>
+      </Segment>,
+    );
+
+    expect(markup).toContain('data-labels="selected"');
+  });
+
   test("carries the ghost variant down to items", () => {
     const markup = renderToStaticMarkup(
       <Segment defaultValue="a" variant="ghost">
