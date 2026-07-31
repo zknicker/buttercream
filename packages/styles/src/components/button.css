@@ -99,6 +99,9 @@
   /* Shorter than md but the same label size, matching the reference. */
   .button--sm {
     height: calc(2rem * var(--spacing-scale));
+    /* Corners scale with the control: at this height the full pill radius reads as a stadium,
+       so small buttons step down a rung, as the reference's do. */
+    border-radius: var(--radius-xl);
     padding-inline: calc(0.75rem * var(--spacing-scale));
     font-size: var(--text-sm);
     line-height: calc(1.25rem * var(--font-size-scale) * var(--line-height) / 1.4);

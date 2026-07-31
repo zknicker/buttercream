@@ -1,6 +1,7 @@
 @layer components {
+  /* No display here: the trigger renders arbitrary elements — a Button keeps its inline-flex,
+     a bare button its UA default. Imposing one flattened flex triggers into stacked blocks. */
   .dropdown__trigger {
-    display: inline-block;
     outline: none;
     cursor: var(--cursor-interactive);
     transition:
@@ -8,7 +9,10 @@
       background-color 150ms ease;
   }
 
-  .dropdown__trigger:active {
+  /* The press squeeze holds while the menu is up, as the reference's does — the trigger reads
+     as held down for as long as its popup owns the pointer. */
+  .dropdown__trigger:active,
+  .dropdown__trigger[data-popup-open] {
     transform: scale(0.97);
   }
 
@@ -209,7 +213,8 @@
     transition: none;
   }
 
-  .dropdown__trigger:active {
+  .dropdown__trigger:active,
+  .dropdown__trigger[data-popup-open] {
     transform: none;
   }
 }

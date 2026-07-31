@@ -25,6 +25,10 @@
 
   .breadcrumbs__link {
     position: relative;
+    /* A crumb lays out its own content: authored icons sit on the text line, not above it. */
+    display: inline-flex;
+    align-items: center;
+    gap: calc(0.5rem * var(--spacing-scale));
     padding-inline: calc(0.125rem * var(--spacing-scale));
     border-radius: var(--radius-sm);
     color: var(--muted);
