@@ -46,6 +46,26 @@ describe("Sidebar", () => {
     expect(markup).toContain('data-variant="sidebar"');
   });
 
+  test("renders trailing text furniture through the chip slot", () => {
+    const markup = markupFor(
+      <Sidebar>
+        <Sidebar.Menu>
+          <Sidebar.MenuItem>
+            <Sidebar.MenuButton>
+              <Sidebar.MenuLabel>Flaky tests root cause</Sidebar.MenuLabel>
+              <Sidebar.MenuChip>10h</Sidebar.MenuChip>
+            </Sidebar.MenuButton>
+          </Sidebar.MenuItem>
+        </Sidebar.Menu>
+      </Sidebar>,
+    );
+
+    /* Bare caption text, unlike the badge's Chip: no chip classes, just the seated span. */
+    expect(markup).toContain('class="sidebar__menu-chip"');
+    expect(markup).toContain(">10h</span>");
+    expect(markup).not.toContain("sidebar__menu-chip chip");
+  });
+
   test("renders a menu entry as a link through the render prop", () => {
     const markup = markupFor(
       <Sidebar collapsible="none">
@@ -199,6 +219,32 @@ describe("Sidebar", () => {
 
     const subButton = markup.slice(markup.indexOf("sidebar__menu-sub-button"));
     expect(subButton).toContain('class="sidebar__menu-label"');
+  });
+
+  test("menus project the guide-line mode for the styles to read", () => {
+    const markup = markupFor(
+      <Sidebar>
+        <Sidebar.Content>
+          <Sidebar.Menu showGuideLines="hover">
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton>
+                <Sidebar.MenuLabel>Inbox</Sidebar.MenuLabel>
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+          </Sidebar.Menu>
+          <Sidebar.Menu>
+            <Sidebar.MenuItem>
+              <Sidebar.MenuButton>
+                <Sidebar.MenuLabel>Search</Sidebar.MenuLabel>
+              </Sidebar.MenuButton>
+            </Sidebar.MenuItem>
+          </Sidebar.Menu>
+        </Sidebar.Content>
+      </Sidebar>,
+    );
+
+    expect(markup).toContain('data-guide-lines="hover"');
+    expect(markup).toContain('data-guide-lines="always"');
   });
 
   test("collapsible none renders a static panel without the fixed container", () => {

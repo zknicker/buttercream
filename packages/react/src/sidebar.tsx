@@ -365,8 +365,27 @@ function SidebarGroupAction({ className, render, ...props }: RenderableButtonPro
   });
 }
 
-function SidebarMenu({ className, ...props }: ComponentPropsWithoutRef<"ul">): ReactElement {
-  return <ul className={classes("sidebar__menu", className)} data-slot="sidebar-menu" {...props} />;
+export interface SidebarMenuProps extends ComponentPropsWithoutRef<"ul"> {
+  /**
+   * Whether nested rows draw their guide line: `true` always (the default), `false` never,
+   * or `"hover"` to fade it in while the pointer is over the menu.
+   */
+  showGuideLines?: boolean | "hover";
+}
+
+function SidebarMenu({
+  className,
+  showGuideLines = true,
+  ...props
+}: SidebarMenuProps): ReactElement {
+  return (
+    <ul
+      className={classes("sidebar__menu", className)}
+      data-guide-lines={showGuideLines === true ? "always" : showGuideLines || "never"}
+      data-slot="sidebar-menu"
+      {...props}
+    />
+  );
 }
 
 function SidebarMenuItem({ className, ...props }: ComponentPropsWithoutRef<"li">): ReactElement {
@@ -516,6 +535,21 @@ function SidebarMenuBadge({
       className={classes("sidebar__menu-badge", className)}
       data-slot="sidebar-menu-badge"
       size="sm"
+      {...props}
+    />
+  );
+}
+
+/*
+ * Trailing furniture that is text, not a count: a timestamp, a shortcut hint. The badge is a
+ * real Chip for counts; the chip is bare caption text — muted and tabular so a column of them
+ * lines up down the rows, as the reference's chip slot does.
+ */
+function SidebarMenuChip({ className, ...props }: ComponentPropsWithoutRef<"span">): ReactElement {
+  return (
+    <span
+      className={classes("sidebar__menu-chip", className)}
+      data-slot="sidebar-menu-chip"
       {...props}
     />
   );
@@ -691,6 +725,7 @@ export const Sidebar = Object.assign(SidebarRoot, {
   MenuBadge: SidebarMenuBadge,
   MenuButton: SidebarMenuButton,
   MenuChevron: SidebarMenuChevron,
+  MenuChip: SidebarMenuChip,
   MenuCollapsible: SidebarMenuCollapsible,
   MenuCollapsibleContent: SidebarMenuCollapsibleContent,
   MenuCollapsibleTrigger: SidebarMenuCollapsibleTrigger,

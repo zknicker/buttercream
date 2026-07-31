@@ -164,6 +164,7 @@ export {
   type SidebarMenuActionProps,
   type SidebarMenuButtonProps,
   type SidebarMenuCollapsibleProps,
+  type SidebarMenuProps,
   type SidebarMenuSkeletonProps,
   type SidebarMenuSubButtonProps,
   type SidebarProps,

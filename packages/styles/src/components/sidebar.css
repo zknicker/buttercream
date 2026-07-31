@@ -20,10 +20,6 @@
     width: 100%;
   }
 
-  .sidebar-provider:has(.sidebar[data-variant="inset"]) {
-    background: var(--bc-sidebar-bg);
-  }
-
   .sidebar {
     display: none;
     color: var(--bc-sidebar-fg);
@@ -143,6 +139,29 @@
     background: var(--bc-sidebar-bg);
   }
 
+  /*
+   * The default panel is the page, not a card: it shares the app background and marks its
+   * content edge with a hairline, as the reference's does. Floating, inset, and the mobile
+   * drawer keep the lifted fill a detached panel needs.
+   */
+  .sidebar[data-variant="sidebar"] {
+    --bc-sidebar-bg: var(--background);
+  }
+
+  /* The inset panel is fully transparent — no fill, border, or shadow: the page shows
+     through the sidebar area and the raised content card carries the surface instead. */
+  .sidebar[data-variant="inset"] {
+    --bc-sidebar-bg: transparent;
+  }
+
+  .sidebar[data-variant="sidebar"][data-side="left"] .sidebar__inner {
+    box-shadow: inset calc(-1 * var(--border-width)) 0 0 var(--bc-sidebar-border);
+  }
+
+  .sidebar[data-variant="sidebar"][data-side="right"] .sidebar__inner {
+    box-shadow: inset var(--border-width) 0 0 var(--bc-sidebar-border);
+  }
+
   .sidebar[data-variant="floating"] .sidebar__inner {
     border: var(--border-width) solid var(--bc-sidebar-border);
     border-radius: var(--radius-lg);
@@ -212,7 +231,9 @@
   @media (min-width: 768px) {
     .sidebar-provider:has(.sidebar[data-variant="inset"]) .sidebar__inset {
       margin: 0.5rem;
+      border: var(--border-width) solid var(--border);
       border-radius: var(--radius-xl);
+      background: var(--surface);
       box-shadow: var(--shadow-surface);
     }
 
@@ -231,7 +252,8 @@
   .sidebar__footer {
     display: flex;
     flex-direction: column;
-    gap: calc(0.5rem * var(--spacing-scale));
+    /* A step roomier than the reference's 0.5rem — its header stack reads too tight. */
+    gap: calc(0.75rem * var(--spacing-scale));
   }
 
   .sidebar__footer {
@@ -240,7 +262,7 @@
 
   .sidebar__header {
     padding: calc(1rem * var(--spacing-scale)) calc(1rem * var(--spacing-scale))
-      calc(0.5rem * var(--spacing-scale));
+      calc(0.75rem * var(--spacing-scale));
   }
 
   .sidebar__footer {
@@ -252,11 +274,12 @@
      buttons out of it, so the collapsed rail returns to the row inset. */
   .sidebar[data-collapsible="icon"] .sidebar__header,
   .sidebar[data-collapsible="icon"] .sidebar__footer {
-    padding-inline: calc(0.375rem * var(--spacing-scale));
+    padding: calc(1rem * var(--spacing-scale)) calc(0.375rem * var(--spacing-scale));
   }
 
+  /* Spans the content's padded width, breathing a step above and below, as the reference's. */
   .sidebar__separator {
-    margin-inline: calc(0.5rem * var(--spacing-scale));
+    margin: calc(0.5rem * var(--spacing-scale)) 0;
   }
 
   .sidebar__content {
@@ -311,7 +334,9 @@
     position: absolute;
     /* Half the label's leftover height: centred on the label line. */
     top: 0.25rem;
-    right: calc(0.5rem * var(--spacing-scale));
+    /* Nearly flush with the group's edge, so the glyph — not the button's larger hit area —
+       lands on the trailing furniture column where badges and timestamps end. */
+    right: calc(0.125rem * var(--spacing-scale));
     display: flex;
     width: 1.25rem;
     aspect-ratio: 1;
@@ -440,11 +465,15 @@
     padding: 0;
   }
 
-  /* The avatar survives the collapse as the row's icon; everything textual folds away. */
+  /* The avatar survives the collapse as the row's icon; everything textual folds away.
+     Important, deliberately: rows are authored with display utilities (flex, grid) that sit
+     in a later cascade layer, and the collapse state must defeat static layout classes. */
   .sidebar[data-collapsible="icon"]
     .sidebar__menu-button
     > :not(svg, .sidebar__menu-icon, .avatar) {
-    display: none;
+    /* biome-ignore lint/complexity/noImportantStyles: collapse-state hiding must beat the
+       display utilities (flex, grid) rows are authored with, which live in a later layer. */
+    display: none !important;
   }
 
   .sidebar[data-collapsible="icon"] .sidebar__menu-button:has(> .avatar) {
@@ -529,6 +558,23 @@
     display: none;
   }
 
+  /* Caption-sized text furniture — a timestamp, a shortcut hint — seated at the row's end
+     like the badge. Tabular numerals keep a column of times aligned down the rows. */
+  .sidebar__menu-chip {
+    flex: none;
+    margin-inline-start: auto;
+    color: var(--muted);
+    font-size: calc(0.625rem * var(--font-size-scale));
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .sidebar[data-collapsible="icon"] .sidebar__menu-chip {
+    display: none;
+  }
+
   .sidebar__menu-skeleton {
     display: flex;
     height: 2rem;
@@ -604,6 +650,21 @@
     display: none;
   }
 
+  /* Guide-line modes, as the reference's: always (default), never, or fading in on menu
+     hover. The border keeps its width in every mode so nothing reflows — only the ink moves. */
+  .sidebar__menu[data-guide-lines="never"] .sidebar__menu-sub {
+    border-inline-start-color: transparent;
+  }
+
+  .sidebar__menu[data-guide-lines="hover"] .sidebar__menu-sub {
+    border-inline-start-color: transparent;
+    transition: border-color 150ms ease;
+  }
+
+  .sidebar__menu[data-guide-lines="hover"]:hover .sidebar__menu-sub {
+    border-inline-start-color: var(--bc-sidebar-border);
+  }
+
   .sidebar__menu-sub-item {
     position: relative;
   }
@@ -665,6 +726,12 @@
    * padding so in-flow furniture — badges, timestamps — slides aside instead of being
    * painted over.
    */
+  /* The glyph's filled edge shows the panel it controls. A right-hand sidebar mirrors it —
+     via the provider, because triggers usually live in the main area, not the sidebar. */
+  .sidebar-provider:has(.sidebar[data-side="right"]) .sidebar__trigger svg {
+    scale: -1 1;
+  }
+
   @media (hover: hover) {
     .sidebar__menu-action[data-show-on-hover] {
       opacity: 0;
