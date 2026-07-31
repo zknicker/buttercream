@@ -82,6 +82,8 @@ export function Confirmation() {
   rows use the same `Sidebar.MenuLabel` as top-level rows.
 - Slot components are often real primitives underneath and accept their props:
   `Sidebar.MenuBadge` is a `Chip`, so `color="success"` gives the green "New" treatment.
+  For trailing text that is not a count — timestamps, shortcut hints — use `Sidebar.MenuChip`:
+  bare muted caption text with tabular numerals, no pill.
 - Follow the icon family, treatment, package, and import pattern in the generated `DESIGN.md`.
   Do not mix icon families in one interface unless the guidance explicitly allows it.
 - Keep icon-only controls labeled and mark decorative icons as hidden from assistive technology.
