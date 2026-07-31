@@ -29,6 +29,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
   const [statesFrame, setStatesFrame] = useState<HTMLDivElement | null>(null);
   const [complexFrame, setComplexFrame] = useState<HTMLDivElement | null>(null);
   const [meetingFrame, setMeetingFrame] = useState<HTMLDivElement | null>(null);
+  const [agentFrame, setAgentFrame] = useState<HTMLDivElement | null>(null);
   const [docsFrame, setDocsFrame] = useState<HTMLDivElement | null>(null);
   const [railFrame, setRailFrame] = useState<HTMLDivElement | null>(null);
   const [rightFrame, setRightFrame] = useState<HTMLDivElement | null>(null);
@@ -195,7 +196,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
               <Sidebar.Rail />
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
                 <Sidebar.Trigger />
                 <span className="flex">{icons.home}</span>
                 <span className="truncate font-medium">Dashboard</span>
@@ -210,63 +211,78 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
 
       <Specimen
         className="specimen--stack specimen--wide"
-        label="States, action menu, hover-revealed actions, and loading"
+        label="Mail — states, a hover action menu, badges, and loading"
       >
         <div className="sidebar-demo sidebar-demo--app" ref={setStatesFrame}>
           <Sidebar.Provider className="sidebar-demo__provider">
-            <Sidebar collapsible="none">
+            <Sidebar collapsible="icon" portalContainer={statesFrame}>
+              <Sidebar.Header>
+                <Sidebar.Menu>
+                  <Sidebar.MenuItem>
+                    <Sidebar.MenuButton>
+                      <Sidebar.MenuIcon>
+                        <span className="flex size-6 flex-none items-center justify-center rounded-md bg-accent text-sm font-bold text-accent-foreground">
+                          M
+                        </span>
+                      </Sidebar.MenuIcon>
+                      <Sidebar.MenuLabel>Acme Mail</Sidebar.MenuLabel>
+                    </Sidebar.MenuButton>
+                  </Sidebar.MenuItem>
+                </Sidebar.Menu>
+              </Sidebar.Header>
+              {/* Section-level, so it runs the sidebar's full width; inside Content it would
+                  pick up the content padding instead. */}
+              <Sidebar.Separator />
               <Sidebar.Content>
                 <Sidebar.Group>
-                  <Sidebar.GroupLabel>States</Sidebar.GroupLabel>
+                  <Sidebar.GroupLabel>Mailboxes</Sidebar.GroupLabel>
                   <Sidebar.GroupContent>
                     <Sidebar.Menu>
                       <Sidebar.MenuItem>
                         <Sidebar.MenuButton isActive>
-                          <Sidebar.MenuIcon>{icons.check}</Sidebar.MenuIcon>
-                          <Sidebar.MenuLabel>Active</Sidebar.MenuLabel>
-                        </Sidebar.MenuButton>
-                      </Sidebar.MenuItem>
-                      <Sidebar.MenuItem>
-                        <Sidebar.MenuButton disabled>
-                          <Sidebar.MenuIcon>{icons.close}</Sidebar.MenuIcon>
-                          <Sidebar.MenuLabel>Disabled</Sidebar.MenuLabel>
+                          <Sidebar.MenuIcon>{icons.mail}</Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Inbox</Sidebar.MenuLabel>
+                          <Sidebar.MenuBadge>24</Sidebar.MenuBadge>
                         </Sidebar.MenuButton>
                       </Sidebar.MenuItem>
                       <Sidebar.MenuItem>
                         <Sidebar.MenuButton>
-                          <Sidebar.MenuIcon>{icons.notification}</Sidebar.MenuIcon>
-                          <Sidebar.MenuLabel>With action menu</Sidebar.MenuLabel>
+                          <Sidebar.MenuIcon>{icons.file}</Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Drafts</Sidebar.MenuLabel>
+                          <Sidebar.MenuBadge>3</Sidebar.MenuBadge>
+                        </Sidebar.MenuButton>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>{icons.archive}</Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Archive</Sidebar.MenuLabel>
                         </Sidebar.MenuButton>
                         <Dropdown>
                           <Dropdown.Trigger
                             render={
-                              <Sidebar.MenuAction aria-label="Item options">
+                              <Sidebar.MenuAction aria-label="Archive options" showOnHover>
                                 {icons.moreVertical}
                               </Sidebar.MenuAction>
                             }
                           />
                           <Dropdown.Content container={statesFrame}>
-                            <Dropdown.Item>{icons.copy}Duplicate</Dropdown.Item>
-                            <Dropdown.Item>{icons.archive}Archive</Dropdown.Item>
-                            <Dropdown.Separator />
-                            <Dropdown.Item danger>{icons.delete}Delete</Dropdown.Item>
+                            <Dropdown.Item>{icons.folderOpen}Open</Dropdown.Item>
+                            <Dropdown.Item>{icons.check}Mark all read</Dropdown.Item>
+                            <Dropdown.Item danger>{icons.delete}Empty archive</Dropdown.Item>
                           </Dropdown.Content>
                         </Dropdown>
                       </Sidebar.MenuItem>
                       <Sidebar.MenuItem>
-                        <Sidebar.MenuButton>
-                          <Sidebar.MenuIcon>{icons.box}</Sidebar.MenuIcon>
-                          <Sidebar.MenuLabel>Action on hover</Sidebar.MenuLabel>
+                        <Sidebar.MenuButton disabled>
+                          <Sidebar.MenuIcon>{icons.warning}</Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Spam</Sidebar.MenuLabel>
                         </Sidebar.MenuButton>
-                        <Sidebar.MenuAction aria-label="Item options" showOnHover>
-                          {icons.moreVertical}
-                        </Sidebar.MenuAction>
                       </Sidebar.MenuItem>
                       <Sidebar.MenuItem>
                         <Sidebar.MenuButton>
-                          <Sidebar.MenuIcon>{icons.globe}</Sidebar.MenuIcon>
+                          <Sidebar.MenuIcon>{icons.tag}</Sidebar.MenuIcon>
                           <Sidebar.MenuLabel>
-                            A very long navigation label that truncates
+                            Quarterly planning and strategy updates
                           </Sidebar.MenuLabel>
                           <Sidebar.MenuBadge>99+</Sidebar.MenuBadge>
                         </Sidebar.MenuButton>
@@ -274,29 +290,29 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                     </Sidebar.Menu>
                   </Sidebar.GroupContent>
                 </Sidebar.Group>
-                <Sidebar.Separator />
                 <Sidebar.Group>
-                  <Sidebar.GroupLabel>Documentation</Sidebar.GroupLabel>
+                  <Sidebar.GroupLabel>Spaces</Sidebar.GroupLabel>
                   <Sidebar.GroupContent>
                     <Sidebar.Menu>
                       <Sidebar.MenuItem>
                         <Sidebar.MenuButton>
-                          <Sidebar.MenuLabel>Getting started</Sidebar.MenuLabel>
+                          <Sidebar.MenuIcon>{icons.palette}</Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Design system</Sidebar.MenuLabel>
                         </Sidebar.MenuButton>
                         <Sidebar.MenuSub>
                           <Sidebar.MenuSubItem>
                             <Sidebar.MenuSubButton>
-                              <Sidebar.MenuLabel>Installation</Sidebar.MenuLabel>
-                            </Sidebar.MenuSubButton>
-                          </Sidebar.MenuSubItem>
-                          <Sidebar.MenuSubItem>
-                            <Sidebar.MenuSubButton isActive>
-                              <Sidebar.MenuLabel>Theming</Sidebar.MenuLabel>
+                              <Sidebar.MenuLabel>Tokens</Sidebar.MenuLabel>
                             </Sidebar.MenuSubButton>
                           </Sidebar.MenuSubItem>
                           <Sidebar.MenuSubItem>
                             <Sidebar.MenuSubButton>
-                              <Sidebar.MenuLabel>Exports</Sidebar.MenuLabel>
+                              <Sidebar.MenuLabel>Components</Sidebar.MenuLabel>
+                            </Sidebar.MenuSubButton>
+                          </Sidebar.MenuSubItem>
+                          <Sidebar.MenuSubItem>
+                            <Sidebar.MenuSubButton>
+                              <Sidebar.MenuLabel>Guides</Sidebar.MenuLabel>
                             </Sidebar.MenuSubButton>
                           </Sidebar.MenuSubItem>
                         </Sidebar.MenuSub>
@@ -304,9 +320,8 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                     </Sidebar.Menu>
                   </Sidebar.GroupContent>
                 </Sidebar.Group>
-                <Sidebar.Separator />
                 <Sidebar.Group>
-                  <Sidebar.GroupLabel>Loading</Sidebar.GroupLabel>
+                  <Sidebar.GroupLabel>Shared inboxes</Sidebar.GroupLabel>
                   <Sidebar.GroupContent>
                     <Sidebar.Menu>
                       <Sidebar.MenuItem>
@@ -319,8 +334,19 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                   </Sidebar.GroupContent>
                 </Sidebar.Group>
               </Sidebar.Content>
+              <Sidebar.Rail />
             </Sidebar>
-            <Sidebar.Inset />
+            <Sidebar.Inset>
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
+                <Sidebar.Trigger />
+                <span className="flex">{icons.mail}</span>
+                <span className="truncate font-medium">Inbox</span>
+              </div>
+              <p className="p-6 text-base text-muted">
+                Row states in one column — an active mailbox, a disabled one, a hover action menu,
+                an overflowing badge, and a section that is still loading.
+              </p>
+            </Sidebar.Inset>
           </Sidebar.Provider>
         </div>
       </Specimen>
@@ -329,27 +355,36 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
         className="specimen--stack specimen--wide"
         label="Complex — compact workspace with a segment header and utility footer"
       >
-        <div className="sidebar-demo sidebar-demo--app [--spacing-scale:0.8]" ref={setComplexFrame}>
+        <div className="sidebar-demo sidebar-demo--app" ref={setComplexFrame}>
           <Sidebar.Provider className="sidebar-demo__provider">
-            <Sidebar collapsible="icon" portalContainer={complexFrame}>
+            {/* The density override compacts the panel alone, as the reference's does: the main
+                area keeps the app's scale, and portalled popups escape the override with it. */}
+            <Sidebar
+              className="[--spacing-scale:0.8]"
+              collapsible="icon"
+              portalContainer={complexFrame}
+            >
               <Sidebar.Header>
-                <div className="flex items-center gap-2 p-1">
+                {/* Collapsed, the rail keeps only the avatar — name, compose, and the
+                    segment fold away with the state, as the reference's do. */}
+                <div className="flex items-center gap-2 p-1 in-data-[state=collapsed]:justify-center in-data-[state=collapsed]:p-0">
                   <Avatar color="warning" shape="rounded" size="sm" variant="soft">
                     <Avatar.Fallback>A</Avatar.Fallback>
                   </Avatar>
-                  <span className="min-w-0 flex-1 truncate text-sm font-medium">Acme Labs</span>
+                  <span className="min-w-0 flex-1 truncate text-sm font-medium in-data-[state=collapsed]:hidden">
+                    Acme Labs
+                  </span>
                   <Dropdown>
                     <Dropdown.Trigger
                       render={
-                        <Button
+                        <button
                           aria-label="Compose"
-                          className="gap-0.5 [&>svg:last-child]:size-3"
-                          size="sm"
-                          variant="ghost"
+                          className="flex items-center gap-0.5 rounded-md p-1 hover:bg-default in-data-[state=collapsed]:hidden [&_svg]:size-4"
+                          type="button"
                         >
                           {icons.edit}
                           {icons.chevronDown}
-                        </Button>
+                        </button>
                       }
                     />
                     <Dropdown.Content container={complexFrame}>
@@ -362,8 +397,9 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                 {/* The reference's icon-expand segment: the selected view carries its label,
                     the rest wait as icons. */}
                 <Segment
-                  className="segment-expand-demo"
+                  className="in-data-[state=collapsed]:hidden"
                   defaultValue="home"
+                  showLabels="selected"
                   size="sm"
                   variant="ghost"
                 >
@@ -458,7 +494,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                         </Sidebar.MenuButton>
                       </Sidebar.MenuItem>
                       <Sidebar.MenuItem>
-                        <Sidebar.MenuButton className="text-muted">
+                        <Sidebar.MenuButton>
                           <Sidebar.MenuIcon>{icons.add}</Sidebar.MenuIcon>
                           <Sidebar.MenuLabel>Add new</Sidebar.MenuLabel>
                         </Sidebar.MenuButton>
@@ -735,6 +771,8 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                   </Sidebar.GroupContent>
                 </Sidebar.Group>
               </Sidebar.Content>
+              {/* Section-level, so it spans the sidebar's full width. */}
+              <Sidebar.Separator />
               <Sidebar.Footer>
                 <Sidebar.Menu>
                   <Sidebar.MenuItem>
@@ -768,21 +806,19 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                     </Sidebar.MenuButton>
                   </Sidebar.MenuItem>
                 </Sidebar.Menu>
-                <div className="flex items-center gap-2">
-                  <Button className="flex-1 justify-between" size="sm" variant="tertiary">
+                <div className="flex items-center justify-center gap-2 px-2 py-2">
+                  <Button className="flex-1" variant="tertiary">
                     {icons.sparkle} New chat
-                    <Kbd keys="command" variant="light">
-                      N
-                    </Kbd>
+                    <Kbd keys="command">N</Kbd>
                   </Button>
-                  <Button aria-label="Quick note" iconOnly size="sm" variant="tertiary">
+                  <Button aria-label="Quick note" iconOnly variant="tertiary">
                     {icons.edit}
                   </Button>
                 </div>
               </Sidebar.Footer>
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
                 <Sidebar.Trigger />
                 <span className="flex">{icons.chart}</span>
                 <span className="truncate font-medium">Roadmap</span>
@@ -803,18 +839,16 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
         <div className="sidebar-demo sidebar-demo--app" ref={setMeetingFrame}>
           <Sidebar.Provider className="sidebar-demo__provider">
             <Sidebar collapsible="offcanvas" portalContainer={meetingFrame}>
-              <Sidebar.Header>
-                <Button className="justify-start" size="sm" variant="outline">
-                  {icons.search}
-                  Search
-                  <Kbd className="ms-auto" keys="command" variant="light">
-                    K
-                  </Kbd>
-                </Button>
-              </Sidebar.Header>
               <Sidebar.Content>
                 <Sidebar.Group>
                   <Sidebar.GroupContent>
+                    <Button className="mt-3 mb-2 justify-start" fullWidth variant="outline">
+                      {icons.search}
+                      Search
+                      <Kbd className="ms-auto" keys="command" variant="light">
+                        K
+                      </Kbd>
+                    </Button>
                     <Sidebar.Menu>
                       <Sidebar.MenuItem>
                         <Sidebar.MenuButton isActive>
@@ -906,7 +940,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                         </Sidebar.MenuButton>
                       </Sidebar.MenuItem>
                       <Sidebar.MenuItem>
-                        <Sidebar.MenuButton className="text-muted">
+                        <Sidebar.MenuButton>
                           <Sidebar.MenuIcon>{icons.folderAdd}</Sidebar.MenuIcon>
                           <Sidebar.MenuLabel>Add folder</Sidebar.MenuLabel>
                         </Sidebar.MenuButton>
@@ -931,24 +965,63 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                 <Dropdown>
                   <Dropdown.Trigger
                     render={
-                      <Sidebar.MenuButton>
-                        <Sidebar.MenuIcon>{icons.code}</Sidebar.MenuIcon>
-                        <Sidebar.MenuLabel>Sarah</Sidebar.MenuLabel>
-                        {icons.unfold}
-                      </Sidebar.MenuButton>
+                      <button
+                        className="flex w-full items-center gap-2.5 rounded-xl px-1.5 py-1.5 text-left hover:bg-default"
+                        type="button"
+                      >
+                        <span className="flex size-6 flex-none items-center justify-center rounded-lg bg-foreground text-background [&>svg]:size-3.5">
+                          {icons.code}
+                        </span>
+                        <span className="text-sm font-medium">Sarah</span>
+                        <span className="flex text-muted [&>svg]:size-3.5">{icons.unfold}</span>
+                      </button>
                     }
                   />
                   <Dropdown.Content container={meetingFrame}>
-                    <Dropdown.Item>{icons.check}Sarah's notes</Dropdown.Item>
-                    <Dropdown.Item>{icons.users}Acme team</Dropdown.Item>
+                    <div className="flex items-center gap-2.5 px-2 py-1.5">
+                      <span className="flex size-8 flex-none items-center justify-center rounded-lg bg-foreground text-background [&>svg]:size-4">
+                        {icons.code}
+                      </span>
+                      <span className="grid gap-0.5">
+                        <span className="text-sm font-medium">Sarah</span>
+                        <span className="text-xs text-muted">1 member</span>
+                      </span>
+                    </div>
+                    <div className="px-2 pb-1.5">
+                      <Button className="w-full" size="sm" variant="tertiary">
+                        {icons.users}
+                        Invite teammates
+                      </Button>
+                    </div>
+                    <Dropdown.Item>
+                      sarah@acme.com
+                      <span className="ms-auto flex [&>svg]:size-3.5">{icons.refresh}</span>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <span className="flex size-5 flex-none items-center justify-center rounded bg-foreground text-background [&>svg]:size-3">
+                        {icons.code}
+                      </span>
+                      Sarah
+                      <span className="ms-auto flex [&>svg]:size-4">{icons.checkmark}</span>
+                    </Dropdown.Item>
+                    <Dropdown.Item>{icons.add}Add workspace</Dropdown.Item>
                     <Dropdown.Separator />
-                    <Dropdown.Item>{icons.settings}Workspace settings</Dropdown.Item>
+                    <Dropdown.Item>{icons.grid}Manage templates</Dropdown.Item>
+                    <Dropdown.Item>{icons.phone}Get app for iPhone</Dropdown.Item>
+                    <Dropdown.Item>{icons.help}Help Center</Dropdown.Item>
+                    <Dropdown.Item>
+                      {icons.settings}
+                      Settings
+                      <Kbd className="ms-auto" keys="command" variant="light">
+                        ,
+                      </Kbd>
+                    </Dropdown.Item>
                   </Dropdown.Content>
                 </Dropdown>
               </Sidebar.Footer>
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
                 <Sidebar.Trigger />
                 <span className="flex">{icons.home}</span>
                 <span className="truncate font-medium">Home</span>
@@ -956,6 +1029,452 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
               <p className="p-6 text-base text-muted">
                 Meeting notes sidebar with search, spaces, and a workspace switcher. Offcanvas mode
                 collapses the panel fully away, so the trigger is the only way back in.
+              </p>
+            </Sidebar.Inset>
+          </Sidebar.Provider>
+        </div>
+      </Specimen>
+
+      <Specimen
+        className="specimen--stack specimen--wide"
+        label="Agent workspace — tasks grouped by repository, status icons, and a profile menu"
+      >
+        <div className="sidebar-demo sidebar-demo--app" ref={setAgentFrame}>
+          <Sidebar.Provider className="sidebar-demo__provider">
+            <Sidebar
+              className="[--spacing-scale:0.8]"
+              collapsible="offcanvas"
+              portalContainer={agentFrame}
+            >
+              <Sidebar.Header>
+                <Sidebar.Menu>
+                  <Sidebar.MenuItem>
+                    <Sidebar.MenuButton>
+                      <Sidebar.MenuIcon>{icons.terminal}</Sidebar.MenuIcon>
+                      <Sidebar.MenuLabel>New Agent</Sidebar.MenuLabel>
+                      <Kbd className="ms-auto" keys="command" variant="light">
+                        N
+                      </Kbd>
+                    </Sidebar.MenuButton>
+                  </Sidebar.MenuItem>
+                  <Sidebar.MenuItem>
+                    <Sidebar.MenuButton isActive>
+                      <Sidebar.MenuIcon>{icons.grid}</Sidebar.MenuIcon>
+                      <Sidebar.MenuLabel>Marketplace</Sidebar.MenuLabel>
+                    </Sidebar.MenuButton>
+                  </Sidebar.MenuItem>
+                </Sidebar.Menu>
+              </Sidebar.Header>
+              <Sidebar.Content>
+                <Sidebar.Group>
+                  <Sidebar.GroupLabel>acme/platform</Sidebar.GroupLabel>
+                  <Sidebar.GroupAction aria-label="New task in acme/platform">
+                    {icons.add}
+                  </Sidebar.GroupAction>
+                  <Sidebar.GroupContent>
+                    <Sidebar.Menu>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="flex text-accent">{icons.workflow}</span>
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>User naming preference refactor</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>now</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Agents sidebar keyboard experience</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>12m</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Glass sidebar group by none option</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>33m</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="flex text-purple-500">{icons.bot}</span>
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Cloud agent error message retry</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>1h</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="flex text-accent">{icons.workflow}</span>
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>UseApplicationProperty migration</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Glass test timing stabilization</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Flaky tests root cause</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>10h</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                    </Sidebar.Menu>
+                  </Sidebar.GroupContent>
+                </Sidebar.Group>
+                <Sidebar.Group>
+                  <Sidebar.GroupLabel>acme/landing</Sidebar.GroupLabel>
+                  <Sidebar.GroupAction aria-label="New task in acme/landing">
+                    {icons.add}
+                  </Sidebar.GroupAction>
+                  <Sidebar.GroupContent>
+                    <Sidebar.Menu>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="flex text-purple-500">{icons.bot}</span>
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Marketing pages responsiveness</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>2h</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="flex text-purple-500">{icons.bot}</span>
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>
+                            Git &amp; checkpoints automatic commits
+                          </Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>3h</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Local server update process</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>
+                            Performance audit for redesigned pages
+                          </Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>1d</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Localized page SEO</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                    </Sidebar.Menu>
+                  </Sidebar.GroupContent>
+                </Sidebar.Group>
+                <Sidebar.Group>
+                  <Sidebar.GroupLabel>acme/backoffice</Sidebar.GroupLabel>
+                  <Sidebar.GroupAction aria-label="New task in acme/backoffice">
+                    {icons.add}
+                  </Sidebar.GroupAction>
+                  <Sidebar.GroupContent>
+                    <Sidebar.Menu>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="flex text-accent">{icons.workflow}</span>
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>
+                            New page for natural language filters
+                          </Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>5h</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Background worker retry handling</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>
+                            Admin-only metric strip for incoming orders
+                          </Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                    </Sidebar.Menu>
+                  </Sidebar.GroupContent>
+                </Sidebar.Group>
+                <Sidebar.Group>
+                  <Sidebar.GroupLabel>tools/plugins</Sidebar.GroupLabel>
+                  <Sidebar.GroupAction aria-label="New task in tools/plugins">
+                    {icons.add}
+                  </Sidebar.GroupAction>
+                  <Sidebar.GroupContent>
+                    <Sidebar.Menu>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Plugin schema verification</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>2d</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                    </Sidebar.Menu>
+                  </Sidebar.GroupContent>
+                </Sidebar.Group>
+                <Sidebar.Group>
+                  <Sidebar.GroupLabel>compass</Sidebar.GroupLabel>
+                  <Sidebar.GroupAction aria-label="New task in compass">
+                    {icons.add}
+                  </Sidebar.GroupAction>
+                  <Sidebar.GroupContent>
+                    <Sidebar.Menu>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Light mode settings</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>
+                            <span className="size-1.5 rounded-full bg-muted" />
+                          </Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>MCP server setup</Sidebar.MenuLabel>
+                          <Sidebar.MenuChip>4h</Sidebar.MenuChip>
+                        </Sidebar.MenuButton>
+                        <Sidebar.MenuAction aria-label="Archive task" showOnHover>
+                          {icons.archive}
+                        </Sidebar.MenuAction>
+                        <Sidebar.MenuAction aria-label="Delete task" showOnHover>
+                          {icons.delete}
+                        </Sidebar.MenuAction>
+                      </Sidebar.MenuItem>
+                    </Sidebar.Menu>
+                  </Sidebar.GroupContent>
+                </Sidebar.Group>
+                <Sidebar.Group>
+                  <Sidebar.GroupContent>
+                    <Sidebar.Menu>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>{icons.more}</Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>More</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                      </Sidebar.MenuItem>
+                      <Sidebar.MenuItem>
+                        <Sidebar.MenuButton>
+                          <Sidebar.MenuIcon>{icons.externalLink}</Sidebar.MenuIcon>
+                          <Sidebar.MenuLabel>Open Workspace</Sidebar.MenuLabel>
+                        </Sidebar.MenuButton>
+                      </Sidebar.MenuItem>
+                    </Sidebar.Menu>
+                  </Sidebar.GroupContent>
+                </Sidebar.Group>
+              </Sidebar.Content>
+              <Sidebar.Footer>
+                <Dropdown>
+                  <Dropdown.Trigger
+                    render={
+                      <button
+                        className="flex w-full items-center gap-2 rounded-xl p-1.5 text-left hover:bg-default"
+                        type="button"
+                      >
+                        <Avatar color="accent" shape="circle" size="sm" variant="soft">
+                          <Avatar.Fallback>AC</Avatar.Fallback>
+                        </Avatar>
+                        <span className="grid min-w-0 gap-0.5">
+                          <span className="truncate text-sm font-medium leading-none">
+                            Alex Chen
+                          </span>
+                          <span className="truncate text-xs leading-none text-muted">
+                            Acme Labs
+                          </span>
+                        </span>
+                        <span className="ms-auto flex size-6 items-center justify-center text-muted [&>svg]:size-4">
+                          {icons.settings}
+                        </span>
+                      </button>
+                    }
+                  />
+                  <Dropdown.Content container={agentFrame}>
+                    <div className="flex items-center gap-2 px-2 py-1.5">
+                      <Avatar color="accent" shape="circle" size="sm" variant="soft">
+                        <Avatar.Fallback>AC</Avatar.Fallback>
+                      </Avatar>
+                      <span className="grid gap-0.5">
+                        <span className="text-sm font-medium">Alex Chen</span>
+                        <span className="text-xs text-muted">alex@acme.com</span>
+                      </span>
+                    </div>
+                    <Dropdown.Item>Profile</Dropdown.Item>
+                    <Dropdown.Item>
+                      Settings
+                      <span className="ms-auto flex text-muted [&>svg]:size-3.5">
+                        {icons.settings}
+                      </span>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      Create Team
+                      <span className="ms-auto flex text-muted [&>svg]:size-3.5">
+                        {icons.users}
+                      </span>
+                    </Dropdown.Item>
+                    <Dropdown.Item danger>
+                      Log Out
+                      <span className="ms-auto flex [&>svg]:size-3.5">{icons.logout}</span>
+                    </Dropdown.Item>
+                  </Dropdown.Content>
+                </Dropdown>
+              </Sidebar.Footer>
+            </Sidebar>
+            <Sidebar.Inset>
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
+                <Sidebar.Trigger />
+                <Breadcrumbs>
+                  <Breadcrumbs.Item current href="#acme-platform">
+                    {icons.code}
+                    acme/platform
+                  </Breadcrumbs.Item>
+                </Breadcrumbs>
+              </div>
+              <p className="p-6 text-base text-muted">
+                Workspace sidebar with agent tasks grouped by repository. Mirrors the pattern used
+                by AI coding tools.
               </p>
             </Sidebar.Inset>
           </Sidebar.Provider>
@@ -1041,7 +1560,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
               </Sidebar.Content>
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
                 <Sidebar.Trigger />
                 <Breadcrumbs>
                   <Breadcrumbs.Item href="#build">
@@ -1208,7 +1727,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
               </Sidebar.Content>
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
                 <Sidebar.Trigger />
                 <Breadcrumbs>
                   <Breadcrumbs.Item href="#build">Build Your Application</Breadcrumbs.Item>
@@ -1295,7 +1814,7 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
               <Sidebar.Rail />
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
                 <Sidebar.Trigger />
                 <span className="flex">{icons.home}</span>
                 <span className="truncate font-medium">Dashboard</span>
@@ -1434,6 +1953,8 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
                   </Sidebar.GroupContent>
                 </Sidebar.Group>
               </Sidebar.Content>
+              {/* Section-level, so it spans the sidebar's full width. */}
+              <Sidebar.Separator />
               <Sidebar.Footer>
                 <Sidebar.Menu>
                   <Sidebar.MenuItem>
@@ -1453,10 +1974,10 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
               <Sidebar.Rail />
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
-                <Sidebar.Trigger />
+              <div className="flex min-h-16 items-center gap-3 p-4 text-base">
                 <span className="flex">{icons.home}</span>
                 <span className="truncate font-medium">Dashboard</span>
+                <Sidebar.Trigger className="ms-auto" />
               </div>
               <p className="p-6 text-base text-muted">
                 Main content area with the sidebar attached to the right.
@@ -1473,24 +1994,12 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
         <div className="sidebar-demo sidebar-demo--app" ref={setIconFrame}>
           <Sidebar.Provider className="sidebar-demo__provider" defaultOpen={false}>
             <Sidebar collapsible="icon" portalContainer={iconFrame}>
-              <Sidebar.Header>
-                <Sidebar.Menu>
-                  <Sidebar.MenuItem>
-                    <Sidebar.MenuButton>
-                      <Avatar color="accent" shape="circle" size="sm" variant="soft">
-                        <Avatar.Fallback>KM</Avatar.Fallback>
-                      </Avatar>
-                      <span className="grid min-w-0 flex-1 gap-0.5 text-left">
-                        <span className="truncate text-sm font-semibold">Kate Moore</span>
-                        <span className="truncate text-xs font-normal text-muted">
-                          kate@acme.com
-                        </span>
-                      </span>
-                    </Sidebar.MenuButton>
-                  </Sidebar.MenuItem>
-                </Sidebar.Menu>
+              <Sidebar.Header className="items-center">
+                <Avatar color="accent" shape="circle" size="sm" variant="soft">
+                  <Avatar.Fallback>KM</Avatar.Fallback>
+                </Avatar>
               </Sidebar.Header>
-              <Sidebar.Content>
+              <Sidebar.Content className="justify-center">
                 <Sidebar.Group>
                   <Sidebar.GroupContent>
                     <Sidebar.Menu>
@@ -1546,12 +2055,12 @@ export function SidebarPreview({ icons }: { icons: PreviewIconElements }): React
               </Sidebar.Footer>
             </Sidebar>
             <Sidebar.Inset>
-              <div className="flex items-center gap-3 p-4 text-base">
-                <span className="truncate font-medium">Dashboard</span>
+              <div className="p-6">
+                <p className="text-base font-medium">Dashboard</p>
+                <p className="mt-1 text-base text-muted">
+                  Icon-only sidebar that is always collapsed.
+                </p>
               </div>
-              <p className="p-6 text-base text-muted">
-                Icon-only sidebar that is always collapsed.
-              </p>
             </Sidebar.Inset>
           </Sidebar.Provider>
         </div>

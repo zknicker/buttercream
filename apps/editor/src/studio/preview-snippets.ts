@@ -1,3 +1,34 @@
+/*
+ * The demos run inside editor plumbing a consumer must not copy: a bounded frame that stands in
+ * for the viewport, and portal wiring that redirects popups into it. The code tab projects the
+ * consumer's version — no frame, no refs, popups portalling to the body as they would in an app.
+ */
+function withoutScaffolding(snippet: string): string {
+  let code = snippet;
+
+  /* Unwrap the demo frame: the wrapper div is the editor's viewport, not the composition. */
+  const frame = /^<div className="sidebar-demo[^"]*"[^>]*>\n(?<inner>[\s\S]*)\n<\/div>$/u.exec(
+    code,
+  );
+  if (frame?.groups?.inner) {
+    code = dedent(frame.groups.inner);
+  }
+
+  return (
+    code
+      /* Portal wiring exists so popups clip to the frame; a real app portals to the body. */
+      .replaceAll(/\s+portalContainer=\{\w*[Ff]rame\}/gu, "")
+      .replaceAll(/\s+container=\{\w*[Ff]rame\}/gu, "")
+      .replaceAll(/, container: \w*[Ff]rame/gu, "")
+      .replaceAll(/\s+ref=\{set[A-Z]\w*\}/gu, "")
+      .replaceAll(/\s+className="sidebar-demo__provider"/gu, "")
+      /* The provider may carry authored classes beside the scaffolding one; keep those. */
+      .replaceAll(/className="sidebar-demo__provider (?<rest>[^"]+)"/gu, 'className="$<rest>"')
+      /* Collapse attributes left alone on their line by the removals above. */
+      .replaceAll(/\n\s*\n/gu, "\n")
+  );
+}
+
 function dedent(source: string): string {
   const lines = source.replace(/^\n/u, "").replace(/\s+$/u, "").split("\n");
   const indentation = lines
@@ -38,7 +69,7 @@ export function extractSpecimenSnippets(
     if (snippets[label]) {
       throw new Error(`${componentName} has more than one specimen labelled "${label}"`);
     }
-    snippets[label] = dedent(children);
+    snippets[label] = withoutScaffolding(dedent(children));
   };
 
   for (const specimen of functionSource.matchAll(

@@ -100,8 +100,8 @@ export function SegmentPreview({ icons }: { icons: PreviewIconElements }): React
         </Segment>
       </Specimen>
       <Specimen label="Icon expand — only the selected view spends width on its label">
-        <div className="segment-expand-frame">
-          <Segment className="segment-expand-demo" defaultValue="grid" size="sm" variant="ghost">
+        <div className="flex w-64 justify-start">
+          <Segment showLabels="selected" defaultValue="grid" size="sm" variant="ghost">
             <Segment.Item value="grid">
               {icons.grid}
               <span>Grid</span>

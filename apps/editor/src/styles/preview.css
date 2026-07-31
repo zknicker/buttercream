@@ -335,56 +335,6 @@
   font-size: 0.8125rem;
 }
 
-/* The reference's icon-expand segment: labels live in the markup, but only the selected
-   view spends the width to show one. data-pressed is the component's own selection signal.
-   Items size to their content and pack to the start, as the reference's do — an equal-width
-   distribution would recentre every icon whenever the selected item changes width. */
-/* Anchors the expanding segment: its total width changes with the selection, so without a
-   fixed start-aligned frame the centred specimen would re-centre the whole row on each click. */
-.segment-expand-frame {
-  display: flex;
-  width: min(100%, 16rem);
-  justify-content: flex-start;
-}
-
-.segment-expand-demo {
-  gap: 0.25rem;
-}
-
-.segment-expand-demo .segment__item {
-  width: auto;
-  flex: none;
-}
-
-/* Labels take their space in one step, as the reference's do — the row settles instantly and
-   the pill glides over stable layout. Animating the width here would re-lay-out the frame on
-   every frame and leave the pill chasing a moving target. */
-.segment-expand-demo .segment__item > span:last-child {
-  display: none;
-}
-
-/* The label wipes open left-to-right on the pill's own clock — same duration, same curve —
-   so the reveal and the glide read as one gesture, the way the reference's grid-column
-   reveal does. clip-path keeps the reveal off the layout, so the glide's measurements
-   stay exact; while the row is still travelling the text is barely revealed, never a
-   fully-drawn streak. */
-.segment-expand-demo .segment__item[data-pressed] > span:last-child {
-  display: inline;
-  animation: segment-expand-label-in 250ms cubic-bezier(0.32, 0.72, 0, 1) both;
-}
-
-@keyframes segment-expand-label-in {
-  from {
-    clip-path: inset(0 100% 0 0);
-    opacity: 0;
-  }
-
-  to {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
-  }
-}
-
 /* A separator fills its container, so both demos need one to stretch across rather than hug. */
 .separator-demo {
   display: grid;
